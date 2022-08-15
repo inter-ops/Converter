@@ -36,6 +36,8 @@
 ehthumbs.db
 Thumbs.db
 
+# Package manager
+Pods
 
 # Node.js / Typescript
 node_modules
