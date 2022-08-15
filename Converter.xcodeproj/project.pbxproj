@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		51083379C3E1A8C553106B41 /* Pods_Converter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D381AC4A8E4AFD45C0572F33 /* Pods_Converter.framework */; };
+		7908E48728AAAFB500B02512 /* Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7908E48628AAAFB500B02512 /* Conversion.swift */; };
 		C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */; };
 		C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4828A950BA00BDCCD4 /* ViewController.swift */; };
 		C2D33F4B28A950BF00BDCCD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2D33F4A28A950BF00BDCCD4 /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		12A4DD098FF695C4B4C696CE /* Pods-Converter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.release.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.release.xcconfig"; sourceTree = "<group>"; };
 		775CE97BDEBC077B403C3753 /* Pods-Converter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.debug.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.debug.xcconfig"; sourceTree = "<group>"; };
+		7908E48628AAAFB500B02512 /* Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversion.swift; sourceTree = "<group>"; };
 		C2D33F4328A950BA00BDCCD4 /* Converter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Converter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C2D33F4828A950BA00BDCCD4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -46,7 +48,6 @@
 				775CE97BDEBC077B403C3753 /* Pods-Converter.debug.xcconfig */,
 				12A4DD098FF695C4B4C696CE /* Pods-Converter.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -85,6 +86,7 @@
 				C2D33F4A28A950BF00BDCCD4 /* Assets.xcassets */,
 				C2D33F4C28A950BF00BDCCD4 /* Main.storyboard */,
 				C2D33F4F28A950BF00BDCCD4 /* Converter.entitlements */,
+				7908E48628AAAFB500B02512 /* Conversion.swift */,
 			);
 			path = Converter;
 			sourceTree = "<group>";
@@ -212,6 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */,
+				7908E48728AAAFB500B02512 /* Conversion.swift in Sources */,
 				C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */,
 				C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */,
 			);
@@ -354,7 +357,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 85N3S3DG8M;
+				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
