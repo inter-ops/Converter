@@ -5,7 +5,9 @@
 //  Created by Justin Bush on 8/13/22.
 //
 
-enum VideoFormat {
+let supportedFormats = ["mp4", "m4v", "mkv", "mov", "webm"]
+
+enum VideoFormat: String, CaseIterable {
   case mp4, m4v, mkv, mov, webm // gif
   
   var dropdownTitle: String {
@@ -29,5 +31,9 @@ enum VideoFormat {
     case .webm: return "webm"
     }
   }
+  
+//  var supportedFormats: [String] {
+//    return ["mp4", "m4v", "mkv", "mov", "webm"]
+//  }
   
 }
