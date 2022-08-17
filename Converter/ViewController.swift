@@ -8,12 +8,15 @@
 import Cocoa
 import ffmpegkit
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, DragDropViewDelegate {
   
   @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: NSProgressIndicator!
   @IBOutlet weak var convertButton: NSButton!
+  
+  @IBOutlet weak var supportedSubText: NSTextField!
+  
   
   var outputFormat: VideoFormat = .mp4   // Default output
   var inputFileUrl: URL?
@@ -24,11 +27,38 @@ class ViewController: NSViewController {
     // Init view
     updateProgressBar(.hide)
     initDropdownMenu()
+    updateSupportedSubText(.hide)
   }
   
   override func viewDidAppear() {
     // Open file browser on startup
     //selectInputFileUrl()
+  }
+  
+  func dragDropViewDidReceive(fileUrl: String) {
+    print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
+    
+    if Format.isSupported(fileUrl) {
+      updateDragDropView(.videoFile)
+      updateSupportedSubText(.hide)
+    } else {
+      updateDragDropView(.unsupported)
+      updateSupportedSubText(.show)
+    }
+  }
+  
+  func updateDragDropView(_ forType: DragDropBox) {
+    dragDropView.image = forType.image
+  }
+  
+  func updateSupportedSubText(_ animate: AnimateFade) {
+    let supportedFileTypes = Format.supported.joined(separator: ", ")
+    switch animate {
+    case .show:
+      supportedSubText.stringValue = "Supported: \(supportedFileTypes)"
+    case .hide:
+      supportedSubText.stringValue = ""
+    }
   }
   
   /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
@@ -78,24 +108,6 @@ class ViewController: NSViewController {
         }
       }
     })
-  }
-  
-  // TODO: Handle drag-n-drop
-  
-  
-  func selectInputFileUrl() {
-    let openPanel = NSOpenPanel()
-    
-    // TODO: Restrict allowed file types
-    openPanel.allowsMultipleSelection = false
-    openPanel.canChooseDirectories = true
-    openPanel.canCreateDirectories = true
-    openPanel.canChooseFiles = true
-    
-    let response = openPanel.runModal()
-    if response == .OK {
-      inputFileUrl = openPanel.url!
-    }
   }
   
   func selectOutputFileUrl(format: VideoFormat) {
