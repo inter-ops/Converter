@@ -15,6 +15,7 @@
 		C2D33F4E28A950BF00BDCCD4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2D33F4C28A950BF00BDCCD4 /* Main.storyboard */; };
 		C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F5628A97E2000BDCCD4 /* VideoFormat.swift */; };
 		C2DC46A028AC1BB300EDD3EB /* DragDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */; };
+		C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DC46A128AD618500EDD3EB /* DragDropBox.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		C2D33F4F28A950BF00BDCCD4 /* Converter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Converter.entitlements; sourceTree = "<group>"; };
 		C2D33F5628A97E2000BDCCD4 /* VideoFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFormat.swift; sourceTree = "<group>"; };
 		C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropView.swift; sourceTree = "<group>"; };
+		C2DC46A128AD618500EDD3EB /* DragDropBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropBox.swift; sourceTree = "<group>"; };
 		D381AC4A8E4AFD45C0572F33 /* Pods_Converter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Converter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -106,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */,
+				C2DC46A128AD618500EDD3EB /* DragDropBox.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */,
 				7908E48728AAAFB500B02512 /* Conversion.swift in Sources */,
 				C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */,
+				C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */,
 				C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

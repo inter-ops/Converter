@@ -717,10 +717,10 @@
                                     <constraint firstAttribute="width" constant="300" id="Go2-dc-JZW"/>
                                     <constraint firstAttribute="height" constant="169" id="QT1-ae-HYJ"/>
                                 </constraints>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="DragDrop" id="Rau-wz-H1A"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="DragDropBox-Icon" id="Rau-wz-H1A"/>
                             </imageView>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7wJ-0E-QQo">
-                                <rect key="frame" x="102" y="140" width="226" height="25"/>
+                                <rect key="frame" x="102" y="129" width="226" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="MP4 (MPEG-4)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="A7T-gV-F2g" id="nOQ-on-HRb">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -738,7 +738,7 @@
                                 </connections>
                             </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="irQ-Ac-42v">
-                                <rect key="frame" x="23" y="146" width="68" height="16"/>
+                                <rect key="frame" x="23" y="136" width="68" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Convert to" id="Ttd-pS-y78">
                                     <font key="font" metaFont="system"/>
@@ -777,7 +777,7 @@
                                 </constraints>
                             </visualEffectView>
                             <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="tcS-Bn-xM6">
-                                <rect key="frame" x="25" y="102" width="300" height="20"/>
+                                <rect key="frame" x="25" y="98" width="300" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </progressIndicator>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bdx-sF-qWs">
@@ -799,11 +799,55 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="WOp-7k-7wN" customClass="DragDropView" customModule="Converter" customModuleProvider="target">
+                                <rect key="frame" x="25" y="191" width="300" height="169"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4IT-LZ-trE">
+                                        <rect key="frame" x="18" y="20" width="264" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="or double click to browse..." id="SSd-zV-neB">
+                                            <font key="font" metaFont="system" size="14"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Iz-aQ-n3Y">
+                                        <rect key="frame" x="18" y="119" width="264" height="26"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Drag and drop your video here" id="gEL-kn-M3y">
+                                            <font key="font" metaFont="system" size="17"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="Xfn-LD-0CL"/>
+                                    <constraint firstAttribute="height" constant="169" id="wXQ-EM-eKq"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="bottomTextField" destination="4IT-LZ-trE" id="Jax-Up-FQ9"/>
+                                    <outlet property="delegate" destination="XfG-lQ-9wD" id="VSn-6e-VYs"/>
+                                    <outlet property="topTextField" destination="4Iz-aQ-n3Y" id="6sx-Va-pnH"/>
+                                </connections>
+                            </customView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SdE-uZ-kGB">
+                                <rect key="frame" x="23" y="169" width="304" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Supported: mp4, m4v..." id="MGz-2H-Rws">
+                                    <font key="font" metaFont="cellTitle"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="3HO-pW-3cV"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="8h1-SZ-hQN"/>
+                            <constraint firstItem="WOp-7k-7wN" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="25" id="GIY-oo-MDS"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="Gdn-Bw-cZu"/>
+                            <constraint firstItem="WOp-7k-7wN" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="I1B-2Y-bed"/>
+                            <constraint firstAttribute="trailing" secondItem="WOp-7k-7wN" secondAttribute="trailing" constant="25" id="R2C-Qs-qgK"/>
                             <constraint firstAttribute="bottom" secondItem="F5s-5R-gtP" secondAttribute="bottom" id="V5S-Sl-QW2"/>
                             <constraint firstAttribute="trailing" secondItem="F5s-5R-gtP" secondAttribute="trailing" id="VUO-Pf-tCp"/>
                         </constraints>
@@ -813,6 +857,7 @@
                         <outlet property="dragDropView" destination="v9D-vH-xx2" id="i3t-qm-CIt"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
                         <outlet property="progressBar" destination="tcS-Bn-xM6" id="3Ye-Gc-08u"/>
+                        <outlet property="supportedSubText" destination="SdE-uZ-kGB" id="Lmz-8Z-7Nn"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -821,6 +866,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="DragDrop" width="300" height="169"/>
+        <image name="DragDropBox-Icon" width="300" height="169"/>
     </resources>
 </document>
