@@ -7,6 +7,20 @@
 
 let supportedFormats = ["mp4", "m4v", "mkv", "mov", "webm"]
 
+struct Format {
+  static let supported = ["mp4", "m4v", "mkv", "mov", "webm"]
+  
+  /// Returns true if lowercased filetype is supported
+  static func isSupported(_ input: String) -> Bool {
+    print("input.lowercased: \(input.lowercased())")
+    
+    for file in supported {
+      if input.lowercased().pathExtension.contains(file) { return true }
+    }
+    return false
+  }
+}
+
 enum VideoFormat: String, CaseIterable {
   case mp4, m4v, mkv, mov, webm // gif
   
@@ -32,8 +46,17 @@ enum VideoFormat: String, CaseIterable {
     }
   }
   
-//  var supportedFormats: [String] {
-//    return ["mp4", "m4v", "mkv", "mov", "webm"]
-//  }
-  
 }
+
+//extension String {
+//  /// Returns true if filetype is supported; checks both uppercase and lowercase
+//  var isSupportedFormat: Bool {
+//    for format in supportedFormats {
+//      if self.lowercased().contains(format) {
+//        return true
+//      }
+//    }
+//    return false
+//  }
+//
+//}
