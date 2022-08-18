@@ -8,16 +8,12 @@
 let supportedFormats = ["mp4", "m4v", "mkv", "mov", "webm"]
 
 struct Format {
-  static let supported = ["mp4", "m4v", "mkv", "mov", "webm"]
+  static let supported = supportedFormats
   
   /// Returns true if lowercased filetype is supported
   static func isSupported(_ input: String) -> Bool {
-    print("input.lowercased: \(input.lowercased())")
-    
-    for file in supported {
-      if input.lowercased().pathExtension.contains(file) { return true }
-    }
-    return false
+    let ext = input.lowercased().pathExtension
+    return supported.contains(ext)
   }
 }
 
