@@ -118,8 +118,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     savePanel.nameFieldLabel = "Video file name:"
     savePanel.nameFieldStringValue = "Untitled"
     
-    // TODO: Should be using allowedContentTypes, but for some reason it's not available, likely a version compat. issue
-    savePanel.allowedFileTypes = supportedFormats //[format.rawString]
+    savePanel.allowedFileTypes = supportedFormats
     savePanel.allowsOtherFileTypes = false
     savePanel.isExtensionHidden = true
     
