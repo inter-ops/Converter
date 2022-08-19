@@ -17,8 +17,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   
   @IBOutlet weak var supportedSubText: NSTextField!
   
-  
-  var outputFormat: VideoFormat = .mp4   // Default output
+  var outputFormat: VideoFormat = .mp4   // Default output format
   var inputFileUrl: URL?
   var outputFileUrl: URL?
   
@@ -38,6 +37,13 @@ class ViewController: NSViewController, DragDropViewDelegate {
   func dragDropViewDidReceive(fileUrl: String) {
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
+    var newInputFileUrl = fileUrl
+    
+    if fileUrl.prefix(7) == "file://" {
+      newInputFileUrl = String(fileUrl.dropFirst(7)) //fileUrl.replacingOccurrences(of: "file://", with: "")
+    }
+    inputFileUrl = newInputFileUrl.fileURL.absoluteURL
+    
     if Format.isSupported(fileUrl) {
       updateDragDropView(.videoFile)
       updateSupportedSubText(.hide)
@@ -51,6 +57,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     dragDropView.image = forType.image
   }
   
+  // TODO: Replace with Supported Formats popover view
   func updateSupportedSubText(_ animate: AnimateFade) {
     let supportedFileTypes = Format.supported.joined(separator: ", ")
     switch animate {
