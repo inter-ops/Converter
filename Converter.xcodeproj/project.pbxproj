@@ -14,6 +14,8 @@
 		C2D33F4B28A950BF00BDCCD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2D33F4A28A950BF00BDCCD4 /* Assets.xcassets */; };
 		C2D33F4E28A950BF00BDCCD4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2D33F4C28A950BF00BDCCD4 /* Main.storyboard */; };
 		C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F5628A97E2000BDCCD4 /* VideoFormat.swift */; };
+		C2DC46A028AC1BB300EDD3EB /* DragDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */; };
+		C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DC46A128AD618500EDD3EB /* DragDropBox.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +29,8 @@
 		C2D33F4D28A950BF00BDCCD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C2D33F4F28A950BF00BDCCD4 /* Converter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Converter.entitlements; sourceTree = "<group>"; };
 		C2D33F5628A97E2000BDCCD4 /* VideoFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFormat.swift; sourceTree = "<group>"; };
+		C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropView.swift; sourceTree = "<group>"; };
+		C2DC46A128AD618500EDD3EB /* DragDropBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropBox.swift; sourceTree = "<group>"; };
 		D381AC4A8E4AFD45C0572F33 /* Pods_Converter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Converter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -82,6 +86,7 @@
 			children = (
 				C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */,
 				C2D33F4828A950BA00BDCCD4 /* ViewController.swift */,
+				C2DC469E28AC1B9800EDD3EB /* Views */,
 				C2D33F5528A97DEA00BDCCD4 /* VideoFormat */,
 				C2D33F4A28A950BF00BDCCD4 /* Assets.xcassets */,
 				C2D33F4C28A950BF00BDCCD4 /* Main.storyboard */,
@@ -97,6 +102,15 @@
 				C2D33F5628A97E2000BDCCD4 /* VideoFormat.swift */,
 			);
 			path = VideoFormat;
+			sourceTree = "<group>";
+		};
+		C2DC469E28AC1B9800EDD3EB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */,
+				C2DC46A128AD618500EDD3EB /* DragDropBox.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,9 +227,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2DC46A028AC1BB300EDD3EB /* DragDropView.swift in Sources */,
 				C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */,
 				7908E48728AAAFB500B02512 /* Conversion.swift in Sources */,
 				C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */,
+				C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */,
 				C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -367,6 +383,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.justinbush.Converter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -385,7 +402,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 85N3S3DG8M;
+				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -395,6 +412,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.justinbush.Converter;
 				PRODUCT_NAME = "$(TARGET_NAME)";

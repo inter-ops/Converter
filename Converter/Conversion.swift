@@ -10,9 +10,9 @@ import ffmpegkit
 
 /**
  Conversion commands:
-- Supported: mp4, mkv, mov, m4v, webm
+- Supported: mp4, mkv, mov, m4v, webm, avi
 - TODO
-     - gif, avi, hevc
+     - gif
  Some resources:
  - Examples from example ffmpeg-kit app
  - https://gist.github.com/Vestride/278e13915894821e1d6f
@@ -23,9 +23,9 @@ import ffmpegkit
 
 // TODO: Need to figure out how to package up ffmpeg kit for release
 
-func isMFormat(filePath: String) -> Bool {
+func isSimpleConversionFormat(filePath: String) -> Bool {
     let ext = getFileExtension(filePath: filePath)
-    return ["mp4", "mkv", "mov", "m4v"].contains(ext)
+    return ["mp4", "mkv", "mov", "m4v", "avi"].contains(ext)
 }
 
 func getFileExtension(filePath: String) -> String {
@@ -36,20 +36,24 @@ func getFileName(filePath: String) -> String {
     return URL(fileURLWithPath: filePath).lastPathComponent
 }
 
+// TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases.
+
 func getConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
     // Simple copy codec for any conversion between mp4, mkv, mov, m4v
-    if isMFormat(filePath: inputFilePath) && isMFormat(filePath: outputFilePath) {
+    if isSimpleConversionFormat(filePath: inputFilePath) && isSimpleConversionFormat(filePath: outputFilePath) {
         return "-i \"\(inputFilePath)\" -codec copy \"\(outputFilePath)\""
     }
     
-    // mp4, mkv, mov, m4v -> webm
+    // mp4, mkv, mov, m4v, avi -> webm
     // - VP9, Constant Quality mode from https://trac.ffmpeg.org/wiki/Encode/VP9. "ffmpeg -i input.mp4 -c:v libvpx-vp9 -crf 30 -b:v 0 output.webm" this seems very slow (near 1 min to convert 17mb video). Requires libvpx-vp9
     // - VP8, vartiable bitrate https://trac.ffmpeg.org/wiki/Encode/VP8. This one is very quick, and smaller file size, best found so far: "ffmpeg -i input.mp4 -c:v libvpx -b:v 1M -c:a libvorbis output.webm" requires libvorbis libvpx
-    if isMFormat(filePath: inputFilePath) && getFileExtension(filePath: outputFilePath) == "webm" {
-        return "-i \"\(inputFilePath)\" -c:v libvpx -b:v 1M -c:a libvorbis \"\(outputFilePath)\""
+    if isSimpleConversionFormat(filePath: inputFilePath) && getFileExtension(filePath: outputFilePath) == "webm" {
+        // cpu-used 2 speeds up processing by about 2x, but does impact quality a bit. I haven't seen a noticeable difference, but if it becomes problematic, we should set it to 1.
+        // See here for more info: https://superuser.com/questions/1586934/vp9-encoding-with-ffmpeg-relation-between-speed-and-deadline-options
+        return "-i \"\(inputFilePath)\" -c:v libvpx -b:v 1M -c:a libvorbis -deadline good -cpu-used 2 -crf 26 \"\(outputFilePath)\""
     }
     
-    if getFileExtension(filePath: inputFilePath) == "webm" && isMFormat(filePath: outputFilePath) {
+    if getFileExtension(filePath: inputFilePath) == "webm" && isSimpleConversionFormat(filePath: outputFilePath) {
         return "-i \"\(inputFilePath)\" -crf 26 \"\(outputFilePath)\""
     }
     
