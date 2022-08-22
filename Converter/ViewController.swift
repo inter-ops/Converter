@@ -73,7 +73,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     // Update outputFormat to selected item
     outputFormat = format
     
-    print("User did select \(format.rawString)")
+    print("User did select \(format.rawValue)")
   }
   
   func userDidClickConvert() { userDidClickConvert(outputFormat) }
@@ -125,7 +125,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     savePanel.nameFieldLabel = "Video file name:"
     savePanel.nameFieldStringValue = "Untitled"
     
-    savePanel.allowedFileTypes = [format.rawString]
+    savePanel.allowedFileTypes = [format.rawValue]
     savePanel.allowsOtherFileTypes = false
     savePanel.isExtensionHidden = true
     
