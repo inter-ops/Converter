@@ -32,18 +32,6 @@ enum VideoFormat: String, CaseIterable {
     }
   }
   
-  var rawString: String {
-    switch self {
-    case .mp4: return "mp4"
-    case .m4v: return "m4v"
-    case .mkv: return "mkv"
-    case .mov: return "mov"
-    case .avi: return "avi"
-//    case .gif: return "gif"
-    case .webm: return "webm"
-    }
-  }
-  
 }
 
 //extension String {

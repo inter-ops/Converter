@@ -6,6 +6,6 @@ target 'Converter' do
   use_frameworks!
 
   # Pods for Converter
-  pod 'ffmpeg-kit-macos-full', '~> 4.5.1'
+  pod 'ffmpeg-kit-macos-full-gpl', '~> 4.5.1'
 
 end
