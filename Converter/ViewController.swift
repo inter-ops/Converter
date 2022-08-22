@@ -93,6 +93,9 @@ class ViewController: NSViewController, DragDropViewDelegate {
     
     var timer = Timer()
     
+    let totalNumberOfFrames = getNumberOfFrames(inputFilePath: inputFileUrl!.path)
+    let startOfConversion = Date()
+    
     let ffmpegSession = runFfmpegConversion(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path) { _ in
       print("Done converting!")
       timer.invalidate()
@@ -112,6 +115,13 @@ class ViewController: NSViewController, DragDropViewDelegate {
           let progressPercentage = (time / duration) * 100
           print("Progress: \(progressPercentage) %")
           self.updateProgressBar(withValue: progressPercentage)
+          
+          let timeElapsed = startOfConversion.timeIntervalSinceNow * -1
+          print("Time elapsed: \(timeElapsed)")
+          let convertedFrames = lastStat.getVideoFrameNumber()
+          let estimatedConversionTimeInSeconds = timeElapsed * (totalNumberOfFrames / Double(convertedFrames))
+          print("Estimated time remaining: \(estimatedConversionTimeInSeconds)s")
+          // TODO: Update estimated time remaining using estimatedConversionTimeInSeconds
         }
       }
     })
