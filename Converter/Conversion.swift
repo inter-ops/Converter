@@ -43,7 +43,6 @@ func getConversionCommand(inputFilePath: String, outputFilePath: String) -> Stri
   // If the input is HEVC codec and the output format is MP4, lets convert to H264 so that the video is supported by Quicktime
   // Requires libx264
   if getVideoCodec(inputFilePath: inputFilePath) == VideoCodec.hevc && getFileExtension(filePath: outputFilePath) == "mp4" {
-    print("CONVERTING TO H264")
     return "-i \"\(inputFilePath)\" -acodec copy -vcodec libx264 \"\(outputFilePath)\""
   }
   
@@ -66,6 +65,7 @@ func getConversionCommand(inputFilePath: String, outputFilePath: String) -> Stri
   }
   
   // TODO: Show the user an error if we get here.
+  print("Unknown file pair to convert")
   return ""
 }
 
