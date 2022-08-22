@@ -122,7 +122,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
           let convertedFrames = lastStat.getVideoFrameNumber()
           let estimatedConversionTimeInSeconds = timeElapsed * (totalNumberOfFrames / Double(convertedFrames))
           print("Estimated time remaining: \(estimatedConversionTimeInSeconds)s")
-          // TODO: Update estimated time remaining using estimatedConversionTimeInSeconds
+          
           self.updateTimeRemaining(estimatedConversionTimeInSeconds)
         }
       }
