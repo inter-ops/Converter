@@ -78,6 +78,13 @@ func runFfmpegConversion(inputFilePath: String, outputFilePath: String, onDone: 
   return session!
 }
 
+func getNumberOfFrames(inputFilePath: String) -> Double {
+  let session = FFprobeKit.execute("-loglevel error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of default=nokey=1:noprint_wrappers=1 \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  let numberOfFrames = Double(logs!.trimmingCharacters(in: .whitespacesAndNewlines))!
+  return numberOfFrames
+}
+
 func getVideoDuration(inputFilePath: String) -> Double {
   let session = FFprobeKit.execute("-loglevel error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
   let logs = session?.getAllLogsAsString()
