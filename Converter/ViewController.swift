@@ -14,6 +14,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: NSProgressIndicator!
   @IBOutlet weak var convertButton: NSButton!
+  @IBOutlet weak var estimatedTimeText: NSTextField!
   
   @IBOutlet weak var supportedSubText: NSTextField!
   
@@ -122,9 +123,17 @@ class ViewController: NSViewController, DragDropViewDelegate {
           let estimatedConversionTimeInSeconds = timeElapsed * (totalNumberOfFrames / Double(convertedFrames))
           print("Estimated time remaining: \(estimatedConversionTimeInSeconds)s")
           // TODO: Update estimated time remaining using estimatedConversionTimeInSeconds
+          self.updateTimeRemaining(estimatedConversionTimeInSeconds)
         }
       }
     })
+  }
+  
+  /// Takes total seconds remaining, formats to `hr, min, sec` and updates the UI text to reflect
+  func updateTimeRemaining(_ remainingInSeconds: Double) {
+    let seconds = Int(remainingInSeconds)
+    let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+    estimatedTimeText.stringValue = "\(h)h \(m)m \(s)s"
   }
   
   func selectOutputFileUrl(format: VideoFormat) {
