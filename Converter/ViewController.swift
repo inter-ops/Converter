@@ -175,12 +175,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
   /// Return VideoFormat type from dropdown item selection
   /// TODO: Rather than hardcoding each value, we should be able to take the selected format and convert it directly to a VideoFormat item
   func getFormat(_ item: String) -> VideoFormat {
-    if item.contains("MP4") { return .mp4 }
-    else if item.contains("M4V") { return .m4v }
-    else if item.contains("MKV") { return .mkv }
-    else if item.contains("MOV") { return .mov }
-    else if item.contains("WEBM") { return .webm }
-    else if item.contains("AVI") { return .avi }
+    if item.contains(VideoFormat.mp4.dropdownTitle) { return .mp4 }
+    else if item.contains(VideoFormat.m4v.dropdownTitle) { return .m4v }
+    else if item.contains(VideoFormat.mkv.dropdownTitle) { return .mkv }
+    else if item.contains(VideoFormat.mov.dropdownTitle) { return .mov }
+    else if item.contains(VideoFormat.webm.dropdownTitle) { return .webm }
+    else if item.contains(VideoFormat.avi.dropdownTitle) { return .avi }
     //    else if item.contains("GIF") { return .gif }
     else { print("Error, unable to read selected format type\nReturning default type: VideoFormat.mp4") }
     return .mp4
