@@ -160,18 +160,15 @@ class ViewController: NSViewController, DragDropViewDelegate {
     formatDropdown.addItems(withTitles: getDropdownTitles())
   }
   
+  var formatTitles: [String] = []
   /// Return VideoFormat title strings as an array for dropdown presentation
   func getDropdownTitles() -> [String] {
-    // TODO: Filter out the input file type
-    return [VideoFormat.mp4.dropdownTitle,
-            VideoFormat.m4v.dropdownTitle,
-            VideoFormat.mkv.dropdownTitle,
-            VideoFormat.mov.dropdownTitle,
-            VideoFormat.avi.dropdownTitle,
-            //            VideoFormat.gif.dropdownTitle,
-            VideoFormat.webm.dropdownTitle
-    ]
+    for format in VideoFormat.allCases {
+      formatTitles.append(format.dropdownTitle)
+    }
+    return formatTitles
   }
+  
   /// Return VideoFormat type from dropdown item selection
   func getFormat(_ item: String) -> VideoFormat {
     for format in VideoFormat.allCases {
