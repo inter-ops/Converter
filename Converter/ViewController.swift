@@ -14,6 +14,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: NSProgressIndicator!
   @IBOutlet weak var convertButton: NSButton!
+  @IBOutlet weak var estimatedTimeText: NSTextField!
   
   @IBOutlet weak var supportedSubText: NSTextField!
   
@@ -121,10 +122,18 @@ class ViewController: NSViewController, DragDropViewDelegate {
           let convertedFrames = lastStat.getVideoFrameNumber()
           let estimatedConversionTimeInSeconds = timeElapsed * (totalNumberOfFrames / Double(convertedFrames))
           print("Estimated time remaining: \(estimatedConversionTimeInSeconds)s")
-          // TODO: Update estimated time remaining using estimatedConversionTimeInSeconds
+          
+          self.updateTimeRemaining(estimatedConversionTimeInSeconds)
         }
       }
     })
+  }
+  
+  /// Takes total seconds remaining, formats to `hr, min, sec` and updates the UI text to reflect
+  func updateTimeRemaining(_ remainingInSeconds: Double) {
+    let seconds = Int(remainingInSeconds)
+    let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+    estimatedTimeText.stringValue = "\(h)h \(m)m \(s)s"
   }
   
   func selectOutputFileUrl(format: VideoFormat) {
@@ -166,12 +175,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
   /// Return VideoFormat type from dropdown item selection
   /// TODO: Rather than hardcoding each value, we should be able to take the selected format and convert it directly to a VideoFormat item
   func getFormat(_ item: String) -> VideoFormat {
-    if item.contains("MP4") { return .mp4 }
-    else if item.contains("M4V") { return .m4v }
-    else if item.contains("MKV") { return .mkv }
-    else if item.contains("MOV") { return .mov }
-    else if item.contains("WEBM") { return .webm }
-    else if item.contains("AVI") { return .avi }
+    if item.contains(VideoFormat.mp4.dropdownTitle) { return .mp4 }
+    else if item.contains(VideoFormat.m4v.dropdownTitle) { return .m4v }
+    else if item.contains(VideoFormat.mkv.dropdownTitle) { return .mkv }
+    else if item.contains(VideoFormat.mov.dropdownTitle) { return .mov }
+    else if item.contains(VideoFormat.webm.dropdownTitle) { return .webm }
+    else if item.contains(VideoFormat.avi.dropdownTitle) { return .avi }
     //    else if item.contains("GIF") { return .gif }
     else { print("Error, unable to read selected format type\nReturning default type: VideoFormat.mp4") }
     return .mp4

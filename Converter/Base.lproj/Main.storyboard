@@ -751,16 +751,16 @@
                                 <rect key="frame" x="0.0" y="0.0" width="350" height="40"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xFx-Bv-g0e">
-                                        <rect key="frame" x="18" y="12" width="98" height="16"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Estimated Size" id="HZq-E1-9fR">
+                                        <rect key="frame" x="18" y="12" width="172" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Estimated Time Remaining" id="HZq-E1-9fR">
                                             <font key="font" metaFont="systemSemibold" size="13"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Co3-Zb-XoX">
-                                        <rect key="frame" x="295" y="12" width="37" height="16"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="0 MB" id="azI-kf-XhR">
+                                        <rect key="frame" x="308" y="12" width="24" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="–:–" id="azI-kf-XhR">
                                             <font key="font" metaFont="systemSemibold" size="13"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -803,10 +803,10 @@
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="WOp-7k-7wN" customClass="DragDropView" customModule="Converter" customModuleProvider="target">
                                 <rect key="frame" x="25" y="191" width="300" height="169"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4IT-LZ-trE">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4IT-LZ-trE">
                                         <rect key="frame" x="18" y="20" width="264" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="or double click to browse..." id="SSd-zV-neB">
+                                        <textFieldCell key="cell" lineBreakMode="truncatingMiddle" alignment="center" title="or double click to browse..." id="SSd-zV-neB">
                                             <font key="font" metaFont="system" size="14"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -856,6 +856,7 @@
                     <connections>
                         <outlet property="convertButton" destination="Bdx-sF-qWs" id="frr-On-Qo0"/>
                         <outlet property="dragDropView" destination="v9D-vH-xx2" id="i3t-qm-CIt"/>
+                        <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
                         <outlet property="progressBar" destination="tcS-Bn-xM6" id="3Ye-Gc-08u"/>
                         <outlet property="supportedSubText" destination="SdE-uZ-kGB" id="Lmz-8Z-7Nn"/>
