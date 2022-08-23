@@ -187,7 +187,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     // Handler function
     userDidSelectFormat(userSelectedFormatType)
   }
-  var userSelectedFormat = "MP4"
+  var userSelectedFormat = VideoFormat.mp4.dropdownTitle
   var userSelectedFormatType: VideoFormat = .mp4
   
   @IBAction func clickConvert(_ sender: Any) {
