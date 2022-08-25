@@ -133,7 +133,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
   func updateTimeRemaining(_ remainingInSeconds: Double) {
     let seconds = Int(remainingInSeconds)
     let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
-    estimatedTimeText.stringValue = "\(h)h \(m)m \(s)s"
+    
+    if h > 0 {
+      estimatedTimeText.stringValue = "\(h)h \(m)m"
+    } else {
+      estimatedTimeText.stringValue = "\(m)m \(s)s"
+    }
   }
   
   func selectOutputFileUrl(format: VideoFormat) {
