@@ -160,29 +160,23 @@ class ViewController: NSViewController, DragDropViewDelegate {
     formatDropdown.addItems(withTitles: getDropdownTitles())
   }
   
+  var formatTitles: [String] = []
   /// Return VideoFormat title strings as an array for dropdown presentation
   func getDropdownTitles() -> [String] {
-    // TODO: Filter out the input file type
-    return [VideoFormat.mp4.dropdownTitle,
-            VideoFormat.m4v.dropdownTitle,
-            VideoFormat.mkv.dropdownTitle,
-            VideoFormat.mov.dropdownTitle,
-            VideoFormat.avi.dropdownTitle,
-            //            VideoFormat.gif.dropdownTitle,
-            VideoFormat.webm.dropdownTitle
-    ]
+    for format in VideoFormat.allCases {
+      formatTitles.append(format.dropdownTitle)
+    }
+    return formatTitles
   }
+  
   /// Return VideoFormat type from dropdown item selection
-  /// TODO: Rather than hardcoding each value, we should be able to take the selected format and convert it directly to a VideoFormat item
   func getFormat(_ item: String) -> VideoFormat {
-    if item.contains(VideoFormat.mp4.dropdownTitle) { return .mp4 }
-    else if item.contains(VideoFormat.m4v.dropdownTitle) { return .m4v }
-    else if item.contains(VideoFormat.mkv.dropdownTitle) { return .mkv }
-    else if item.contains(VideoFormat.mov.dropdownTitle) { return .mov }
-    else if item.contains(VideoFormat.webm.dropdownTitle) { return .webm }
-    else if item.contains(VideoFormat.avi.dropdownTitle) { return .avi }
-    //    else if item.contains("GIF") { return .gif }
-    else { print("Error, unable to read selected format type\nReturning default type: VideoFormat.mp4") }
+    for format in VideoFormat.allCases {
+      if item == format.dropdownTitle {
+        return format
+      }
+    }
+    print("Error, unable to read selected format type\nReturning default type: VideoFormat.mp4")
     return .mp4
   }
   
@@ -193,7 +187,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     // Handler function
     userDidSelectFormat(userSelectedFormatType)
   }
-  var userSelectedFormat = "MP4"
+  var userSelectedFormat = VideoFormat.mp4.dropdownTitle
   var userSelectedFormatType: VideoFormat = .mp4
   
   @IBAction func clickConvert(_ sender: Any) {
