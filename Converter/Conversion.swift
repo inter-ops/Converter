@@ -37,13 +37,13 @@ func getFileName(filePath: String) -> String {
   return URL(fileURLWithPath: filePath).lastPathComponent
 }
 
-// TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases.
+// TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases. For testing video quality output, see here: https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
 
 func getConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
   // If the input is HEVC codec and the output format is MP4, lets convert to H264 so that the video is supported by Quicktime
   // Requires libx264
-  if getVideoCodec(inputFilePath: inputFilePath) == VideoCodec.hevc && getFileExtension(filePath: outputFilePath) == "mp4" {
-    return "-i \"\(inputFilePath)\" -acodec copy -vcodec libx264 \"\(outputFilePath)\""
+  if getVideoCodec(inputFilePath: inputFilePath) == VideoCodec.hevc && getFileExtension(filePath: outputFilePath) == VideoFormat.mp4.rawValue {
+    return "-i \"\(inputFilePath)\" -acodec copy -vcodec libx264 -preset fast -crf 26 \"\(outputFilePath)\""
   }
   
   // Simple copy codec for any conversion between mp4, mkv, mov, m4v
@@ -54,13 +54,13 @@ func getConversionCommand(inputFilePath: String, outputFilePath: String) -> Stri
   // mp4, mkv, mov, m4v, avi -> webm
   // - VP9, Constant Quality mode from https://trac.ffmpeg.org/wiki/Encode/VP9. "ffmpeg -i input.mp4 -c:v libvpx-vp9 -crf 30 -b:v 0 output.webm" this seems very slow (near 1 min to convert 17mb video). Requires libvpx-vp9
   // - VP8, vartiable bitrate https://trac.ffmpeg.org/wiki/Encode/VP8. This one is very quick, and smaller file size, best found so far: "ffmpeg -i input.mp4 -c:v libvpx -b:v 1M -c:a libvorbis output.webm" requires libvorbis libvpx
-  if isWrapperConversionFormat(filePath: inputFilePath) && getFileExtension(filePath: outputFilePath) == "webm" {
+  if isWrapperConversionFormat(filePath: inputFilePath) && getFileExtension(filePath: outputFilePath) == VideoFormat.webm.rawValue {
     // cpu-used 2 speeds up processing by about 2x, but does impact quality a bit. I haven't seen a noticeable difference, but if it becomes problematic, we should set it to 1.
     // See here for more info: https://superuser.com/questions/1586934/vp9-encoding-with-ffmpeg-relation-between-speed-and-deadline-options
     return "-i \"\(inputFilePath)\" -c:v libvpx -b:v 1M -c:a libvorbis -deadline good -cpu-used 2 -crf 26 \"\(outputFilePath)\""
   }
   
-  if getFileExtension(filePath: inputFilePath) == "webm" && isWrapperConversionFormat(filePath: outputFilePath) {
+  if getFileExtension(filePath: inputFilePath) == VideoFormat.webm.rawValue && isWrapperConversionFormat(filePath: outputFilePath) {
     return "-i \"\(inputFilePath)\" -crf 26 \"\(outputFilePath)\""
   }
   
