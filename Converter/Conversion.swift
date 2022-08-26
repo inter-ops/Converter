@@ -37,6 +37,8 @@ func getFileName(filePath: String) -> String {
   return URL(fileURLWithPath: filePath).lastPathComponent
 }
 
+// TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases. For testing video quality output, see here: https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
+
 func getConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
   // If the input is HEVC codec and the output format is MP4, lets convert to H264 so that the video is supported by Quicktime
   // Requires libx264
