@@ -105,6 +105,8 @@ class ViewController: NSViewController, DragDropViewDelegate {
       self.updateProgressBar(withValue: 100)
     }
     
+    // TODO: time estimate is very unstable in first few seconds, lets hide it until we see it stabalize?
+    
     // This currently updates progress every 0.5 seconds
     timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { _ in
       
@@ -120,10 +122,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
           let timeElapsed = startOfConversion.timeIntervalSinceNow * -1
           print("Time elapsed: \(timeElapsed)")
           let convertedFrames = lastStat.getVideoFrameNumber()
-          let estimatedConversionTimeInSeconds = timeElapsed * (totalNumberOfFrames / Double(convertedFrames))
-          print("Estimated time remaining: \(estimatedConversionTimeInSeconds)s")
+          print("Number of converted frames: \(convertedFrames)")
+          let totalConversionTime = timeElapsed * (totalNumberOfFrames / Double(convertedFrames))
           
-          self.updateTimeRemaining(estimatedConversionTimeInSeconds)
+          let timeRemaining = totalConversionTime - timeElapsed
+          print("Estimated time remaining: \(timeRemaining)s")
+          self.updateTimeRemaining(timeRemaining)
         }
       }
     })
