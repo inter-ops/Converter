@@ -212,7 +212,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     progressBar.borderColor = NSColor.placeholderTextColor //.separatorColor
     progressBar.borderWidth = 0.3
     progressBar.cornerRadius = 3
-    progressBar.animate(to: 50, minValue: 0, maxValue: 100)
+    progressBar.animate(to: 0, minValue: 0, maxValue: 100)
     
     updateProgressBar(.hide)
   }
