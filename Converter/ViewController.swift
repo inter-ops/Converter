@@ -139,10 +139,16 @@ class ViewController: NSViewController, DragDropViewDelegate {
     let seconds = Int(remainingInSeconds)
     let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     
+    // TODO: Implement "Finishing up..." phase before "Done!"
+    // This TODO may not be necessary if we implement progress Timer properly
     if h > 0 {
       estimatedTimeText.stringValue = "\(h)h \(m)m"
-    } else {
+    } else if m > 0 {
       estimatedTimeText.stringValue = "\(m)m \(s)s"
+    } else if s > 0 {
+      estimatedTimeText.stringValue = "\(s)s"
+    } else {
+      estimatedTimeText.stringValue = "Done!"
     }
   }
   
