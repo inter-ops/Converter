@@ -49,7 +49,7 @@ open class ColorfulProgressIndicator: NSView {
     updateProgress()
   }
   
-  open func animate(to doubleValue: Double? = nil, minValue: Double? = nil, maxValue: Double? = nil, duration: TimeInterval = 0.25) {
+  open func animate(to doubleValue: Double? = nil, minValue: Double? = nil, maxValue: Double? = nil, duration: TimeInterval = 0.5) {
     let currentPath = progressShapeLayer.presentation()?.path ?? progressShapeLayer.path
     
     // stop prior animation, if any
