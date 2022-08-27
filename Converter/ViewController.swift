@@ -12,7 +12,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   
   @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
-  @IBOutlet weak var progressBar: NSProgressIndicator!
+  @IBOutlet weak var progressBar: ColorfulProgressIndicator!
   @IBOutlet weak var convertButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
   
@@ -25,7 +25,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     // Init view
-    updateProgressBar(.hide)
+    initProgressBar()
     initDropdownMenu()
     updateSupportedSubText(.hide)
   }
@@ -83,7 +83,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     selectOutputFileUrl(format: withFormat)
     
     updateProgressBar(.show)
-    updateProgressBar(withValue: 0)
+    updateProgressBar(value: 0)
     
     let duration = getVideoDuration(inputFilePath: inputFileUrl!.path)
     
@@ -102,13 +102,14 @@ class ViewController: NSViewController, DragDropViewDelegate {
       timer.invalidate()
       
       // TODO: This doesnt work currently. We need this to ensure the progress bar updates if the conversion completes before the timer interval starts
-      self.updateProgressBar(withValue: 100)
+      self.updateProgressBar(value: 100)
     }
     
     // TODO: time estimate is very unstable in first few seconds, lets hide it until we see it stabalize?
     
     // This currently updates progress every 0.5 seconds
-    timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { _ in
+    let interval = 0.5
+    timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { _ in
       
       let statistics = ffmpegSession.getStatistics()
       let count = statistics!.count
@@ -117,7 +118,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
           let time = Double(lastStat.getTime() / 1000)
           let progressPercentage = (time / duration) * 100
           print("Progress: \(progressPercentage) %")
-          self.updateProgressBar(withValue: progressPercentage)
+          self.updateProgressBar(value: progressPercentage, withInterval: interval)
           
           let timeElapsed = startOfConversion.timeIntervalSinceNow * -1
           print("Time elapsed: \(timeElapsed)")
@@ -205,18 +206,26 @@ class ViewController: NSViewController, DragDropViewDelegate {
   }
   
   // MARK: Progress Bar
+  /// Initialize progress bar with hidden default state and config values,
+  /// ie. `progressBar.progressColor = .blue` or `progressBar.cornerRadius = 3`
+  func initProgressBar() {
+    // ProgressBar init
+    updateProgressBar(.hide)
+  }
+  
   /// Show/hide progress bar animation
   func updateProgressBar(_ animate: AnimateFade) {
     progressBar.alphaValue = animate.alpha
   }
   
   /// Update progress bar animation with Double value
-  func updateProgressBar(withValue: Double) {
-    if withValue >= 100 {
+  func updateProgressBar(value: Double, withInterval: Double = 0.5) {
+    if value >= 100 {
       updateProgressBar(.hide)
-      progressBar.doubleValue = 0
+      progressBar.animate(to: 0)
     } else {
-      progressBar.doubleValue = withValue
+      updateProgressBar(.show)
+      progressBar.animate(to: value)
     }
   }
   
