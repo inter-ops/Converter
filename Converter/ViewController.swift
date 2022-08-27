@@ -140,8 +140,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
     
     if h > 0 {
       estimatedTimeText.stringValue = "\(h)h \(m)m"
-    } else {
+    } else if m > 0 {
       estimatedTimeText.stringValue = "\(m)m \(s)s"
+    } else if s > 0 {
+      estimatedTimeText.stringValue = "\(s)s"
+    } else {
+      estimatedTimeText.stringValue = "Done!"
     }
   }
   
