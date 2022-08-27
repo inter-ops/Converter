@@ -43,7 +43,7 @@ func getConversionCommand(inputFilePath: String, outputFilePath: String) -> Stri
   // If the input is HEVC codec and the output format is MP4, lets convert to H264 so that the video is supported by Quicktime
   // Requires libx264
   if getVideoCodec(inputFilePath: inputFilePath) == VideoCodec.hevc && getFileExtension(filePath: outputFilePath) == VideoFormat.mp4.rawValue {
-    return "-i \"\(inputFilePath)\" -acodec copy -vcodec libx264 -preset fast -crf 26 \"\(outputFilePath)\""
+    return "-i \"\(inputFilePath)\" -acodec aac -vcodec libx264 -preset veryfast -crf 26 \"\(outputFilePath)\""
   }
   
   // Simple copy codec for any conversion between mp4, mkv, mov, m4v
