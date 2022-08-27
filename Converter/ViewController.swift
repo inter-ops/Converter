@@ -206,15 +206,10 @@ class ViewController: NSViewController, DragDropViewDelegate {
   }
   
   // MARK: Progress Bar
-  /// Initialize progress bar with hidden default state
+  /// Initialize progress bar with hidden default state and config values,
+  /// ie. `progressBar.progressColor = .blue` or `progressBar.cornerRadius = 3`
   func initProgressBar() {
-    progressBar.progressColor = NSColor.controlAccentColor
-    progressBar.backgroundColor = NSColor.controlBackgroundColor
-    progressBar.borderColor = NSColor.placeholderTextColor //.separatorColor
-    progressBar.borderWidth = 0.3
-    progressBar.cornerRadius = 3
-    progressBar.animate(to: 0, minValue: 0, maxValue: 100)
-    
+    // ProgressBar init
     updateProgressBar(.hide)
   }
   

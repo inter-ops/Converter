@@ -11,15 +11,15 @@ import Cocoa
 
 @IBDesignable
 open class ColorfulProgressIndicator: NSView {
-  @IBInspectable open var doubleValue: Double = 50 { didSet { needsLayout = true } }
+  @IBInspectable open var doubleValue: Double = 0  { didSet { needsLayout = true } }
   @IBInspectable open var minValue: Double = 0     { didSet { needsLayout = true } }
   @IBInspectable open var maxValue: Double = 100   { didSet { needsLayout = true } }
   
-  @IBInspectable open var backgroundColor: NSColor = .lightGray { didSet { layer?.backgroundColor = backgroundColor.cgColor } }
-  @IBInspectable open var progressColor:   NSColor = .blue      { didSet { progressShapeLayer.fillColor = progressColor.cgColor } }
-  @IBInspectable open var borderColor:     NSColor = .clear     { didSet { layer?.borderColor = borderColor.cgColor } }
-  @IBInspectable open var borderWidth:     CGFloat = 0          { didSet { layer?.borderWidth = borderWidth } }
-  @IBInspectable open var cornerRadius:    CGFloat = 0          { didSet { layer?.cornerRadius = cornerRadius } }
+  @IBInspectable open var backgroundColor: NSColor = .controlBackgroundColor  { didSet { layer?.backgroundColor = backgroundColor.cgColor } }
+  @IBInspectable open var progressColor:   NSColor = .controlAccentColor      { didSet { progressShapeLayer.fillColor = progressColor.cgColor } }
+  @IBInspectable open var borderColor:     NSColor = .placeholderTextColor    { didSet { layer?.borderColor = borderColor.cgColor } }
+  @IBInspectable open var borderWidth:     CGFloat = 0.3        { didSet { layer?.borderWidth = borderWidth } }
+  @IBInspectable open var cornerRadius:    CGFloat = 3          { didSet { layer?.cornerRadius = cornerRadius } }
   
   private lazy var progressShapeLayer: CAShapeLayer = {
     let shapeLayer = CAShapeLayer()
