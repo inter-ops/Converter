@@ -12,7 +12,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   
   @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
-  @IBOutlet weak var progressBar: NSProgressIndicator!
+  @IBOutlet weak var progressBar: ColorfulProgressIndicator!
   @IBOutlet weak var convertButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
   
@@ -25,7 +25,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     // Init view
-    updateProgressBar(.hide)
+    initProgressBar()
     initDropdownMenu()
     updateSupportedSubText(.hide)
   }
@@ -205,6 +205,18 @@ class ViewController: NSViewController, DragDropViewDelegate {
   }
   
   // MARK: Progress Bar
+  /// Initialize progress bar with hidden default state
+  func initProgressBar() {
+    progressBar.progressColor = NSColor.controlAccentColor
+    progressBar.backgroundColor = NSColor.controlBackgroundColor
+    progressBar.borderColor = NSColor.placeholderTextColor //.separatorColor
+    progressBar.borderWidth = 0.3
+    progressBar.cornerRadius = 3
+    progressBar.animate(to: 50, minValue: 0, maxValue: 100)
+    
+    updateProgressBar(.hide)
+  }
+  
   /// Show/hide progress bar animation
   func updateProgressBar(_ animate: AnimateFade) {
     progressBar.alphaValue = animate.alpha
@@ -214,9 +226,10 @@ class ViewController: NSViewController, DragDropViewDelegate {
   func updateProgressBar(withValue: Double) {
     if withValue >= 100 {
       updateProgressBar(.hide)
-      progressBar.doubleValue = 0
+      progressBar.animate(to: 0)
     } else {
-      progressBar.doubleValue = withValue
+      updateProgressBar(.show)
+      progressBar.animate(to: withValue)
     }
   }
   
