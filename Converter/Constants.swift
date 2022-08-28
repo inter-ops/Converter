@@ -7,4 +7,7 @@
 
 import Foundation
 
-let PROGRESS_UPDATE_INTERVAL = 0.5
+struct Constants {
+  static let progressUpdateInterval = 0.5
+}
+

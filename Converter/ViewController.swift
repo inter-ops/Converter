@@ -116,8 +116,8 @@ class ViewController: NSViewController, DragDropViewDelegate {
     let lastProgressPercentage = getProgressPercentage(statistics: statisticsArray[statisticsArray.count-2])
     let lastTimeRemaining = getEstimatedTimeRemaining(statistics: statisticsArray[statisticsArray.count-2], progressPercentage: lastProgressPercentage)
     
-    // Since the last statistic will have been checked PROGRESS_UPDATE_INTERVAL earlier then the current one, we need to adjust it for comparison
-    let adjustedLastTimeRemaining = lastTimeRemaining-PROGRESS_UPDATE_INTERVAL
+    // Since the last statistic will have been checked Constants.progressUpdateInterval earlier then the current one, we need to adjust it for comparison
+    let adjustedLastTimeRemaining = lastTimeRemaining - Constants.progressUpdateInterval
     
     // We determine the time remaining to be stable if timeRemaining and adjustedTimeRemaining are within 20% of each other
     self.isTimeRemainingStable = max(timeRemaining, adjustedLastTimeRemaining) / min(timeRemaining, adjustedLastTimeRemaining) < 1.2
@@ -151,7 +151,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     }
     
     // This currently updates progress every 0.5 seconds
-    timer = Timer.scheduledTimer(withTimeInterval: PROGRESS_UPDATE_INTERVAL, repeats: true, block: { _ in
+    timer = Timer.scheduledTimer(withTimeInterval: Constants.progressUpdateInterval, repeats: true, block: { _ in
       
       if let statisticsArray = ffmpegSession.getStatistics() as? [Statistics] {
         // This must be called before updateTimeRemaining to ensure we know whether the time remaining is stable or not.
@@ -162,7 +162,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
         let progressPercentage = self.getProgressPercentage(statistics: lastStatistics)
         let timeRemaining = self.getEstimatedTimeRemaining(statistics: lastStatistics, progressPercentage: progressPercentage)
         
-        self.updateProgressBar(value: progressPercentage, withInterval: PROGRESS_UPDATE_INTERVAL)
+        self.updateProgressBar(value: progressPercentage)
         self.updateTimeRemaining(timeRemaining)
       }
       
@@ -264,7 +264,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   }
   
   /// Update progress bar animation with Double value
-  func updateProgressBar(value: Double, withInterval: Double = PROGRESS_UPDATE_INTERVAL) {
+  func updateProgressBar(value: Double) {
     if value >= 100 {
       updateProgressBar(.hide)
       progressBar.animate(to: 0)
