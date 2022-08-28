@@ -81,12 +81,14 @@ class ViewController: NSViewController, DragDropViewDelegate {
     print("User did select \(format.rawValue)")
   }
   
+  /// Calculates the video conversion progress in percentage.
   func getProgressPercentage(statistics: Statistics) -> Double {
     let time = Double(statistics.getTime() / 1000)
     let progressPercentage = (time / self.videoDuration!) * 100
     return progressPercentage
   }
   
+  /// Calculates an estimated time remaining for the active video conversion.
   func getEstimatedTimeRemaining(statistics: Statistics, progressPercentage: Double) -> Double {
     let timeElapsed = self.startOfConversion!.timeIntervalSinceNow * -1
     let convertedFrames = statistics.getVideoFrameNumber()
@@ -96,6 +98,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     return timeRemaining
   }
   
+  /// Checks whether time estimates are stable or not, and sets isTimeRemainingStable to true once they have stabalized. Estimates are stable if they have not deviated by more than 20% since the last statistics query.
   func checkStabilityOfTimeRemaining(statisticsArray: [Statistics]) -> Void {
     // If we've already determined that the time remaining is stable, nothing to do
     if self.isTimeRemainingStable {
