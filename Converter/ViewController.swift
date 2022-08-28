@@ -45,7 +45,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
       newInputFileUrl = String(fileUrl.dropFirst(7)) //fileUrl.replacingOccurrences(of: "file://", with: "")
     }
     
-    setInputFileUrl(fileUrl: newInputFileUrl.fileURL.absoluteURL)
+    inputFileUrl = newInputFileUrl.fileURL.absoluteURL
     
     if Format.isSupported(fileUrl) {
       updateDragDropView(.videoFile)
@@ -58,11 +58,6 @@ class ViewController: NSViewController, DragDropViewDelegate {
   
   func updateDragDropView(_ forType: DragDropBox) {
     dragDropView.image = forType.image
-  }
-  
-  func setInputFileUrl(fileUrl: URL) {
-    self.inputFileUrl = fileUrl
-    resetProgressBar()
   }
   
   // TODO: Replace with Supported Formats popover view
