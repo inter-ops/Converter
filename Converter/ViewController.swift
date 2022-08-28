@@ -34,10 +34,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     updateSupportedSubText(.hide)
   }
   
-  override func viewDidAppear() {
-    // Open file browser on startup
-    //selectInputFileUrl()
-  }
+  // TODO: After conversion is done, we should change the state of the "Convert" button. We could do something like "Reset" to clear the entire UI. Or just auto clear the input file so that the user is forced to drag a new one in if they want to click "Convert" again.
   
   func dragDropViewDidReceive(fileUrl: String) {
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
@@ -47,7 +44,8 @@ class ViewController: NSViewController, DragDropViewDelegate {
     if fileUrl.prefix(7) == "file://" {
       newInputFileUrl = String(fileUrl.dropFirst(7)) //fileUrl.replacingOccurrences(of: "file://", with: "")
     }
-    inputFileUrl = newInputFileUrl.fileURL.absoluteURL
+    
+    setInputFileUrl(fileUrl: newInputFileUrl.fileURL.absoluteURL)
     
     if Format.isSupported(fileUrl) {
       updateDragDropView(.videoFile)
@@ -60,6 +58,11 @@ class ViewController: NSViewController, DragDropViewDelegate {
   
   func updateDragDropView(_ forType: DragDropBox) {
     dragDropView.image = forType.image
+  }
+  
+  func setInputFileUrl(fileUrl: URL) {
+    self.inputFileUrl = fileUrl
+    resetProgressBar()
   }
   
   // TODO: Replace with Supported Formats popover view
@@ -265,8 +268,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
   
   /// Update progress bar animation with Double value
   func updateProgressBar(value: Double, withInterval: Double = 0.5) {
-    updateProgressBar(.show)
     progressBar.animate(to: value)
+  }
+  
+  func resetProgressBar() {
+    updateProgressBar(value: 0)
+    estimatedTimeText.stringValue = "–:–"
   }
   
 }
