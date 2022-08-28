@@ -34,10 +34,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     updateSupportedSubText(.hide)
   }
   
-  override func viewDidAppear() {
-    // Open file browser on startup
-    //selectInputFileUrl()
-  }
+  // TODO: After conversion is done, we should change the state of the "Convert" button. We could do something like "Reset" to clear the entire UI. Or just auto clear the input file so that the user is forced to drag a new one in if they want to click "Convert" again.
   
   func dragDropViewDidReceive(fileUrl: String) {
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
@@ -47,6 +44,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     if fileUrl.prefix(7) == "file://" {
       newInputFileUrl = String(fileUrl.dropFirst(7)) //fileUrl.replacingOccurrences(of: "file://", with: "")
     }
+    
     inputFileUrl = newInputFileUrl.fileURL.absoluteURL
     
     if Format.isSupported(fileUrl) {
@@ -143,11 +141,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
     self.startOfConversion = Date()
     
     let ffmpegSession = runFfmpegConversion(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path) { _ in
-      print("Done converting!")
       timer.invalidate()
       
-      // TODO: This doesnt work currently. We need this to ensure the progress bar updates if the conversion completes before the timer interval starts
-      self.updateProgressBar(value: 100)
+      DispatchQueue.main.async {
+        self.updateProgressBar(value: 100)
+        self.estimatedTimeText.stringValue = "Done 🚀"
+      }
     }
     
     // This currently updates progress every 0.5 seconds
@@ -178,8 +177,6 @@ class ViewController: NSViewController, DragDropViewDelegate {
     let seconds = Int(remainingInSeconds)
     let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     
-    // TODO: Implement "Finishing up..." phase before "Done!"
-    // This TODO may not be necessary if we implement progress Timer properly
     if h > 0 {
       estimatedTimeText.stringValue = "\(h)h \(m)m"
     } else if m > 0 {
@@ -187,7 +184,8 @@ class ViewController: NSViewController, DragDropViewDelegate {
     } else if s > 0 {
       estimatedTimeText.stringValue = "\(s)s"
     } else {
-      estimatedTimeText.stringValue = "Done!"
+      // FFMPEG has a slight lag after frames are done processing but before the conversion is compelete, so we show the user a message to avoid freezing the time estimate.
+      estimatedTimeText.stringValue = "Finishing up..."
     }
   }
   
@@ -264,14 +262,13 @@ class ViewController: NSViewController, DragDropViewDelegate {
   }
   
   /// Update progress bar animation with Double value
-  func updateProgressBar(value: Double) {
-    if value >= 100 {
-      updateProgressBar(.hide)
-      progressBar.animate(to: 0)
-    } else {
-      updateProgressBar(.show)
-      progressBar.animate(to: value)
-    }
+  func updateProgressBar(value: Double, withInterval: Double = 0.5) {
+    progressBar.animate(to: value)
+  }
+  
+  func resetProgressBar() {
+    updateProgressBar(value: 0)
+    estimatedTimeText.stringValue = "–:–"
   }
   
 }
