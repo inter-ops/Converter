@@ -21,6 +21,10 @@ class ViewController: NSViewController, DragDropViewDelegate {
   var outputFormat: VideoFormat = .mp4   // Default output format
   var inputFileUrl: URL?
   var outputFileUrl: URL?
+  var videoDuration: Double?
+  var totalNumberOfFrames: Double?
+  var startOfConversion: Date?
+  var isTimeRemainingStable = false
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -77,6 +81,48 @@ class ViewController: NSViewController, DragDropViewDelegate {
     print("User did select \(format.rawValue)")
   }
   
+  /// Calculates the video conversion progress in percentage.
+  func getProgressPercentage(statistics: Statistics) -> Double {
+    let time = Double(statistics.getTime() / 1000)
+    let progressPercentage = (time / self.videoDuration!) * 100
+    return progressPercentage
+  }
+  
+  /// Calculates an estimated time remaining for the active video conversion.
+  func getEstimatedTimeRemaining(statistics: Statistics, progressPercentage: Double) -> Double {
+    let timeElapsed = self.startOfConversion!.timeIntervalSinceNow * -1
+    let convertedFrames = statistics.getVideoFrameNumber()
+    let totalConversionTime = timeElapsed * (self.totalNumberOfFrames! / Double(convertedFrames))
+    
+    let timeRemaining = totalConversionTime - timeElapsed
+    return timeRemaining
+  }
+  
+  /// Checks whether time estimates are stable or not, and sets isTimeRemainingStable to true once they have stabalized. Estimates are stable if they have not deviated by more than 20% since the last statistics query.
+  func checkStabilityOfTimeRemaining(statisticsArray: [Statistics]) -> Void {
+    // If we've already determined that the time remaining is stable, nothing to do
+    if self.isTimeRemainingStable {
+      return
+    }
+    
+    // Wait until we've collected at least 3 statistics before evaluating whether time estimates are stable
+    if statisticsArray.count < 3 {
+      return
+    }
+    
+    let progressPercentage = getProgressPercentage(statistics: statisticsArray[statisticsArray.count-1])
+    let timeRemaining = getEstimatedTimeRemaining(statistics: statisticsArray[statisticsArray.count-1], progressPercentage: progressPercentage)
+    
+    let lastProgressPercentage = getProgressPercentage(statistics: statisticsArray[statisticsArray.count-2])
+    let lastTimeRemaining = getEstimatedTimeRemaining(statistics: statisticsArray[statisticsArray.count-2], progressPercentage: lastProgressPercentage)
+    
+    // Since the last statistic will have been checked Constants.progressUpdateInterval earlier then the current one, we need to adjust it for comparison
+    let adjustedLastTimeRemaining = lastTimeRemaining - Constants.progressUpdateInterval
+    
+    // We determine the time remaining to be stable if timeRemaining and adjustedTimeRemaining are within 20% of each other
+    self.isTimeRemainingStable = max(timeRemaining, adjustedLastTimeRemaining) / min(timeRemaining, adjustedLastTimeRemaining) < 1.2
+  }
+  
   func userDidClickConvert() { userDidClickConvert(outputFormat) }
   func userDidClickConvert(_ withFormat: VideoFormat) {
     
@@ -85,8 +131,6 @@ class ViewController: NSViewController, DragDropViewDelegate {
     updateProgressBar(.show)
     updateProgressBar(value: 0)
     
-    let duration = getVideoDuration(inputFilePath: inputFileUrl!.path)
-    
     if (inputFileUrl == nil || outputFileUrl == nil) {
       print("User has not selected input or output file, skipping conversion!")
       return
@@ -94,8 +138,9 @@ class ViewController: NSViewController, DragDropViewDelegate {
     
     var timer = Timer()
     
-    let totalNumberOfFrames = getNumberOfFrames(inputFilePath: inputFileUrl!.path)
-    let startOfConversion = Date()
+    self.videoDuration = getVideoDuration(inputFilePath: inputFileUrl!.path)
+    self.totalNumberOfFrames = getNumberOfFrames(inputFilePath: inputFileUrl!.path)
+    self.startOfConversion = Date()
     
     let ffmpegSession = runFfmpegConversion(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path) { _ in
       print("Done converting!")
@@ -105,37 +150,31 @@ class ViewController: NSViewController, DragDropViewDelegate {
       self.updateProgressBar(value: 100)
     }
     
-    // TODO: time estimate is very unstable in first few seconds, lets hide it until we see it stabalize?
-    
     // This currently updates progress every 0.5 seconds
-    let interval = 0.5
-    timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { _ in
+    timer = Timer.scheduledTimer(withTimeInterval: Constants.progressUpdateInterval, repeats: true, block: { _ in
       
-      let statistics = ffmpegSession.getStatistics()
-      let count = statistics!.count
-      if (count > 0) {
-        if let lastStat = statistics![count-1] as? Statistics {
-          let time = Double(lastStat.getTime() / 1000)
-          let progressPercentage = (time / duration) * 100
-          print("Progress: \(progressPercentage) %")
-          self.updateProgressBar(value: progressPercentage, withInterval: interval)
-          
-          let timeElapsed = startOfConversion.timeIntervalSinceNow * -1
-          print("Time elapsed: \(timeElapsed)")
-          let convertedFrames = lastStat.getVideoFrameNumber()
-          print("Number of converted frames: \(convertedFrames)")
-          let totalConversionTime = timeElapsed * (totalNumberOfFrames / Double(convertedFrames))
-          
-          let timeRemaining = totalConversionTime - timeElapsed
-          print("Estimated time remaining: \(timeRemaining)s")
-          self.updateTimeRemaining(timeRemaining)
-        }
+      if let statisticsArray = ffmpegSession.getStatistics() as? [Statistics] {
+        // This must be called before updateTimeRemaining to ensure we know whether the time remaining is stable or not.
+        self.checkStabilityOfTimeRemaining(statisticsArray: statisticsArray)
+        
+        let lastStatistics = statisticsArray[statisticsArray.count - 1]
+        
+        let progressPercentage = self.getProgressPercentage(statistics: lastStatistics)
+        let timeRemaining = self.getEstimatedTimeRemaining(statistics: lastStatistics, progressPercentage: progressPercentage)
+        
+        self.updateProgressBar(value: progressPercentage)
+        self.updateTimeRemaining(timeRemaining)
       }
+      
     })
   }
   
   /// Takes total seconds remaining, formats to `hr, min, sec` and updates the UI text to reflect
   func updateTimeRemaining(_ remainingInSeconds: Double) {
+    if !self.isTimeRemainingStable {
+      return
+    }
+    
     let seconds = Int(remainingInSeconds)
     let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     
@@ -225,7 +264,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   }
   
   /// Update progress bar animation with Double value
-  func updateProgressBar(value: Double, withInterval: Double = 0.5) {
+  func updateProgressBar(value: Double) {
     if value >= 100 {
       updateProgressBar(.hide)
       progressBar.animate(to: 0)
