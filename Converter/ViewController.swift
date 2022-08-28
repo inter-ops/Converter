@@ -143,11 +143,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
     self.startOfConversion = Date()
     
     let ffmpegSession = runFfmpegConversion(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path) { _ in
-      print("Done converting!")
       timer.invalidate()
       
-      // TODO: This doesnt work currently. We need this to ensure the progress bar updates if the conversion completes before the timer interval starts
-      self.updateProgressBar(value: 100)
+      DispatchQueue.main.async {
+        self.updateProgressBar(value: 100)
+        self.estimatedTimeText.stringValue = "Done 🚀"
+      }
     }
     
     // This currently updates progress every 0.5 seconds
@@ -178,8 +179,6 @@ class ViewController: NSViewController, DragDropViewDelegate {
     let seconds = Int(remainingInSeconds)
     let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     
-    // TODO: Implement "Finishing up..." phase before "Done!"
-    // This TODO may not be necessary if we implement progress Timer properly
     if h > 0 {
       estimatedTimeText.stringValue = "\(h)h \(m)m"
     } else if m > 0 {
@@ -187,7 +186,8 @@ class ViewController: NSViewController, DragDropViewDelegate {
     } else if s > 0 {
       estimatedTimeText.stringValue = "\(s)s"
     } else {
-      estimatedTimeText.stringValue = "Done!"
+      // FFMPEG has a slight lag after frames are done processing but before the conversion is compelete, so we show the user a message to avoid freezing the time estimate.
+      estimatedTimeText.stringValue = "Finishing up..."
     }
   }
   
@@ -264,14 +264,9 @@ class ViewController: NSViewController, DragDropViewDelegate {
   }
   
   /// Update progress bar animation with Double value
-  func updateProgressBar(value: Double) {
-    if value >= 100 {
-      updateProgressBar(.hide)
-      progressBar.animate(to: 0)
-    } else {
-      updateProgressBar(.show)
-      progressBar.animate(to: value)
-    }
+  func updateProgressBar(value: Double, withInterval: Double = 0.5) {
+    updateProgressBar(.show)
+    progressBar.animate(to: value)
   }
   
 }
