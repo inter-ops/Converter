@@ -13,7 +13,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
-  @IBOutlet weak var convertButton: NSButton!
+  @IBOutlet weak var actionButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
   
   @IBOutlet weak var supportedSubText: NSTextField!
@@ -119,6 +119,24 @@ class ViewController: NSViewController, DragDropViewDelegate {
     
     // We determine the time remaining to be stable if timeRemaining and adjustedTimeRemaining are within 20% of each other
     self.isTimeRemainingStable = max(timeRemaining, adjustedLastTimeRemaining) / min(timeRemaining, adjustedLastTimeRemaining) < 1.2
+  }
+  
+  var isActivelyConverting = false
+  func userDidClickActionButton() {
+    if isActivelyConverting {
+      userDidClickStop()
+      actionButton.title = "Convert"
+    } else {
+      userDidClickConvert()
+      actionButton.title = "Stop"
+    }
+    isActivelyConverting = !isActivelyConverting
+  }
+  
+  /// Called when the user clicks "Stop" upon a conversion-in-progress
+  func userDidClickStop() {
+    // TODO: Stop conversion process, possibly with an alert and deleting the mid-converted file?
+    print("User did stop conversion process")
   }
   
   func userDidClickConvert() { userDidClickConvert(outputFormat) }
@@ -243,9 +261,9 @@ class ViewController: NSViewController, DragDropViewDelegate {
   var userSelectedFormat = VideoFormat.mp4.dropdownTitle
   var userSelectedFormatType: VideoFormat = .mp4
   
-  @IBAction func clickConvert(_ sender: Any) {
-    // User did click "Convert" button
-    userDidClickConvert()
+  @IBAction func clickActionButton(_ sender: Any) {
+    // User did click button: "Convert" or "Stop"
+    userDidClickActionButton()
   }
   
   // MARK: Progress Bar

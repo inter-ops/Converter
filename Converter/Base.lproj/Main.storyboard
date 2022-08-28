@@ -785,7 +785,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="clickConvert:" target="XfG-lQ-9wD" id="Yvn-EI-2eR"/>
+                                    <action selector="clickActionButton:" target="XfG-lQ-9wD" id="HUq-kU-byd"/>
                                 </connections>
                             </button>
                             <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vOg-XD-oHC">
@@ -854,7 +854,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="convertButton" destination="Bdx-sF-qWs" id="frr-On-Qo0"/>
+                        <outlet property="actionButton" destination="Bdx-sF-qWs" id="TcE-73-pkG"/>
                         <outlet property="dragDropView" destination="v9D-vH-xx2" id="i3t-qm-CIt"/>
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
