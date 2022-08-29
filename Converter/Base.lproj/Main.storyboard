@@ -798,34 +798,12 @@
                             </button>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="WOp-7k-7wN" customClass="DragDropView" customModule="Converter" customModuleProvider="target">
                                 <rect key="frame" x="25" y="191" width="300" height="169"/>
-                                <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4IT-LZ-trE">
-                                        <rect key="frame" x="18" y="20" width="264" height="22"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" lineBreakMode="truncatingMiddle" alignment="center" title="or double click to browse..." id="SSd-zV-neB">
-                                            <font key="font" metaFont="system" size="14"/>
-                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                    </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Iz-aQ-n3Y">
-                                        <rect key="frame" x="18" y="119" width="264" height="26"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Drag and drop your video here" id="gEL-kn-M3y">
-                                            <font key="font" metaFont="system" size="17"/>
-                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                    </textField>
-                                </subviews>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Xfn-LD-0CL"/>
                                     <constraint firstAttribute="height" constant="169" id="wXQ-EM-eKq"/>
                                 </constraints>
                                 <connections>
-                                    <outlet property="bottomTextField" destination="4IT-LZ-trE" id="Jax-Up-FQ9"/>
                                     <outlet property="delegate" destination="XfG-lQ-9wD" id="VSn-6e-VYs"/>
-                                    <outlet property="topTextField" destination="4Iz-aQ-n3Y" id="6sx-Va-pnH"/>
                                 </connections>
                             </customView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SdE-uZ-kGB">
@@ -841,6 +819,24 @@
                                 <rect key="frame" x="25" y="105" width="300" height="6"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wI2-qE-TlK">
+                                <rect key="frame" x="35" y="316" width="280" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Drag and drop your video here" id="brH-tr-9li">
+                                    <font key="font" metaFont="system" size="17"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t3K-S7-h56">
+                                <rect key="frame" x="35" y="212" width="280" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="truncatingMiddle" alignment="center" title="or double click to browse..." id="tEy-bs-gnI">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="3HO-pW-3cV"/>
@@ -855,6 +851,8 @@
                     </view>
                     <connections>
                         <outlet property="actionButton" destination="Bdx-sF-qWs" id="TcE-73-pkG"/>
+                        <outlet property="dragDropBottomTitle" destination="t3K-S7-h56" id="PYQ-hS-1yp"/>
+                        <outlet property="dragDropTopTitle" destination="wI2-qE-TlK" id="loF-4s-gyn"/>
                         <outlet property="dragDropView" destination="v9D-vH-xx2" id="i3t-qm-CIt"/>
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>

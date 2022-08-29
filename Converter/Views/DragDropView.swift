@@ -11,13 +11,12 @@ import Cocoa
 
 @objc protocol DragDropViewDelegate {
   func dragDropViewDidReceive(fileUrl: String)
+  func updateDragDropTitle(_ top: String, bottom: String)
 }
 
 class DragDropView: NSView {
   
   @IBOutlet weak var delegate: DragDropViewDelegate?
-  @IBOutlet weak var topTextField: NSTextField!
-  @IBOutlet weak var bottomTextField: NSTextField!
   
   var filePath: String?
   let expectedExt = Format.supported //supportedFormats
@@ -111,8 +110,7 @@ class DragDropView: NSView {
   }
   
   func updateTextField(top: String = "", bottom: String) {
-    if !top.isEmpty { topTextField.stringValue = top }
-    if !bottom.isEmpty { bottomTextField.stringValue = bottom }
+    delegate?.updateDragDropTitle(top, bottom: bottom)
   }
   
   override func draw(_ dirtyRect: NSRect) {

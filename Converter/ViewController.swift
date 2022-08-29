@@ -16,6 +16,10 @@ class ViewController: NSViewController, DragDropViewDelegate {
   @IBOutlet weak var actionButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
   
+  // DragDropView titles
+  @IBOutlet weak var dragDropTopTitle: NSTextField!
+  @IBOutlet weak var dragDropBottomTitle: NSTextField!
+  
   @IBOutlet weak var supportedSubText: NSTextField!
   
   var outputFormat: VideoFormat = .mp4   // Default output format
@@ -58,6 +62,11 @@ class ViewController: NSViewController, DragDropViewDelegate {
   
   func updateDragDropView(_ forType: DragDropBox) {
     dragDropView.image = forType.image
+  }
+  /// Sets the dragDropBox title text without affecting the box style (ie. `bottom: inputFileName`)
+  func updateDragDropTitle(_ top: String = "", bottom: String = "") {
+    if !top.isEmpty { dragDropTopTitle.stringValue = top }
+    if !bottom.isEmpty { dragDropBottomTitle.stringValue = bottom }
   }
   
   // TODO: Replace with Supported Formats popover view
