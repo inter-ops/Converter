@@ -11,7 +11,6 @@ import Cocoa
 
 @objc protocol DragDropViewDelegate {
   func dragDropViewDidReceive(fileUrl: String)
-  func updateDragDropTitle(_ top: String, bottom: String)
   func updateDragDrop(title: String, subtitle: String, withWarning: Bool)
 }
 
@@ -53,9 +52,6 @@ class DragDropView: NSView {
     if response == .OK {
       let path = openPanel.url!.absoluteString
       delegate?.dragDropViewDidReceive(fileUrl: path)
-      // Set bottomTextField to equal filename
-      
-      updateTextField(bottom: path.lastPathComponent)
     }
   }
   
@@ -80,14 +76,6 @@ class DragDropView: NSView {
     
     let testFilePath = path.lowercased()
     return Format.isSupported(testFilePath)
-    
-//    let suffix = URL(fileURLWithPath: path).pathExtension
-//    for ext in self.expectedExt {
-//      if ext.lowercased() == suffix {
-//        return true
-//      }
-//    }
-//    return false
   }
   
   override func draggingExited(_ sender: NSDraggingInfo?) {
@@ -107,14 +95,7 @@ class DragDropView: NSView {
     filePath = path
     delegate?.dragDropViewDidReceive(fileUrl: path)
     
-    // Set bottomTextField to equal filename
-    updateTextField(bottom: path.lastPathComponent)
-    
     return true
-  }
-  
-  func updateTextField(top: String = "", bottom: String) {
-    delegate?.updateDragDropTitle(top, bottom: bottom)
   }
   
   override func draw(_ dirtyRect: NSRect) {
@@ -123,10 +104,4 @@ class DragDropView: NSView {
     // Drawing code here.
   }
   
-}
-
-extension String {
-  var fileURL: URL { return URL(fileURLWithPath: self) }
-  var pathExtension: String { return fileURL.pathExtension.lowercased() }
-  var lastPathComponent: String { return fileURL.lastPathComponent }
 }

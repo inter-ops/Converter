@@ -52,7 +52,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     inputFileUrl = newInputFileUrl.fileURL.absoluteURL
     
     if Format.isSupported(fileUrl) {
-      updateDragDrop(withStyle: .videoFile)
+      updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
     } else {
       updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
       // TODO: Show Unsupported popover
@@ -356,4 +356,10 @@ enum AnimateFade {
     }
     
   }
+}
+
+extension String {
+  var fileURL: URL { return URL(fileURLWithPath: self) }
+  var pathExtension: String { return fileURL.pathExtension.lowercased() }
+  var lastPathComponent: String { return fileURL.lastPathComponent }
 }
