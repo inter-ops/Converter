@@ -12,6 +12,7 @@ import Cocoa
 @objc protocol DragDropViewDelegate {
   func dragDropViewDidReceive(fileUrl: String)
   func updateDragDropTitle(_ top: String, bottom: String)
+  func updateDragDrop(title: String, subtitle: String, withWarning: Bool)
 }
 
 class DragDropView: NSView {
@@ -65,6 +66,9 @@ class DragDropView: NSView {
       layer?.backgroundColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor //NSColor.blue.cgColor
       return .copy
     } else {
+      layer?.backgroundColor = NSColor(red: 225, green: 0, blue: 0, alpha: 0.2).cgColor
+      delegate?.updateDragDrop(title: "", subtitle: "Unsupported file type", withWarning: true)
+      
       return NSDragOperation()
     }
   }

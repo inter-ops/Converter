@@ -52,14 +52,36 @@ class ViewController: NSViewController, DragDropViewDelegate {
     inputFileUrl = newInputFileUrl.fileURL.absoluteURL
     
     if Format.isSupported(fileUrl) {
-      updateDragDropView(.videoFile)
-      updateSupportedSubText(.hide)
+      updateDragDrop(withStyle: .videoFile)
     } else {
-      updateDragDropView(.unsupported)
-      updateSupportedSubText(.show)
+      updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
+      // TODO: Show Unsupported popover
+      
     }
   }
   
+  /// Handler for all things dragDropBox related
+  /// - parameters:
+  ///   - title: Edits the top title text of the box (ie. "Drag and drop your video here")
+  ///   - subtitle: Edits the bottom title text of the box (used for additional info and warning descriptors)
+  ///   - withStyle: Shows the box style (ie. `.warning` for red outline box)
+  /// ```
+  /// // Red box with error message
+  /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
+  /// ```
+  func updateDragDrop(title: String = "", subtitle: String = "", withStyle: DragDropBox) {
+    updateDragDropView(withStyle)
+    updateDragDropTitle(title, bottom: subtitle)
+  }
+  // Obj-C compatible function for passing updateDragDop through delegate
+  func updateDragDrop(title: String, subtitle: String, withWarning: Bool) {
+    if withWarning {
+      updateDragDrop(title: title, subtitle: subtitle, withStyle: .warning)
+    } else {
+      updateDragDrop(title: title, subtitle: subtitle, withStyle: .videoFile)
+    }
+  }
+  /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
   func updateDragDropView(_ forType: DragDropBox) {
     dragDropView.image = forType.image
   }

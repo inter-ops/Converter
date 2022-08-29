@@ -11,13 +11,13 @@ enum DragDropBox {
   
   case empty
   case videoFile
-  case unsupported
+  case warning
   
   var image: NSImage {
     switch self {
     case .empty:        return NSImage(named: "DragDropBox-Icon")!
     case .videoFile:    return NSImage(named: "DragDropBox-Icon-Selected")!
-    case .unsupported:  return NSImage(named: "DragDropBox-Unsupported")!
+    case .warning:      return NSImage(named: "DragDropBox-Warning")!
     }
   }
   
