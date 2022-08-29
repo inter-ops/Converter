@@ -152,16 +152,30 @@ class ViewController: NSViewController, DragDropViewDelegate {
     self.isTimeRemainingStable = max(timeRemaining, adjustedLastTimeRemaining) / min(timeRemaining, adjustedLastTimeRemaining) < 1.2
   }
   
-  var isActivelyConverting = false
+  /// Determines the state of the conversion process for the Action button (ie. if `.ready`, the app is ready to begin the process; if `.converting`, the app is undergoing conversion
+  var conversionState: ConversionState = .ready
+  /// Triggers the action button handler if there exists a valid input file; if no input exists, show an error
   func userDidClickActionButton() {
-    if isActivelyConverting {
-      userDidClickStop()
-      actionButton.title = "Convert"
+    if inputFileUrl == nil {
+      updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
     } else {
+      handleActionButton(withStatus: conversionState)
+    }
+  }
+  /// Handles the action button states, and their respective actions, based on the current ConversionState: `.ready` or `.converting`
+  func handleActionButton(withStatus: ConversionState) {
+    switch withStatus {
+    case .ready:
       userDidClickConvert()
       actionButton.title = "Stop"
+      conversionState = .ready
+    case .converting:
+      userDidClickStop()
+      actionButton.title = "Convert"
+      conversionState = .converting
     }
-    isActivelyConverting = !isActivelyConverting
+  }
+  
   }
   
   /// Called when the user clicks "Stop" upon a conversion-in-progress
@@ -322,6 +336,10 @@ class ViewController: NSViewController, DragDropViewDelegate {
   
 }
 
+enum ConversionState {
+  case ready
+  case converting
+}
 
 enum AnimateFade {
   case show, hide
