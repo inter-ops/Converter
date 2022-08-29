@@ -11,13 +11,12 @@ import Cocoa
 
 @objc protocol DragDropViewDelegate {
   func dragDropViewDidReceive(fileUrl: String)
+  func updateDragDrop(title: String, subtitle: String, withWarning: Bool)
 }
 
 class DragDropView: NSView {
   
   @IBOutlet weak var delegate: DragDropViewDelegate?
-  @IBOutlet weak var topTextField: NSTextField!
-  @IBOutlet weak var bottomTextField: NSTextField!
   
   var filePath: String?
   let expectedExt = Format.supported //supportedFormats
@@ -53,9 +52,6 @@ class DragDropView: NSView {
     if response == .OK {
       let path = openPanel.url!.absoluteString
       delegate?.dragDropViewDidReceive(fileUrl: path)
-      // Set bottomTextField to equal filename
-      
-      updateTextField(bottom: path.lastPathComponent)
     }
   }
   
@@ -66,6 +62,9 @@ class DragDropView: NSView {
       layer?.backgroundColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor //NSColor.blue.cgColor
       return .copy
     } else {
+      layer?.backgroundColor = NSColor(red: 225, green: 0, blue: 0, alpha: 0.2).cgColor
+      delegate?.updateDragDrop(title: "", subtitle: "Unsupported file type", withWarning: true)
+      
       return NSDragOperation()
     }
   }
@@ -77,14 +76,6 @@ class DragDropView: NSView {
     
     let testFilePath = path.lowercased()
     return Format.isSupported(testFilePath)
-    
-//    let suffix = URL(fileURLWithPath: path).pathExtension
-//    for ext in self.expectedExt {
-//      if ext.lowercased() == suffix {
-//        return true
-//      }
-//    }
-//    return false
   }
   
   override func draggingExited(_ sender: NSDraggingInfo?) {
@@ -104,15 +95,7 @@ class DragDropView: NSView {
     filePath = path
     delegate?.dragDropViewDidReceive(fileUrl: path)
     
-    // Set bottomTextField to equal filename
-    updateTextField(bottom: path.lastPathComponent)
-    
     return true
-  }
-  
-  func updateTextField(top: String = "", bottom: String) {
-    if !top.isEmpty { topTextField.stringValue = top }
-    if !bottom.isEmpty { bottomTextField.stringValue = bottom }
   }
   
   override func draw(_ dirtyRect: NSRect) {
@@ -121,10 +104,4 @@ class DragDropView: NSView {
     // Drawing code here.
   }
   
-}
-
-extension String {
-  var fileURL: URL { return URL(fileURLWithPath: self) }
-  var pathExtension: String { return fileURL.pathExtension.lowercased() }
-  var lastPathComponent: String { return fileURL.lastPathComponent }
 }

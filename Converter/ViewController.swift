@@ -13,8 +13,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
   @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
-  @IBOutlet weak var convertButton: NSButton!
+  @IBOutlet weak var actionButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
+  
+  // DragDropView titles
+  @IBOutlet weak var dragDropTopTitle: NSTextField!
+  @IBOutlet weak var dragDropBottomTitle: NSTextField!
   
   @IBOutlet weak var supportedSubText: NSTextField!
   
@@ -48,16 +52,45 @@ class ViewController: NSViewController, DragDropViewDelegate {
     inputFileUrl = newInputFileUrl.fileURL.absoluteURL
     
     if Format.isSupported(fileUrl) {
-      updateDragDropView(.videoFile)
+      updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
       updateSupportedSubText(.hide)
     } else {
-      updateDragDropView(.unsupported)
+      updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
+      // TODO: Show Unsupported popover
       updateSupportedSubText(.show)
+      
     }
   }
   
+  /// Handler for all things dragDropBox related
+  /// - parameters:
+  ///   - title: Edits the top title text of the box (ie. "Drag and drop your video here")
+  ///   - subtitle: Edits the bottom title text of the box (used for additional info and warning descriptors)
+  ///   - withStyle: Shows the box style (ie. `.warning` for red outline box)
+  /// ```
+  /// // Red box with error message
+  /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
+  /// ```
+  func updateDragDrop(title: String = "", subtitle: String = "", withStyle: DragDropBox) {
+    updateDragDropView(withStyle)
+    updateDragDropTitle(title, bottom: subtitle)
+  }
+  // Obj-C compatible function for passing updateDragDop through delegate
+  func updateDragDrop(title: String, subtitle: String, withWarning: Bool) {
+    if withWarning {
+      updateDragDrop(title: title, subtitle: subtitle, withStyle: .warning)
+    } else {
+      updateDragDrop(title: title, subtitle: subtitle, withStyle: .videoFile)
+    }
+  }
+  /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
   func updateDragDropView(_ forType: DragDropBox) {
     dragDropView.image = forType.image
+  }
+  /// Sets the dragDropBox title text without affecting the box style (ie. `bottom: inputFileName`)
+  func updateDragDropTitle(_ top: String = "", bottom: String = "") {
+    if !top.isEmpty { dragDropTopTitle.stringValue = top }
+    if !bottom.isEmpty { dragDropBottomTitle.stringValue = bottom }
   }
   
   // TODO: Replace with Supported Formats popover view
@@ -121,6 +154,42 @@ class ViewController: NSViewController, DragDropViewDelegate {
     self.isTimeRemainingStable = max(timeRemaining, adjustedLastTimeRemaining) / min(timeRemaining, adjustedLastTimeRemaining) < 1.2
   }
   
+  /// Determines the state of the conversion process for the Action button (ie. if `.ready`, the app is ready to begin the process; if `.converting`, the app is undergoing conversion
+  var currentStatus: ConversionState = .ready
+  /// Triggers the action button handler if there exists a valid input file; if no input exists, show an error
+  func userDidClickActionButton() {
+    if inputFileUrl == nil {
+      updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
+    } else {
+      handleActionButton(withStatus: currentStatus)
+    }
+  }
+  /// Handles the action button states, and their respective actions, based on the current ConversionState: `.ready` or `.converting`
+  func handleActionButton(withStatus: ConversionState) {
+    switch withStatus {
+    case .ready:
+      userDidClickConvert()
+      actionButton.title = "Stop"
+      currentStatus = .converting
+    case .converting:
+      userDidClickStop()
+      actionButton.title = "Convert"
+      currentStatus = .ready
+    }
+  }
+  
+  /// Called when a conversion process is completed and the app's state needs to be reset
+  func resetActionButton() {
+    actionButton.title = "Convert"
+    currentStatus = .ready
+  }
+  
+  /// Called when the user clicks "Stop" upon a conversion-in-progress
+  func userDidClickStop() {
+    // TODO: Stop conversion process, possibly with an alert and deleting the mid-converted file?
+    print("User did stop conversion process")
+  }
+  
   func userDidClickConvert() { userDidClickConvert(outputFormat) }
   func userDidClickConvert(_ withFormat: VideoFormat) {
     
@@ -146,6 +215,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
       DispatchQueue.main.async {
         self.updateProgressBar(value: 100)
         self.estimatedTimeText.stringValue = "Done 🚀"
+        self.resetActionButton()
       }
     }
     
@@ -243,9 +313,9 @@ class ViewController: NSViewController, DragDropViewDelegate {
   var userSelectedFormat = VideoFormat.mp4.dropdownTitle
   var userSelectedFormatType: VideoFormat = .mp4
   
-  @IBAction func clickConvert(_ sender: Any) {
-    // User did click "Convert" button
-    userDidClickConvert()
+  @IBAction func clickActionButton(_ sender: Any) {
+    // User did click button: "Convert" or "Stop"
+    userDidClickActionButton()
   }
   
   // MARK: Progress Bar
@@ -273,6 +343,10 @@ class ViewController: NSViewController, DragDropViewDelegate {
   
 }
 
+enum ConversionState {
+  case ready
+  case converting
+}
 
 enum AnimateFade {
   case show, hide
@@ -284,4 +358,10 @@ enum AnimateFade {
     }
     
   }
+}
+
+extension String {
+  var fileURL: URL { return URL(fileURLWithPath: self) }
+  var pathExtension: String { return fileURL.pathExtension.lowercased() }
+  var lastPathComponent: String { return fileURL.lastPathComponent }
 }
