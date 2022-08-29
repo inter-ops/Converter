@@ -53,9 +53,11 @@ class ViewController: NSViewController, DragDropViewDelegate {
     
     if Format.isSupported(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
+      updateSupportedSubText(.hide)
     } else {
       updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
       // TODO: Show Unsupported popover
+      updateSupportedSubText(.show)
       
     }
   }
