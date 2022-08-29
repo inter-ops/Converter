@@ -176,6 +176,10 @@ class ViewController: NSViewController, DragDropViewDelegate {
     }
   }
   
+  /// Called when a conversion process is completed and the app's state needs to be reset
+  func resetActionButton() {
+    actionButton.title = "Convert"
+    conversionState = .ready
   }
   
   /// Called when the user clicks "Stop" upon a conversion-in-progress
@@ -209,6 +213,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
       DispatchQueue.main.async {
         self.updateProgressBar(value: 100)
         self.estimatedTimeText.stringValue = "Done 🚀"
+        self.resetActionButton()
       }
     }
     
