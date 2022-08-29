@@ -38,8 +38,6 @@ class ViewController: NSViewController, DragDropViewDelegate {
     updateSupportedSubText(.hide)
   }
   
-  // TODO: After conversion is done, we should change the state of the "Convert" button. We could do something like "Reset" to clear the entire UI. Or just auto clear the input file so that the user is forced to drag a new one in if they want to click "Convert" again.
-  
   func dragDropViewDidReceive(fileUrl: String) {
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
@@ -54,6 +52,12 @@ class ViewController: NSViewController, DragDropViewDelegate {
     if Format.isSupported(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
       updateSupportedSubText(.hide)
+      
+      let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
+      if !isValid {
+        updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
+        inputFileUrl = nil
+      }
     } else {
       updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
       // TODO: Show Unsupported popover
