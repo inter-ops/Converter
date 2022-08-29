@@ -56,6 +56,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
       let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
       if !isValid {
         updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
+        inputFileUrl = nil
       }
     } else {
       updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
