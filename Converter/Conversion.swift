@@ -100,3 +100,12 @@ func getVideoCodec(inputFilePath: String) -> VideoCodec {
   let codec = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
   return convertToVideoCodec(inputCodec: codec)
 }
+
+func isFileValid(inputFilePath: String) -> Bool {
+  let session = FFprobeKit.execute("-loglevel error \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let error = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  
+  return error.count == 0
+}
