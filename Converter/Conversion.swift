@@ -49,7 +49,7 @@ func getVideoAndAudioConversionCommand(inputFilePath: String, outputFilePath: St
   // Simple copy codec for any conversion between mp4, mkv, mov, m4v
   // TODO: There are likely still cases where this will break a video
   if isWrapperConversionFormat(filePath: inputFilePath) && isWrapperConversionFormat(filePath: outputFilePath) {
-    return "-i \"\(inputFilePath)\" -c:v copy -c:a copy"
+    return "-c:v copy -c:a copy"
   }
   
   // mp4, mkv, mov, m4v, avi -> webm
@@ -95,9 +95,8 @@ func getSubtitleConversionCommand(inputFilePath: String, outputFilePath: String)
 func runFfmpegConversion(inputFilePath: String, outputFilePath: String, onDone: @escaping (_: FFmpegSession?) -> Void) -> FFmpegSession {
   let videoAndAudioCommand = getVideoAndAudioConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
   let subtitleCommand = getSubtitleConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-  let command = "-i \"\(inputFilePath)\" \(videoAndAudioCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  let command = "-y -i \"\(inputFilePath)\" \(videoAndAudioCommand) \(subtitleCommand) \"\(outputFilePath)\""
   
-  // TODO: this breaks if the file already exists, need to first delete output file
   let session = FFmpegKit.executeAsync(command, withCompleteCallback: onDone)
   
   return session!

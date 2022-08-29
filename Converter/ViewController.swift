@@ -152,7 +152,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
     // This currently updates progress every 0.5 seconds
     timer = Timer.scheduledTimer(withTimeInterval: Constants.progressUpdateInterval, repeats: true, block: { _ in
       
-      if let statisticsArray = ffmpegSession.getStatistics() as? [Statistics] {
+      if let statisticsArray = ffmpegSession.getStatistics() as? [Statistics], statisticsArray.count > 0 {
         // This must be called before updateTimeRemaining to ensure we know whether the time remaining is stable or not.
         self.checkStabilityOfTimeRemaining(statisticsArray: statisticsArray)
         
