@@ -212,6 +212,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         
         self.resetActionButton()
         self.outputFileUrl = nil
+        self.isTimeRemainingStable = false
+        self.videoDuration = nil
+        self.totalNumberOfFrames = nil
+        self.startOfConversion = nil
       }
     }
     
