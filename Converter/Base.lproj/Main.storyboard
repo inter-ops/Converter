@@ -864,8 +864,29 @@
             </objects>
             <point key="canvasLocation" x="74" y="309"/>
         </scene>
+        <!--Supported Formats View Controller-->
+        <scene sceneID="bWs-mc-xnW">
+            <objects>
+                <viewController id="tdq-GI-y6j" customClass="SupportedFormatsViewController" customModule="Converter" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="gaj-12-IZn">
+                        <rect key="frame" x="0.0" y="0.0" width="240" height="140"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RMn-sh-dW0">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="140"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Supported-Formats-Popover" id="rhe-cT-OEt"/>
+                            </imageView>
+                        </subviews>
+                    </view>
+                </viewController>
+                <customObject id="FOh-DJ-csE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="433" y="309"/>
+        </scene>
     </scenes>
     <resources>
         <image name="DragDropBox-Icon" width="300" height="169"/>
+        <image name="Supported-Formats-Popover" width="240" height="140"/>
     </resources>
 </document>
