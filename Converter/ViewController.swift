@@ -374,6 +374,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       popover.performClose(nil)
     }
   }
+  /// Obj-C compatible function for dismissing supportedFormatsPopover from delegate
+  func hideSupportedFormatsPopover() {
+    hidePopover(supportedFormatsPopover)
+  }
   
 }
 
