@@ -359,10 +359,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }()
   /// Displays `helpInfoPopover` to minY-position of object sender: `(?)`
   @IBAction func showHelpInfoPopover(sender: NSButton) {
-    let positioningView = sender
-    let positioningRect = NSZeroRect
-    let preferredEdge = NSRectEdge.minY
-    helpInfoPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
+    if (helpInfoPopover.isShown) {
+      hidePopover(helpInfoPopover)
+    } else {
+      let positioningView = sender
+      let positioningRect = NSZeroRect
+      let preferredEdge = NSRectEdge.minY
+      helpInfoPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
+    }
   }
   /// Hide specific NSPopover object
   func hidePopover(_ popover: NSPopover) {
