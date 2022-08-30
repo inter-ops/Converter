@@ -8,7 +8,7 @@
 import Cocoa
 import ffmpegkit
 
-class ViewController: NSViewController, DragDropViewDelegate {
+class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
   @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
@@ -164,6 +164,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
   func userDidClickActionButton() {
     if inputFileUrl == nil {
       updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
+      showSupportedFormatsPopover()
     } else {
       handleActionButton(withStatus: currentStatus)
     }
@@ -343,6 +344,48 @@ class ViewController: NSViewController, DragDropViewDelegate {
   func resetProgressBar() {
     updateProgressBar(value: 0)
     estimatedTimeText.stringValue = "–:–"
+  }
+  
+  
+  
+  // MARK: Popovers
+  /// Initialize popover to call `SupportedFormatsViewController`
+  lazy var supportedFormatsPopover: NSPopover = {
+    let popover = NSPopover()
+    popover.behavior = .semitransient
+    popover.contentViewController = SupportedFormatsViewController()
+    popover.delegate = self
+    popover.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+    return popover
+  }()
+  /// Displays `supportedFormatsPopover` to maxX-position of `dragDropView`
+  func showSupportedFormatsPopover() {
+    let positioningView = dragDropView!
+    let positioningRect = NSZeroRect
+    let preferredEdge = NSRectEdge.maxX
+    supportedFormatsPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
+  }
+  /// Initialize popover to call `HelpInfoViewController`
+  lazy var helpInfoPopover: NSPopover = {
+    let popover = NSPopover()
+    popover.behavior = .semitransient
+    popover.contentViewController = HelpInfoViewController()
+    popover.delegate = self
+    popover.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+    return popover
+  }()
+  /// Displays `helpInfoPopover` to minY-position of object sender: `(?)`
+  @IBAction func showHelpInfoPopover(sender: NSButton) {
+    let positioningView = sender
+    let positioningRect = NSZeroRect
+    let preferredEdge = NSRectEdge.minY
+    helpInfoPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
+  }
+  /// Hide specific NSPopover object
+  func hidePopover(_ popover: NSPopover) {
+    if popover.isShown {
+      popover.performClose(nil)
+    }
   }
   
 }
