@@ -13,6 +13,9 @@
 		7978DA6B28BAE30400BC254B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978DA6A28BAE30400BC254B /* Constants.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
+		C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */; };
+		C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C257C19528BE70C800E2849D /* HelpInfoViewController.swift */; };
+		C257C19828BE70F200E2849D /* SupportedFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19728BE70F200E2849D /* SupportedFormatsViewController.xib */; };
 		C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */; };
 		C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */; };
 		C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4828A950BA00BDCCD4 /* ViewController.swift */; };
@@ -30,6 +33,9 @@
 		7978DA6A28BAE30400BC254B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
 		C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulProgressIndicator.swift; sourceTree = "<group>"; };
+		C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpInfoViewController.xib; sourceTree = "<group>"; };
+		C257C19528BE70C800E2849D /* HelpInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpInfoViewController.swift; sourceTree = "<group>"; };
+		C257C19728BE70F200E2849D /* SupportedFormatsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupportedFormatsViewController.xib; sourceTree = "<group>"; };
 		C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionDidComplete.swift; sourceTree = "<group>"; };
 		C2D33F4328A950BA00BDCCD4 /* Converter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Converter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -68,7 +74,10 @@
 		C24745C728BD8812007E128B /* Popover */ = {
 			isa = PBXGroup;
 			children = (
+				C257C19528BE70C800E2849D /* HelpInfoViewController.swift */,
+				C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */,
 				C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */,
+				C257C19728BE70F200E2849D /* SupportedFormatsViewController.xib */,
 			);
 			path = Popover;
 			sourceTree = "<group>";
@@ -212,8 +221,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */,
 				C2D33F4B28A950BF00BDCCD4 /* Assets.xcassets in Resources */,
 				C2D33F4E28A950BF00BDCCD4 /* Main.storyboard in Resources */,
+				C257C19828BE70F200E2849D /* SupportedFormatsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +283,7 @@
 				C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */,
 				C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */,
 				7978DA6B28BAE30400BC254B /* Constants.swift in Sources */,
+				C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */,
 				C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */,
 				C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */,
 				794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */,
