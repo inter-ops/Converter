@@ -809,15 +809,6 @@
                                     <outlet property="delegate" destination="XfG-lQ-9wD" id="VSn-6e-VYs"/>
                                 </connections>
                             </customView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SdE-uZ-kGB">
-                                <rect key="frame" x="23" y="169" width="304" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Supported: mp4, m4v..." id="MGz-2H-Rws">
-                                    <font key="font" metaFont="cellTitle"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JZg-d2-J84" customClass="ColorfulProgressIndicator" customModule="Converter" customModuleProvider="target">
                                 <rect key="frame" x="25" y="105" width="300" height="6"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -860,7 +851,6 @@
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
                         <outlet property="progressBar" destination="JZg-d2-J84" id="oEX-c3-c8A"/>
-                        <outlet property="supportedSubText" destination="SdE-uZ-kGB" id="Lmz-8Z-7Nn"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

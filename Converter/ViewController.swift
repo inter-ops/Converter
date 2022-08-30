@@ -20,8 +20,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
   
-  @IBOutlet weak var supportedSubText: NSTextField!
-  
   var outputFormat: VideoFormat = .mp4   // Default output format
   var inputFileUrl: URL?
   var outputFileUrl: URL?
@@ -35,7 +33,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Init view
     initProgressBar()
     initDropdownMenu()
-    updateSupportedSubText(.hide)
   }
   
   func dragDropViewDidReceive(fileUrl: String) {
@@ -51,7 +48,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     if Format.isSupported(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
-      updateSupportedSubText(.hide)
       
       let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
       if !isValid {
@@ -61,9 +57,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     } else {
       updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
       showSupportedFormatsPopover()
-      
-      updateSupportedSubText(.show)
-      
     }
   }
   
@@ -96,17 +89,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {
     if !top.isEmpty { dragDropTopTitle.stringValue = top }
     if !bottom.isEmpty { dragDropBottomTitle.stringValue = bottom }
-  }
-  
-  // TODO: Replace with Supported Formats popover view
-  func updateSupportedSubText(_ animate: AnimateFade) {
-    let supportedFileTypes = Format.supported.joined(separator: ", ")
-    switch animate {
-    case .show:
-      supportedSubText.stringValue = "Supported: \(supportedFileTypes)"
-    case .hide:
-      supportedSubText.stringValue = ""
-    }
   }
   
   /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
