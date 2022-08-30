@@ -8,7 +8,7 @@
 import Cocoa
 import ffmpegkit
 
-class ViewController: NSViewController, DragDropViewDelegate {
+class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
   @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
@@ -19,8 +19,6 @@ class ViewController: NSViewController, DragDropViewDelegate {
   // DragDropView titles
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
-  
-  @IBOutlet weak var supportedSubText: NSTextField!
   
   var outputFormat: VideoFormat = .mp4   // Default output format
   var inputFileUrl: URL?
@@ -35,7 +33,6 @@ class ViewController: NSViewController, DragDropViewDelegate {
     // Init view
     initProgressBar()
     initDropdownMenu()
-    updateSupportedSubText(.hide)
   }
   
   func dragDropViewDidReceive(fileUrl: String) {
@@ -51,7 +48,6 @@ class ViewController: NSViewController, DragDropViewDelegate {
     
     if Format.isSupported(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
-      updateSupportedSubText(.hide)
       
       let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
       if !isValid {
@@ -60,9 +56,7 @@ class ViewController: NSViewController, DragDropViewDelegate {
       }
     } else {
       updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
-      // TODO: Show Unsupported popover
-      updateSupportedSubText(.show)
-      
+      showSupportedFormatsPopover()
     }
   }
   
@@ -95,17 +89,6 @@ class ViewController: NSViewController, DragDropViewDelegate {
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {
     if !top.isEmpty { dragDropTopTitle.stringValue = top }
     if !bottom.isEmpty { dragDropBottomTitle.stringValue = bottom }
-  }
-  
-  // TODO: Replace with Supported Formats popover view
-  func updateSupportedSubText(_ animate: AnimateFade) {
-    let supportedFileTypes = Format.supported.joined(separator: ", ")
-    switch animate {
-    case .show:
-      supportedSubText.stringValue = "Supported: \(supportedFileTypes)"
-    case .hide:
-      supportedSubText.stringValue = ""
-    }
   }
   
   /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
@@ -344,6 +327,48 @@ class ViewController: NSViewController, DragDropViewDelegate {
   func resetProgressBar() {
     updateProgressBar(value: 0)
     estimatedTimeText.stringValue = "–:–"
+  }
+  
+  
+  
+  // MARK: Popovers
+  /// Initialize popover to call `SupportedFormatsViewController`
+  lazy var supportedFormatsPopover: NSPopover = {
+    let popover = NSPopover()
+    popover.behavior = .semitransient
+    popover.contentViewController = SupportedFormatsViewController()
+    popover.delegate = self
+    popover.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+    return popover
+  }()
+  /// Displays `supportedFormatsPopover` to maxX-position of `dragDropView`
+  func showSupportedFormatsPopover() {
+    let positioningView = dragDropView!
+    let positioningRect = NSZeroRect
+    let preferredEdge = NSRectEdge.maxX
+    supportedFormatsPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
+  }
+  /// Initialize popover to call `HelpInfoViewController`
+  lazy var helpInfoPopover: NSPopover = {
+    let popover = NSPopover()
+    popover.behavior = .semitransient
+    popover.contentViewController = HelpInfoViewController()
+    popover.delegate = self
+    popover.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+    return popover
+  }()
+  /// Displays `helpInfoPopover` to minY-position of object sender: `(?)`
+  @IBAction func showHelpInfoPopover(sender: NSButton) {
+    let positioningView = sender
+    let positioningRect = NSZeroRect
+    let preferredEdge = NSRectEdge.minY
+    helpInfoPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
+  }
+  /// Hide specific NSPopover object
+  func hidePopover(_ popover: NSPopover) {
+    if popover.isShown {
+      popover.performClose(nil)
+    }
   }
   
 }
