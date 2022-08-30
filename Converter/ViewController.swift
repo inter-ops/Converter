@@ -155,7 +155,19 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func handleActionButton(withStatus: ConversionState) {
     switch withStatus {
     case .ready:
-      userDidClickConvert()
+      selectOutputFileUrl(format: outputFormat)
+      
+      // If the user had previously canceled a conversion, this will be set to true. Reset it to false to ensure the conversion completion block executes properly.
+      userDidCancelSession = false
+      resetProgressBar()
+      
+      // Note that we check this after resetting the app state. This prevents the user from mistaking a previously shown "Done 🚀" message with the state of the canceled conversion. If we checked this before resetting the progress bar, a user may think the conversion they canceled was actually done, since the done message from the previous conversion would still be shown.
+      if (outputFileUrl == nil) {
+        print("User canceled output file selection, skipping conversion")
+        return
+      }
+      
+      startConversion()
       actionButton.title = "Stop"
       currentStatus = .converting
     case .converting:
@@ -177,19 +189,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     FFmpegKit.cancel()
   }
   
-  func userDidClickConvert() { userDidClickConvert(outputFormat) }
-  func userDidClickConvert(_ withFormat: VideoFormat) {
-    
-    selectOutputFileUrl(format: withFormat)
-    
-    resetProgressBar()
-    userDidCancelSession = false
-    
-    if (inputFileUrl == nil || outputFileUrl == nil) {
-      print("User has not selected input or output file, skipping conversion!")
-      return
-    }
-    
+  func startConversion() {
     var analyticsTimer = Timer()
     
     self.videoDuration = getVideoDuration(inputFilePath: inputFileUrl!.path)
@@ -211,6 +211,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         }
         
         self.resetActionButton()
+        self.outputFileUrl = nil
+        self.isTimeRemainingStable = false
+        self.videoDuration = nil
+        self.totalNumberOfFrames = nil
+        self.startOfConversion = nil
       }
     }
     
