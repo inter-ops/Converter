@@ -27,11 +27,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var totalNumberOfFrames: Double?
   var startOfConversion: Date?
   var isTimeRemainingStable = false
+  var userDidCancelSession = false
   
   override func viewDidLoad() {
     super.viewDidLoad()
     // Init view
-    initProgressBar()
     initDropdownMenu()
   }
   
@@ -173,8 +173,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Called when the user clicks "Stop" upon a conversion-in-progress
   func userDidClickStop() {
-    // TODO: Stop conversion process, possibly with an alert and deleting the mid-converted file?
-    print("User did stop conversion process")
+    userDidCancelSession = true
+    FFmpegKit.cancel()
   }
   
   func userDidClickConvert() { userDidClickConvert(outputFormat) }
@@ -182,33 +182,40 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     selectOutputFileUrl(format: withFormat)
     
-    updateProgressBar(.show)
-    updateProgressBar(value: 0)
+    resetProgressBar()
+    userDidCancelSession = false
     
     if (inputFileUrl == nil || outputFileUrl == nil) {
       print("User has not selected input or output file, skipping conversion!")
       return
     }
     
-    var timer = Timer()
+    var analyticsTimer = Timer()
     
     self.videoDuration = getVideoDuration(inputFilePath: inputFileUrl!.path)
     self.totalNumberOfFrames = getNumberOfFrames(inputFilePath: inputFileUrl!.path)
     self.startOfConversion = Date()
     
     let ffmpegSession = runFfmpegConversion(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path) { _ in
-      timer.invalidate()
+      analyticsTimer.invalidate()
       
       DispatchQueue.main.async {
-        self.updateProgressBar(value: 100)
-        self.estimatedTimeText.stringValue = "Done 🚀"
+        if self.userDidCancelSession {
+          self.updateProgressBar(value: 0)
+          self.estimatedTimeText.stringValue = "Canceled ⚠️"
+        }
+        else {
+          self.updateProgressBar(value: 100)
+          self.estimatedTimeText.stringValue = "Done 🚀"
+          self.alertConversionDidComplete(withOutputPath: self.outputFileUrl!)
+        }
+        
         self.resetActionButton()
-        self.alertConversionDidComplete(withOutputPath: self.outputFileUrl!)
       }
     }
     
     // This currently updates progress every 0.5 seconds
-    timer = Timer.scheduledTimer(withTimeInterval: Constants.progressUpdateInterval, repeats: true, block: { _ in
+    analyticsTimer = Timer.scheduledTimer(withTimeInterval: Constants.progressUpdateInterval, repeats: true, block: { _ in
       
       if let statisticsArray = ffmpegSession.getStatistics() as? [Statistics], statisticsArray.count > 0 {
         // This must be called before updateTimeRemaining to ensure we know whether the time remaining is stable or not.
@@ -305,20 +312,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // User did click button: "Convert" or "Stop"
     userDidClickActionButton()
   }
-  
-  // MARK: Progress Bar
-  /// Initialize progress bar with hidden default state and config values,
-  /// ie. `progressBar.progressColor = .blue` or `progressBar.cornerRadius = 3`
-  func initProgressBar() {
-    // ProgressBar init
-    updateProgressBar(.hide)
-  }
-  
-  /// Show/hide progress bar animation
-  func updateProgressBar(_ animate: AnimateFade) {
-    progressBar.alphaValue = animate.alpha
-  }
-  
+
   /// Update progress bar animation with Double value
   func updateProgressBar(value: Double, withInterval: Double = 0.5) {
     progressBar.animate(to: value)
@@ -384,18 +378,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
 enum ConversionState {
   case ready
   case converting
-}
-
-enum AnimateFade {
-  case show, hide
-  
-  var alpha: CGFloat {
-    switch self {
-    case .show: return CGFloat(1)
-    case .hide: return CGFloat(0)
-    }
-    
-  }
 }
 
 extension String {
