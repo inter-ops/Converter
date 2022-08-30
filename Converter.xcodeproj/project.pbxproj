@@ -11,6 +11,7 @@
 		7908E48728AAAFB500B02512 /* Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7908E48628AAAFB500B02512 /* Conversion.swift */; };
 		794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BE83328B3D0030074E40C /* VideoCodec.swift */; };
 		7978DA6B28BAE30400BC254B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978DA6A28BAE30400BC254B /* Constants.swift */; };
+		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
 		C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */; };
 		C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */; };
@@ -27,6 +28,7 @@
 		7908E48628AAAFB500B02512 /* Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversion.swift; sourceTree = "<group>"; };
 		794BE83328B3D0030074E40C /* VideoCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCodec.swift; sourceTree = "<group>"; };
 		7978DA6A28BAE30400BC254B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
 		C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulProgressIndicator.swift; sourceTree = "<group>"; };
 		C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionDidComplete.swift; sourceTree = "<group>"; };
 		C2D33F4328A950BA00BDCCD4 /* Converter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Converter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +63,14 @@
 				1E6BC34F0A1BE18A67D11155 /* Pods-Converter.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		C24745C728BD8812007E128B /* Popover */ = {
+			isa = PBXGroup;
+			children = (
+				C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */,
+			);
+			path = Popover;
 			sourceTree = "<group>";
 		};
 		C256C46A28BA878A00F4DE98 /* ProgressBar */ = {
@@ -125,6 +135,7 @@
 		C2DC469E28AC1B9800EDD3EB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C24745C728BD8812007E128B /* Popover */,
 				C256C46A28BA878A00F4DE98 /* ProgressBar */,
 				C289E8AA28BA6DD10002CDA3 /* Alerts */,
 				C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */,
@@ -265,6 +276,7 @@
 				C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */,
 				794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */,
 				C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */,
+				C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
