@@ -201,7 +201,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       
       DispatchQueue.main.async {
         if self.userDidCancelSession {
-          // TODO: Delete partial file
           self.updateProgressBar(value: 0)
           self.estimatedTimeText.stringValue = "Canceled ⚠️"
         }
