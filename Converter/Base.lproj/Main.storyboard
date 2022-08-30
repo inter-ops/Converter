@@ -778,7 +778,7 @@
                                 </constraints>
                             </visualEffectView>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bdx-sF-qWs">
-                                <rect key="frame" x="218" y="56" width="114" height="32"/>
+                                <rect key="frame" x="218" y="68" width="114" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Convert" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lVh-Wj-bL0">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -789,7 +789,7 @@
                                 </connections>
                             </button>
                             <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vOg-XD-oHC">
-                                <rect key="frame" x="22" y="59" width="25" height="25"/>
+                                <rect key="frame" x="22" y="71" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MYs-4E-96V">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -809,10 +809,6 @@
                                     <outlet property="delegate" destination="XfG-lQ-9wD" id="VSn-6e-VYs"/>
                                 </connections>
                             </customView>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JZg-d2-J84" customClass="ColorfulProgressIndicator" customModule="Converter" customModuleProvider="target">
-                                <rect key="frame" x="25" y="105" width="300" height="6"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            </customView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wI2-qE-TlK">
                                 <rect key="frame" x="35" y="316" width="280" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -831,6 +827,10 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JZg-d2-J84" customClass="ColorfulProgressIndicator" customModule="Converter" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="40" width="350" height="6"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </customView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="3HO-pW-3cV"/>

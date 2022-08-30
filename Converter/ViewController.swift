@@ -203,6 +203,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         self.updateProgressBar(value: 100)
         self.estimatedTimeText.stringValue = "Done 🚀"
         self.resetActionButton()
+        self.alertConversionDidComplete(withOutputPath: self.outputFileUrl!)
       }
     }
     
