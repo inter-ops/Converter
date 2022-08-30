@@ -60,7 +60,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       }
     } else {
       updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
-      // TODO: Show Unsupported popover
+      showSupportedFormatsPopover()
+      
       updateSupportedSubText(.show)
       
     }
