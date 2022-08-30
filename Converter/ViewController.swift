@@ -260,7 +260,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     savePanel.title = "Save your video"
     savePanel.message = "Choose a name for your converted video:"
     savePanel.nameFieldLabel = "Video file name:"
-    savePanel.nameFieldStringValue = "Untitled"
+    savePanel.nameFieldStringValue = inputFileUrl!.deletingPathExtension().lastPathComponent // Input file name with extension removed
     
     savePanel.allowedFileTypes = [format.rawValue]
     savePanel.allowsOtherFileTypes = false
