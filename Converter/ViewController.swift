@@ -147,7 +147,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func userDidClickActionButton() {
     if inputFileUrl == nil {
       updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
-      showSupportedFormatsPopover()
     } else {
       handleActionButton(withStatus: currentStatus)
     }
