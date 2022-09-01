@@ -11,8 +11,8 @@
 			</array>
 			<key>CFBundleTypeName</key>
 			<string></string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 		</dict>
 	</array>
 </dict>

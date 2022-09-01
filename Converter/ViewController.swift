@@ -35,10 +35,17 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     initDropdownMenu()
   }
   
-  /// Handles the dropping of a file onto the app icon
-  func openFileFrom(_ file: String) {
-    dragDropViewDidReceive(fileUrl: file)
+  override func viewDidAppear() {
+    // Handles opening of file in application on launch after initial load
+    DispatchQueue.main.async {
+      if openAppWithFilePath != nil {
+        self.dragDropViewDidReceive(fileUrl: openAppWithFilePath!)
+        openAppWithFilePath = nil
+      }
+      mainViewHasAppeared = true
+    }
   }
+  
   /// Handles all input file requests, checks for validity and adjust the dragDropView box to reflect any errors
   func dragDropViewDidReceive(fileUrl: String) {
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
