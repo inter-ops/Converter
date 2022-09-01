@@ -84,6 +84,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       updateDragDrop(title: title, subtitle: subtitle, withStyle: .warning)
     } else {
       updateDragDrop(title: title, subtitle: subtitle, withStyle: .videoFile)
+      hidePopover(supportedFormatsPopover)
     }
   }
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
