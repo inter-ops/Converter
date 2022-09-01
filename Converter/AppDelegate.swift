@@ -9,8 +9,6 @@ import Cocoa
 
 let debug = true
 
-var openAppWithFilePath: String? = nil
-var mainViewHasAppeared = false
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -33,6 +31,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
   
+  var openAppWithFilePath: String? = nil
+  var mainViewHasAppeared = false
+  
   // Handles the dropping of a video file onto the App icon
   func application(_ sender: NSApplication, openFile filename: String) -> Bool {
     // Checks to see if the mainView has initialized display
@@ -43,7 +44,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
       // Otherwise, set String flag for opening once mainView hasAppeared
       openAppWithFilePath = filename
     }
-    
     return true
   }
 

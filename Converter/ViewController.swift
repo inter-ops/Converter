@@ -29,6 +29,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var isTimeRemainingStable = false
   var userDidCancelSession = false
   
+  let appDelegate = NSApplication.shared.delegate as! AppDelegate
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Init view
@@ -38,11 +40,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   override func viewDidAppear() {
     // Handles opening of file in application on launch after initial load
     DispatchQueue.main.async {
-      if openAppWithFilePath != nil {
-        self.dragDropViewDidReceive(fileUrl: openAppWithFilePath!)
-        openAppWithFilePath = nil
+      if self.appDelegate.openAppWithFilePath != nil {
+        self.dragDropViewDidReceive(fileUrl: self.appDelegate.openAppWithFilePath!)
+        self.appDelegate.openAppWithFilePath = nil
       }
-      mainViewHasAppeared = true
+      self.appDelegate.mainViewHasAppeared = true
     }
   }
   
