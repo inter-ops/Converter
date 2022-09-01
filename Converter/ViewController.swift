@@ -154,7 +154,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Handles the action button states, and their respective actions, based on the current ConversionState: `.ready` or `.converting`
   func handleActionButton(withStatus: ConversionState) {
     switch withStatus {
-    case .ready:
+    case .ready:      
       selectOutputFileUrl(format: outputFormat)
       
       // If the user had previously canceled a conversion, this will be set to true. Reset it to false to ensure the conversion completion block executes properly.

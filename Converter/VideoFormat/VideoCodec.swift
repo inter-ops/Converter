@@ -6,7 +6,7 @@
 //
 
 enum VideoCodec: String, CaseIterable {
-  case hevc, h264, vp8, vp9, mpeg4
+  case hevc, h264, vp8, vp9, mpeg1video, mpeg2video, mpeg4, unknown
 }
 
 func convertToVideoCodec(inputCodec: String) -> VideoCodec {
@@ -17,5 +17,5 @@ func convertToVideoCodec(inputCodec: String) -> VideoCodec {
   }
   
   print("Unknown input codec")
-  return .h264
+  return .unknown
 }
