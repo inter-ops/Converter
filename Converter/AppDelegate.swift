@@ -14,7 +14,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
   var mainWindow: NSWindow!
 
-
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     // Insert code here to initialize your application
     mainWindow = NSApplication.shared.windows[0]
@@ -28,6 +27,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.makeKeyAndOrderFront(self)
       }
     }
+    return true
+  }
+  // Handles the dropping of a video file onto the App icon
+  func application(_ sender: NSApplication, openFile filename: String) -> Bool {
+    let viewController = self.mainWindow.contentViewController as? ViewController
+    viewController?.openFileFrom(filename)
+    
     return true
   }
 
