@@ -236,7 +236,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           
           let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           print("Error message: \(errorMessage)")
-          // TODO: Show user the error message & report error for devs to investigate
+          self.alertErrorPrompt(withMessage: errorMessage)
+          
         }
         else {
           self.updateProgressBar(value: 100)
