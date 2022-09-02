@@ -14,6 +14,7 @@ import ffmpegkit
  Some resources:
  - Examples from example ffmpeg-kit app
  - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Subtitle_formats_support
+ - https://trac.ffmpeg.org/wiki/Encode/HighQualityAudio
  - https://gist.github.com/Vestride/278e13915894821e1d6f
  - https://trac.ffmpeg.org/wiki/Encode/VP8
  - https://gist.github.com/jaydenseric/220c785d6289bcfd7366
@@ -22,11 +23,6 @@ import ffmpegkit
 
 // TODO: Need to figure out how to package up ffmpeg kit for release
 // Needs: --enable-x264 --enable-gpl --enable-libvpx
-
-func isWrapperConversionFormat(filePath: String) -> Bool {
-  let ext = getFileExtension(filePath: filePath)
-  return ["mp4", "mkv", "mov", "m4v", "avi"].contains(ext)
-}
 
 func getFileExtension(filePath: String) -> String {
   return URL(fileURLWithPath: filePath).pathExtension
@@ -38,36 +34,75 @@ func getFileName(filePath: String) -> String {
 
 // TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases. For testing video quality output, see here: https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
 
-// TODO: This function should build the command in pieces (video codecs, audio codecs, other params)
-func getVideoAndAudioConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
-  // If the input is HEVC codec and the output format is MP4, lets convert to H264 so that the video is supported by Quicktime
-  // Requires libx264
-  if getVideoCodec(inputFilePath: inputFilePath) == VideoCodec.hevc && getFileExtension(filePath: outputFilePath) == VideoFormat.mp4.rawValue {
-    return "-c:a aac -c:v libx264 -preset veryfast -crf 26"
-  }
+func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
+  let inputVideoCodec = getVideoCodec(inputFilePath: inputFilePath)
+  let outputFileType = getFileExtension(filePath: outputFilePath)
+  let inputFileType = getFileExtension(filePath: inputFilePath)
   
-  // Simple copy codec for any conversion between mp4, mkv, mov, m4v
-  // TODO: There are likely still cases where this will break a video
-  if isWrapperConversionFormat(filePath: inputFilePath) && isWrapperConversionFormat(filePath: outputFilePath) {
-    return "-c:v copy -c:a copy"
-  }
-  
-  // mp4, mkv, mov, m4v, avi -> webm
-  // - VP9, Constant Quality mode from https://trac.ffmpeg.org/wiki/Encode/VP9. "ffmpeg -i input.mp4 -c:v libvpx-vp9 -crf 30 -b:v 0 output.webm" this seems very slow (near 1 min to convert 17mb video). Requires libvpx-vp9
-  // - VP8, vartiable bitrate https://trac.ffmpeg.org/wiki/Encode/VP8. This one is very quick, and smaller file size, best found so far: "ffmpeg -i input.mp4 -c:v libvpx -b:v 1M -c:a libvorbis output.webm" requires libvorbis libvpx
-  if isWrapperConversionFormat(filePath: inputFilePath) && getFileExtension(filePath: outputFilePath) == VideoFormat.webm.rawValue {
+  switch outputFileType {
+  case VideoFormat.webm.rawValue:
+    // - VP9, Constant Quality mode from https://trac.ffmpeg.org/wiki/Encode/VP9. "ffmpeg -i input.mp4 -c:v libvpx-vp9 -crf 30 -b:v 0 output.webm" this seems very slow (near 1 min to convert 17mb video). Requires libvpx-vp9
+    // - VP8, vartiable bitrate https://trac.ffmpeg.org/wiki/Encode/VP8. This one is very quick, and smaller file size, best found so far: "ffmpeg -i input.mp4 -c:v libvpx -b:v 1M -c:a libvorbis output.webm" requires libvorbis libvpx
     // cpu-used 2 speeds up processing by about 2x, but does impact quality a bit. I haven't seen a noticeable difference, but if it becomes problematic, we should set it to 1.
     // See here for more info: https://superuser.com/questions/1586934/vp9-encoding-with-ffmpeg-relation-between-speed-and-deadline-options
-    return "-c:v libvpx -b:v 1M -c:a libvorbis -deadline good -cpu-used 2 -crf 26"
+    return "-c:v libvpx -b:v 1M -deadline good -cpu-used 2 -crf 26"
+    
+  case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue, VideoFormat.avi.rawValue:
+    // If input file is WEBM, we re-encode to H264
+    if inputFileType == VideoFormat.webm.rawValue {
+      return "-c:v libx264 -preset veryfast -crf 26"
+    }
+    
+    // If input file is HEVC, we re-encode to H264 to ensure QuickTime support
+    if inputVideoCodec == VideoCodec.hevc {
+      return "-c:v libx264 -preset veryfast -crf 26"
+    }
+    
+    // For everything else, we copy video codec since it should be supported.
+    // TODO: There could still be some cases where this is not true, need to do more testing.
+    return "-c:v copy"
+    
+  default:
+    // For unknown cases, we re-encode to H264
+    return "-c:v libx264 -preset veryfast -crf 26"
   }
+}
+
+// References:
+// - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
+// - https://en.wikipedia.org/wiki/QuickTime
+func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
+  let inputAudioCodec = getAudioCodec(inputFilePath: inputFilePath)
+  let outputFileType = getFileExtension(filePath: outputFilePath)
   
-  if getFileExtension(filePath: inputFilePath) == VideoFormat.webm.rawValue && isWrapperConversionFormat(filePath: outputFilePath) {
-    return "-c:a aac -c:v libx264 -preset veryfast -crf 26"
+  switch outputFileType {
+  case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue:
+    // MP4 & its varients support a wide variety of audio codecs, but we also want to ensure the output file is supported by QuickTime.
+    // Weirdly enough, AC3 and EAC3 are not listed as supported by QuickTime but they seem to work.
+    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 {
+      return "-c:a copy"
+    }
+    else {
+      return "-c:a ac3"
+    }
+  case VideoFormat.mkv.rawValue:
+    // MKV supports all audio codecs we support
+    return "-c:a copy"
+  case VideoFormat.avi.rawValue:
+    // Codecs supported by AVI
+    // TODO: We currently can't differentiate between DTS and DTS-HD, so we re-encode for either. In the future, we only need to re-encode for DTS-HD here.
+    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.mp3 || inputAudioCodec == AudioCodec.ac3 || inputAudioCodec == AudioCodec.pcm_alaw || inputAudioCodec == AudioCodec.pcm_mulaw {
+      return "-c:a copy"
+    }
+    else {
+      return "-c:a ac3"
+    }
+  case VideoFormat.webm.rawValue:
+    return "-c:a libvorbis"
+  default:
+    print("Unknown output file type when selecting audio codec")
+    return "-c:a ac3"
   }
-  
-  // TODO: Show the user an error if we get here.
-  print("Unknown file pair to convert")
-  return ""
 }
 
 /// Get the subtitle conversion portion of the FFMPEG command.
@@ -76,7 +111,7 @@ func getSubtitleConversionCommand(inputFilePath: String, outputFilePath: String)
   let outputFileType = getFileExtension(filePath: outputFilePath)
   
   switch outputFileType {
-  // TODO: This is resulting in two output subtitle streams, the first one is the correct one, the second one shows "Chapter 1" and nothing else
+    // TODO: This is resulting in two output subtitle streams, the first one is the correct one, the second one shows "Chapter 1" and nothing else
   case VideoFormat.mp4.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mov.rawValue:
     return "-c:s mov_text"
   case VideoFormat.mkv.rawValue:
@@ -93,9 +128,11 @@ func getSubtitleConversionCommand(inputFilePath: String, outputFilePath: String)
 }
 
 func runFfmpegConversion(inputFilePath: String, outputFilePath: String, onDone: @escaping (_: FFmpegSession?) -> Void) -> FFmpegSession {
-  let videoAndAudioCommand = getVideoAndAudioConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+  let videoCommand = getVideoConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+  let audioCommand = getAudioConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+
   let subtitleCommand = getSubtitleConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-  let command = "-y -i \"\(inputFilePath)\" \(videoAndAudioCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  let command = "-y -i \"\(inputFilePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
   
   let session = FFmpegKit.executeAsync(command, withCompleteCallback: onDone)
   
@@ -117,6 +154,7 @@ func getVideoDuration(inputFilePath: String) -> Double {
   return duration
 }
 
+// TODO: This operation is synchronous. If we notice this slows down the app, we can do is async immediately after a user selects an input file
 func getVideoCodec(inputFilePath: String) -> VideoCodec {
   let session = FFprobeKit.execute("-loglevel error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
   let logs = session?.getAllLogsAsString()
@@ -124,6 +162,30 @@ func getVideoCodec(inputFilePath: String) -> VideoCodec {
   let codec = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
   return convertToVideoCodec(inputCodec: codec)
 }
+
+// TODO: This operation is synchronous. If we notice this slows down the app, we can do is async immediately after a user selects an input file
+func getAudioCodec(inputFilePath: String) -> AudioCodec {
+  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let codec = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  return convertToAudioCodec(inputCodec: codec)
+}
+
+// TODO: This will be used to differentiate types of DTS (DTS, DTS-HD), types of AAC (HE-AAC, AAC-LC, etc.)
+// Some resource:
+// - https://stackoverflow.com/questions/61365587/what-does-profile-means-in-an-aac-encoded-audio
+// - https://trac.ffmpeg.org/wiki/Encode/HighQualityAudio
+// - https://trac.ffmpeg.org/wiki/Encode/AAC
+//func getAudioCodecProfile(inputFilePath: String) -> Void {
+//  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=profile  -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
+//  let logs = session?.getAllLogsAsString()
+//
+//
+//  let profile = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+//  print("PROFILE \(profile)")
+//}
+
 
 func isFileValid(inputFilePath: String) -> Bool {
   let session = FFprobeKit.execute("-loglevel error \"\(inputFilePath)\"")

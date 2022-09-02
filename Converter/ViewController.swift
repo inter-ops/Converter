@@ -116,8 +116,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Calculates the video conversion progress in percentage.
   func getProgressPercentage(statistics: Statistics) -> Double {
-    let time = Double(statistics.getTime() / 1000)
-    let progressPercentage = (time / self.videoDuration!) * 100
+    let timeElapsed = self.startOfConversion!.timeIntervalSinceNow * -1
+    let convertedFrames = statistics.getVideoFrameNumber()
+    let totalConversionTime = timeElapsed * (self.totalNumberOfFrames! / Double(convertedFrames))
+    
+    let progressPercentage = (timeElapsed / totalConversionTime) * 100
     return progressPercentage
   }
   
@@ -169,7 +172,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Handles the action button states, and their respective actions, based on the current ConversionState: `.ready` or `.converting`
   func handleActionButton(withStatus: ConversionState) {
     switch withStatus {
-    case .ready:
+    case .ready:      
       selectOutputFileUrl(format: outputFormat)
       
       // If the user had previously canceled a conversion, this will be set to true. Reset it to false to ensure the conversion completion block executes properly.
