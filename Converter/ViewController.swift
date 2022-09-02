@@ -236,6 +236,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           
           let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           print("Error message: \(errorMessage)")
+          // TODO: Input file (video/audio) stream information?
           self.alertErrorPrompt(withMessage: errorMessage)
           
         }
