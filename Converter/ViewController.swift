@@ -224,7 +224,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           self.updateProgressBar(value: 100)
           self.estimatedTimeText.stringValue = "Error ⛔️"
           
-          // TODO: Show user an error, report error for devs to investigate
+          let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
+          print("Error message: \(errorMessage)")
+          // TODO: Show user the error message & report error for devs to investigate
         }
         else {
           self.updateProgressBar(value: 100)
