@@ -83,7 +83,7 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
       return "-c:a copy"
     }
     else {
-      return "-c:a eac3"
+      return "-c:a ac3"
     }
   case VideoFormat.mkv.rawValue:
     // MKV supports all audio codecs we support
