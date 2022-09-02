@@ -15,6 +15,7 @@ import ffmpegkit
  - Examples from example ffmpeg-kit app
  - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Subtitle_formats_support
  - https://trac.ffmpeg.org/wiki/Encode/HighQualityAudio
+ - https://brandur.org/fragments/ffmpeg-h265
  - https://gist.github.com/Vestride/278e13915894821e1d6f
  - https://trac.ffmpeg.org/wiki/Encode/VP8
  - https://gist.github.com/jaydenseric/220c785d6289bcfd7366
@@ -77,13 +78,13 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
   
   switch outputFileType {
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue:
-    // MP4 & its varients support a wide variety of audio codecs, but we also want to ensure the output file is supported by QuickTime.
-    // Weirdly enough, AC3 and EAC3 are not listed as supported by QuickTime but they seem to work.
+    // Codecs supported by MP4 and Quicktime
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 {
       return "-c:a copy"
     }
     else {
-      return "-c:a ac3"
+      // See https://brandur.org/fragments/ffmpeg-h265 for details
+      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
     }
   case VideoFormat.mkv.rawValue:
     // MKV supports all audio codecs we support
@@ -91,17 +92,17 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
   case VideoFormat.avi.rawValue:
     // Codecs supported by AVI
     // TODO: We currently can't differentiate between DTS and DTS-HD, so we re-encode for either. In the future, we only need to re-encode for DTS-HD here.
-    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.mp3 || inputAudioCodec == AudioCodec.ac3 || inputAudioCodec == AudioCodec.pcm_alaw || inputAudioCodec == AudioCodec.pcm_mulaw {
+    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.mp3 || inputAudioCodec == AudioCodec.ac3 {
       return "-c:a copy"
     }
     else {
-      return "-c:a ac3"
+      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
     }
   case VideoFormat.webm.rawValue:
     return "-c:a libvorbis"
   default:
     print("Unknown output file type when selecting audio codec")
-    return "-c:a ac3"
+    return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
   }
 }
 
