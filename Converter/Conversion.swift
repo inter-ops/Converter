@@ -132,7 +132,11 @@ func runFfmpegConversion(inputFilePath: String, outputFilePath: String, onDone: 
   let audioCommand = getAudioConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
 
   let subtitleCommand = getSubtitleConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-  let command = "-y -i \"\(inputFilePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  let command = "-hide_banner -loglevel error -y -i \"\(inputFilePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  
+  if debug {
+    print("Running FFMPEG command: \(command)")
+  }
   
   let session = FFmpegKit.executeAsync(command, withCompleteCallback: onDone)
   
