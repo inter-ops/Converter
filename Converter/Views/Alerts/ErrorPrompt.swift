@@ -22,17 +22,15 @@ extension ViewController {
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
         print("User did choose to send error message")
         
-        var errorMessage = withMessage.replacingOccurrences(of: " ", with: "%20")
-        errorMessage = errorMessage.replacingOccurrences(of: "\n", with: "%0D%0A")
-        
-        if let url = URL(string: "mailto:hello@airtv.io?subject=Video%20Converter%20Error&body=Please%20include%20the%20following%20message:%0D%0A%0D%0A\(errorMessage)") {
-          NSWorkspace.shared.open(url)
-        }
+        let service = NSSharingService(named: NSSharingService.Name.composeEmail)
+        service?.recipients = ["hello@airtv.io"]
+        service?.subject = "Help: Video Converter Error"
+        service?.perform(withItems: ["Please include this message log in the email:\n\n\(withMessage)"])
       }
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
         print("User did dismiss error message")
         
       }
     })
-    }
+  }
 }
