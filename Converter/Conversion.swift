@@ -79,7 +79,7 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue:
     // MP4 & its varients support a wide variety of audio codecs, but we also want to ensure the output file is supported by QuickTime.
     // Weirdly enough, AC3 and EAC3 are not listed as supported by QuickTime but they seem to work.
-    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 || inputAudioCodec == AudioCodec.alac || inputAudioCodec == AudioCodec.flac || inputAudioCodec == AudioCodec.mp3 || inputAudioCodec == AudioCodec.pcm_alaw || inputAudioCodec == AudioCodec.pcm_mulaw {
+    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 {
       return "-c:a copy"
     }
     else {
