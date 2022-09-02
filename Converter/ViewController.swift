@@ -27,7 +27,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var totalNumberOfFrames: Double?
   var startOfConversion: Date?
   var isTimeRemainingStable = false
-  var userDidCancelSession = false
   
   let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
@@ -176,7 +175,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       selectOutputFileUrl(format: outputFormat)
       
       // If the user had previously canceled a conversion, this will be set to true. Reset it to false to ensure the conversion completion block executes properly.
-      userDidCancelSession = false
       resetProgressBar()
       
       // Note that we check this after resetting the app state. This prevents the user from mistaking a previously shown "Done 🚀" message with the state of the canceled conversion. If we checked this before resetting the progress bar, a user may think the conversion they canceled was actually done, since the done message from the previous conversion would still be shown.
@@ -203,7 +201,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Called when the user clicks "Stop" upon a conversion-in-progress
   func userDidClickStop() {
-    userDidCancelSession = true
     FFmpegKit.cancel()
   }
   
@@ -214,13 +211,22 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     self.totalNumberOfFrames = getNumberOfFrames(inputFilePath: inputFileUrl!.path)
     self.startOfConversion = Date()
     
-    let ffmpegSession = runFfmpegConversion(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path) { _ in
+    let ffmpegSession = runFfmpegConversion(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path) { session in
+      let returnCode = session!.getReturnCode()
       analyticsTimer.invalidate()
       
       DispatchQueue.main.async {
-        if self.userDidCancelSession {
+        if returnCode!.isValueCancel() {
           self.updateProgressBar(value: 0)
           self.estimatedTimeText.stringValue = "Canceled ⚠️"
+        }
+        else if returnCode!.isValueError() {
+          self.updateProgressBar(value: 100)
+          self.estimatedTimeText.stringValue = "Error ⛔️"
+          
+          let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
+          print("Error message: \(errorMessage)")
+          // TODO: Show user the error message & report error for devs to investigate
         }
         else {
           self.updateProgressBar(value: 100)
