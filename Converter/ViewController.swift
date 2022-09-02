@@ -29,12 +29,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var isTimeRemainingStable = false
   var userDidCancelSession = false
   
+  let appDelegate = NSApplication.shared.delegate as! AppDelegate
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Init view
     initDropdownMenu()
   }
   
+  override func viewDidAppear() {
+    // Handles opening of file in application on launch after initial load
+    DispatchQueue.main.async {
+      if self.appDelegate.openAppWithFilePath != nil {
+        self.dragDropViewDidReceive(fileUrl: self.appDelegate.openAppWithFilePath!)
+        self.appDelegate.openAppWithFilePath = nil
+      }
+      self.appDelegate.mainViewHasAppeared = true
+    }
+  }
+  
+  /// Handles all input file requests, checks for validity and adjust the dragDropView box to reflect any errors
   func dragDropViewDidReceive(fileUrl: String) {
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
@@ -79,6 +93,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       updateDragDrop(title: title, subtitle: subtitle, withStyle: .warning)
     } else {
       updateDragDrop(title: title, subtitle: subtitle, withStyle: .videoFile)
+      hidePopover(supportedFormatsPopover)
     }
   }
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
