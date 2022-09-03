@@ -95,7 +95,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       updateDragDropTitle(title, bottom: subtitle)
     }
   }
-  // Obj-C compatible function for passing updateDragDop through delegate
+  /// Obj-C compatible function for passing updateDragDop through delegate
   func updateDragDrop(title: String, subtitle: String, withWarning: Bool) {
     if withWarning {
       updateDragDrop(title: title, subtitle: subtitle, withStyle: .warning)
