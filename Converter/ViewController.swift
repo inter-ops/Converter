@@ -356,6 +356,23 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   
   
+  // MARK: Clear Input File Button
+  /// Clear the input file and revert UI to default state; hide clearInputFileButton when complete
+  @IBAction func clearInputFile(_ sender: Any) {
+    updateDragDrop(withStyle: .empty)
+    inputFileUrl = nil
+    displayClearButton(.hide)   // Hide clear button
+  }
+  /// Set the display state of clearInputFileButton: `.hide` or `.show`
+  func displayClearButton(_ state: ObjectDisplay) {
+    switch state {
+    case .show: clearInputFileButton.alphaValue = 0.6   // Default dim appearance
+    case .hide: clearInputFileButton.alphaValue = 0
+    }
+  }
+  
+  
+  
   // MARK: Popovers
   /// Initialize popover to call `SupportedFormatsViewController`
   lazy var supportedFormatsPopover: NSPopover = {
@@ -404,6 +421,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     hidePopover(supportedFormatsPopover)
   }
   
+}
+
+enum ObjectDisplay {
+  case show, hide
 }
 
 enum ConversionState {

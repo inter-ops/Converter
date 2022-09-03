@@ -838,6 +838,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="clearInputFile:" target="XfG-lQ-9wD" id="VVl-5t-fxJ"/>
+                                </connections>
                             </button>
                         </subviews>
                         <constraints>
