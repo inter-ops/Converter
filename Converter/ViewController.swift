@@ -10,13 +10,13 @@ import ffmpegkit
 
 class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
-  @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
   @IBOutlet weak var actionButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
   
-  // DragDropView titles
+  // DragDropView objects
+  @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
   @IBOutlet weak var clearInputFileButton: NSButton!
