@@ -35,7 +35,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     super.viewDidLoad()
     // Init view
     initDropdownMenu()
-    clearInputFileButton.alphaValue = 0.6
+    displayClearButton(.hide)
   }
   
   override func viewDidAppear() {
@@ -63,6 +63,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     if Format.isSupported(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
+      displayClearButton(.show)
       
       let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
       if !isValid {
