@@ -19,6 +19,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   // DragDropView titles
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
+  @IBOutlet weak var clearInputFileButton: NSButton!
   
   var outputFormat: VideoFormat = .mp4   // Default output format
   var inputFileUrl: URL?
@@ -34,6 +35,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     super.viewDidLoad()
     // Init view
     initDropdownMenu()
+    clearInputFileButton.alphaValue = 0.6
   }
   
   override func viewDidAppear() {
