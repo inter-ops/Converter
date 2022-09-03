@@ -76,18 +76,24 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
   }
   
-  /// Handler for all things dragDropBox related
+  /// Handler for all things dragDropBox related; set `withStyle: .empty` for default state
   /// - parameters:
   ///   - title: Edits the top title text of the box (ie. "Drag and drop your video here")
   ///   - subtitle: Edits the bottom title text of the box (used for additional info and warning descriptors)
   ///   - withStyle: Shows the box style (ie. `.warning` for red outline box)
   /// ```
+  /// // Default launch state
+  /// updateDragDrop(withStyle: .empty)
   /// // Red box with error message
   /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
   /// ```
   func updateDragDrop(title: String = "", subtitle: String = "", withStyle: DragDropBox) {
-    updateDragDropView(withStyle)
-    updateDragDropTitle(title, bottom: subtitle)
+    if withStyle == .empty && (title.isEmpty && subtitle.isEmpty) {
+      updateDragDrop(title: "Drag and drop your video here", subtitle: "or double click to browse...", withStyle: .empty)
+    } else {
+      updateDragDropView(withStyle)
+      updateDragDropTitle(title, bottom: subtitle)
+    }
   }
   // Obj-C compatible function for passing updateDragDop through delegate
   func updateDragDrop(title: String, subtitle: String, withWarning: Bool) {
