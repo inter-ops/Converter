@@ -10,15 +10,16 @@ import ffmpegkit
 
 class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
-  @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
   @IBOutlet weak var actionButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
   
-  // DragDropView titles
+  // DragDropView objects
+  @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
+  @IBOutlet weak var clearInputFileButton: NSButton!
   
   var outputFormat: VideoFormat = .mp4   // Default output format
   var inputFileUrl: URL?
@@ -34,6 +35,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     super.viewDidLoad()
     // Init view
     initDropdownMenu()
+    displayClearButton(.hide)
   }
   
   override func viewDidAppear() {
@@ -61,6 +63,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     if Format.isSupported(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
+      displayClearButton(.show)
       
       let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
       if !isValid {
@@ -73,20 +76,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
   }
   
-  /// Handler for all things dragDropBox related
+  /// Handler for all things dragDropBox related; set `withStyle: .empty` for default state
   /// - parameters:
   ///   - title: Edits the top title text of the box (ie. "Drag and drop your video here")
   ///   - subtitle: Edits the bottom title text of the box (used for additional info and warning descriptors)
   ///   - withStyle: Shows the box style (ie. `.warning` for red outline box)
   /// ```
+  /// // Default launch state
+  /// updateDragDrop(withStyle: .empty)
   /// // Red box with error message
   /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
   /// ```
   func updateDragDrop(title: String = "", subtitle: String = "", withStyle: DragDropBox) {
-    updateDragDropView(withStyle)
-    updateDragDropTitle(title, bottom: subtitle)
+    if withStyle == .empty && (title.isEmpty && subtitle.isEmpty) {
+      updateDragDrop(title: "Drag and drop your video here", subtitle: "or double click to browse...", withStyle: .empty)
+    } else {
+      updateDragDropView(withStyle)
+      updateDragDropTitle(title, bottom: subtitle)
+    }
   }
-  // Obj-C compatible function for passing updateDragDop through delegate
+  /// Obj-C compatible function for passing updateDragDop through delegate
   func updateDragDrop(title: String, subtitle: String, withWarning: Bool) {
     if withWarning {
       updateDragDrop(title: title, subtitle: subtitle, withStyle: .warning)
@@ -354,6 +363,23 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   
   
+  // MARK: Clear Input File Button
+  /// Clear the input file and revert UI to default state; hide clearInputFileButton when complete
+  @IBAction func clearInputFile(_ sender: Any) {
+    updateDragDrop(withStyle: .empty)
+    inputFileUrl = nil
+    displayClearButton(.hide)   // Hide clear button
+  }
+  /// Set the display state of clearInputFileButton: `.hide` or `.show`
+  func displayClearButton(_ state: ObjectDisplay) {
+    switch state {
+    case .show: clearInputFileButton.alphaValue = 0.6   // Default dim appearance
+    case .hide: clearInputFileButton.alphaValue = 0
+    }
+  }
+  
+  
+  
   // MARK: Popovers
   /// Initialize popover to call `SupportedFormatsViewController`
   lazy var supportedFormatsPopover: NSPopover = {
@@ -402,6 +428,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     hidePopover(supportedFormatsPopover)
   }
   
+}
+
+enum ObjectDisplay {
+  case show, hide
 }
 
 enum ConversionState {
