@@ -84,7 +84,8 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+//      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+      return "-c:a ac3" // TODO: Replace this with aac using the proper number of audio channels
     }
   case VideoFormat.mkv.rawValue:
     // MKV supports all audio codecs we support
@@ -96,13 +97,15 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
       return "-c:a copy"
     }
     else {
-      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+//      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+      return "-c:a ac3" // TODO: Replace this with aac using the proper number of audio channels
     }
   case VideoFormat.webm.rawValue:
     return "-c:a libvorbis"
   default:
     print("Unknown output file type when selecting audio codec")
-    return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+//    return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+    return "-c:a ac3" // TODO: Replace this with aac using the proper number of audio channels
   }
 }
 
