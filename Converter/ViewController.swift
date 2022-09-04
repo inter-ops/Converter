@@ -236,8 +236,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           
           let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           print("Error message: \(errorMessage)")
+          let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
           // TODO: Input file (video/audio) stream information?
-          self.alertErrorPrompt(withMessage: errorMessage)
+          self.alertErrorPrompt(withMessage: errorMessage, withFfprobeOutput: ffprobeOutput)
           
         }
         else {

@@ -224,6 +224,13 @@ func getNumberOfAudioChannels(inputFilePath: String) -> Int {
 //  print("PROFILE \(profile)")
 //}
 
+func getFfprobeOutput(inputFilePath: String) -> String {
+  let session = FFprobeKit.execute("\"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let output = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  return output
+}
 
 func isFileValid(inputFilePath: String) -> Bool {
   let session = FFprobeKit.execute("-loglevel error \"\(inputFilePath)\"")
