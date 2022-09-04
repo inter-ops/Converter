@@ -22,7 +22,7 @@ extension ViewController {
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
         print("User did choose to send error message")
         // Format message body and log contents to be used in email
-        let messageContents = "Please make sure to include the text file as an attachment, as well as any additional details that could help us to better understand what happened. We'll get back to you as soon as we can!\n\n\n\n"
+        let messageContents = "[Enter any additional details here]\n\n\n\n"
         let txtFileContents = "\(ErrorLogHeaders.error)\(withMessage)\(ErrorLogHeaders.ffprobe)\(withFfprobeOutput)"
         // Create an error log txt file to use as attachment
         let txtFile = self.writeTempTxtFile(txtFileContents)
@@ -44,7 +44,7 @@ extension ViewController {
   /// - Returns: URL reference of temporary `.txt` file
   func writeTempTxtFile(_ contents: String) -> URL {
     let url = FileManager.default.temporaryDirectory
-      .appendingPathComponent("Error-log-\(UUID().uuidString)")
+      .appendingPathComponent("error-log-\(UUID().uuidString)")
       .appendingPathExtension("txt")
     let string = contents
     try? string.write(to: url, atomically: true, encoding: .utf8)
