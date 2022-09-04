@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7276E2AD59F051AC37D5947A /* Pods_Converter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F810C5C80FA22868AF150923 /* Pods_Converter.framework */; };
 		7908E48728AAAFB500B02512 /* Conversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7908E48628AAAFB500B02512 /* Conversion.swift */; };
+		794AA2CA28C2D61900AADF36 /* ChannelLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794AA2C928C2D61900AADF36 /* ChannelLayout.swift */; };
 		794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BE83328B3D0030074E40C /* VideoCodec.swift */; };
 		7978DA6B28BAE30400BC254B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978DA6A28BAE30400BC254B /* Constants.swift */; };
 		799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E3E5328C0479500234BDE /* AudioCodec.swift */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		1E6BC34F0A1BE18A67D11155 /* Pods-Converter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.release.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.release.xcconfig"; sourceTree = "<group>"; };
 		7908E48628AAAFB500B02512 /* Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversion.swift; sourceTree = "<group>"; };
+		794AA2C928C2D61900AADF36 /* ChannelLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelLayout.swift; sourceTree = "<group>"; };
 		794BE83328B3D0030074E40C /* VideoCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCodec.swift; sourceTree = "<group>"; };
 		7978DA6A28BAE30400BC254B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		799E3E5328C0479500234BDE /* AudioCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCodec.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 				C2D33F5628A97E2000BDCCD4 /* VideoFormat.swift */,
 				799E3E5328C0479500234BDE /* AudioCodec.swift */,
 				794BE83328B3D0030074E40C /* VideoCodec.swift */,
+				794AA2C928C2D61900AADF36 /* ChannelLayout.swift */,
 			);
 			path = VideoFormat;
 			sourceTree = "<group>";
@@ -289,6 +292,7 @@
 				C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */,
 				C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */,
 				7978DA6B28BAE30400BC254B /* Constants.swift in Sources */,
+				794AA2CA28C2D61900AADF36 /* ChannelLayout.swift in Sources */,
 				C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */,
 				C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */,
 				C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */,

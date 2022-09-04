@@ -69,6 +69,7 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
   }
 }
 
+// TODO: If channel_layout is stereo (or anything else with not enough audio channels for 5.1) use "-c:a aac -ac 2" instead of channelmap. Will need to look at possible values for channel_layout and whether its enough or we need number of channels too
 // References:
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
@@ -169,12 +170,21 @@ func getVideoCodec(inputFilePath: String) -> VideoCodec {
 }
 
 // TODO: This operation is synchronous. If we notice this slows down the app, we can do is async immediately after a user selects an input file
+// Could also get all these through a single ffprobe call that gets all stream info, then parse it all on the swift side. This would already be a big improvement.
 func getAudioCodec(inputFilePath: String) -> AudioCodec {
   let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
   let logs = session?.getAllLogsAsString()
   
   let codec = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
   return convertToAudioCodec(inputCodec: codec)
+}
+
+func getChannelLayout(inputFilePath: String) -> ChannelLayout {
+  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let channelLayout = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  return convertToChannelLayout(inputChannelLayout: channelLayout)
 }
 
 // TODO: This will be used to differentiate types of DTS (DTS, DTS-HD), types of AAC (HE-AAC, AAC-LC, etc.)
