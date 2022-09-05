@@ -78,6 +78,9 @@ struct ErrorLogHeaders {
 // MARK: Error Test Data
 // Sample Error for testing prompt reporting
 extension ViewController {
+  @IBAction func triggerAlertErrorTestAction(_ sender: NSMenuItem) {
+    triggerAlertErrorTest()
+  }
   /// Calls sample alertErrorPrompt() with error output for: unavailable input channels
   func triggerAlertErrorTest() {
     let a = NSAlert()

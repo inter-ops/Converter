@@ -14,11 +14,15 @@ let debug = true
 class AppDelegate: NSObject, NSApplicationDelegate {
 
   var mainWindow: NSWindow!
+  @IBOutlet weak var debugMenu: NSMenuItem!
 
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     // Insert code here to initialize your application
     mainWindow = NSApplication.shared.windows[0]
     NSApp.activate(ignoringOtherApps: true)
+    
+    debugMenu.isHidden = !debug
+    debugMenu.isEnabled = debug
   }
   
   // Handles Reopening of Main Window
