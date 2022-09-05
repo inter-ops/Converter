@@ -216,6 +216,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       analyticsTimer.invalidate()
       
       DispatchQueue.main.async {
+        // Reference: https://github.com/tanersener/ffmpeg-kit-test/blob/main/macos/test-app-cocoapods/FFmpegKitMACOS/CommandViewController.m
         if returnCode!.isValueCancel() {
           self.updateProgressBar(value: 0)
           self.estimatedTimeText.stringValue = "Canceled ⚠️"
