@@ -85,7 +85,6 @@ func getAacConversionCommand(inputFilePath: String) -> String {
   }
 }
 
-// TODO: If channel_layout is stereo (or anything else with not enough audio channels for 5.1) use "-c:a aac -ac 2" instead of channelmap. Will need to look at possible values for channel_layout and whether its enough or we need number of channels too
 // References:
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
