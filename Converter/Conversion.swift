@@ -79,13 +79,9 @@ func getAacConversionCommand(inputFilePath: String) -> String {
     // If we have 6 or more channels, we can force a 5.1 channel layout
     return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
   }
-  else if numberOfAudioChannels >= 2 {
-    // If we have 2 or more channels, we can force stereo output
-    return "-c:a aac -ac 2"
-  }
   else {
-    // Otherwise use mono output
-    return "-c:a aac -ac 1"
+    // For any other number of channels, FFMPEG can handle converting to stereo. If we have a mono audio input, FFMPEG will simply copy the mono audio to both channels.
+    return "-c:a aac -ac 2"
   }
 }
 
