@@ -144,13 +144,17 @@ func getSubtitleConversionCommand(inputFilePath: String, outputFilePath: String)
   
 }
 
-func runFfmpegConversion(inputFilePath: String, outputFilePath: String, onDone: @escaping (_: FFmpegSession?) -> Void) -> FFmpegSession {
+func getFfmpegCommand(inputFilePath: String, outputFilePath: String) -> String {
   let videoCommand = getVideoConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
   let audioCommand = getAudioConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-
+  
   let subtitleCommand = getSubtitleConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
   let command = "-hide_banner -loglevel error -y -i \"\(inputFilePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
   
+  return command
+}
+
+func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> Void) -> FFmpegSession {
   if debug {
     print("Running FFMPEG command: \(command)")
   }
@@ -224,6 +228,13 @@ func getNumberOfAudioChannels(inputFilePath: String) -> Int {
 //  print("PROFILE \(profile)")
 //}
 
+func getFfprobeOutput(inputFilePath: String) -> String {
+  let session = FFprobeKit.execute("\"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let output = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  return output
+}
 
 func isFileValid(inputFilePath: String) -> Bool {
   let session = FFprobeKit.execute("-loglevel error \"\(inputFilePath)\"")

@@ -26,6 +26,7 @@
 		C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F5628A97E2000BDCCD4 /* VideoFormat.swift */; };
 		C2DC46A028AC1BB300EDD3EB /* DragDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */; };
 		C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DC46A128AD618500EDD3EB /* DragDropBox.swift */; };
+		C2E1F22128C29A17005A8B48 /* ErrorPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E1F22028C29A17005A8B48 /* ErrorPrompt.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		C2D94BCD28C11BCE001E14E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropView.swift; sourceTree = "<group>"; };
 		C2DC46A128AD618500EDD3EB /* DragDropBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropBox.swift; sourceTree = "<group>"; };
+		C2E1F22028C29A17005A8B48 /* ErrorPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorPrompt.swift; sourceTree = "<group>"; };
 		CE85D4F219590952D3EB64BA /* Pods-Converter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.debug.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.debug.xcconfig"; sourceTree = "<group>"; };
 		F810C5C80FA22868AF150923 /* Pods_Converter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Converter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */,
+				C2E1F22028C29A17005A8B48 /* ErrorPrompt.swift */,
 			);
 			path = Alerts;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */,
 				C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */,
 				C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */,
+				C2E1F22128C29A17005A8B48 /* ErrorPrompt.swift in Sources */,
 				7978DA6B28BAE30400BC254B /* Constants.swift in Sources */,
 				794AA2CA28C2D61900AADF36 /* ChannelLayout.swift in Sources */,
 				C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */,

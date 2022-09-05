@@ -669,13 +669,37 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Debug" id="dmb-yp-Nwr">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Debug" id="R2W-zl-G9c">
+                                    <items>
+                                        <menuItem title="Alerts" id="Xgu-4k-6Dt">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" id="MFy-T9-zgW">
+                                                <items>
+                                                    <menuItem title="Alert Error Test" id="5dF-0R-ACg">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="triggerAlertErrorTestAction:" target="Ady-hI-5gd" id="5sV-2u-Dl8"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                         </items>
                     </menu>
                     <connections>
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Converter" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Converter" customModuleProvider="target">
+                    <connections>
+                        <outlet property="debugMenu" destination="dmb-yp-Nwr" id="kKD-LU-cdU"/>
+                    </connections>
+                </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
