@@ -16,6 +16,7 @@ import ffmpegkit
  - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Subtitle_formats_support
  - https://trac.ffmpeg.org/wiki/Encode/HighQualityAudio
  - https://brandur.org/fragments/ffmpeg-h265
+ - https://trac.ffmpeg.org/wiki/AudioChannelManipulation
  - https://gist.github.com/Vestride/278e13915894821e1d6f
  - https://trac.ffmpeg.org/wiki/Encode/VP8
  - https://gist.github.com/jaydenseric/220c785d6289bcfd7366
@@ -69,6 +70,25 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
   }
 }
 
+/// This function checks the number of audio channels available in the input audio and determines how many output channels should be used to ensure a successful conversion and QuickTime support.
+/// Reference: https://trac.ffmpeg.org/wiki/AudioChannelManipulation, https://brandur.org/fragments/ffmpeg-h265
+func getAacConversionCommand(inputFilePath: String) -> String {
+  let numberOfAudioChannels = getNumberOfAudioChannels(inputFilePath: inputFilePath)
+
+  if numberOfAudioChannels >= 6 {
+    // If we have 6 or more channels, we can force a 5.1 channel layout
+    return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+  }
+  else if numberOfAudioChannels >= 2 {
+    // If we have 2 or more channels, we can force stereo output
+    return "-c:a aac -ac 2"
+  }
+  else {
+    // Otherwise use mono output
+    return "-c:a aac -ac 1"
+  }
+}
+
 // TODO: If channel_layout is stereo (or anything else with not enough audio channels for 5.1) use "-c:a aac -ac 2" instead of channelmap. Will need to look at possible values for channel_layout and whether its enough or we need number of channels too
 // References:
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
@@ -85,7 +105,7 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+      return getAacConversionCommand(inputFilePath: inputFilePath)
     }
   case VideoFormat.mkv.rawValue:
     // MKV supports all audio codecs we support
@@ -97,13 +117,13 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
       return "-c:a copy"
     }
     else {
-      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+      return getAacConversionCommand(inputFilePath: inputFilePath)
     }
   case VideoFormat.webm.rawValue:
     return "-c:a libvorbis"
   default:
     print("Unknown output file type when selecting audio codec")
-    return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+    return getAacConversionCommand(inputFilePath: inputFilePath)
   }
 }
 
@@ -185,6 +205,14 @@ func getChannelLayout(inputFilePath: String) -> ChannelLayout {
   
   let channelLayout = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
   return convertToChannelLayout(inputChannelLayout: channelLayout)
+}
+
+func getNumberOfAudioChannels(inputFilePath: String) -> Int {
+  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=channels -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let channels = Int(logs!.trimmingCharacters(in: .whitespacesAndNewlines))!
+  return channels
 }
 
 // TODO: This will be used to differentiate types of DTS (DTS, DTS-HD), types of AAC (HE-AAC, AAC-LC, etc.)
