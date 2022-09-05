@@ -16,6 +16,7 @@ import ffmpegkit
  - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Subtitle_formats_support
  - https://trac.ffmpeg.org/wiki/Encode/HighQualityAudio
  - https://brandur.org/fragments/ffmpeg-h265
+ - https://trac.ffmpeg.org/wiki/AudioChannelManipulation
  - https://gist.github.com/Vestride/278e13915894821e1d6f
  - https://trac.ffmpeg.org/wiki/Encode/VP8
  - https://gist.github.com/jaydenseric/220c785d6289bcfd7366
@@ -69,6 +70,21 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
   }
 }
 
+/// This function checks the number of audio channels available in the input audio and determines how many output channels should be used to ensure a successful conversion and QuickTime support.
+/// Reference: https://trac.ffmpeg.org/wiki/AudioChannelManipulation, https://brandur.org/fragments/ffmpeg-h265
+func getAacConversionCommand(inputFilePath: String) -> String {
+  let numberOfAudioChannels = getNumberOfAudioChannels(inputFilePath: inputFilePath)
+
+  if numberOfAudioChannels >= 6 {
+    // If we have 6 or more channels, we can force a 5.1 channel layout
+    return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+  }
+  else {
+    // For any other number of channels, FFMPEG can handle converting to stereo. If we have a mono audio input, FFMPEG will simply copy the mono audio to both channels.
+    return "-c:a aac -ac 2"
+  }
+}
+
 // References:
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
@@ -84,8 +100,7 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
-//      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
-      return "-c:a ac3" // TODO: Replace this with aac using the proper number of audio channels
+      return getAacConversionCommand(inputFilePath: inputFilePath)
     }
   case VideoFormat.mkv.rawValue:
     // MKV supports all audio codecs we support
@@ -97,15 +112,13 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
       return "-c:a copy"
     }
     else {
-//      return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
-      return "-c:a ac3" // TODO: Replace this with aac using the proper number of audio channels
+      return getAacConversionCommand(inputFilePath: inputFilePath)
     }
   case VideoFormat.webm.rawValue:
     return "-c:a libvorbis"
   default:
     print("Unknown output file type when selecting audio codec")
-//    return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
-    return "-c:a ac3" // TODO: Replace this with aac using the proper number of audio channels
+    return getAacConversionCommand(inputFilePath: inputFilePath)
   }
 }
 
@@ -172,12 +185,29 @@ func getVideoCodec(inputFilePath: String) -> VideoCodec {
 }
 
 // TODO: This operation is synchronous. If we notice this slows down the app, we can do is async immediately after a user selects an input file
+// Could also get all these through a single ffprobe call that gets all stream info, then parse it all on the swift side. This would already be a big improvement.
 func getAudioCodec(inputFilePath: String) -> AudioCodec {
   let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
   let logs = session?.getAllLogsAsString()
   
   let codec = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
   return convertToAudioCodec(inputCodec: codec)
+}
+
+func getChannelLayout(inputFilePath: String) -> ChannelLayout {
+  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let channelLayout = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  return convertToChannelLayout(inputChannelLayout: channelLayout)
+}
+
+func getNumberOfAudioChannels(inputFilePath: String) -> Int {
+  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=channels -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let channels = Int(logs!.trimmingCharacters(in: .whitespacesAndNewlines))!
+  return channels
 }
 
 // TODO: This will be used to differentiate types of DTS (DTS, DTS-HD), types of AAC (HE-AAC, AAC-LC, etc.)
