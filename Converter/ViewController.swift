@@ -28,6 +28,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var totalNumberOfFrames: Double?
   var startOfConversion: Date?
   var isTimeRemainingStable = false
+  var ffmpegCommand: String?
   
   let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
@@ -219,8 +220,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     self.videoDuration = getVideoDuration(inputFilePath: inputFileUrl!.path)
     self.totalNumberOfFrames = getNumberOfFrames(inputFilePath: inputFileUrl!.path)
     self.startOfConversion = Date()
+    self.ffmpegCommand = getFfmpegCommand(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path)
     
-    let ffmpegSession = runFfmpegConversion(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path) { session in
+    let ffmpegSession = runFfmpegCommand(command: ffmpegCommand!) { session in
       let returnCode = session!.getReturnCode()
       analyticsTimer.invalidate()
       
@@ -237,9 +239,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           print("Error message: \(errorMessage)")
           let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
-          // TODO: Input file (video/audio) stream information?
-          self.alertErrorPrompt(withMessage: errorMessage, withFfprobeOutput: ffprobeOutput)
-          
+          self.alertErrorPrompt(withMessage: errorMessage, withFfprobeOutput: ffprobeOutput, withFfmpegCommand: self.ffmpegCommand!)
         }
         else {
           self.updateProgressBar(value: 100)
@@ -253,6 +253,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         self.videoDuration = nil
         self.totalNumberOfFrames = nil
         self.startOfConversion = nil
+        self.ffmpegCommand = nil
       }
     }
     

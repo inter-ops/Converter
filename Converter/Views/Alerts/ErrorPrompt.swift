@@ -10,7 +10,7 @@ import Cocoa
 extension ViewController {
   
   /// Alert user of an error that occured, with the option of forwarding to devs
-  func alertErrorPrompt(withMessage: String, withFfprobeOutput: String) {
+  func alertErrorPrompt(withMessage: String, withFfprobeOutput: String, withFfmpegCommand: String) {
     let a = NSAlert()
     a.messageText = "An error occured"
     a.informativeText = "There was a problem converting your file. Would you like to send this error to the dev team?"
@@ -23,7 +23,8 @@ extension ViewController {
         print("User did choose to send error message")
         // Format message body and log contents to be used in email
         let messageContents = "[Enter any additional details here]\n\n\n\n"
-        let txtFileContents = "\(ErrorLogHeaders.error)\(withMessage)\(ErrorLogHeaders.ffprobe)\(withFfprobeOutput)"
+        let txtFileContents = "Command: \(withFfmpegCommand)\(ErrorLogHeaders.error)\(withMessage)\(ErrorLogHeaders.ffprobe)\(withFfprobeOutput)"
+        print("TEXT: \(txtFileContents)")
         // Create an error log txt file to use as attachment
         let txtFile = self.writeTempTxtFile(txtFileContents)
         // Compose mail client request with message and log contents
@@ -56,6 +57,7 @@ extension ViewController {
 // MARK: Error Log Headers
 struct ErrorLogHeaders {
   static let error = """
+\n\n\n\n
 ######################
 ### ERROR CONTENTS ###
 ######################
