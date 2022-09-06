@@ -10,10 +10,20 @@
 				<string>*</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string></string>
+			<string>All Files</string>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>NSExportableTypes</key>
+			<array>
+				<string>public.data</string>
+			</array>
 		</dict>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
