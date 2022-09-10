@@ -775,8 +775,8 @@
                                 <rect key="frame" x="0.0" y="0.0" width="350" height="40"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xFx-Bv-g0e">
-                                        <rect key="frame" x="18" y="12" width="172" height="16"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Estimated Time Remaining" id="HZq-E1-9fR">
+                                        <rect key="frame" x="18" y="12" width="165" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Estimated time remaining" id="HZq-E1-9fR">
                                             <font key="font" metaFont="systemSemibold" size="13"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
