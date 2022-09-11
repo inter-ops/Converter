@@ -7,7 +7,7 @@
 
 import Cocoa
 
-let debug = true
+let debug = false
 
 
 @main
@@ -16,6 +16,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   var mainWindow: NSWindow!
   @IBOutlet weak var debugMenu: NSMenuItem!
 
+  @IBAction func openMainWindowMenu(_ sender: NSMenuItem) {
+    mainWindow.makeKeyAndOrderFront(self)
+  }
+  
+  @IBAction func openWindowFileMenu(_ sender: NSMenuItem) {
+    mainWindow.makeKeyAndOrderFront(self)
+    // Open File
+    let viewController = self.mainWindow.contentViewController as? ViewController
+    viewController?.openFileMenuItem()
+  }
+  
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     // Insert code here to initialize your application
     mainWindow = NSApplication.shared.windows[0]
