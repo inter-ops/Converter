@@ -58,12 +58,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     if fileUrl.prefix(7) == "file://" {
       newInputFileUrl = String(fileUrl.dropFirst(7)) //fileUrl.replacingOccurrences(of: "file://", with: "")
+      // TODO: Inspect file browser cuasing %20 issue
+      newInputFileUrl = newInputFileUrl.replacingOccurrences(of: "%20", with: " ")
     }
     
     inputFileUrl = newInputFileUrl.fileURL.absoluteURL
     
-    if Format.isSupported(fileUrl) {
-      updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
+    if Format.isSupported(newInputFileUrl) {
+      updateDragDrop(subtitle: newInputFileUrl.lastPathComponent, withStyle: .videoFile)
       displayClearButton(.show)
       
       let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
