@@ -636,7 +636,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Window" id="5W5-NB-P7g">
                                     <items>
-                                        <menuItem title="Open Container" id="S0C-ht-ofB">
+                                        <menuItem title="Open Converter" id="S0C-ht-ofB">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="openMainWindowMenu:" target="Voe-Tx-rLC" id="5te-yr-9x1"/>
