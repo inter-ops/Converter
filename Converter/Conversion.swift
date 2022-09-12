@@ -210,7 +210,6 @@ func getNumberOfAudioChannels(inputFilePath: String) -> Int {
   let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=channels -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
   let logs = session?.getAllLogsAsString()
   
-  // TODO: Account for case with no audio stream available
   if logs!.isEmpty || logs == nil {
     return 0
   }
