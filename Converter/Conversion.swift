@@ -155,7 +155,7 @@ func getFfmpegCommand(inputFilePath: String, outputFilePath: String) -> String {
 }
 
 func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> Void) -> FFmpegSession {
-  if debug {
+  if Config.shared.debug {
     print("Running FFMPEG command: \(command)")
   }
   

@@ -7,9 +7,6 @@
 
 import Cocoa
 
-let debug = true
-
-
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -21,8 +18,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     mainWindow = NSApplication.shared.windows[0]
     NSApp.activate(ignoringOtherApps: true)
     
-    debugMenu.isHidden = !debug
-    debugMenu.isEnabled = debug
+    debugMenu.isHidden = !Config.shared.debug
+    debugMenu.isEnabled = Config.shared.debug
   }
   
   // Handles Reopening of Main Window
