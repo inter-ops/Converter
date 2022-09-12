@@ -71,11 +71,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func dragDropViewDidReceive(fileUrl: String) {
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
-    var newInputFileUrl = fileUrl
-    inputFileUrl = newInputFileUrl.fileURL.absoluteURL
+    inputFileUrl = fileUrl.fileURL.absoluteURL
     
-    if Format.isSupported(newInputFileUrl) {
-      updateDragDrop(subtitle: newInputFileUrl.lastPathComponent, withStyle: .videoFile)
+    if Format.isSupported(fileUrl) {
+      updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
       displayClearButton(.show)
       
       let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
