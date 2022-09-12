@@ -7,15 +7,23 @@
 
 import Cocoa
 
-let debug = true
-
-
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
   var mainWindow: NSWindow!
   @IBOutlet weak var debugMenu: NSMenuItem!
 
+  @IBAction func openMainWindowMenu(_ sender: NSMenuItem) {
+    mainWindow.makeKeyAndOrderFront(self)
+  }
+  
+  @IBAction func openWindowFileMenu(_ sender: NSMenuItem) {
+    mainWindow.makeKeyAndOrderFront(self)
+    // Open File
+    let viewController = self.mainWindow.contentViewController as? ViewController
+    viewController?.openFileBrowser()
+  }
+  
   func applicationDidFinishLaunching(_ aNotification: Notification) {
     // Insert code here to initialize your application
     mainWindow = NSApplication.shared.windows[0]
@@ -62,3 +70,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 }
 
+// TODO: Replace with Environment PR
+// MARK: Preprocessor Debug
+#if DEBUG
+let debug = true
+#else
+let debug = false
+#endif

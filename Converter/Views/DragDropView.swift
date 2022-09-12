@@ -14,6 +14,7 @@ import Cocoa
   func updateDragDrop(title: String, subtitle: String, withWarning: Bool)
   func showSupportedFormatsPopover()
   func hideSupportedFormatsPopover()
+  func openFileBrowser()
 }
 
 class DragDropView: NSView {
@@ -37,23 +38,7 @@ class DragDropView: NSView {
     let clickCount: Int = event.clickCount
     
     if clickCount > 1 {
-      selectInputFileUrl()
-    }
-  }
-  
-  func selectInputFileUrl() {
-    let openPanel = NSOpenPanel()
-    
-    openPanel.allowsMultipleSelection = false
-    openPanel.canChooseDirectories = true
-    openPanel.canCreateDirectories = true
-    openPanel.canChooseFiles = true
-    openPanel.allowedFileTypes = supportedFormats
-    
-    let response = openPanel.runModal()
-    if response == .OK {
-      let path = openPanel.url!.absoluteString
-      delegate?.dragDropViewDidReceive(fileUrl: path)
+      delegate?.openFileBrowser()
     }
   }
   
