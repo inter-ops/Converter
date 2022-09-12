@@ -7,9 +7,6 @@
 
 import Cocoa
 
-let debug = false
-
-
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -73,3 +70,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 }
 
+// MARK: Preprocessor Debug
+#if DEBUG
+let debug = true
+#else
+let debug = false
+#endif
