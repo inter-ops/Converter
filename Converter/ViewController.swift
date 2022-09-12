@@ -39,7 +39,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     displayClearButton(.hide)
   }
   
-  func openFileMenuItem() {
+  func openFileBrowser() {
     let openPanel = NSOpenPanel()
     
     openPanel.allowsMultipleSelection = false

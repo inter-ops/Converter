@@ -21,7 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     mainWindow.makeKeyAndOrderFront(self)
     // Open File
     let viewController = self.mainWindow.contentViewController as? ViewController
-    viewController?.openFileMenuItem()
+    viewController?.openFileBrowser()
   }
   
   func applicationDidFinishLaunching(_ aNotification: Notification) {
