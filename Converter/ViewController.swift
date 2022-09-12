@@ -50,7 +50,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     let response = openPanel.runModal()
     if response == .OK {
-      let path = openPanel.url!.absoluteString.removingPercentEncoding
+      let path = openPanel.url?.path
       print("path: \(String(describing: path))")
       dragDropViewDidReceive(fileUrl: path!)
     }
@@ -72,11 +72,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
     var newInputFileUrl = fileUrl
-    
-    if fileUrl.prefix(7) == "file://" {
-      newInputFileUrl = String(fileUrl.dropFirst(7)) //fileUrl.replacingOccurrences(of: "file://", with: "")
-    }
-    
     inputFileUrl = newInputFileUrl.fileURL.absoluteURL
     
     if Format.isSupported(newInputFileUrl) {
