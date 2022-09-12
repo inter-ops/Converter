@@ -39,6 +39,23 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     displayClearButton(.hide)
   }
   
+  func openFileBrowser() {
+    let openPanel = NSOpenPanel()
+    
+    openPanel.allowsMultipleSelection = false
+    openPanel.canChooseDirectories = true
+    openPanel.canCreateDirectories = true
+    openPanel.canChooseFiles = true
+    openPanel.allowedFileTypes = supportedFormats
+    
+    let response = openPanel.runModal()
+    if response == .OK {
+      let path = openPanel.url?.path
+      print("path: \(String(describing: path))")
+      dragDropViewDidReceive(fileUrl: path!)
+    }
+  }
+  
   override func viewDidAppear() {
     // Handles opening of file in application on launch after initial load
     DispatchQueue.main.async {
@@ -54,13 +71,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func dragDropViewDidReceive(fileUrl: String) {
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
-    var newInputFileUrl = fileUrl
-    
-    if fileUrl.prefix(7) == "file://" {
-      newInputFileUrl = String(fileUrl.dropFirst(7)) //fileUrl.replacingOccurrences(of: "file://", with: "")
-    }
-    
-    inputFileUrl = newInputFileUrl.fileURL.absoluteURL
+    inputFileUrl = fileUrl.fileURL.absoluteURL
     
     if Format.isSupported(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
