@@ -50,9 +50,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     let response = openPanel.runModal()
     if response == .OK {
-      let path = openPanel.url!.absoluteString
-      print("path: \(path)")
-      dragDropViewDidReceive(fileUrl: path)
+      let path = openPanel.url!.absoluteString.removingPercentEncoding
+      print("path: \(String(describing: path))")
+      dragDropViewDidReceive(fileUrl: path!)
     }
   }
   
@@ -75,8 +75,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     if fileUrl.prefix(7) == "file://" {
       newInputFileUrl = String(fileUrl.dropFirst(7)) //fileUrl.replacingOccurrences(of: "file://", with: "")
-      // TODO: Inspect file browser cuasing %20 issue
-      newInputFileUrl = newInputFileUrl.replacingOccurrences(of: "%20", with: " ")
     }
     
     inputFileUrl = newInputFileUrl.fileURL.absoluteURL
