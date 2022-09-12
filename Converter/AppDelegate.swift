@@ -70,6 +70,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 }
 
+// TODO: Replace with Environment PR
 // MARK: Preprocessor Debug
 #if DEBUG
 let debug = true
