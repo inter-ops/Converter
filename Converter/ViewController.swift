@@ -194,7 +194,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       }
       
       if inputFileUrl!.path == outputFileUrl!.path {
-        self.errorAlert(withMessage: "Input and output file names are the same, please chose a different name.")
+        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
         return
       }
       
