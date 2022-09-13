@@ -66,20 +66,28 @@ func writeTempTxtFile(_ contents: String) -> URL {
 
 // MARK: Error Log Headers
 struct ErrorLogHeaders {
+  static let messageHeader = """
+  [Enter any additional details here]
+  \n\n
+  Please do not touch anything below this line.
+  ----------
+  \n\n
+  """
+  
   static let error = """
-\n\n\n\n
-######################
-### ERROR CONTENTS ###
-######################
-\n\n
-"""
+  \n\n
+  ######################
+  ### ERROR CONTENTS ###
+  ######################
+  \n\n
+  """
   static let ffprobe = """
-\n\n\n\n
-######################
-### FFPROBE OUTPUT ###
-######################
-\n\n
-"""
+  \n\n
+  ######################
+  ### FFPROBE OUTPUT ###
+  ######################
+  \n\n
+  """
 }
 
 // MARK: Error Test Data
