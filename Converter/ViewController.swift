@@ -199,8 +199,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       resetProgressBar()
       
       // Note that we check this after resetting the app state. This prevents the user from mistaking a previously shown "Done 🚀" message with the state of the canceled conversion. If we checked this before resetting the progress bar, a user may think the conversion they canceled was actually done, since the done message from the previous conversion would still be shown.
-      if (outputFileUrl == nil) {
+      if outputFileUrl == nil {
         print("User canceled output file selection, skipping conversion")
+        return
+      }
+      
+      if inputFileUrl!.path == outputFileUrl!.path {
+        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
         return
       }
       
@@ -250,7 +255,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           print("Error message: \(errorMessage)")
           let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
-          self.alertErrorPrompt(withMessage: errorMessage, withFfprobeOutput: ffprobeOutput, withFfmpegCommand: self.ffmpegCommand!)
+          self.unexpectedErrorAlert(withErrorMessage: errorMessage, withFfprobeOutput: ffprobeOutput, withFfmpegCommand: self.ffmpegCommand!)
         }
         else {
           self.updateProgressBar(value: 100)
