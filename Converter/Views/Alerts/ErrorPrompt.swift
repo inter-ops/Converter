@@ -89,32 +89,10 @@ struct ErrorLogHeaders {
 // MARK: Error Test Data
 // Sample Error for testing prompt reporting
 extension ViewController {
-  @IBAction func triggerAlertErrorTestAction(_ sender: NSMenuItem) {
-    triggerAlertErrorTest()
-  }
   /// Calls sample alertErrorPrompt() with error output for: unavailable input channels
-  func triggerAlertErrorTest() {
-    let a = NSAlert()
-    a.messageText = "An error occured"
-    a.informativeText = "There was a problem converting your file. Would you like to send this error to the dev team?"
-    a.addButton(withTitle: "Send")
-    a.addButton(withTitle: "Dismiss")
-    a.alertStyle = NSAlert.Style.critical
-    a.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
-      if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
-        print("User did choose to send error message")
-        // Format message body and log contents to be used in email
-        let messageContents = "[Enter any additional details here]\n\n\n\n"
-        let txtFileContents = AlertErrorTest.sampleOutput
-        // Create an error log txt file to use as attachment
-        let txtFile = writeTempTxtFile(txtFileContents)
-        // Compose mail client request with message and log contents
-        let service = NSSharingService(named: NSSharingService.Name.composeEmail)
-        service?.recipients = ["hello@airtv.io"]
-        service?.subject = "Help: Video Converter Error"
-        service?.perform(withItems: [messageContents, txtFile])
-      }
-    })
+  @IBAction func triggerAlertErrorTestAction(_ sender: NSMenuItem) {
+    let a = AlertErrorTest.self
+    unexpectedErrorAlert(withErrorMessage: a.errorMessage, withFfprobeOutput: a.ffprobeOutput, withFfmpegCommand: a.ffmpegCommand)
   }
 }
 
