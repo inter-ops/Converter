@@ -22,20 +22,16 @@ extension ViewController {
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
         print("User did choose to send error message")
         // Format message body and log contents to be used in email
-        let messageContents = "[Enter any additional details here]\n\n\n\n"
-        let txtFileContents = "Command: \(withFfmpegCommand)\(ErrorLogHeaders.error)\(withErrorMessage)\(ErrorLogHeaders.ffprobe)\(withFfprobeOutput)"
-        print("TEXT: \(txtFileContents)")
-        // Create an error log txt file to use as attachment
-        let txtFile = writeTempTxtFile(txtFileContents)
+        let messageHeader = ErrorLogHeaders.messageHeader
+        let messageBody = messageHeader + "Command: \(withFfmpegCommand)\(ErrorLogHeaders.error)\(withErrorMessage)\(ErrorLogHeaders.ffprobe)\(withFfprobeOutput)"
         // Compose mail client request with message and log contents
         let service = NSSharingService(named: NSSharingService.Name.composeEmail)
         service?.recipients = ["hello@airtv.io"]
         service?.subject = "Help: Video Converter Error"
-        service?.perform(withItems: [messageContents, txtFile])
+        service?.perform(withItems: [messageBody])
       }
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
         print("User did dismiss error message")
-        
       }
     })
   }
