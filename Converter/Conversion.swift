@@ -93,7 +93,18 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
   let outputFileType = getFileExtension(filePath: outputFilePath)
   
   switch outputFileType {
-  case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue:
+  case VideoFormat.m4v.rawValue:
+    // Codecs supported by M4V and Quicktime. This should be identical to the logic for MP4 and MOV, with the exception of avoiding copying EAC3 codec.
+    // Technically M4V should support EAC3, but FFMPEG throws an error when this is attempted.
+    // See this ticket for more info https://trac.ffmpeg.org/ticket/4844
+    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.ac3 {
+      return "-c:a copy"
+    }
+    else {
+      // See https://brandur.org/fragments/ffmpeg-h265 for details
+      return getAacConversionCommand(inputFilePath: inputFilePath)
+    }
+  case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue:
     // Codecs supported by MP4 and Quicktime
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 {
       return "-c:a copy"
