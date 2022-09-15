@@ -71,7 +71,7 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
     }
     
     //  https://trac.ffmpeg.org/wiki/Encode/MPEG-4
-    return "-c:v libxvid"
+    return "-c:v libxvid -qscale:v 5"
   default:
     // For unknown cases, we re-encode to H264
     return "-c:v libx264 -preset veryfast -crf 26"
