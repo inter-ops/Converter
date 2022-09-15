@@ -47,8 +47,11 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
     // - VP9, Constant Quality mode from https://trac.ffmpeg.org/wiki/Encode/VP9. "ffmpeg -i input.mp4 -c:v libvpx-vp9 -crf 30 -b:v 0 output.webm" this seems very slow (near 1 min to convert 17mb video). Requires libvpx-vp9
     // - VP8, vartiable bitrate https://trac.ffmpeg.org/wiki/Encode/VP8. This one is very quick, and smaller file size, best found so far: "ffmpeg -i input.mp4 -c:v libvpx -b:v 1M -c:a libvorbis output.webm" requires libvorbis libvpx
     // cpu-used 2 speeds up processing by about 2x, but does impact quality a bit. I haven't seen a noticeable difference, but if it becomes problematic, we should set it to 1.
-    // See here for more info: https://superuser.com/questions/1586934/vp9-encoding-with-ffmpeg-relation-between-speed-and-deadline-options
-    return "-c:v libvpx -b:v 1M -deadline good -cpu-used 2 -crf 26"
+    // See here for more info:
+    // - https://superuser.com/questions/1586934/vp9-encoding-with-ffmpeg-relation-between-speed-and-deadline-options
+    // - https://superuser.com/questions/556463/converting-video-to-webm-with-ffmpeg-avconv
+    // - https://superuser.com/a/1280369
+    return "-c:v libvpx -b:v 5M -deadline good -cpu-used 2 -crf 10"
     
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
     // If input file is WEBM, we re-encode to H264
