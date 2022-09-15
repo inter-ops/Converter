@@ -16,6 +16,7 @@ func convertToVideoCodec(inputCodec: String) -> VideoCodec {
     }
   }
   
-  print("Unknown input codec")
+  // TODO: Report this to us so that we can add a case for it
+  print("Unknown input video codec \(inputCodec)")
   return .unknown
 }
