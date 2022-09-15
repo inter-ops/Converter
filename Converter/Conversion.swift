@@ -26,6 +26,7 @@ import ffmpegkit
 // TODO: Need to figure out how to package up ffmpeg kit for release
 // Needs: --enable-x264 --enable-gpl --enable-libvpx
 
+// TODO: Convert this to a VideoFormat type so that we don't need to use .rawValue everywhere
 func getFileExtension(filePath: String) -> String {
   return URL(fileURLWithPath: filePath).pathExtension
 }
@@ -49,7 +50,7 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
     // See here for more info: https://superuser.com/questions/1586934/vp9-encoding-with-ffmpeg-relation-between-speed-and-deadline-options
     return "-c:v libvpx -b:v 1M -deadline good -cpu-used 2 -crf 26"
     
-  case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue, VideoFormat.avi.rawValue:
+  case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
     // If input file is WEBM, we re-encode to H264
     if inputFileType == VideoFormat.webm.rawValue {
       return "-c:v libx264 -preset veryfast -crf 26"
@@ -64,6 +65,13 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
     // TODO: There could still be some cases where this is not true, need to do more testing.
     return "-c:v copy"
     
+  case VideoFormat.avi.rawValue:
+    if inputVideoCodec == VideoCodec.mpeg4 {
+      return "-c:v copy"
+    }
+    
+    //  https://trac.ffmpeg.org/wiki/Encode/MPEG-4
+    return "-c:v libxvid -qscale:v 5"
   default:
     // For unknown cases, we re-encode to H264
     return "-c:v libx264 -preset veryfast -crf 26"
@@ -91,6 +99,10 @@ func getAacConversionCommand(inputFilePath: String) -> String {
 func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
   let inputAudioCodec = getAudioCodec(inputFilePath: inputFilePath)
   let outputFileType = getFileExtension(filePath: outputFilePath)
+  
+  if inputAudioCodec == .empty {
+    return ""
+  }
   
   switch outputFileType {
   case VideoFormat.m4v.rawValue:
