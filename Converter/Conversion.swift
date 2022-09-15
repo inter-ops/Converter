@@ -83,6 +83,7 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
 func getAacConversionCommand(inputFilePath: String) -> String {
   let numberOfAudioChannels = getNumberOfAudioChannels(inputFilePath: inputFilePath)
 
+  // TODO: if number of channels is 6, we can likely leave them alone.
   if numberOfAudioChannels >= 6 {
     // If we have 6 or more channels, we can force a 5.1 channel layout
     return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
