@@ -255,7 +255,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           print("Error message: \(errorMessage)")
           let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
-          
           self.unexpectedErrorAlert(withErrorMessage: errorMessage, withFfprobeOutput: ffprobeOutput, withFfmpegCommand: self.ffmpegCommand!, inputFilePath: self.inputFileUrl!.path, outputFilePath: self.outputFileUrl!.path)
         }
         else {
