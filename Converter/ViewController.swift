@@ -137,8 +137,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Calculates the video conversion progress in percentage.
   func getProgressPercentage(statistics: Statistics) -> Double {
     let timeElapsed = self.startOfConversion!.timeIntervalSinceNow * -1
-    let convertedFrames = statistics.getVideoFrameNumber()
-    let totalConversionTime = timeElapsed * (self.totalNumberOfFrames! / Double(convertedFrames))
+    let videoTime = Double(statistics.getTime())/1000
+    let totalConversionTime = timeElapsed * (self.videoDuration! / videoTime)
     
     let progressPercentage = (timeElapsed / totalConversionTime) * 100
     return progressPercentage
@@ -147,8 +147,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Calculates an estimated time remaining for the active video conversion.
   func getEstimatedTimeRemaining(statistics: Statistics, progressPercentage: Double) -> Double {
     let timeElapsed = self.startOfConversion!.timeIntervalSinceNow * -1
-    let convertedFrames = statistics.getVideoFrameNumber()
-    let totalConversionTime = timeElapsed * (self.totalNumberOfFrames! / Double(convertedFrames))
+    let videoTime = Double(statistics.getTime())/1000
+    let totalConversionTime = timeElapsed * (self.videoDuration! / videoTime)
     
     let timeRemaining = totalConversionTime - timeElapsed
     return timeRemaining
