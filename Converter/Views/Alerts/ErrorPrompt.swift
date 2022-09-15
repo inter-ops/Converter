@@ -7,10 +7,14 @@
 
 import Cocoa
 
+func sanitizeFilePaths(textToSanitize: String, inputFilePath: String, outputFilePath: String) -> String {
+  return textToSanitize.replacingOccurrences(of: inputFilePath, with: "<input-path>").replacingOccurrences(of: outputFilePath, with: "<output-path>")
+}
+
 extension ViewController {
   
   /// Alert user of an error that occured, with the option of forwarding to devs
-  func unexpectedErrorAlert(withErrorMessage: String, withFfprobeOutput: String, withFfmpegCommand: String) {
+  func unexpectedErrorAlert(withErrorMessage: String, withFfprobeOutput: String, withFfmpegCommand: String, inputFilePath: String, outputFilePath: String) {
     let a = NSAlert()
     a.messageText = "An error occured"
     a.informativeText = "There was a problem converting your file. Would you like to send this error to the dev team?"
@@ -23,7 +27,12 @@ extension ViewController {
         print("User did choose to send error message")
         // Format message body and log contents to be used in email
         let messageHeader = ErrorLogHeaders.messageHeader
-        let messageBody = messageHeader + "Command: \(withFfmpegCommand)\(ErrorLogHeaders.error)\(withErrorMessage)\(ErrorLogHeaders.ffprobe)\(withFfprobeOutput)"
+
+        let sanitizedErrorMessage = sanitizeFilePaths(textToSanitize: withErrorMessage, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: withFfprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        
+        let messageBody = messageHeader + "Command: \(sanitizedFfmpegCommand)\n" + "Input extension: \(URL(fileURLWithPath: inputFilePath).pathExtension)\n" + "Output extension: \(URL(fileURLWithPath: outputFilePath).pathExtension)" + "\(ErrorLogHeaders.error)\(sanitizedErrorMessage)\(ErrorLogHeaders.ffprobe)\(sanitizedFfprobeOutput)"
         // Compose mail client request with message and log contents
         let service = NSSharingService(named: NSSharingService.Name.composeEmail)
         service?.recipients = ["hello@airtv.io"]
@@ -92,7 +101,7 @@ extension ViewController {
   /// Calls sample alertErrorPrompt() with error output for: unavailable input channels
   @IBAction func triggerAlertErrorTestAction(_ sender: NSMenuItem) {
     let a = AlertErrorTest.self
-    unexpectedErrorAlert(withErrorMessage: a.errorMessage, withFfprobeOutput: a.ffprobeOutput, withFfmpegCommand: a.ffmpegCommand)
+    unexpectedErrorAlert(withErrorMessage: a.errorMessage, withFfprobeOutput: a.ffprobeOutput, withFfmpegCommand: a.ffmpegCommand, inputFilePath: "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm", outputFilePath: "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4")
   }
 }
 

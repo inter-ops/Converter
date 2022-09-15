@@ -230,10 +230,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     FFmpegKit.cancel()
   }
   
-  func sanitizeFilePaths(textToSanitize: String) -> String {
-    return textToSanitize.replacingOccurrences(of: inputFileUrl!.path, with: "<input-path>").replacingOccurrences(of: outputFileUrl!.path, with: "<output-path>")
-  }
-  
   func startConversion() {
     var analyticsTimer = Timer()
     
@@ -260,10 +256,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           print("Error message: \(errorMessage)")
           let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
           
-          let sanitizedFfmpegCommand = self.sanitizeFilePaths(textToSanitize: self.ffmpegCommand!)
-          let sanitizedErrorMessage = self.sanitizeFilePaths(textToSanitize: errorMessage)
-          let sanitizedFfprobeOutput = self.sanitizeFilePaths(textToSanitize: ffprobeOutput)
-          self.unexpectedErrorAlert(withErrorMessage: sanitizedErrorMessage, withFfprobeOutput: sanitizedFfprobeOutput, withFfmpegCommand: sanitizedFfmpegCommand)
+          self.unexpectedErrorAlert(withErrorMessage: errorMessage, withFfprobeOutput: ffprobeOutput, withFfmpegCommand: self.ffmpegCommand!, inputFilePath: self.inputFileUrl!.path, outputFilePath: self.outputFileUrl!.path)
         }
         else {
           self.updateProgressBar(value: 100)
