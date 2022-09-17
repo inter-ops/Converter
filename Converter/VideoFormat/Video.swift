@@ -100,18 +100,6 @@ struct SubtitleStream {
   
   let language: String? // From TAG:language if exists
   
-  init(codecName: String, codecLongName: String, profile: String, codecType: String, codecTagString: String, codecTag: String, language: String) {
-    self.rawCodecName = codecName
-    self.codec = convertToSubtitleCodec(inputCodec: codecName)
-    self.codecLongName = codecLongName
-    self.profile = profile
-    self.codecType = codecType
-    self.codecTagString = codecTagString
-    self.codecTag = codecTag
-    
-    self.language = language
-  }
-  
   init(ffprobeDict: [String: String]) {
     self.rawCodecName = ffprobeDict["codec_name"] ?? ""
     self.codec = convertToSubtitleCodec(inputCodec: ffprobeDict["codec_name"] ?? "")

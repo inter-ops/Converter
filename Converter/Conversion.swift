@@ -193,7 +193,6 @@ func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> 
 }
 
 func getAllVideoProperties(inputFilePath: String) -> Video {
-  //  ffprobe -loglevel error  -show_entries stream:format 
   let session = FFprobeKit.execute("-loglevel error -count_packets -show_entries stream:format \"\(inputFilePath)\"")
   let logs = session?.getAllLogsAsString()!.trimmingCharacters(in: .whitespacesAndNewlines)
 

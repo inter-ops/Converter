@@ -10,11 +10,6 @@ enum AudioCodec: String, CaseIterable {
 }
 
 func convertToAudioCodec(inputCodec: String) -> AudioCodec {
-//  if inputCodec.isEmpty {
-//    print("Empty input audio codec")
-//    return AudioCodec.empty
-//  }
-  
   for codec in AudioCodec.allCases {
     if codec.rawValue == inputCodec {
       return codec
