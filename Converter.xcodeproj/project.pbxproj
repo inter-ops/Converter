@@ -14,6 +14,8 @@
 		794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BE83328B3D0030074E40C /* VideoCodec.swift */; };
 		7978DA6B28BAE30400BC254B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978DA6A28BAE30400BC254B /* Constants.swift */; };
 		799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E3E5328C0479500234BDE /* AudioCodec.swift */; };
+		79AF2A7E28D5FDF6009CCB42 /* SubtitleCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AF2A7D28D5FDF6009CCB42 /* SubtitleCodec.swift */; };
+		79AF2A8228D60C26009CCB42 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AF2A8128D60C26009CCB42 /* Video.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
 		C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */; };
@@ -39,6 +41,8 @@
 		794BE83328B3D0030074E40C /* VideoCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCodec.swift; sourceTree = "<group>"; };
 		7978DA6A28BAE30400BC254B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		799E3E5328C0479500234BDE /* AudioCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCodec.swift; sourceTree = "<group>"; };
+		79AF2A7D28D5FDF6009CCB42 /* SubtitleCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleCodec.swift; sourceTree = "<group>"; };
+		79AF2A8128D60C26009CCB42 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		8A265585079F8D007EFC096F /* Pods-Converter.development release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.development release.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.development release.xcconfig"; sourceTree = "<group>"; };
 		96B94DCBF36DFC82156EDC66 /* Pods-Converter.production release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.production release.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.production release.xcconfig"; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
@@ -159,6 +163,8 @@
 				799E3E5328C0479500234BDE /* AudioCodec.swift */,
 				794BE83328B3D0030074E40C /* VideoCodec.swift */,
 				794AA2C928C2D61900AADF36 /* ChannelLayout.swift */,
+				79AF2A7D28D5FDF6009CCB42 /* SubtitleCodec.swift */,
+				79AF2A8128D60C26009CCB42 /* Video.swift */,
 			);
 			path = VideoFormat;
 			sourceTree = "<group>";
@@ -300,6 +306,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2DC46A028AC1BB300EDD3EB /* DragDropView.swift in Sources */,
+				79AF2A7E28D5FDF6009CCB42 /* SubtitleCodec.swift in Sources */,
 				C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */,
 				7908E48728AAAFB500B02512 /* Conversion.swift in Sources */,
 				799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */,
@@ -311,6 +318,7 @@
 				794AA2CA28C2D61900AADF36 /* ChannelLayout.swift in Sources */,
 				C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */,
 				C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */,
+				79AF2A8228D60C26009CCB42 /* Video.swift in Sources */,
 				C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */,
 				794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */,
 				C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */,
@@ -485,8 +493,8 @@
 				CODE_SIGN_ENTITLEMENTS = Converter/Converter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Converter/Info.plist;
@@ -629,8 +637,8 @@
 				CODE_SIGN_ENTITLEMENTS = Converter/Converter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Converter/Info.plist;

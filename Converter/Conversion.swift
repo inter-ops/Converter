@@ -37,10 +37,10 @@ func getFileName(filePath: String) -> String {
 
 // TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases. For testing video quality output, see here: https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
 
-func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
-  let inputVideoCodec = getVideoCodec(inputFilePath: inputFilePath)
+func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> String {
+  let inputVideoCodec = inputVideo.videoStreams[0].codec
   let outputFileType = getFileExtension(filePath: outputFilePath)
-  let inputFileType = getFileExtension(filePath: inputFilePath)
+  let inputFileType = getFileExtension(filePath: inputVideo.filePath)
   
   switch outputFileType {
   case VideoFormat.webm.rawValue:
@@ -83,8 +83,8 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
 
 /// This function checks the number of audio channels available in the input audio and determines how many output channels should be used to ensure a successful conversion and QuickTime support.
 /// Reference: https://trac.ffmpeg.org/wiki/AudioChannelManipulation, https://brandur.org/fragments/ffmpeg-h265
-func getAacConversionCommand(inputFilePath: String) -> String {
-  let numberOfAudioChannels = getNumberOfAudioChannels(inputFilePath: inputFilePath)
+func getAacConversionCommand(inputVideo: Video) -> String {
+  let numberOfAudioChannels = inputVideo.audioStreams[0].channels
 
   // TODO: if number of channels is 6, we can likely leave them alone.
   if numberOfAudioChannels >= 6 {
@@ -100,14 +100,15 @@ func getAacConversionCommand(inputFilePath: String) -> String {
 // References:
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
-func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
-  let inputAudioCodec = getAudioCodec(inputFilePath: inputFilePath)
-  let outputFileType = getFileExtension(filePath: outputFilePath)
-  
-  if inputAudioCodec == .empty {
+func getAudioConversionCommand(inputVideo: Video, outputFilePath: String) -> String {
+  // If we don't have any audio streams, we don't need a conversion command
+  if inputVideo.audioStreams.isEmpty {
     return ""
   }
   
+  let inputAudioCodec = inputVideo.audioStreams[0].codec
+  let outputFileType = getFileExtension(filePath: outputFilePath)
+
   switch outputFileType {
   case VideoFormat.m4v.rawValue:
     // Codecs supported by M4V and Quicktime. This should be identical to the logic for MP4 and MOV, with the exception of avoiding copying EAC3 codec.
@@ -118,7 +119,7 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return getAacConversionCommand(inputFilePath: inputFilePath)
+      return getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue:
     // Codecs supported by MP4 and Quicktime
@@ -127,7 +128,7 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return getAacConversionCommand(inputFilePath: inputFilePath)
+      return getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.mkv.rawValue:
     // MKV supports all audio codecs we support
@@ -139,19 +140,19 @@ func getAudioConversionCommand(inputFilePath: String, outputFilePath: String) ->
       return "-c:a copy"
     }
     else {
-      return getAacConversionCommand(inputFilePath: inputFilePath)
+      return getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.webm.rawValue:
     return "-c:a libvorbis"
   default:
     print("Unknown output file type when selecting audio codec")
-    return getAacConversionCommand(inputFilePath: inputFilePath)
+    return getAacConversionCommand(inputVideo: inputVideo)
   }
 }
 
 /// Get the subtitle conversion portion of the FFMPEG command.
 /// https://en.wikibooks.org/wiki/FFMPEG_An_Intermediate_Guide/subtitle_options
-func getSubtitleConversionCommand(inputFilePath: String, outputFilePath: String) -> String {
+func getSubtitleConversionCommand(inputVideo: Video, outputFilePath: String) -> String {
   let outputFileType = getFileExtension(filePath: outputFilePath)
   
   switch outputFileType {
@@ -171,12 +172,12 @@ func getSubtitleConversionCommand(inputFilePath: String, outputFilePath: String)
   
 }
 
-func getFfmpegCommand(inputFilePath: String, outputFilePath: String) -> String {
-  let videoCommand = getVideoConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-  let audioCommand = getAudioConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+func getFfmpegCommand(inputVideo: Video, outputFilePath: String) -> String {
+  let videoCommand = getVideoConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
+  let audioCommand = getAudioConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
   
-  let subtitleCommand = getSubtitleConversionCommand(inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-  let command = "-hide_banner -loglevel error -y -i \"\(inputFilePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  let subtitleCommand = getSubtitleConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
+  let command = "-hide_banner -loglevel error -y -i \"\(inputVideo.filePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
   
   return command
 }
@@ -191,76 +192,17 @@ func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> 
   return session!
 }
 
-func getNumberOfFrames(inputFilePath: String) -> Double {
-  let session = FFprobeKit.execute("-loglevel error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of default=nokey=1:noprint_wrappers=1 \"\(inputFilePath)\"")
-  let logs = session?.getAllLogsAsString()
-  let numberOfFrames = Double(logs!.trimmingCharacters(in: .whitespacesAndNewlines))!
-  return numberOfFrames
+func getAllVideoProperties(inputFilePath: String) -> Video {
+  //  ffprobe -loglevel error  -show_entries stream:format 
+  let session = FFprobeKit.execute("-loglevel error -count_packets -show_entries stream:format \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()!.trimmingCharacters(in: .whitespacesAndNewlines)
+
+  return buildVideo(withFfprobeOutput: logs!, inputFilePath: inputFilePath)
 }
 
-func getVideoDuration(inputFilePath: String) -> Double {
-  let session = FFprobeKit.execute("-loglevel error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
-  let logs = session?.getAllLogsAsString()
-  
-  let duration = Double(logs!.trimmingCharacters(in: .whitespacesAndNewlines))!
-  return duration
-}
-
-// TODO: This operation is synchronous. If we notice this slows down the app, we can do is async immediately after a user selects an input file
-func getVideoCodec(inputFilePath: String) -> VideoCodec {
-  let session = FFprobeKit.execute("-loglevel error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
-  let logs = session?.getAllLogsAsString()
-  
-  let codec = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
-  return convertToVideoCodec(inputCodec: codec)
-}
-
-// TODO: This operation is synchronous. If we notice this slows down the app, we can do is async immediately after a user selects an input file
-// Could also get all these through a single ffprobe call that gets all stream info, then parse it all on the swift side. This would already be a big improvement.
-func getAudioCodec(inputFilePath: String) -> AudioCodec {
-  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
-  let logs = session?.getAllLogsAsString()
-  
-  let codec = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
-  return convertToAudioCodec(inputCodec: codec)
-}
-
-func getChannelLayout(inputFilePath: String) -> ChannelLayout {
-  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=channel_layout -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
-  let logs = session?.getAllLogsAsString()
-  
-  let channelLayout = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
-  return convertToChannelLayout(inputChannelLayout: channelLayout)
-}
-
-func getNumberOfAudioChannels(inputFilePath: String) -> Int {
-  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=channels -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
-  let logs = session?.getAllLogsAsString()
-  
-  if logs!.isEmpty || logs == nil {
-    return 0
-  }
-  
-  let channels = Int(logs!.trimmingCharacters(in: .whitespacesAndNewlines))!
-  return channels
-}
-
-// TODO: This will be used to differentiate types of DTS (DTS, DTS-HD), types of AAC (HE-AAC, AAC-LC, etc.)
-// Some resource:
-// - https://stackoverflow.com/questions/61365587/what-does-profile-means-in-an-aac-encoded-audio
-// - https://trac.ffmpeg.org/wiki/Encode/HighQualityAudio
-// - https://trac.ffmpeg.org/wiki/Encode/AAC
-//func getAudioCodecProfile(inputFilePath: String) -> Void {
-//  let session = FFprobeKit.execute("-loglevel error -select_streams a:0 -show_entries stream=profile  -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
-//  let logs = session?.getAllLogsAsString()
-//
-//
-//  let profile = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
-//  print("PROFILE \(profile)")
-//}
-
+// This uses the same command as getAllVideoProperties but we leave out the loglevel field to include additional metadata
 func getFfprobeOutput(inputFilePath: String) -> String {
-  let session = FFprobeKit.execute("\"\(inputFilePath)\"")
+  let session = FFprobeKit.execute("-count_packets -show_entries stream:format \"\(inputFilePath)\"")
   let logs = session?.getAllLogsAsString()
   
   let output = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
