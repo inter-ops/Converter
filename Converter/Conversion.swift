@@ -60,6 +60,7 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
     }
     
     // If input file is HEVC, we re-encode to H264 and 8-bit colour to ensure QuickTime support
+    // https://superuser.com/questions/1380946/how-do-i-convert-10-bit-h-265-hevc-videos-to-h-264-without-quality-loss
     if inputVideoCodec == VideoCodec.hevc {
       return "-c:v libx264 -preset veryfast -crf 20 -vf format=yuv420p"
     }
