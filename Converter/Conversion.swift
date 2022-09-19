@@ -39,6 +39,7 @@ func getFileName(filePath: String) -> String {
 
 func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
+  let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
   let outputFileType = getFileExtension(filePath: outputFilePath)
   let inputFileType = getFileExtension(filePath: inputVideo.filePath)
   
@@ -61,6 +62,11 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     
     // If input file is HEVC, we re-encode to H264 to ensure QuickTime support
     if inputVideoCodec == VideoCodec.hevc {
+      return "-c:v libx264 -preset veryfast -crf 26"
+    }
+    
+    // MOV does not support xvid, so we need to re-encode
+    if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
       return "-c:v libx264 -preset veryfast -crf 26"
     }
     
