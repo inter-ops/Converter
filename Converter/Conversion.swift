@@ -60,9 +60,9 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
       return "-c:v libx264 -preset veryfast -crf 26"
     }
     
-    // If input file is HEVC, we re-encode to H264 to ensure QuickTime support
+    // If input file is HEVC, we re-encode to H264 and 8-bit colour to ensure QuickTime support
     if inputVideoCodec == VideoCodec.hevc {
-      return "-c:v libx264 -preset veryfast -crf 26"
+      return "-c:v libx264 -preset veryfast -crf 20 -vf format=yuv420p"
     }
     
     // MOV does not support xvid, so we need to re-encode
