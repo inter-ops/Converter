@@ -5,24 +5,28 @@
 //  Created by Francesco Virga on 2022-09-17.
 //
 
+enum CodecType: String {
+  case video, audio, subtitle
+}
+
 struct VideoStream {
   let codec: VideoCodec
   let rawCodecName: String  // in case we have an unknown VideoCodec, we can see it here
   let codecLongName: String
   let profile: String
-  let codecType: String // TODO: enum of "video" "audio" "subtitle"
+  let codecType: CodecType
   let codecTagString: String
-  let codecTag: String // TODO: hex or something, example was 0x0000
+  let codecTag: String
   let width: Int
   let height: Int
   
   let sampleAspectRatio: String
   let displayAspectRatio: String
-  let pixFmt: String // TODO enum, example was "yuv420p"
+  let pixFmt: String // Run ffmpeg -pix_fmts for supported formats
   
   let numberOfFrames: Int // This comes from nb_read_packets
   
-  // TODO: enum or int for both below, examples were both 24/1, look into difference between these two
+  // Difference between frame rates: https://video.stackexchange.com/a/20790
   let rFrameRate: String
   let avgFrameRate: String
   
@@ -31,7 +35,7 @@ struct VideoStream {
     self.codec = convertToVideoCodec(inputCodec: ffprobeDict["codec_name"] ?? "")
     self.codecLongName = ffprobeDict["codec_long_name"] ?? ""
     self.profile = ffprobeDict["profile"] ?? ""
-    self.codecType = ffprobeDict["codec_type"] ?? ""
+    self.codecType = CodecType(rawValue: ffprobeDict["codec_type"]!)!
     self.codecTagString = ffprobeDict["codec_tag_string"] ?? ""
     self.codecTag = ffprobeDict["codec_tag"] ?? ""
     self.width = Int(ffprobeDict["width"] ?? "0")!
@@ -50,23 +54,23 @@ struct AudioStream {
   let rawCodecName: String  // in case we have an unknown AudioCodec, we can see it here
   let codecLongName: String
   
-  // TODO: This will be used to differentiate types of DTS (DTS, DTS-HD), types of AAC (HE-AAC, AAC-LC, etc.). Us an enum.
+  // TODO: This will be used to differentiate types of DTS (DTS, DTS-HD), types of AAC (HE-AAC, AAC-LC, etc.).
   // Some resource:
   // - https://stackoverflow.com/questions/61365587/what-does-profile-means-in-an-aac-encoded-audio
   // - https://trac.ffmpeg.org/wiki/Encode/HighQualityAudio
   // - https://trac.ffmpeg.org/wiki/Encode/AAC
   let profile: String
   
-  let codecType: String // TODO: enum of "video" "audio" "subtitle"
+  let codecType: CodecType
   let codecTagString: String
-  let codecTag: String // TODO: hex or something, example was 0x0000
+  let codecTag: String
   
   let sampleRate: Int
   let channels: Int
   let channelLayout: ChannelLayout
-  let rawChannelLayout: String // in case we have an unknown ChannelLayout, we can see it here
+  let rawChannelLayout: String // In case we have an unknown ChannelLayout, we can see it here
   
-  let bitRate: Int // TODO: this is bits or bytes / s, double check
+  let bitRate: Int // This is in bits/s
   
   let language: String? // From TAG:language if exists
   let title: String? // From TAG:title if exists
@@ -76,7 +80,7 @@ struct AudioStream {
     self.codec = convertToAudioCodec(inputCodec: ffprobeDict["codec_name"] ?? "")
     self.codecLongName = ffprobeDict["codec_long_name"] ?? ""
     self.profile = ffprobeDict["profile"] ?? ""
-    self.codecType = ffprobeDict["codec_type"] ?? ""
+    self.codecType = CodecType(rawValue: ffprobeDict["codec_type"]!)!
     self.codecTagString = ffprobeDict["codec_tag_string"] ?? ""
     self.codecTag = ffprobeDict["codec_tag"] ?? ""
     self.sampleRate = Int(ffprobeDict["sample_rate"] ?? "0")!
@@ -94,9 +98,9 @@ struct SubtitleStream {
   let rawCodecName: String  // in case we have an unknown SubtitleCodec, we can see it here
   let codecLongName: String
   let profile: String
-  let codecType: String // TODO: enum of "video" "audio" "subtitle"
+  let codecType: CodecType
   let codecTagString: String
-  let codecTag: String // TODO: hex or something, example was 0x0000
+  let codecTag: String
   
   let language: String? // From TAG:language if exists
   
@@ -105,7 +109,7 @@ struct SubtitleStream {
     self.codec = convertToSubtitleCodec(inputCodec: ffprobeDict["codec_name"] ?? "")
     self.codecLongName = ffprobeDict["codec_long_name"] ?? ""
     self.profile = ffprobeDict["profile"] ?? ""
-    self.codecType = ffprobeDict["codec_type"] ?? ""
+    self.codecType = CodecType(rawValue: ffprobeDict["codec_type"]!)!
     self.codecTagString = ffprobeDict["codec_tag_string"] ?? ""
     self.codecTag = ffprobeDict["codec_tag"] ?? ""
     self.language = ffprobeDict["TAG:language"]
@@ -116,11 +120,11 @@ struct Video {
   let title: String? // This comes from TAG:title if exists
   let filePath: String
   let duration: Double // Seconds
-  let bitRate: Int // TODO: this is bits or bytes / s, double check
-  let size: Int // TODO: this is bits or bytes, double check
+  let bitRate: Int // This is in bits/s
+  let size: Int // This is in bytes
   
-  let formatName: String // TODO: enum
-  let formatLongName: String // TODO: enum if possible
+  let formatName: String // eg "matroska,webm" or "mp4"
+  let formatLongName: String // eg "Matroska / WebM" or "MP4 (MPEG-4 Part 14)"
   let encoder: String? // This comes from TAG:ENCODER if exists
   let videoStreams: [VideoStream]
   let audioStreams: [AudioStream]
