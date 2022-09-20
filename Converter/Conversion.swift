@@ -65,6 +65,12 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
       return "-c:v libx264 -preset veryfast -crf 20 -vf format=yuv420p"
     }
     
+    let inputVideoCodecTag = getVideoCodecTag(inputFilePath: inputFilePath)
+    // MOV does not support xvid, so we need to re-encode
+    if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
+      return "-c:v libx264 -preset veryfast -crf 26"
+    }
+    
     // For everything else, we copy video codec since it should be supported.
     // TODO: There could still be some cases where this is not true, need to do more testing.
     return "-c:v copy"
@@ -224,6 +230,14 @@ func getAudioCodec(inputFilePath: String) -> AudioCodec {
   
   let codec = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
   return convertToAudioCodec(inputCodec: codec)
+}
+
+func getVideoCodecTag(inputFilePath: String) -> String {
+  let session = FFprobeKit.execute("-loglevel error -select_streams v:0 -show_entries stream=codec_tag_string -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let codecTagString = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  return codecTagString
 }
 
 func getChannelLayout(inputFilePath: String) -> ChannelLayout {
