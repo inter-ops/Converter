@@ -109,7 +109,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7276E2AD59F051AC37D5947A /* Pods_Converter.framework in Frameworks */,
 				79B2AFB528DA2E26009783EE /* libswresample.xcframework in Frameworks */,
 				79B2AFAB28DA2E21009783EE /* libavcodec.xcframework in Frameworks */,
 				79B2AFA828DA2E20009783EE /* ffmpegkit.xcframework in Frameworks */,
