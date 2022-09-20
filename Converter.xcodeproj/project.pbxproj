@@ -16,6 +16,22 @@
 		799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E3E5328C0479500234BDE /* AudioCodec.swift */; };
 		79AF2A7E28D5FDF6009CCB42 /* SubtitleCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AF2A7D28D5FDF6009CCB42 /* SubtitleCodec.swift */; };
 		79AF2A8228D60C26009CCB42 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AF2A8128D60C26009CCB42 /* Video.swift */; };
+		79B2AFA828DA2E20009783EE /* ffmpegkit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9828DA2E18009783EE /* ffmpegkit.xcframework */; };
+		79B2AFA928DA2E20009783EE /* ffmpegkit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9828DA2E18009783EE /* ffmpegkit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		79B2AFAB28DA2E21009783EE /* libavcodec.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9A28DA2E19009783EE /* libavcodec.xcframework */; };
+		79B2AFAC28DA2E21009783EE /* libavcodec.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9A28DA2E19009783EE /* libavcodec.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		79B2AFAD28DA2E22009783EE /* libavdevice.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9B28DA2E19009783EE /* libavdevice.xcframework */; };
+		79B2AFAE28DA2E22009783EE /* libavdevice.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9B28DA2E19009783EE /* libavdevice.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		79B2AFAF28DA2E23009783EE /* libavfilter.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9E28DA2E1A009783EE /* libavfilter.xcframework */; };
+		79B2AFB028DA2E23009783EE /* libavfilter.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9E28DA2E1A009783EE /* libavfilter.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		79B2AFB128DA2E24009783EE /* libavformat.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9F28DA2E1A009783EE /* libavformat.xcframework */; };
+		79B2AFB228DA2E24009783EE /* libavformat.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9F28DA2E1A009783EE /* libavformat.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		79B2AFB328DA2E25009783EE /* libavutil.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9D28DA2E1A009783EE /* libavutil.xcframework */; };
+		79B2AFB428DA2E25009783EE /* libavutil.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9D28DA2E1A009783EE /* libavutil.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		79B2AFB528DA2E26009783EE /* libswresample.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9928DA2E18009783EE /* libswresample.xcframework */; };
+		79B2AFB628DA2E26009783EE /* libswresample.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9928DA2E18009783EE /* libswresample.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		79B2AFB728DA2E27009783EE /* libswscale.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9C28DA2E1A009783EE /* libswscale.xcframework */; };
+		79B2AFB828DA2E27009783EE /* libswscale.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79B2AF9C28DA2E1A009783EE /* libswscale.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
 		C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */; };
@@ -32,6 +48,27 @@
 		C2E1F22128C29A17005A8B48 /* ErrorPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E1F22028C29A17005A8B48 /* ErrorPrompt.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		79B2AFAA28DA2E20009783EE /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				79B2AFA928DA2E20009783EE /* ffmpegkit.xcframework in Embed Frameworks */,
+				79B2AFAE28DA2E22009783EE /* libavdevice.xcframework in Embed Frameworks */,
+				79B2AFB028DA2E23009783EE /* libavfilter.xcframework in Embed Frameworks */,
+				79B2AFAC28DA2E21009783EE /* libavcodec.xcframework in Embed Frameworks */,
+				79B2AFB428DA2E25009783EE /* libavutil.xcframework in Embed Frameworks */,
+				79B2AFB228DA2E24009783EE /* libavformat.xcframework in Embed Frameworks */,
+				79B2AFB828DA2E27009783EE /* libswscale.xcframework in Embed Frameworks */,
+				79B2AFB628DA2E26009783EE /* libswresample.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1E6BC34F0A1BE18A67D11155 /* Pods-Converter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.release.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.release.xcconfig"; sourceTree = "<group>"; };
 		4222BD8B6F4A153DDD99EA47 /* Pods-Converter.development debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.development debug.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.development debug.xcconfig"; sourceTree = "<group>"; };
@@ -43,6 +80,14 @@
 		799E3E5328C0479500234BDE /* AudioCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCodec.swift; sourceTree = "<group>"; };
 		79AF2A7D28D5FDF6009CCB42 /* SubtitleCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleCodec.swift; sourceTree = "<group>"; };
 		79AF2A8128D60C26009CCB42 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		79B2AF9828DA2E18009783EE /* ffmpegkit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ffmpegkit.xcframework; sourceTree = "<group>"; };
+		79B2AF9928DA2E18009783EE /* libswresample.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libswresample.xcframework; sourceTree = "<group>"; };
+		79B2AF9A28DA2E19009783EE /* libavcodec.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavcodec.xcframework; sourceTree = "<group>"; };
+		79B2AF9B28DA2E19009783EE /* libavdevice.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavdevice.xcframework; sourceTree = "<group>"; };
+		79B2AF9C28DA2E1A009783EE /* libswscale.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libswscale.xcframework; sourceTree = "<group>"; };
+		79B2AF9D28DA2E1A009783EE /* libavutil.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavutil.xcframework; sourceTree = "<group>"; };
+		79B2AF9E28DA2E1A009783EE /* libavfilter.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavfilter.xcframework; sourceTree = "<group>"; };
+		79B2AF9F28DA2E1A009783EE /* libavformat.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = libavformat.xcframework; sourceTree = "<group>"; };
 		8A265585079F8D007EFC096F /* Pods-Converter.development release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.development release.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.development release.xcconfig"; sourceTree = "<group>"; };
 		96B94DCBF36DFC82156EDC66 /* Pods-Converter.production release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Converter.production release.xcconfig"; path = "Target Support Files/Pods-Converter/Pods-Converter.production release.xcconfig"; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +118,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7276E2AD59F051AC37D5947A /* Pods_Converter.framework in Frameworks */,
+				79B2AFB528DA2E26009783EE /* libswresample.xcframework in Frameworks */,
+				79B2AFAB28DA2E21009783EE /* libavcodec.xcframework in Frameworks */,
+				79B2AFA828DA2E20009783EE /* ffmpegkit.xcframework in Frameworks */,
+				79B2AFAD28DA2E22009783EE /* libavdevice.xcframework in Frameworks */,
+				79B2AFB328DA2E25009783EE /* libavutil.xcframework in Frameworks */,
+				79B2AFAF28DA2E23009783EE /* libavfilter.xcframework in Frameworks */,
+				79B2AFB728DA2E27009783EE /* libswscale.xcframework in Frameworks */,
+				79B2AFB128DA2E24009783EE /* libavformat.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +237,14 @@
 		D5F2785EA79D681D546BD992 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				79B2AF9828DA2E18009783EE /* ffmpegkit.xcframework */,
+				79B2AF9A28DA2E19009783EE /* libavcodec.xcframework */,
+				79B2AF9B28DA2E19009783EE /* libavdevice.xcframework */,
+				79B2AF9E28DA2E1A009783EE /* libavfilter.xcframework */,
+				79B2AF9F28DA2E1A009783EE /* libavformat.xcframework */,
+				79B2AF9D28DA2E1A009783EE /* libavutil.xcframework */,
+				79B2AF9928DA2E18009783EE /* libswresample.xcframework */,
+				79B2AF9C28DA2E1A009783EE /* libswscale.xcframework */,
 				F810C5C80FA22868AF150923 /* Pods_Converter.framework */,
 			);
 			name = Frameworks;
@@ -200,7 +261,7 @@
 				C2D33F3F28A950BA00BDCCD4 /* Sources */,
 				C2D33F4028A950BA00BDCCD4 /* Frameworks */,
 				C2D33F4128A950BA00BDCCD4 /* Resources */,
-				A36BCEAA0D3A0E712CD5BB3A /* [CP] Embed Pods Frameworks */,
+				79B2AFAA28DA2E20009783EE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -279,23 +340,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A36BCEAA0D3A0E712CD5BB3A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Converter/Pods-Converter-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Converter/Pods-Converter-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Converter/Pods-Converter-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

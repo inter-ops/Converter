@@ -1,16 +1,3 @@
-PODS:
-  - ffmpeg-kit-macos-full-gpl (4.5.1)
-
-DEPENDENCIES:
-  - ffmpeg-kit-macos-full-gpl (~> 4.5.1)
-
-SPEC REPOS:
-  trunk:
-    - ffmpeg-kit-macos-full-gpl
-
-SPEC CHECKSUMS:
-  ffmpeg-kit-macos-full-gpl: c68ef79d8b844966adcbe3a0701dff2eabdb90bf
-
-PODFILE CHECKSUM: de077c71f4bc98dfea306829064316712760aacd
+PODFILE CHECKSUM: 92deb72f2ff9aed3e90e827692fd6e38444418bb
 
 COCOAPODS: 1.11.3
