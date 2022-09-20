@@ -6,15 +6,10 @@
 //
 
 enum AudioCodec: String, CaseIterable {
-  case aac, ac3, eac3, dts, truehd, mp3, flac, alac, pcm_alaw, pcm_mulaw, empty, unknown
+  case aac, ac3, eac3, dts, truehd, mp3, flac, alac, pcm_alaw, pcm_mulaw, vorbis, unknown
 }
 
 func convertToAudioCodec(inputCodec: String) -> AudioCodec {
-  if inputCodec.isEmpty {
-    print("Empty input audio codec")
-    return AudioCodec.empty
-  }
-  
   for codec in AudioCodec.allCases {
     if codec.rawValue == inputCodec {
       return codec

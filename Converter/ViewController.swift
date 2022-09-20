@@ -24,11 +24,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var outputFormat: VideoFormat = .mp4   // Default output format
   var inputFileUrl: URL?
   var outputFileUrl: URL?
-  var videoDuration: Double?
-  var totalNumberOfFrames: Double?
   var startOfConversion: Date?
   var isTimeRemainingStable = false
   var ffmpegCommand: String?
+  
+  var inputVideo: Video?
   
   let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
@@ -138,7 +138,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func getProgressPercentage(statistics: Statistics) -> Double {
     let timeElapsed = self.startOfConversion!.timeIntervalSinceNow * -1
     let videoTime = Double(statistics.getTime())/1000
-    let totalConversionTime = timeElapsed * (self.videoDuration! / videoTime)
+    let totalConversionTime = timeElapsed * (self.inputVideo!.duration / videoTime)
     
     let progressPercentage = (timeElapsed / totalConversionTime) * 100
     return progressPercentage
@@ -148,7 +148,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func getEstimatedTimeRemaining(statistics: Statistics, progressPercentage: Double) -> Double {
     let timeElapsed = self.startOfConversion!.timeIntervalSinceNow * -1
     let videoTime = Double(statistics.getTime())/1000
-    let totalConversionTime = timeElapsed * (self.videoDuration! / videoTime)
+    let totalConversionTime = timeElapsed * (self.inputVideo!.duration / videoTime)
     
     let timeRemaining = totalConversionTime - timeElapsed
     return timeRemaining
@@ -233,10 +233,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func startConversion() {
     var analyticsTimer = Timer()
     
-    self.videoDuration = getVideoDuration(inputFilePath: inputFileUrl!.path)
-    self.totalNumberOfFrames = getNumberOfFrames(inputFilePath: inputFileUrl!.path)
+    self.inputVideo = getAllVideoProperties(inputFilePath: inputFileUrl!.path)
+    
     self.startOfConversion = Date()
-    self.ffmpegCommand = getFfmpegCommand(inputFilePath: inputFileUrl!.path, outputFilePath: outputFileUrl!.path)
+    self.ffmpegCommand = getFfmpegCommand(inputVideo: inputVideo!, outputFilePath: outputFileUrl!.path)
     
     let ffmpegSession = runFfmpegCommand(command: ffmpegCommand!) { session in
       let returnCode = session!.getReturnCode()
@@ -266,8 +266,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         self.resetActionButton()
         self.outputFileUrl = nil
         self.isTimeRemainingStable = false
-        self.videoDuration = nil
-        self.totalNumberOfFrames = nil
+        self.inputVideo = nil
         self.startOfConversion = nil
         self.ffmpegCommand = nil
       }
