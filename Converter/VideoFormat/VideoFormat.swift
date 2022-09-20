@@ -5,7 +5,7 @@
 //  Created by Justin Bush on 8/13/22.
 //
 
-let supportedFormats = ["mp4", "m4v", "mkv", "mov", "webm", "avi"]
+let supportedFormats = ["mp4", "mkv", "m4v", "mov", "webm", "avi"]
 
 struct Format {
   static let supported = supportedFormats
@@ -18,13 +18,13 @@ struct Format {
 }
 
 enum VideoFormat: String, CaseIterable {
-  case mp4, m4v, mkv, mov, webm, avi // gif
+  case mp4, mkv, m4v, mov, webm, avi // gif
   
   var dropdownTitle: String {
     switch self {
     case .mp4: return "MP4"
-    case .m4v: return "M4V"
     case .mkv: return "MKV"
+    case .m4v: return "M4V"
     case .mov: return "MOV"
     case .avi: return "AVI"
 //    case .gif: return "GIF"
@@ -33,16 +33,3 @@ enum VideoFormat: String, CaseIterable {
   }
   
 }
-
-//extension String {
-//  /// Returns true if filetype is supported; checks both uppercase and lowercase
-//  var isSupportedFormat: Bool {
-//    for format in supportedFormats {
-//      if self.lowercased().contains(format) {
-//        return true
-//      }
-//    }
-//    return false
-//  }
-//
-//}
