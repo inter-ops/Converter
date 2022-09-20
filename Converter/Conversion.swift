@@ -59,8 +59,15 @@ func getVideoConversionCommand(inputFilePath: String, outputFilePath: String) ->
       return "-c:v libx264 -preset veryfast -crf 26"
     }
     
-    // If input file is HEVC, we re-encode to H264 to ensure QuickTime support
+    // If input file is HEVC, we re-encode to H264 and 8-bit colour to ensure QuickTime support
+    // https://superuser.com/questions/1380946/how-do-i-convert-10-bit-h-265-hevc-videos-to-h-264-without-quality-loss
     if inputVideoCodec == VideoCodec.hevc {
+      return "-c:v libx264 -preset veryfast -crf 20 -vf format=yuv420p"
+    }
+    
+    let inputVideoCodecTag = getVideoCodecTag(inputFilePath: inputFilePath)
+    // MOV does not support xvid, so we need to re-encode
+    if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
       return "-c:v libx264 -preset veryfast -crf 26"
     }
     
@@ -223,6 +230,14 @@ func getAudioCodec(inputFilePath: String) -> AudioCodec {
   
   let codec = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
   return convertToAudioCodec(inputCodec: codec)
+}
+
+func getVideoCodecTag(inputFilePath: String) -> String {
+  let session = FFprobeKit.execute("-loglevel error -select_streams v:0 -show_entries stream=codec_tag_string -of default=noprint_wrappers=1:nokey=1 \"\(inputFilePath)\"")
+  let logs = session?.getAllLogsAsString()
+  
+  let codecTagString = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  return codecTagString
 }
 
 func getChannelLayout(inputFilePath: String) -> ChannelLayout {
