@@ -166,6 +166,12 @@ func buildVideo(withFfprobeOutput: String, inputFilePath: String) -> Video {
       }
       
       let keyValuePair = keyValuePairString.components(separatedBy: "=")
+      // If we dont have a key value pair, skip this line. This is currently needed because some streams contain SIDE_DATA tags which we are not handling.
+      // It would be cleaner to parse these out separately, but they don't contain any useful info for us yet so we can just ignore these lines for now.
+      if keyValuePair.count < 2 {
+        continue
+      }
+      
       let key = keyValuePair[0]
       let value = keyValuePair[1]
       dict[key] = value
