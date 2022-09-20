@@ -52,6 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     if mainViewHasAppeared {
       let viewController = self.mainWindow.contentViewController as? ViewController
       viewController?.dragDropViewDidReceive(fileUrl: filename)
+      mainWindow.makeKeyAndOrderFront(self)
     } else {
       // Otherwise, set String flag for opening once mainView hasAppeared
       openAppWithFilePath = filename
