@@ -52,7 +52,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     // - https://superuser.com/questions/1586934/vp9-encoding-with-ffmpeg-relation-between-speed-and-deadline-options
     // - https://superuser.com/questions/556463/converting-video-to-webm-with-ffmpeg-avconv
     // - https://superuser.com/a/1280369
-    return "-c:v libvpx -b:v 5M -deadline good -cpu-used 2 -crf 26"
+    return "-c:v libvpx -b:v 50MB -deadline good -cpu-used 2 -crf 5"
     
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
     // If input file is WEBM, we re-encode to H264
