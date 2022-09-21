@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C2D33F4228A950BA00BDCCD4"
-               BuildableName = "Converter.app"
+               BuildableName = "Video Converter.app"
                BlueprintName = "Converter"
                ReferencedContainer = "container:Converter.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C2D33F4228A950BA00BDCCD4"
-            BuildableName = "Converter.app"
+            BuildableName = "Video Converter.app"
             BlueprintName = "Converter"
             ReferencedContainer = "container:Converter.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C2D33F4228A950BA00BDCCD4"
-            BuildableName = "Converter.app"
+            BuildableName = "Video Converter.app"
             BlueprintName = "Converter"
             ReferencedContainer = "container:Converter.xcodeproj">
          </BuildableReference>
