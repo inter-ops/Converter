@@ -39,6 +39,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     displayClearButton(.hide)
   }
   
+  override func viewDidDisappear() {
+    hidePopover(supportedFormatsPopover)
+    hidePopover(helpInfoPopover)
+  }
+  
   func openFileBrowser() {
     let openPanel = NSOpenPanel()
     
