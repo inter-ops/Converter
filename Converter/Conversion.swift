@@ -117,9 +117,8 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
       // http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
       // https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
     
-    // TODO: Test pallette options in ref above
-    // TODO: Test fps values
-    return " -vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
+    // TODO: "MPEG-4 x264 480p (Stereo, AAC)" causes a stutter, post on stack overflow
+    return "-c:v libx264 -vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
   default:
     // For unknown cases, we re-encode to H264
     return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
@@ -146,13 +145,14 @@ func getAacConversionCommand(inputVideo: Video) -> String {
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
 func getAudioConversionCommand(inputVideo: Video, outputFilePath: String) -> String {
-  let inputAudioCodec = inputVideo.audioStreams[0].codec
   let outputFileType = getFileExtension(filePath: outputFilePath)
   
   // If we don't have any audio streams, or we are converting to GIF, we don't need an audio conversion command
   if inputVideo.audioStreams.isEmpty || outputFileType == VideoFormat.gif.rawValue {
     return ""
   }
+  
+  let inputAudioCodec = inputVideo.audioStreams[0].codec
 
   switch outputFileType {
   case VideoFormat.m4v.rawValue:
@@ -204,6 +204,11 @@ func getAudioConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
 /// https://en.wikibooks.org/wiki/FFMPEG_An_Intermediate_Guide/subtitle_options
 func getSubtitleConversionCommand(inputVideo: Video, outputFilePath: String) -> String {
   let outputFileType = getFileExtension(filePath: outputFilePath)
+  
+  // If we don't have any audio streams, or we are converting to GIF, we don't need a subtitle conversion command
+  if inputVideo.subtitleStreams.isEmpty || outputFileType == VideoFormat.gif.rawValue {
+    return ""
+  }
   
   switch outputFileType {
     // TODO: This is resulting in two output subtitle streams, the first one is the correct one, the second one shows "Chapter 1" and nothing else
