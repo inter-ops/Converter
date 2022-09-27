@@ -118,7 +118,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
       // https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
     
     // TODO: "MPEG-4 x264 480p (Stereo, AAC)" causes a stutter, post on stack overflow
-    return "-c:v libx264 -vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
+    return "-vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
   default:
     // For unknown cases, we re-encode to H264
     return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
