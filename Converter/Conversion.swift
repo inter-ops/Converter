@@ -39,6 +39,11 @@ func getFileName(filePath: String) -> String {
 
 // TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases. For testing video quality output, see here: https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
 
+// TODO: Create a readme for this documentation
+
+/// Get the video portion of the ffmpeg command.
+/// For x264, we always use 8-bit colour (pixfmt yuv420p) to ensure maximum support. See "Encoding for dumb players" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
+/// We use a crf of 20. The default is 23, and 17-18 is considered visually lossless. See "Choose a CRF value" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
 func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
@@ -60,18 +65,23 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
     // If input file is WEBM, we re-encode to H264
     if inputFileType == VideoFormat.webm.rawValue {
-      return "-c:v libx264 -preset veryfast -crf 26"
+      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
     }
     
-    // If input file is HEVC, we re-encode to H264 and 8-bit colour to ensure QuickTime support
+    // If input codec is ProRes or unknown, we re-encode to H264
+    if inputVideoCodec == VideoCodec.prores || inputVideoCodec == VideoCodec.unknown {
+      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
+    }
+    
+    // If input codec is HEVC, we re-encode to H264 and 8-bit colour to ensure QuickTime support
     // https://superuser.com/questions/1380946/how-do-i-convert-10-bit-h-265-hevc-videos-to-h-264-without-quality-loss
     if inputVideoCodec == VideoCodec.hevc {
-      return "-c:v libx264 -preset veryfast -crf 20 -vf format=yuv420p"
+      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
     }
     
-    // MOV does not support xvid, so we need to re-encode
+    // MOV does not support xvid, so we need to re-encode to H264
     if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
-      return "-c:v libx264 -preset veryfast -crf 26"
+      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
     }
     
     // For everything else, we copy video codec since it should be supported.
@@ -87,7 +97,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     return "-c:v libxvid -qscale:v 5"
   default:
     // For unknown cases, we re-encode to H264
-    return "-c:v libx264 -preset veryfast -crf 26"
+    return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
   }
 }
 
@@ -141,8 +151,13 @@ func getAudioConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
       return getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.mkv.rawValue:
-    // MKV supports all audio codecs we support
-    return "-c:a copy"
+    if inputAudioCodec == AudioCodec.unknown {
+      return getAacConversionCommand(inputVideo: inputVideo)
+    }
+    else {
+      // MKV supports all audio codecs we support
+      return "-c:a copy"
+    }
   case VideoFormat.avi.rawValue:
     // Codecs supported by AVI
     // TODO: We currently can't differentiate between DTS and DTS-HD, so we re-encode for either. In the future, we only need to re-encode for DTS-HD here.
