@@ -23,8 +23,10 @@ import ffmpegkit
  - https://wiki.archlinux.org/title/FFmpeg
  */
 
-// TODO: Need to figure out how to package up ffmpeg kit for release
-// Needs: --enable-x264 --enable-gpl --enable-libvpx
+/// Building FFMPEG
+/// Bare minimum package requirements are "--xcframework --enable-x264 --enable-gpl --enable-libvpx --enable-libvorbis", but we ran into "unknown encoder" errors with certain input videos.
+/// Currently built with the following: "--xcframework  --enable-gpl  --enable-x264 --enable-x265  --enable-xvidcore --enable-macos-zlib  --enable-macos-audiotoolbox --enable-macos-avfoundation  --enable-macos-bzip2  --enable-macos-videotoolbox --enable-macos-libiconv    --enable-macos-coreimage --enable-macos-opencl  --enable-macos-opengl   --enable-chromaprint --enable-fontconfig --enable-freetype   --enable-fribidi --enable-gmp   --enable-kvazaar  --enable-lame  --enable-libaom  --enable-libass --enable-libilbc  --enable-libtheora     --enable-libvorbis  --enable-libvpx  --enable-libxml2  --enable-opencore-amr  --enable-openh264  --enable-openssl     --enable-opus        --enable-sdl --enable-shine  --enable-snappy    --enable-soxr   --enable-speex  --enable-srt --enable-twolame    --enable-vo-amrwbenc      --enable-zimg". This is every non-GPL library other than webp (libgif failed building), tesseract (libgif failed building), gnutls (gnutls failed building), dav1d (failed building), and every GPL library other than rubberband & libvidstab (unnecessary).
+
 
 // TODO: Convert this to a VideoFormat type so that we don't need to use .rawValue everywhere
 func getFileExtension(filePath: String) -> String {
