@@ -51,7 +51,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     openPanel.canChooseDirectories = true
     openPanel.canCreateDirectories = true
     openPanel.canChooseFiles = true
-    openPanel.allowedFileTypes = supportedFormats
+    openPanel.allowedFileTypes = supportedInputFormats
     
     let response = openPanel.runModal()
     if response == .OK {
@@ -78,7 +78,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     inputFileUrl = fileUrl.fileURL.absoluteURL
     
-    if Format.isSupported(fileUrl) {
+    if Format.isSupportedAsInput(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
       displayClearButton(.show)
       

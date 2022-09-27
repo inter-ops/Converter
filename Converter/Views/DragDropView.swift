@@ -22,7 +22,6 @@ class DragDropView: NSView {
   @IBOutlet weak var delegate: DragDropViewDelegate?
   
   var filePath: String?
-  let expectedExt = Format.supported //supportedFormats
   
   let clearColor = NSColor.clear.cgColor
   
@@ -63,7 +62,7 @@ class DragDropView: NSView {
     else { return false }
     
     let testFilePath = path.lowercased()
-    return Format.isSupported(testFilePath)
+    return Format.isSupportedAsInput(testFilePath)
   }
   
   override func draggingExited(_ sender: NSDraggingInfo?) {

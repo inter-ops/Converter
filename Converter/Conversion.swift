@@ -41,6 +41,11 @@ func getFileName(filePath: String) -> String {
 
 // TODO: Create a readme for this documentation
 
+// TODO: Test gif to all outputs
+
+// TODO: See if we need to set a specific frame rate for output gifs
+// Especially avi: https://www.linuxquestions.org/questions/linux-software-2/converting-animated-gif-to-avi-ffmpeg-549839/
+
 /// Get the video portion of the ffmpeg command.
 /// For x264, we always use 8-bit colour (pixfmt yuv420p) to ensure maximum support. See "Encoding for dumb players" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
 /// We use a crf of 20. The default is 23, and 17-18 is considered visually lossless. See "Choose a CRF value" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
@@ -60,12 +65,24 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     // - https://superuser.com/questions/1586934/vp9-encoding-with-ffmpeg-relation-between-speed-and-deadline-options
     // - https://superuser.com/questions/556463/converting-video-to-webm-with-ffmpeg-avconv
     // - https://superuser.com/a/1280369
-    return "-c:v libvpx -b:v \(inputBitRate) -deadline good -cpu-used 2 -crf 5"
     
+    if inputFileType == VideoFormat.gif.rawValue {
+      // This command is identical to the one below, but uses 8-bit color, which is required for gif inputs
+      return "-c:v libvpx -b:v \(inputBitRate) -deadline good -cpu-used 2 -crf 5 -pix_fmt yuv420p"
+    }
+    else {
+      return "-c:v libvpx -b:v \(inputBitRate) -deadline good -cpu-used 2 -crf 5"
+    }
+  
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
     // If input file is WEBM, we re-encode to H264
     if inputFileType == VideoFormat.webm.rawValue {
       return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
+    }
+    
+    // If input file is GIF, we re-encode to H264 and ensure the dimensions are divisible by 2. See https://unix.stackexchange.com/a/294892
+    if inputFileType == VideoFormat.gif.rawValue {
+      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
     }
     
     // If input codec is ProRes or unknown, we re-encode to H264
@@ -95,6 +112,14 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     
     //  https://trac.ffmpeg.org/wiki/Encode/MPEG-4
     return "-c:v libxvid -qscale:v 5"
+  case VideoFormat.gif.rawValue:
+      // Reference: https://superuser.com/a/556031
+      // http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
+      // https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
+    
+    // TODO: Test pallette options in ref above
+    // TODO: Test fps values
+    return " -vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
   default:
     // For unknown cases, we re-encode to H264
     return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
@@ -121,13 +146,13 @@ func getAacConversionCommand(inputVideo: Video) -> String {
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
 func getAudioConversionCommand(inputVideo: Video, outputFilePath: String) -> String {
-  // If we don't have any audio streams, we don't need a conversion command
-  if inputVideo.audioStreams.isEmpty {
-    return ""
-  }
-  
   let inputAudioCodec = inputVideo.audioStreams[0].codec
   let outputFileType = getFileExtension(filePath: outputFilePath)
+  
+  // If we don't have any audio streams, or we are converting to GIF, we don't need an audio conversion command
+  if inputVideo.audioStreams.isEmpty || outputFileType == VideoFormat.gif.rawValue {
+    return ""
+  }
 
   switch outputFileType {
   case VideoFormat.m4v.rawValue:
@@ -197,6 +222,7 @@ func getSubtitleConversionCommand(inputVideo: Video, outputFilePath: String) -> 
   
 }
 
+// TODO: FFMPEG command could be built using a builder class (eg withVideoCodec("x264").withCrf(20)), would cleanup the getVideoConversionCommand, getAudioConversionCommand and getSubtitleConversionCommand functions
 func getFfmpegCommand(inputVideo: Video, outputFilePath: String) -> String {
   let videoCommand = getVideoConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
   let audioCommand = getAudioConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
