@@ -888,6 +888,44 @@
             </objects>
             <point key="canvasLocation" x="74" y="309"/>
         </scene>
+        <!--Window Controller-->
+        <scene sceneID="lTU-cc-ODy">
+            <objects>
+                <windowController id="s4d-AT-TJn" customClass="ContactWindowController" customModule="Video_Converter" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="lBw-Yw-L5C">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="245" y="311" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1050"/>
+                        <view key="contentView" id="duq-6O-6Ya">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="s4d-AT-TJn" id="Pkk-X5-7uK"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="OFe-nn-UE2" kind="relationship" relationship="window.shadowedContentViewController" id="2U4-cX-7D9"/>
+                    </connections>
+                </windowController>
+                <customObject id="tlJ-tZ-XSH" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="664" y="254"/>
+        </scene>
+        <!--Contact View Controller-->
+        <scene sceneID="cO0-Xi-6v1">
+            <objects>
+                <viewController id="OFe-nn-UE2" customClass="ContactViewController" customModule="Video_Converter" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="JC3-rv-G8A">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="Si4-OI-Qes" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="664" y="658"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Clear-Icon" width="14" height="14"/>
