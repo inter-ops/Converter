@@ -24,7 +24,6 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     messageField.font = .systemFont(ofSize: NSFont.systemFontSize)
   }
   
-  /// Initialize dropdown menu with titles (see `VideoFormat.dropdownTitle` for values)
   func initTopicDropdownMenu() {
     topicDropdown.removeAllItems()
     topicDropdown.addItems(withTitles: topics)
@@ -51,12 +50,12 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
       // Don't send duplicate emails
     } else {
       archiveDuplicate = [name, email, topic, message]
-      // Send email
+      // TODO: Send email
       let subject = "Video Converter: \(topic)"
       let recipient = "\(name) (\(email))"
       let messageBody = "\(message)"
       
-      print("SEND EMAIL\n---\nRecipient: \(recipient)Subject: \(subject)\nMessage: \(messageBody)\n---")
+      print("SEND EMAIL\n---\nRecipient: \(recipient)\nSubject: \(subject)\nMessage: \(messageBody)\n---")
       // Uppdate notice text
       updateNotice(.sent)
     }
@@ -74,6 +73,8 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     noticeText.stringValue = status.textValue
   }
   
+  
+  // MARK: Notice Config
   enum NoticeToggle {
     case hide, sent, allRequired, validEmail
     
