@@ -37,12 +37,11 @@ class ReportErrorViewController: NSViewController {
     let message = messageField.string
     let shouldSendAppLogs = appLogsCheckbox.state == .on
     
-    let emailPattern = #"/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/"#
+    let emailPattern = #"^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$"#
     let emailResult = email.range(of: emailPattern, options: .regularExpression)
     let isValidEmail = emailResult != nil
     
-    // TODO: Email Regex
-    if !isValidEmail {    //if !email.contains("@") || !email.contains(".") {
+    if !isValidEmail {
       updateNotice(.validEmail)
     } else {
       sendMessage(name: name, email: email, message: message, shouldSendAppLogs: shouldSendAppLogs)

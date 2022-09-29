@@ -35,14 +35,13 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     let topic = topicDropdown.selectedItem!.title
     let message = messageField.string
     
-    let emailPattern = #"/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/"#
+    let emailPattern = #"^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$"#
     let emailResult = email.range(of: emailPattern, options: .regularExpression)
     let isValidEmail = emailResult != nil
     
-    // TODO: Email Regex
     if name.isEmpty || email.isEmpty || message.isEmpty {
       updateNotice(.allRequired)
-    } else if !isValidEmail {   //} else if !email.contains("@") || !email.contains(".") {
+    } else if !isValidEmail {
       updateNotice(.validEmail)
     } else {
       sendMessage(name: name, email: email, topic: topic, message: message)
