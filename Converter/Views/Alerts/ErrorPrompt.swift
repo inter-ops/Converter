@@ -33,6 +33,10 @@ extension ViewController {
         let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
         
         let messageBody = messageHeader + "Command: \(sanitizedFfmpegCommand)\n" + "Input extension: \(URL(fileURLWithPath: inputFilePath).pathExtension)\n" + "Output extension: \(URL(fileURLWithPath: outputFilePath).pathExtension)" + "\(ErrorLogHeaders.error)\(sanitizedErrorMessage)\(ErrorLogHeaders.ffprobe)\(sanitizedFfprobeOutput)"
+        
+        // Update global AppLogs most recent
+        AppLogs.mostRecent = messageBody
+        
         // Compose mail client request with message and log contents
         let service = NSSharingService(named: NSSharingService.Name.composeEmail)
         service?.recipients = ["hello@airtv.io"]
