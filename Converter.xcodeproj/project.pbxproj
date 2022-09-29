@@ -37,6 +37,7 @@
 		C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C257C19528BE70C800E2849D /* HelpInfoViewController.swift */; };
 		C257C19828BE70F200E2849D /* SupportedFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19728BE70F200E2849D /* SupportedFormatsViewController.xib */; };
 		C274CDEB28E5E274005BCE22 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C274CDE928E5E274005BCE22 /* ContactViewController.swift */; };
+		C274CDEE28E609F5005BCE22 /* ReportErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C274CDED28E609F5005BCE22 /* ReportErrorViewController.swift */; };
 		C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */; };
 		C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */; };
 		C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4828A950BA00BDCCD4 /* ViewController.swift */; };
@@ -92,6 +93,7 @@
 		C257C19528BE70C800E2849D /* HelpInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpInfoViewController.swift; sourceTree = "<group>"; };
 		C257C19728BE70F200E2849D /* SupportedFormatsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupportedFormatsViewController.xib; sourceTree = "<group>"; };
 		C274CDE928E5E274005BCE22 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
+		C274CDED28E609F5005BCE22 /* ReportErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportErrorViewController.swift; sourceTree = "<group>"; };
 		C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionDidComplete.swift; sourceTree = "<group>"; };
 		C2D33F4328A950BA00BDCCD4 /* Video Converter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Video Converter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				C274CDE928E5E274005BCE22 /* ContactViewController.swift */,
+				C274CDED28E609F5005BCE22 /* ReportErrorViewController.swift */,
 			);
 			path = NativeContact;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */,
 				C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */,
 				C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */,
+				C274CDEE28E609F5005BCE22 /* ReportErrorViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
