@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -879,6 +879,7 @@
                         <outlet property="dragDropBottomTitle" destination="t3K-S7-h56" id="PYQ-hS-1yp"/>
                         <outlet property="dragDropTopTitle" destination="wI2-qE-TlK" id="loF-4s-gyn"/>
                         <outlet property="dragDropView" destination="v9D-vH-xx2" id="i3t-qm-CIt"/>
+                        <outlet property="estimatedTimeLabel" destination="xFx-Bv-g0e" id="9Fh-Hm-58c"/>
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
                         <outlet property="progressBar" destination="JZg-d2-J84" id="oEX-c3-c8A"/>
