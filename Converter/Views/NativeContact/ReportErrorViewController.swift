@@ -111,7 +111,7 @@ class ReportErrorViewController: NSViewController {
       case .hide: return ""
       case .sent: return "Error report sent!"
       case .allRequired: return "All fields are required"
-      case .validEmail: return "Please provide an email that we can reach you at"
+      case .validEmail: return "Please provide a valid email that we can reach you at"
       }
     }
   }
