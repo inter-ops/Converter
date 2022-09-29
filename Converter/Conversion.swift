@@ -21,6 +21,7 @@ import ffmpegkit
  - https://trac.ffmpeg.org/wiki/Encode/VP8
  - https://gist.github.com/jaydenseric/220c785d6289bcfd7366
  - https://wiki.archlinux.org/title/FFmpeg
+ - Filter docs: https://ffmpeg.org/ffmpeg.html#Simple-filtergraphs https://ffmpeg.org/ffmpeg-filters.html#Filtering-Introduction
  */
 
 /// Building FFMPEG
@@ -39,14 +40,7 @@ func getFileName(filePath: String) -> String {
 
 // TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases. For testing video quality output, see here: https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
 
-// TODO: Create a readme for this documentation
-
-// TODO: Test gif to all outputs
-
-// TODO: See if we need to set a specific frame rate for output gifs
-// Especially avi: https://www.linuxquestions.org/questions/linux-software-2/converting-animated-gif-to-avi-ffmpeg-549839/
-// And also look into using VSYNC, mentioned in this article: https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
-// If any problems with vsync and frame delays, https://stackoverflow.com/questions/58261344/what-does-ffmpegs-setpts-filter-do-exactly
+// TODO: Create a readme for this documentation after refactor is done on this file.
 
 /// Get the video portion of the ffmpeg command.
 /// For x264, we always use 8-bit colour (pixfmt yuv420p) to ensure maximum support. See "Encoding for dumb players" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
@@ -68,7 +62,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     // - https://superuser.com/questions/556463/converting-video-to-webm-with-ffmpeg-avconv
     // - https://superuser.com/a/1280369
     
-    if inputFileType == VideoFormat.gif.rawValue {
+    if inputFileType == VideoFormat.gif.rawValue || inputVideoCodec == VideoCodec.gif {
       // This command is identical to the one below, but uses 8-bit color, which is required for gif inputs
       return "-c:v libvpx -b:v \(inputBitRate) -deadline good -cpu-used 2 -crf 5 -pix_fmt yuv420p"
     }
@@ -83,7 +77,9 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     }
     
     // If input file is GIF, we re-encode to H264 and ensure the dimensions are divisible by 2. See https://unix.stackexchange.com/a/294892
-    if inputFileType == VideoFormat.gif.rawValue {
+    if inputFileType == VideoFormat.gif.rawValue || inputVideoCodec == VideoCodec.gif {
+      // Note that this command works for most use cases, but odd cases (such as really low FPS & frame number gifs, eg https://github.com/cyburgee/ffmpeg-guide/blob/master/321.gif) will trip up VLC and stop too early.
+      // If we are having issues with this, review the method outlined here: https://github.com/cyburgee/ffmpeg-guide I already tried integrating this but found that using fps=source_fps wouldn't fix the issue, the FPS had to be increased. I don't want to screw with FPS too much for now unless we see this become a problem in the wild.
       return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
     }
     
@@ -112,7 +108,14 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
       return "-c:v copy"
     }
     
-    //  https://trac.ffmpeg.org/wiki/Encode/MPEG-4
+    // AVI conversion docs: https://trac.ffmpeg.org/wiki/Encode/MPEG-4
+    
+    // If this command ever causes problems, try https://stackoverflow.com/questions/3212821/animated-gif-to-avi-on-linux https://www.linuxquestions.org/questions/linux-software-2/converting-animated-gif-to-avi-ffmpeg-549839/#edit2729743
+    if inputFileType == VideoFormat.gif.rawValue || inputVideoCodec == VideoCodec.gif {
+      // libxvid throws errors for GIF inputs, so we use the native mpeg4 encoder instead.
+      return "-c:v mpeg4 -vtag xvid -qscale:v 5 -pix_fmt yuv420p"
+    }
+    
     return "-c:v libxvid -qscale:v 5"
   case VideoFormat.gif.rawValue:
     // Gif conversion resources:
