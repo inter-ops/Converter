@@ -35,17 +35,22 @@ class ReportErrorViewController: NSViewController {
     let name = nameField.stringValue
     let email = emailField.stringValue
     let message = messageField.string
-    let sendAllAppLogs = appLogsCheckbox.state == .on
+    let shouldSendAppLogs = appLogsCheckbox.state == .on
     
-    if !email.contains("@") || !email.contains(".") {
+    let emailPattern = #"/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/"#
+    let emailResult = email.range(of: emailPattern, options: .regularExpression)
+    let isValidEmail = emailResult != nil
+    
+    // TODO: Email Regex
+    if !isValidEmail {    //if !email.contains("@") || !email.contains(".") {
       updateNotice(.validEmail)
     } else {
-      sendMessage(name: name, email: email, message: message, allAppLogs: sendAllAppLogs)
+      sendMessage(name: name, email: email, message: message, shouldSendAppLogs: shouldSendAppLogs)
     }
   }
   
   var archiveDuplicate: [String] = []
-  func sendMessage(name: String, email: String, message: String, allAppLogs: Bool) {
+  func sendMessage(name: String, email: String, message: String, shouldSendAppLogs: Bool) {
     if archiveDuplicate == [name, email, message] {
       // Don't send duplicate emails
     } else {
@@ -58,7 +63,7 @@ class ReportErrorViewController: NSViewController {
       let reportedError = AppLogs.mostRecent
       var appLogs = ""
       
-      if allAppLogs {
+      if shouldSendAppLogs {
         for entry in AppLogs.currentSession {
           appLogs.append(entry)
           appLogs.append("\n\n=====\n\n")
@@ -69,7 +74,7 @@ class ReportErrorViewController: NSViewController {
       
       print("SEND EMAIL\n---\nRecipient: \(recipient)\nSubject: \(subject)\nMessage: \(messageBody)\n---")
       print("ERROR:\n\(reportedError)\n---")
-      if allAppLogs { print("ALL LOGS: \(appLogs)\n---") }
+      if shouldSendAppLogs { print("ALL LOGS: \(appLogs)\n---") }
       
       // Uppdate notice text
       updateNotice(.sent)
