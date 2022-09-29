@@ -7,12 +7,12 @@
 
 import Cocoa
 
-class ContactViewController: NSViewController, NSTextFieldDelegate {
+class ContactViewController: NSViewController, NSTextViewDelegate {
   
   @IBOutlet weak var nameField: NSTextField!
   @IBOutlet weak var emailField: NSTextField!
   @IBOutlet weak var topicDropdown: NSPopUpButton!
-  @IBOutlet weak var messageField: NSTextField!
+  @IBOutlet weak var messageField: NSTextView!
   @IBOutlet weak var noticeText: NSTextField!
   
   let topics = ["Feedback", "Bug Report", "Feature Request", "Other"]
@@ -21,6 +21,7 @@ class ContactViewController: NSViewController, NSTextFieldDelegate {
     super.viewDidLoad()
     initTopicDropdownMenu()
     updateNotice(.hide)
+    messageField.font = .systemFont(ofSize: NSFont.systemFontSize)
   }
   
   /// Initialize dropdown menu with titles (see `VideoFormat.dropdownTitle` for values)
@@ -33,7 +34,7 @@ class ContactViewController: NSViewController, NSTextFieldDelegate {
     let name = nameField.stringValue
     let email = emailField.stringValue
     let topic = topicDropdown.selectedItem!.title
-    let message = messageField.stringValue
+    let message = messageField.string
     
     if name.isEmpty || email.isEmpty || message.isEmpty {
       updateNotice(.allRequired)
@@ -55,7 +56,7 @@ class ContactViewController: NSViewController, NSTextFieldDelegate {
       let recipient = "\(name) (\(email))"
       let messageBody = "\(message)"
       
-      print("SEND EMAIL\n---\nName: \(nameField.stringValue)\nEmail: \(emailField.stringValue)\nTopic: \(String(describing: topicDropdown.selectedItem!.title))\nMessage: \(messageField.stringValue)\n---")
+      print("SEND EMAIL\n---\nRecipient: \(recipient)Subject: \(subject)\nMessage: \(messageBody)\n---")
       // Uppdate notice text
       updateNotice(.sent)
     }
@@ -64,7 +65,7 @@ class ContactViewController: NSViewController, NSTextFieldDelegate {
   @IBAction func resetButtonAction(_ sender: NSButton) {
     nameField.stringValue = ""
     emailField.stringValue = ""
-    messageField.stringValue = ""
+    messageField.string = ""
   }
   
   func updateNotice(_ status: NoticeToggle) {
@@ -103,38 +104,5 @@ class ContactViewController: NSViewController, NSTextFieldDelegate {
       }
     }
   }
-  
-  // MARK: Delegates
-  // TextField delegate
-  
-  func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
-    let event = NSApplication.shared.currentEvent
-    if event?.type == .keyDown && event?.keyCode == 36 {
-      self.stringValue = self.stringValue.stringByAppendingString("\n")
-      return false
-    } else {
-      return true
-    }
-  }
-  
-  func control(_ control: NSControl, textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
-    if commandSelector == #selector(NSStandardKeyBindingResponding.insertNewline(_:)) {
-      // new line action:
-      // always insert a line-break character and don’t cause the receiver to end editing
-      textView.insertNewlineIgnoringFieldEditor(self)
-      return true
-    }
-    return false
-  }
-  
-//  override func textShouldEndEditing(textObject: NSText) -> Bool {
-//    let event = NSApplication.sharedApplication().currentEvent
-//    if event?.type == NSEventType.KeyDown && event?.keyCode == 36 {
-//      self.stringValue = self.stringValue.stringByAppendingString("\n")
-//      return false
-//    } else {
-//      return super.textShouldEndEditing(textObject)
-//    }
-//  }
   
 }

@@ -119,21 +119,21 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Edit" hidden="YES" id="5QF-Oa-p0T">
+                            <menuItem title="Edit" id="5QF-Oa-p0T">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Edit" id="W48-6f-4Dl">
                                     <items>
-                                        <menuItem title="Undo" keyEquivalent="z" id="dRJ-4n-Yzg">
+                                        <menuItem title="Undo" hidden="YES" keyEquivalent="z" id="dRJ-4n-Yzg">
                                             <connections>
                                                 <action selector="undo:" target="Ady-hI-5gd" id="M6e-cu-g7V"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Redo" keyEquivalent="Z" id="6dh-zS-Vam">
+                                        <menuItem title="Redo" hidden="YES" keyEquivalent="Z" id="6dh-zS-Vam">
                                             <connections>
                                                 <action selector="redo:" target="Ady-hI-5gd" id="oIA-Rs-6OD"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="WRV-NI-Exz"/>
+                                        <menuItem isSeparatorItem="YES" hidden="YES" id="WRV-NI-Exz"/>
                                         <menuItem title="Cut" keyEquivalent="x" id="uRl-iY-unG">
                                             <connections>
                                                 <action selector="cut:" target="Ady-hI-5gd" id="YJe-68-I9s"/>
@@ -149,7 +149,7 @@
                                                 <action selector="paste:" target="Ady-hI-5gd" id="UvS-8e-Qdg"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Paste and Match Style" keyEquivalent="V" id="WeT-3V-zwk">
+                                        <menuItem title="Paste and Match Style" hidden="YES" keyEquivalent="V" id="WeT-3V-zwk">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="pasteAsPlainText:" target="Ady-hI-5gd" id="cEh-KX-wJQ"/>
@@ -661,6 +661,13 @@
                                                 <action selector="showHelp:" target="Ady-hI-5gd" id="y7X-2Q-9no"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="1ar-2R-llq"/>
+                                        <menuItem title="Contact Us" id="d1o-Tg-Abg">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <segue destination="s4d-AT-TJn" kind="show" id="AZd-SB-erv"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -926,7 +933,7 @@
                 </windowController>
                 <customObject id="tlJ-tZ-XSH" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="923" y="419"/>
+            <point key="canvasLocation" x="697" y="-204"/>
         </scene>
         <!--Contact View Controller-->
         <scene sceneID="cO0-Xi-6v1">
@@ -1041,15 +1048,33 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HxV-G2-70L">
-                                        <rect key="frame" x="20" y="20" width="240" height="111"/>
+                                    <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mOK-n8-jAL">
+                                        <rect key="frame" x="20" y="10" width="240" height="121"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="c87-SC-Mo9">
-                                            <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                    </textField>
+                                        <clipView key="contentView" drawsBackground="NO" id="1O0-TZ-rYY">
+                                            <rect key="frame" x="1" y="1" width="238" height="119"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" selectionGranularity="word" continuousSpellChecking="YES" spellingCorrection="YES" smartInsertDelete="YES" id="CyQ-hI-elv">
+                                                    <rect key="frame" x="0.0" y="0.0" width="238" height="119"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <size key="minSize" width="238" height="119"/>
+                                                    <size key="maxSize" width="240" height="10000000"/>
+                                                    <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                </textView>
+                                            </subviews>
+                                        </clipView>
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Ycq-V6-8FJ">
+                                            <rect key="frame" x="-100" y="-100" width="240" height="16"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </scroller>
+                                        <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="T3k-uy-UDH">
+                                            <rect key="frame" x="223" y="1" width="16" height="119"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </scroller>
+                                    </scrollView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="QYY-26-Wju" firstAttribute="leading" secondItem="MvC-Jc-PNO" secondAttribute="leading" constant="20" symbolic="YES" id="EBp-b1-h7M"/>
@@ -1116,16 +1141,19 @@
                     </view>
                     <connections>
                         <outlet property="emailField" destination="Fla-lW-vxL" id="yZR-6o-lrv"/>
-                        <outlet property="messageField" destination="HxV-G2-70L" id="hRk-X4-sJu"/>
+                        <outlet property="messageField" destination="CyQ-hI-elv" id="uDq-z0-GHQ"/>
                         <outlet property="nameField" destination="Dr1-Yy-Ak2" id="ZcJ-kE-kmN"/>
                         <outlet property="noticeText" destination="OPH-u4-8DZ" id="VjV-Ph-kM9"/>
                         <outlet property="topicDropdown" destination="5oS-hp-63m" id="P1N-QH-5ug"/>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="552" y="419"/>
+            <point key="canvasLocation" x="697" y="334"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="AZd-SB-erv"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="Clear-Icon" width="14" height="14"/>
         <image name="DragDropBox-Icon" width="300" height="169"/>
