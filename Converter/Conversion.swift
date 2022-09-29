@@ -45,6 +45,8 @@ func getFileName(filePath: String) -> String {
 
 // TODO: See if we need to set a specific frame rate for output gifs
 // Especially avi: https://www.linuxquestions.org/questions/linux-software-2/converting-animated-gif-to-avi-ffmpeg-549839/
+// And also look into using VSYNC, mentioned in this article: https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
+// If any problems with vsync and frame delays, https://stackoverflow.com/questions/58261344/what-does-ffmpegs-setpts-filter-do-exactly
 
 /// Get the video portion of the ffmpeg command.
 /// For x264, we always use 8-bit colour (pixfmt yuv420p) to ensure maximum support. See "Encoding for dumb players" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
@@ -113,12 +115,16 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     //  https://trac.ffmpeg.org/wiki/Encode/MPEG-4
     return "-c:v libxvid -qscale:v 5"
   case VideoFormat.gif.rawValue:
-      // Reference: https://superuser.com/a/556031
-      // http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
-      // https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
+    // Gif conversion resources:
+    // https://superuser.com/a/556031
+    // http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
+    // https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
+    // Frame rate: https://trac.ffmpeg.org/wiki/ChangingFrameRate
     
-    // TODO: "MPEG-4 x264 480p (Stereo, AAC)" causes a stutter, post on stack overflow
-    return "-vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
+    // TODO: There is still a slight stutter with certain output videos. This seems to go away with higher FPS.
+    // TODO: There is a slight delay with progress as the palette file needs to be created. Look into ways to estimate this, or may want to add an arbitrary delay based on file size or format. This delay is especially long for x265. Didnt find much online, so should ask stackoverflow. At the minimum, we should make it more clear that we are estimating conversion time during this period (since we show no progress bar).
+    // NOTE: If color is an issue, use "palettegen=stats_mode=single" and "paletteuse=new=1"
+    return "-vf \"scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0 -r 15 -vsync vfr"
   default:
     // For unknown cases, we re-encode to H264
     return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
@@ -130,7 +136,6 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
 func getAacConversionCommand(inputVideo: Video) -> String {
   let numberOfAudioChannels = inputVideo.audioStreams[0].channels
 
-  // TODO: if number of channels is 6, we can likely leave them alone.
   if numberOfAudioChannels >= 6 {
     // If we have 6 or more channels, we can force a 5.1 channel layout
     return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
