@@ -9,5 +9,7 @@ import Foundation
 
 struct Constants {
   static let progressUpdateInterval = 0.5
+  static let estimatedTimeLabelText = "Estimated time remaining"
+  static let estimatingTimeLabelText = "Estimating time remaining..."
 }
 

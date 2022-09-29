@@ -14,6 +14,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
   @IBOutlet weak var actionButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
+  @IBOutlet weak var estimatedTimeLabel: NSTextField!
   
   // DragDropView objects
   @IBOutlet weak var dragDropView: NSImageView!
@@ -274,8 +275,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         self.inputVideo = nil
         self.startOfConversion = nil
         self.ffmpegCommand = nil
+        
+        // In case the conversion finished before the time remaining was estimated
+        self.estimatedTimeLabel.stringValue = Constants.estimatedTimeLabelText
       }
     }
+    
+    estimatedTimeLabel.stringValue = Constants.estimatingTimeLabelText
     
     // This currently updates progress every 0.5 seconds
     analyticsTimer = Timer.scheduledTimer(withTimeInterval: Constants.progressUpdateInterval, repeats: true, block: { _ in
@@ -301,6 +307,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     if !self.isTimeRemainingStable {
       return
     }
+    
+    estimatedTimeLabel.stringValue = Constants.estimatedTimeLabelText
     
     let seconds = Int(remainingInSeconds)
     let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
