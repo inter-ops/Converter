@@ -24,7 +24,7 @@ struct VideoStream {
   let displayAspectRatio: String
   let pixFmt: String // Run ffmpeg -pix_fmts for supported formats
   
-  let numberOfFrames: Int // This comes from nb_read_packets
+  //let numberOfFrames: Int // This comes from nb_read_packets
   
   // Difference between frame rates: https://video.stackexchange.com/a/20790
   let rFrameRate: String
@@ -43,7 +43,7 @@ struct VideoStream {
     self.sampleAspectRatio = ffprobeDict["sample_aspect_ratio"] ?? ""
     self.displayAspectRatio = ffprobeDict["display_aspect_ratio"] ?? ""
     self.pixFmt = ffprobeDict["pix_fmt"] ?? ""
-    self.numberOfFrames = Int(ffprobeDict["nb_read_packets"] ?? "0")!
+    //self.numberOfFrames = Int(ffprobeDict["nb_read_packets"] ?? "0")!
     self.rFrameRate = ffprobeDict["r_frame_rate"] ?? ""
     self.avgFrameRate = ffprobeDict["avg_frame_rate"] ?? ""
   }
