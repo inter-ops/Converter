@@ -24,7 +24,11 @@ struct VideoStream {
   let displayAspectRatio: String
   let pixFmt: String // Run ffmpeg -pix_fmts for supported formats
   
-  let numberOfFrames: Int // This comes from nb_read_packets
+  // Used for the -count_packets flags in getAllVideoProperties and getFfprobeOutput:
+  // FFprobeKit.execute("-loglevel error -count_packets -show_entries ...")
+  // Removed due to unneccesary app stalling.
+  // See: https://github.com/inter-ops/Converter/pull/70/commits/113165beae1240f1dabcb8ca77fffec9b55e0bfa
+  //let numberOfFrames: Int // This comes from nb_read_packets
   
   // Difference between frame rates: https://video.stackexchange.com/a/20790
   let rFrameRate: String
@@ -43,7 +47,7 @@ struct VideoStream {
     self.sampleAspectRatio = ffprobeDict["sample_aspect_ratio"] ?? ""
     self.displayAspectRatio = ffprobeDict["display_aspect_ratio"] ?? ""
     self.pixFmt = ffprobeDict["pix_fmt"] ?? ""
-    self.numberOfFrames = Int(ffprobeDict["nb_read_packets"] ?? "0")!
+    //self.numberOfFrames = Int(ffprobeDict["nb_read_packets"] ?? "0")!
     self.rFrameRate = ffprobeDict["r_frame_rate"] ?? ""
     self.avgFrameRate = ffprobeDict["avg_frame_rate"] ?? ""
   }
