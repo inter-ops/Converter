@@ -30,6 +30,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var ffmpegCommand: String?
   
   var inputVideo: Video?
+  var isProcessingInputFile = false
   
   let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
@@ -76,18 +77,34 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Handles all input file requests, checks for validity and adjust the dragDropView box to reflect any errors
   func dragDropViewDidReceive(fileUrl: String) {
     print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
+    resetProgressBar()
     
-    inputFileUrl = fileUrl.fileURL.absoluteURL
+    let inputUrl = fileUrl.fileURL.absoluteURL
+    // Clear any previous input videos set
+    inputVideo = nil
+    inputFileUrl = nil
     
     if Format.isSupportedAsInput(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
       displayClearButton(.show)
       
-      let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
+      // TODO: Does this need to be done on a background thread too?
+      let isValid = isFileValid(inputFilePath: inputUrl.path)
       if !isValid {
         updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
-        inputFileUrl = nil
+        return
       }
+      
+      estimatedTimeLabel.stringValue = Constants.processingInputFileLabelText
+      self.isProcessingInputFile = true
+      
+      getAllVideoProperties(inputFilePath: inputUrl.path) { video in
+        self.inputVideo = video
+        self.inputFileUrl = inputUrl
+        self.isProcessingInputFile = false
+        self.estimatedTimeLabel.stringValue = Constants.beginConversionLabelText
+      }
+      
     } else {
       updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
       showSupportedFormatsPopover()
@@ -189,11 +206,17 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var currentStatus: ConversionState = .ready
   /// Triggers the action button handler if there exists a valid input file; if no input exists, show an error
   func userDidClickActionButton() {
+    if isProcessingInputFile {
+      // TODO: Do we want to show an error message?
+      return
+    }
+    
     if inputFileUrl == nil {
       updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
-    } else {
-      handleActionButton(withStatus: currentStatus)
+      return
     }
+    
+      handleActionButton(withStatus: currentStatus)
   }
   /// Handles the action button states, and their respective actions, based on the current ConversionState: `.ready` or `.converting`
   func handleActionButton(withStatus: ConversionState) {
@@ -239,8 +262,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func startConversion() {
     var analyticsTimer = Timer()
     
-    self.inputVideo = getAllVideoProperties(inputFilePath: inputFileUrl!.path)
-    
     self.startOfConversion = Date()
     self.ffmpegCommand = getFfmpegCommand(inputVideo: inputVideo!, outputFilePath: outputFileUrl!.path)
     
@@ -272,7 +293,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         self.resetActionButton()
         self.outputFileUrl = nil
         self.isTimeRemainingStable = false
-        self.inputVideo = nil
         self.startOfConversion = nil
         self.ffmpegCommand = nil
         
@@ -392,6 +412,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func resetProgressBar() {
     updateProgressBar(value: 0)
     estimatedTimeText.stringValue = "–:–"
+    estimatedTimeLabel.stringValue = Constants.estimatedTimeLabelText
   }
   
   
@@ -401,6 +422,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBAction func clearInputFile(_ sender: Any) {
     updateDragDrop(withStyle: .empty)
     inputFileUrl = nil
+    inputVideo = nil
+    resetProgressBar()
     displayClearButton(.hide)   // Hide clear button
   }
   /// Set the display state of clearInputFileButton: `.hide` or `.show`
