@@ -7,10 +7,6 @@
 
 import Foundation
 
-let contactFormUrl = "https://contact-form-u7kjuwr4da-uc.a.run.app"
-let errorReportUrl = "https://error-report-u7kjuwr4da-uc.a.run.app"
-
-
 func sendPostRequest(url: String, data: Dictionary<String, AnyObject>, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
   print("Sending POST request")
   
@@ -60,13 +56,13 @@ struct API {
   static func contactForm(name: String, email: String, topic: String, message: String, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
     let params = ["name":name, "email":email, "topic": topic, "message": message] as Dictionary<String, AnyObject>
     
-    sendPostRequest(url: contactFormUrl, data: params, completion: completion)
+    sendPostRequest(url: Constants.API.contactFormUrl, data: params, completion: completion)
   }
   
   static func errorReport(name: String, email: String, errorMessage: String, additionalDetails: String, ffprobeOutput: String, applicationLogs: String?, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
     let params = ["name":name, "email":email, "errorMessage": errorMessage, "additionalDetails": additionalDetails, "ffprobeOutput": ffprobeOutput, "applicationLogs": applicationLogs] as Dictionary<String, AnyObject>
     
-    sendPostRequest(url: errorReportUrl, data: params, completion: completion)
+    sendPostRequest(url: Constants.API.errorReportUrl, data: params, completion: completion)
   }
 
 }
