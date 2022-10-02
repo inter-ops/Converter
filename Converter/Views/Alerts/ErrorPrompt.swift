@@ -32,16 +32,12 @@ extension ViewController {
         let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: withFfprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
         let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
         
-        let messageBody = messageHeader + "Command: \(sanitizedFfmpegCommand)\n" + "Input extension: \(URL(fileURLWithPath: inputFilePath).pathExtension)\n" + "Output extension: \(URL(fileURLWithPath: outputFilePath).pathExtension)" + "\(ErrorLogHeaders.error)\(sanitizedErrorMessage)\(ErrorLogHeaders.ffprobe)\(sanitizedFfprobeOutput)"
+        let inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
+        let outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
         
-        // Update global AppLogs most recent
-        AppLogs.mostRecent = messageBody
+        // TODO: Open ReportErrorViewController, pass sanitizedErrorMessage, sanitizedFfprobeOutput, sanitizedFfmpegCommand, inputExtension, outputExtension to it
         
-        // Compose mail client request with message and log contents
-        let service = NSSharingService(named: NSSharingService.Name.composeEmail)
-        service?.recipients = ["hello@airtv.io"]
-        service?.subject = "Help: Video Converter Error"
-        service?.perform(withItems: [messageBody])
+//        AppLogs.mostRecent = messageBody
       }
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
         print("User did dismiss error message")

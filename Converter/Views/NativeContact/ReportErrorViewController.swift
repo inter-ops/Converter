@@ -34,7 +34,7 @@ class ReportErrorViewController: NSViewController {
   @IBAction func sendButtonAction(_ sender: NSButton) {
     let name = nameField.stringValue
     let email = emailField.stringValue
-    let message = messageField.string
+    let additionalDetails = messageField.string
     let shouldSendAppLogs = appLogsCheckbox.state == .on
     
     let emailPattern = #"^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$"#
@@ -44,20 +44,16 @@ class ReportErrorViewController: NSViewController {
     if !isValidEmail {
       updateNotice(.validEmail)
     } else {
-      sendMessage(name: name, email: email, message: message, shouldSendAppLogs: shouldSendAppLogs)
+      sendMessage(name: name, email: email, additionalDetails: additionalDetails, shouldSendAppLogs: shouldSendAppLogs)
     }
   }
   
   var archiveDuplicate: [String] = []
-  func sendMessage(name: String, email: String, message: String, shouldSendAppLogs: Bool) {
-    if archiveDuplicate == [name, email, message] {
+  func sendMessage(name: String, email: String, additionalDetails: String, shouldSendAppLogs: Bool) {
+    if archiveDuplicate == [name, email, additionalDetails] {
       // Don't send duplicate emails
     } else {
-      archiveDuplicate = [name, email, message]
-      // TODO: Send email
-      let subject = "Video Converter: Error Report"
-      let recipient = "\(name) (\(email))"
-      let messageBody = "\(message)"
+      archiveDuplicate = [name, email, additionalDetails]
       
       let reportedError = AppLogs.mostRecent
       var appLogs = ""
@@ -65,18 +61,25 @@ class ReportErrorViewController: NSViewController {
       if shouldSendAppLogs {
         for entry in AppLogs.currentSession {
           appLogs.append(entry)
-          appLogs.append("\n\n=====\n\n")
         }
       }
       
-      // TODO: Send email
+      // TODO: These params should come from the caller of this modal
+      // applicationLogs need to be stored manually. See here for implementation https://stackoverflow.com/questions/9097424/logging-data-on-device-and-retrieving-the-log/41741076#41741076
+
+      API.errorReport(name: name, email: email, errorMessage: "", additionalDetails: additionalDetails, ffprobeOutput: "", applicationLogs: "") { responseData, errorMessage in
+        
+        if errorMessage != nil {
+          // TODO: Show error message
+          return
+        }
+        
+        // Uppdate notice text
+        self.updateNotice(.sent)
+        // TODO: Clear contact form. That should also allow us to remove the archiveDuplicate logic
+      }
       
-      print("SEND EMAIL\n---\nRecipient: \(recipient)\nSubject: \(subject)\nMessage: \(messageBody)\n---")
-      print("ERROR:\n\(reportedError)\n---")
       if shouldSendAppLogs { print("ALL LOGS: \(appLogs)\n---") }
-      
-      // Uppdate notice text
-      updateNotice(.sent)
     }
   }
   

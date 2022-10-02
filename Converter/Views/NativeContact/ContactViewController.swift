@@ -54,14 +54,20 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
       // Don't send duplicate emails
     } else {
       archiveDuplicate = [name, email, topic, message]
-      // TODO: Send email
-      let subject = "Video Converter: \(topic)"
-      let recipient = "\(name) (\(email))"
-      let messageBody = "\(message)"
       
-      print("SEND EMAIL\n---\nRecipient: \(recipient)\nSubject: \(subject)\nMessage: \(messageBody)\n---")
-      // Uppdate notice text
-      updateNotice(.sent)
+      // TODO: Do we need a spinner / loader?
+      
+      API.contactForm(name: name, email: email, topic: topic, message: message) { responseData, errorMessage in
+        
+        if errorMessage != nil {
+            // TODO: Show error message
+          return
+        }
+        
+        // Uppdate notice text
+        self.updateNotice(.sent)
+        // TODO: Clear contact form. That should also allow us to remove the archiveDuplicate logic
+      }
     }
   }
   
