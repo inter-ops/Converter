@@ -909,6 +909,7 @@
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
                         <outlet property="progressBar" destination="JZg-d2-J84" id="oEX-c3-c8A"/>
+                        <segue destination="yR0-6c-gBs" kind="show" identifier="showReportError" id="EQ5-Om-Sgo"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -945,7 +946,7 @@
         <!--Window Controller-->
         <scene sceneID="xe4-vA-nsh">
             <objects>
-                <windowController id="yR0-6c-gBs" sceneMemberID="viewController">
+                <windowController id="yR0-6c-gBs" customClass="ReportErrorWindowController" customModule="Video_Converter" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="Report Issue" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="smq-Au-Lib">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenNone="YES"/>
@@ -1081,7 +1082,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oIP-lV-zw0">
                                         <rect key="frame" x="18" y="3" width="404" height="14"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Please provide a valid email that we can reach you at" id="teC-Bq-Us8">
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -1321,7 +1322,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OPH-u4-8DZ">
                                         <rect key="frame" x="20" y="28" width="154" height="14"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="All fields are required" id="p5Q-zE-QBg">
-                                            <font key="font" metaFont="system" size="11"/>
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -1372,6 +1373,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="EQ5-Om-Sgo"/>
         <segue reference="AZd-SB-erv"/>
     </inferredMetricsTieBreakers>
     <resources>

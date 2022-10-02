@@ -24,12 +24,25 @@ class ReportErrorViewController: NSViewController {
   @IBOutlet weak var appLogsCheckbox: NSButton!
   @IBOutlet weak var noticeText: NSTextField!
   
+  var sanitizedErrorMessage: String = ""
+  var sanitizedFfprobeOutput: String = ""
+  var sanitizedFfmpegCommand: String = ""
+  var inputExtension: String = ""
+  var outputExtension: String = ""
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     updateNotice(.hide)
     messageField.font = .monospacedSystemFont(ofSize: 13, weight: .medium)
   }
   
+  func passErrorData(errorMessage: String, ffprobeOutput: String, ffmegCommand: String, inExtension: String, outExtension: String) {
+    sanitizedErrorMessage = errorMessage
+    sanitizedFfprobeOutput = ffprobeOutput
+    sanitizedFfmpegCommand = ffmegCommand
+    inputExtension = inExtension
+    outputExtension = outExtension
+  }
   
   @IBAction func sendButtonAction(_ sender: NSButton) {
     let name = nameField.stringValue
@@ -48,41 +61,30 @@ class ReportErrorViewController: NSViewController {
     }
   }
   
-  var archiveDuplicate: [String] = []
   func sendMessage(name: String, email: String, additionalDetails: String, shouldSendAppLogs: Bool) {
-    if archiveDuplicate == [name, email, additionalDetails] {
-      // Don't send duplicate emails
-    } else {
-      archiveDuplicate = [name, email, additionalDetails]
+    // TODO: These params should come from the caller of this modal
+    // applicationLogs need to be stored manually. See here for implementation https://stackoverflow.com/questions/9097424/logging-data-on-device-and-retrieving-the-log/41741076#41741076
+    
+    API.errorReport(name: name, email: email, errorMessage: sanitizedErrorMessage, additionalDetails: additionalDetails, ffprobeOutput: sanitizedFfprobeOutput, applicationLogs: "") { responseData, errorMessage in
       
-      let reportedError = AppLogs.mostRecent
-      var appLogs = ""
-      
-      if shouldSendAppLogs {
-        for entry in AppLogs.currentSession {
-          appLogs.append(entry)
-        }
+      if errorMessage != nil {
+        self.updateNotice(withMessage: errorMessage!)
+        return
       }
       
-      // TODO: These params should come from the caller of this modal
-      // applicationLogs need to be stored manually. See here for implementation https://stackoverflow.com/questions/9097424/logging-data-on-device-and-retrieving-the-log/41741076#41741076
-
-      API.errorReport(name: name, email: email, errorMessage: "", additionalDetails: additionalDetails, ffprobeOutput: "", applicationLogs: "") { responseData, errorMessage in
-        
-        if errorMessage != nil {
-          // TODO: Show error message
-          return
-        }
-        
-        // Uppdate notice text
-        self.updateNotice(.sent)
-        // TODO: Clear contact form. That should also allow us to remove the archiveDuplicate logic
-      }
+      // Uppdate notice text
+      self.updateNotice(.sent)
+      // TODO: Show alert prompt "Success" or completion animation
+      // TODO: Dismiss window controller on OK or after delay
       
-      if shouldSendAppLogs { print("ALL LOGS: \(appLogs)\n---") }
     }
   }
   
+  func updateNotice(withMessage: String) {
+    noticeText.isHidden = false
+    noticeText.textColor = .systemRed
+    noticeText.stringValue = withMessage
+  }
   
   func updateNotice(_ status: NoticeToggle) {
     noticeText.isHidden = status.hidden

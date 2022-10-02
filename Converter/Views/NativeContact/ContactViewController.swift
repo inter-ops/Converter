@@ -48,26 +48,19 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     }
   }
   
-  var archiveDuplicate: [String] = []
   func sendMessage(name: String, email: String, topic: String, message: String) {
-    if archiveDuplicate == [name, email, topic, message] {
-      // Don't send duplicate emails
-    } else {
-      archiveDuplicate = [name, email, topic, message]
+    // TODO: Do we need a spinner / loader?
+    
+    API.contactForm(name: name, email: email, topic: topic, message: message) { responseData, errorMessage in
       
-      // TODO: Do we need a spinner / loader?
-      
-      API.contactForm(name: name, email: email, topic: topic, message: message) { responseData, errorMessage in
-        
-        if errorMessage != nil {
-            // TODO: Show error message
-          return
-        }
-        
-        // Uppdate notice text
-        self.updateNotice(.sent)
-        // TODO: Clear contact form. That should also allow us to remove the archiveDuplicate logic
+      if errorMessage != nil {
+        self.updateNotice(withMessage: errorMessage!)
+        return
       }
+      
+      self.updateNotice(.sent)
+      // TODO: Show alert prompt "Success" or completion animation
+      // TODO: Dismiss window controller on OK or after delay
     }
   }
   
@@ -75,6 +68,12 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     nameField.stringValue = ""
     emailField.stringValue = ""
     messageField.string = ""
+  }
+  
+  func updateNotice(withMessage: String) {
+    noticeText.isHidden = false
+    noticeText.textColor = .systemRed
+    noticeText.stringValue = withMessage
   }
   
   func updateNotice(_ status: NoticeToggle) {
