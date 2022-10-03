@@ -18,10 +18,6 @@ extension ViewController {
     performSegue(withIdentifier: segue.rawValue, sender: self)
   }
   
-//  func segue(_ segue: WindowSegues, _ sender: Any? = ViewController.self) {
-//    performSegue(withIdentifier: segue.rawValue, sender: self)
-//  }
-  
   // Called when NSStoryboard Segue occurs from ViewController
   override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
     
