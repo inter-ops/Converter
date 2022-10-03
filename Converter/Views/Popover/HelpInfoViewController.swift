@@ -8,6 +8,8 @@
 import Cocoa
 
 class HelpInfoViewController: NSViewController {
+
+  let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -16,9 +18,10 @@ class HelpInfoViewController: NSViewController {
   
   @IBAction func contactButtonAction(sender: NSButton) {
     print("Contact button was clicked")
-    if let url = URL(string: "mailto:hello@airtv.io") {
-      NSWorkspace.shared.open(url)
-    }
+//    if let url = URL(string: "mailto:hello@airtv.io") {
+//      NSWorkspace.shared.open(url)
+//    }
+    appDelegate.showContactWindow()
   }
   
 }

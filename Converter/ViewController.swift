@@ -461,6 +461,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func hideSupportedFormatsPopover() {
     hidePopover(supportedFormatsPopover)
   }
+  func hideHelpInfoPopover() {
+    hidePopover(helpInfoPopover)
+  }
   
 }
 

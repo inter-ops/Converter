@@ -66,7 +66,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
 
-
+  var contactWindowController: NSWindowController?
+  func showContactWindow() {
+    let viewController = self.mainWindow.contentViewController as? ViewController
+    viewController?.hideHelpInfoPopover()
+    let sb = NSStoryboard(name: "Main", bundle: nil)
+    contactWindowController = sb.instantiateController(withIdentifier: "ContactWindowControllerID") as? NSWindowController
+    contactWindowController?.showWindow(self)
+  }
+  
 }
 
 // TODO: Replace with Environment PR
