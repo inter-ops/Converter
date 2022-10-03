@@ -82,7 +82,7 @@ class ReportErrorViewController: NSViewController {
       // TODO: Figure out post-async delay
       // Perhaps call closeWindow upon certain message?
       // if responceData == "success" { self.closeWindow() }
-      
+      self.closeWindow()
     }
   }
   
