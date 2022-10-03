@@ -22,52 +22,26 @@ extension ViewController {
     a.addButton(withTitle: "Dismiss")
     a.alertStyle = NSAlert.Style.critical
     
-    
-    
     a.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
+      
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
         print("User did choose to send error message")
         // Format message body and log contents to be used in email
-        self.messageHeader = ErrorLogHeaders.messageHeader
-
-        self.sanitizedErrorMessage = sanitizeFilePaths(textToSanitize: withErrorMessage, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        self.sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: withFfprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        self.sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        DraftError.messageHeader = ErrorLogHeaders.messageHeader
+        DraftError.sanitizedErrorMessage = sanitizeFilePaths(textToSanitize: withErrorMessage, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        DraftError.sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: withFfprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        DraftError.sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        DraftError.inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
+        DraftError.outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
         
-        self.inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
-        self.outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
-        
-        // TODO: Open ReportErrorViewController, pass sanitizedErrorMessage, sanitizedFfprobeOutput, sanitizedFfmpegCommand, inputExtension, outputExtension to it
-        
-        // Could not get to initialize:
-        //let windowController = ReportErrorWindowController()
-        //windowController.showWindow(self)
-        //windowController.showWindow(nil)
-        //windowController.loadWindow()
-        
-        self.performSegue(withIdentifier: "showReportError", sender: self)
-        
+        self.segue(.showReportError)
       }
+      
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
         print("User did dismiss error message")
       }
+      
     })
-  }
-  
-  
-  
-  override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-    
-    if (segue.identifier == "showReportError") {
-      if let reportErrorWC = segue.destinationController as? ReportErrorWindowController {
-        //reportErrorWC.sanitizedErrorMessage = sanitizedErrorMessage
-        reportErrorWC.passErrorData(errorMessage: sanitizedErrorMessage, ffprobeOutput: sanitizedFfprobeOutput, ffmegCommand: sanitizedFfmpegCommand, inExtension: inputExtension, outExtension: outputExtension)
-        //reportErrorWC.printL(message: sanitizedErrorMessage)
-        //reportErrorWC.testStatment(sanitizedErrorMessage)
-        //reportErrorWC.window?.contentViewController =
-        //reportErrorWC.printFunc(message: sanitizedErrorMessage)
-      }
-    }
   }
   
   func errorAlert(withMessage: String) {

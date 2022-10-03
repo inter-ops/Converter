@@ -32,12 +32,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
-  var messageHeader = ""
-  var sanitizedErrorMessage = ""
-  var sanitizedFfprobeOutput = ""
-  var sanitizedFfmpegCommand = ""
-  var inputExtension = ""
-  var outputExtension = ""
+  struct DraftError {
+    static var messageHeader = ""
+    static var sanitizedErrorMessage = ""
+    static var sanitizedFfprobeOutput = ""
+    static var sanitizedFfmpegCommand = ""
+    static var inputExtension = ""
+    static var outputExtension = ""
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()

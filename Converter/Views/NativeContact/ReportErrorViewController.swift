@@ -62,7 +62,7 @@ class ReportErrorViewController: NSViewController {
   }
   
   func sendMessage(name: String, email: String, additionalDetails: String, shouldSendAppLogs: Bool) {
-    // TODO: These params should come from the caller of this modal
+    // TODO: Application Logs:
     // applicationLogs need to be stored manually. See here for implementation https://stackoverflow.com/questions/9097424/logging-data-on-device-and-retrieving-the-log/41741076#41741076
     
     API.errorReport(name: name, email: email, errorMessage: sanitizedErrorMessage, additionalDetails: additionalDetails, ffprobeOutput: sanitizedFfprobeOutput, applicationLogs: "") { responseData, errorMessage in

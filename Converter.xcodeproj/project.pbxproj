@@ -39,6 +39,7 @@
 		C257C19828BE70F200E2849D /* SupportedFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19728BE70F200E2849D /* SupportedFormatsViewController.xib */; };
 		C2638D5428EA20CA00841C47 /* ContactWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2638D5328EA20CA00841C47 /* ContactWindowController.swift */; };
 		C2638D5628EA211400841C47 /* ReportErrorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2638D5528EA211400841C47 /* ReportErrorWindowController.swift */; };
+		C2638D5C28EB446A00841C47 /* SegueData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2638D5B28EB446A00841C47 /* SegueData.swift */; };
 		C274CDEB28E5E274005BCE22 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C274CDE928E5E274005BCE22 /* ContactViewController.swift */; };
 		C274CDEE28E609F5005BCE22 /* ReportErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C274CDED28E609F5005BCE22 /* ReportErrorViewController.swift */; };
 		C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */; };
@@ -98,6 +99,7 @@
 		C257C19728BE70F200E2849D /* SupportedFormatsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SupportedFormatsViewController.xib; sourceTree = "<group>"; };
 		C2638D5328EA20CA00841C47 /* ContactWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactWindowController.swift; sourceTree = "<group>"; };
 		C2638D5528EA211400841C47 /* ReportErrorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportErrorWindowController.swift; sourceTree = "<group>"; };
+		C2638D5B28EB446A00841C47 /* SegueData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueData.swift; sourceTree = "<group>"; };
 		C274CDE928E5E274005BCE22 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		C274CDED28E609F5005BCE22 /* ReportErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportErrorViewController.swift; sourceTree = "<group>"; };
 		C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionDidComplete.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				C2D94BCD28C11BCE001E14E9 /* Info.plist */,
 				C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */,
 				C2D33F4828A950BA00BDCCD4 /* ViewController.swift */,
+				C2638D5B28EB446A00841C47 /* SegueData.swift */,
 				C2DC469E28AC1B9800EDD3EB /* Views */,
 				C2D33F5528A97DEA00BDCCD4 /* VideoFormat */,
 				C2D33F4A28A950BF00BDCCD4 /* Assets.xcassets */,
@@ -343,6 +346,7 @@
 				C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */,
 				794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */,
 				C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */,
+				C2638D5C28EB446A00841C47 /* SegueData.swift in Sources */,
 				C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */,
 				C274CDEE28E609F5005BCE22 /* ReportErrorViewController.swift in Sources */,
 			);

@@ -910,6 +910,7 @@
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
                         <outlet property="progressBar" destination="JZg-d2-J84" id="oEX-c3-c8A"/>
                         <segue destination="yR0-6c-gBs" kind="show" identifier="showReportError" id="EQ5-Om-Sgo"/>
+                        <segue destination="s4d-AT-TJn" kind="show" identifier="showContact" id="AU9-B4-7B8"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -919,7 +920,7 @@
         <!--Window Controller-->
         <scene sceneID="lTU-cc-ODy">
             <objects>
-                <windowController id="s4d-AT-TJn" sceneMemberID="viewController">
+                <windowController storyboardIdentifier="ContactWindowControllerID" id="s4d-AT-TJn" customClass="ContactWindowController" customModule="Video_Converter" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="Contact" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="lBw-Yw-L5C">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenNone="YES"/>
@@ -1374,7 +1375,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="EQ5-Om-Sgo"/>
-        <segue reference="AZd-SB-erv"/>
+        <segue reference="AU9-B4-7B8"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Clear-Icon" width="14" height="14"/>
