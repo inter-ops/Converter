@@ -88,6 +88,7 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
   func disableAllFields(_ state: Bool) {
     nameField.isEnabled = !state
     emailField.isEnabled = !state
+    topicDropdown.isEnabled = !state
     messageField.isSelectable = !state
     if state {
       messageField.alphaValue = 0.3
