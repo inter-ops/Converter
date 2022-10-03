@@ -13,6 +13,15 @@ func sanitizeFilePaths(textToSanitize: String, inputFilePath: String, outputFile
 
 extension ViewController {
   
+  struct DraftError {
+    static var messageHeader = ""
+    static var sanitizedErrorMessage = ""
+    static var sanitizedFfprobeOutput = ""
+    static var sanitizedFfmpegCommand = ""
+    static var inputExtension = ""
+    static var outputExtension = ""
+  }
+  
   /// Alert user of an error that occured, with the option of forwarding to devs
   func unexpectedErrorAlert(withErrorMessage: String, withFfprobeOutput: String, withFfmpegCommand: String, inputFilePath: String, outputFilePath: String) {
     let a = NSAlert()
