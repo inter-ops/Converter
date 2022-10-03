@@ -14,6 +14,7 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
   @IBOutlet weak var topicDropdown: NSPopUpButton!
   @IBOutlet weak var messageField: NSTextView!
   @IBOutlet weak var noticeText: NSTextField!
+  @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
   
   let topics = ["Feedback", "Bug Report", "Feature Request", "Other"]
   
@@ -21,6 +22,7 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     super.viewDidLoad()
     initTopicDropdownMenu()
     updateNotice(.hide)
+    updateProgressBar(.hide)
     messageField.font = .systemFont(ofSize: NSFont.systemFontSize)
   }
   
@@ -51,6 +53,8 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
   func sendMessage(name: String, email: String, topic: String, message: String) {
     // TODO: Do we need a spinner / loader?
     
+    self.updateProgressBar(.show)
+    
     API.contactForm(name: name, email: email, topic: topic, message: message) { responseData, errorMessage in
       
       if errorMessage != nil {
@@ -58,9 +62,32 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
         return
       }
       
-      self.updateNotice(.sent)
-      // TODO: Show alert prompt "Success" or completion animation
-      // TODO: Dismiss window controller on OK or after delay
+      self.updateProgressBar(.hide) // Hide progressBar
+      self.updateNotice(.sent)      // Update noticeText
+    }
+  }
+  
+  func updateProgressBar(_ display: ObjectDisplay) {
+    switch display {
+    case .hide:
+      self.indeterminateProgressBar.isHidden = true
+      self.indeterminateProgressBar.stopAnimation(self)
+      disableAllFields(false)
+    case .show:
+      indeterminateProgressBar.isHidden = false
+      indeterminateProgressBar.startAnimation(self)
+      disableAllFields(true)
+    }
+  }
+  
+  func disableAllFields(_ state: Bool) {
+    nameField.isEnabled = !state
+    emailField.isEnabled = !state
+    messageField.isSelectable = !state
+    if state {
+      messageField.alphaValue = 0.3
+    } else {
+      messageField.alphaValue = 1
     }
   }
   

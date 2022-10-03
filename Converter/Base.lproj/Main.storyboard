@@ -1128,6 +1128,9 @@
                                     <constraint firstItem="Zm0-bM-HxJ" firstAttribute="leading" secondItem="sw5-TX-un8" secondAttribute="leading" constant="20" symbolic="YES" id="xQI-gK-aop"/>
                                 </constraints>
                             </customView>
+                            <progressIndicator maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="YU7-aG-hEA">
+                                <rect key="frame" x="-4" y="-7" width="448" height="20"/>
+                            </progressIndicator>
                         </subviews>
                         <constraints>
                             <constraint firstItem="71P-N2-gBr" firstAttribute="leading" secondItem="l0v-r3-jUR" secondAttribute="leading" id="4kg-fp-Oqj"/>
@@ -1137,17 +1140,21 @@
                             <constraint firstItem="BCx-ih-sEG" firstAttribute="top" secondItem="GhQ-Io-q3f" secondAttribute="bottom" constant="8" symbolic="YES" id="Fcn-ma-eDF"/>
                             <constraint firstItem="GhQ-Io-q3f" firstAttribute="top" secondItem="l0v-r3-jUR" secondAttribute="top" constant="8" id="I04-86-KYV"/>
                             <constraint firstItem="sw5-TX-un8" firstAttribute="leading" secondItem="l0v-r3-jUR" secondAttribute="leading" id="QE6-TL-VdE"/>
+                            <constraint firstAttribute="bottom" secondItem="YU7-aG-hEA" secondAttribute="bottom" constant="-6" id="VGd-6m-Tos"/>
                             <constraint firstAttribute="trailing" secondItem="GhQ-Io-q3f" secondAttribute="trailing" id="YyJ-wv-Lad"/>
                             <constraint firstItem="BCx-ih-sEG" firstAttribute="leading" secondItem="l0v-r3-jUR" secondAttribute="leading" id="bn3-fv-CgV"/>
                             <constraint firstItem="71P-N2-gBr" firstAttribute="top" secondItem="sw5-TX-un8" secondAttribute="bottom" id="hV3-5C-3P9"/>
                             <constraint firstItem="GhQ-Io-q3f" firstAttribute="leading" secondItem="l0v-r3-jUR" secondAttribute="leading" id="k0x-9e-56q"/>
                             <constraint firstAttribute="bottom" secondItem="71P-N2-gBr" secondAttribute="bottom" constant="6" id="qBY-M5-36W"/>
                             <constraint firstAttribute="trailing" secondItem="BCx-ih-sEG" secondAttribute="trailing" id="rzH-Hu-vYU"/>
+                            <constraint firstAttribute="trailing" secondItem="YU7-aG-hEA" secondAttribute="trailing" constant="-4" id="sJQ-sY-d28"/>
+                            <constraint firstItem="YU7-aG-hEA" firstAttribute="leading" secondItem="l0v-r3-jUR" secondAttribute="leading" constant="-4" id="wdr-LM-GPK"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="appLogsCheckbox" destination="Zm0-bM-HxJ" id="j5K-gK-3Ta"/>
                         <outlet property="emailField" destination="9CS-v6-I5Y" id="1Sx-ix-mZY"/>
+                        <outlet property="indeterminateProgressBar" destination="YU7-aG-hEA" id="99t-0b-BlN"/>
                         <outlet property="messageField" destination="8gq-WA-Ttm" id="0bG-aL-F1t"/>
                         <outlet property="nameField" destination="We7-MR-cwi" id="mJg-SI-TdF"/>
                         <outlet property="noticeText" destination="oIP-lV-zw0" id="dkU-Ji-fN5"/>
@@ -1328,11 +1335,17 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
+                                    <progressIndicator maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="Mk3-d3-Faa">
+                                        <rect key="frame" x="-4" y="-7" width="288" height="20"/>
+                                    </progressIndicator>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="55" id="2uk-km-z93"/>
+                                    <constraint firstAttribute="trailing" secondItem="Mk3-d3-Faa" secondAttribute="trailing" constant="-4" id="YPS-Om-MhV"/>
+                                    <constraint firstAttribute="bottom" secondItem="Mk3-d3-Faa" secondAttribute="bottom" constant="-6" id="e39-s0-YbD"/>
                                     <constraint firstItem="3Xd-g3-dgk" firstAttribute="leading" secondItem="OPH-u4-8DZ" secondAttribute="trailing" constant="8" symbolic="YES" id="pzs-OJ-0c8"/>
                                     <constraint firstItem="OPH-u4-8DZ" firstAttribute="leading" secondItem="s72-Ld-ElX" secondAttribute="leading" constant="22" id="qE7-yu-WVm"/>
+                                    <constraint firstItem="Mk3-d3-Faa" firstAttribute="leading" secondItem="s72-Ld-ElX" secondAttribute="leading" constant="-4" id="vcR-0W-Pm8"/>
                                     <constraint firstItem="3Xd-g3-dgk" firstAttribute="top" secondItem="s72-Ld-ElX" secondAttribute="top" constant="11" id="vr1-Ix-Y3o"/>
                                     <constraint firstItem="OPH-u4-8DZ" firstAttribute="top" secondItem="s72-Ld-ElX" secondAttribute="top" constant="13" id="wpe-1p-hqN"/>
                                     <constraint firstAttribute="trailing" secondItem="3Xd-g3-dgk" secondAttribute="trailing" constant="20" symbolic="YES" id="zcR-Bo-Qy2"/>
@@ -1354,7 +1367,6 @@
                             <constraint firstAttribute="trailing" secondItem="sMk-yh-TQC" secondAttribute="trailing" id="dDs-Qe-bva"/>
                             <constraint firstAttribute="trailing" secondItem="2fD-Y5-DSX" secondAttribute="trailing" id="hSO-gd-eaS"/>
                             <constraint firstItem="sMk-yh-TQC" firstAttribute="top" secondItem="G9b-pT-VUF" secondAttribute="bottom" constant="8" symbolic="YES" id="iYe-bV-fDG"/>
-                            <constraint firstItem="s72-Ld-ElX" firstAttribute="leading" secondItem="JC3-rv-G8A" secondAttribute="leading" id="ipJ-dm-kGI"/>
                             <constraint firstItem="2fD-Y5-DSX" firstAttribute="top" secondItem="JC3-rv-G8A" secondAttribute="top" constant="8" id="lra-GG-Zyz"/>
                             <constraint firstItem="G9b-pT-VUF" firstAttribute="top" secondItem="2fD-Y5-DSX" secondAttribute="bottom" constant="8" symbolic="YES" id="mxp-Hz-dbW"/>
                             <constraint firstAttribute="trailing" secondItem="s72-Ld-ElX" secondAttribute="trailing" id="nEV-6U-iFA"/>
@@ -1363,6 +1375,7 @@
                     </view>
                     <connections>
                         <outlet property="emailField" destination="Fla-lW-vxL" id="yZR-6o-lrv"/>
+                        <outlet property="indeterminateProgressBar" destination="Mk3-d3-Faa" id="I38-Rq-FbF"/>
                         <outlet property="messageField" destination="CyQ-hI-elv" id="uDq-z0-GHQ"/>
                         <outlet property="nameField" destination="Dr1-Yy-Ak2" id="ZcJ-kE-kmN"/>
                         <outlet property="noticeText" destination="OPH-u4-8DZ" id="VjV-Ph-kM9"/>

@@ -23,6 +23,7 @@ class ReportErrorViewController: NSViewController {
   @IBOutlet weak var messageField: NSTextView!
   @IBOutlet weak var appLogsCheckbox: NSButton!
   @IBOutlet weak var noticeText: NSTextField!
+  @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
   
   var sanitizedErrorMessage: String = ""
   var sanitizedFfprobeOutput: String = ""
@@ -33,6 +34,7 @@ class ReportErrorViewController: NSViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     updateNotice(.hide)
+    updateProgressBar(.hide)
     messageField.font = .monospacedSystemFont(ofSize: 13, weight: .medium)
   }
   
@@ -65,6 +67,8 @@ class ReportErrorViewController: NSViewController {
     // TODO: Application Logs:
     // applicationLogs need to be stored manually. See here for implementation https://stackoverflow.com/questions/9097424/logging-data-on-device-and-retrieving-the-log/41741076#41741076
     
+    updateProgressBar(.show)
+    
     API.errorReport(name: name, email: email, errorMessage: sanitizedErrorMessage, additionalDetails: additionalDetails, ffprobeOutput: sanitizedFfprobeOutput, applicationLogs: "") { responseData, errorMessage in
       
       if errorMessage != nil {
@@ -72,12 +76,31 @@ class ReportErrorViewController: NSViewController {
         return
       }
       
-      // Uppdate notice text
-      self.updateNotice(.sent)
-      // TODO: Show alert prompt "Success" or completion animation
-      // TODO: Dismiss window controller on OK or after delay
+      self.updateProgressBar(.hide) // Hide progressBar
+      self.updateNotice(.sent)      // Update noticeText
       
     }
+  }
+  
+  func updateProgressBar(_ display: ObjectDisplay) {
+    switch display {
+    case .hide:
+      self.indeterminateProgressBar.isHidden = true
+      self.indeterminateProgressBar.stopAnimation(self)
+      disableAllFields(false)
+    case .show:
+      indeterminateProgressBar.isHidden = false
+      indeterminateProgressBar.startAnimation(self)
+      disableAllFields(true)
+    }
+  }
+  
+  func disableAllFields(_ state: Bool) {
+    nameField.isEnabled = !state
+    emailField.isEnabled = !state
+    messageField.isSelectable = !state
+    if state { messageField.alphaValue = 0.3 }
+    else { messageField.alphaValue = 1 }
   }
   
   func updateNotice(withMessage: String) {
