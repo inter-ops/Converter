@@ -64,6 +64,10 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
       
       self.updateProgressBar(.hide) // Hide progressBar
       self.updateNotice(.sent)      // Update noticeText
+      
+      // TODO: Figure out post-async delay
+      // Perhaps call closeWindow upon certain message?
+      // if responceData == "success" { self.closeWindow() }
     }
   }
   
@@ -89,6 +93,19 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     } else {
       messageField.alphaValue = 1
     }
+  }
+  
+  func closeWindow() {
+    print("closeWindow() called")
+    // Issues with calling both from async thread
+    
+    //    let _ = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
+    //      self.view.window?.windowController?.close()
+    //    }
+    
+    //    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+    //      self.view.window?.windowController?.close()
+    //    }
   }
   
   @IBAction func resetButtonAction(_ sender: NSButton) {

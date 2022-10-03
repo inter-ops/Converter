@@ -79,6 +79,10 @@ class ReportErrorViewController: NSViewController {
       self.updateProgressBar(.hide) // Hide progressBar
       self.updateNotice(.sent)      // Update noticeText
       
+      // TODO: Figure out post-async delay
+      // Perhaps call closeWindow upon certain message?
+      // if responceData == "success" { self.closeWindow() }
+      
     }
   }
   
@@ -101,6 +105,19 @@ class ReportErrorViewController: NSViewController {
     messageField.isSelectable = !state
     if state { messageField.alphaValue = 0.3 }
     else { messageField.alphaValue = 1 }
+  }
+  
+  func closeWindow() {
+    print("closeWindow() called")
+    // Issues with calling both from async thread
+    
+//    let _ = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
+//      self.view.window?.windowController?.close()
+//    }
+
+//    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//      self.view.window?.windowController?.close()
+//    }
   }
   
   func updateNotice(withMessage: String) {
