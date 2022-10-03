@@ -1158,6 +1158,7 @@
                         <outlet property="messageField" destination="8gq-WA-Ttm" id="0bG-aL-F1t"/>
                         <outlet property="nameField" destination="We7-MR-cwi" id="mJg-SI-TdF"/>
                         <outlet property="noticeText" destination="oIP-lV-zw0" id="dkU-Ji-fN5"/>
+                        <outlet property="sendButton" destination="8ai-jv-2pJ" id="80a-dm-eQV"/>
                     </connections>
                 </viewController>
                 <customObject id="oaC-QC-QHu" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1379,6 +1380,7 @@
                         <outlet property="messageField" destination="CyQ-hI-elv" id="uDq-z0-GHQ"/>
                         <outlet property="nameField" destination="Dr1-Yy-Ak2" id="ZcJ-kE-kmN"/>
                         <outlet property="noticeText" destination="OPH-u4-8DZ" id="VjV-Ph-kM9"/>
+                        <outlet property="sendButton" destination="3Xd-g3-dgk" id="4cw-KN-4rO"/>
                         <outlet property="topicDropdown" destination="5oS-hp-63m" id="P1N-QH-5ug"/>
                     </connections>
                 </viewController>

@@ -14,6 +14,7 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
   @IBOutlet weak var topicDropdown: NSPopUpButton!
   @IBOutlet weak var messageField: NSTextView!
   @IBOutlet weak var noticeText: NSTextField!
+  @IBOutlet weak var sendButton: NSButton!
   @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
   
   let topics = ["Feedback", "Bug Report", "Feature Request", "Other"]
@@ -68,7 +69,7 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
       // TODO: Figure out post-async delay
       // Perhaps call closeWindow upon certain message?
       // if responceData == "success" { self.closeWindow() }
-      self.closeWindow()
+      //self.closeWindow()
     }
   }
   
@@ -90,11 +91,9 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     emailField.isEnabled = !state
     topicDropdown.isEnabled = !state
     messageField.isSelectable = !state
-    if state {
-      messageField.alphaValue = 0.3
-    } else {
-      messageField.alphaValue = 1
-    }
+    if state { messageField.alphaValue = 0.3 }
+    else { messageField.alphaValue = 1 }
+    sendButton.isEnabled = !state
   }
   
   func closeWindow() {

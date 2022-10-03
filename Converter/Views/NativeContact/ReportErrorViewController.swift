@@ -23,6 +23,7 @@ class ReportErrorViewController: NSViewController {
   @IBOutlet weak var messageField: NSTextView!
   @IBOutlet weak var appLogsCheckbox: NSButton!
   @IBOutlet weak var noticeText: NSTextField!
+  @IBOutlet weak var sendButton: NSButton!
   @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
   
   var sanitizedErrorMessage: String = ""
@@ -82,7 +83,7 @@ class ReportErrorViewController: NSViewController {
       // TODO: Figure out post-async delay
       // Perhaps call closeWindow upon certain message?
       // if responceData == "success" { self.closeWindow() }
-      self.closeWindow()
+      //self.closeWindow()
     }
   }
   
@@ -105,6 +106,7 @@ class ReportErrorViewController: NSViewController {
     messageField.isSelectable = !state
     if state { messageField.alphaValue = 0.3 }
     else { messageField.alphaValue = 1 }
+    sendButton.isEnabled = !state
   }
   
   func closeWindow() {
