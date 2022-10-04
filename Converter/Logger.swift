@@ -18,9 +18,7 @@ import OSLog
 
 let subsystem = Bundle.main.bundleIdentifier!
 
-// TODO: Make available for older platforms
-
-// TODO: Create wrapper func for logging so that we can pass generic strings
+// TODO: Create wrapper func which uses logger if we have macos 11 available, otherwise just prints
 
 @available(macOS 11.0, *)
 struct ApplicationLogger {
@@ -49,10 +47,11 @@ struct ApplicationLogger {
   }
 }
 
-@available(macOS 12.0, *)
 func getLogEntries() throws -> [OSLogEntryLog] {
   // Open the log store.
-  let logStore = try OSLogStore(scope: .currentProcessIdentifier)
+  let logStore = OSLogStore()
+  
+//  let logStore = try OSLogStore(scope: .currentProcessIdentifier)
   
   // Get all the logs from the last hour.
   let oneHourAgo = logStore.position(date: Date().addingTimeInterval(-3600))
