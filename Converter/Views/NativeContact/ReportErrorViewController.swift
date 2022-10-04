@@ -114,12 +114,13 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
   }
   
   func toggleFieldsAreEnabled(_ state: Bool) {
+    nameField.becomeFirstResponder()
     nameField.isEnabled = state
     emailField.isEnabled = state
     appLogsCheckbox.isEnabled = state
     if state { messageField.alphaValue = 1 }
     else { messageField.alphaValue = 0.3 }
-    messageField.isSelectable = state
+    //messageField.isSelectable = state
     sendButton.isEnabled = state
   }
   
