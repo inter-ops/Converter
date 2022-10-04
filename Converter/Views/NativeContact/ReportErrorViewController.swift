@@ -16,7 +16,7 @@ struct AppLogs {
   }
 }
 
-class ReportErrorViewController: NSViewController {
+class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFieldDelegate {
   
   @IBOutlet weak var nameField: NSTextField!
   @IBOutlet weak var emailField: NSTextField!
@@ -39,6 +39,10 @@ class ReportErrorViewController: NSViewController {
     updateNotice(.hide)
     updateProgressBar(.hide)
     messageField.font = .monospacedSystemFont(ofSize: 13, weight: .medium)
+    
+    nameField.delegate = self
+    emailField.delegate = self
+    messageField.delegate = self
   }
   
   func passErrorData(errorMessage: String, ffprobeOutput: String, ffmegCommand: String, inExtension: String, outExtension: String) {
@@ -64,6 +68,8 @@ class ReportErrorViewController: NSViewController {
     } else {
       sendMessage(name: name, email: email, additionalDetails: additionalDetails, shouldSendAppLogs: shouldSendAppLogs)
     }
+    
+    updateNotice(.hide)
   }
   
   func sendMessage(name: String, email: String, additionalDetails: String, shouldSendAppLogs: Bool) {
@@ -122,6 +128,15 @@ class ReportErrorViewController: NSViewController {
       self.view.window?.windowController?.close()
       self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
     }
+  }
+  
+  func control(_ control: NSControl, textShouldBeginEditing fieldEditor: NSText) -> Bool {
+    updateNotice(.hide)
+    return true
+  }
+  
+  func textDidBeginEditing(_ notification: Notification) {
+    updateNotice(.hide)
   }
   
   func updateNotice(withMessage: String) {

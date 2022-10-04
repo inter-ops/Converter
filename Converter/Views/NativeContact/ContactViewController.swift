@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class ContactViewController: NSViewController, NSTextViewDelegate {
+class ContactViewController: NSViewController, NSTextViewDelegate, NSTextFieldDelegate {
   
   @IBOutlet weak var nameField: NSTextField!
   @IBOutlet weak var emailField: NSTextField!
@@ -27,6 +27,10 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     updateNotice(.hide)
     updateProgressBar(.hide)
     messageField.font = .systemFont(ofSize: NSFont.systemFontSize)
+    
+    nameField.delegate = self
+    emailField.delegate = self
+    messageField.delegate = self
   }
   
   func initTopicDropdownMenu() {
@@ -51,6 +55,8 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     } else {
       sendMessage(name: name, email: email, topic: topic, message: message)
     }
+    
+    updateNotice(.hide)
   }
   
   func sendMessage(name: String, email: String, topic: String, message: String) {
@@ -107,6 +113,15 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
       self.view.window?.windowController?.close()
       self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
     }
+  }
+  
+  func control(_ control: NSControl, textShouldBeginEditing fieldEditor: NSText) -> Bool {
+    updateNotice(.hide)
+    return true
+  }
+  
+  func textDidBeginEditing(_ notification: Notification) {
+    updateNotice(.hide)
   }
   
   @IBAction func resetButtonAction(_ sender: NSButton) {
