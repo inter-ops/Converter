@@ -27,7 +27,7 @@ func sendPostRequest(url: String, data: Dictionary<String, AnyObject>, completio
     
     var jsonData: Dictionary<String, AnyObject> = [:]
     
-    if data!.count > 0 && contentType.hasPrefix("application/json") {
+    if contentType.hasPrefix("application/json") && data!.count > 0 {
       do {
         jsonData = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
       } catch {
