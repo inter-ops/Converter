@@ -105,7 +105,7 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
   func closeWindowWithSuccess() {
     DispatchQueue.main.async {
       self.view.window?.windowController?.close()
-      self.appDelegate.messageDidSendAlert()
+      self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
     }
   }
   

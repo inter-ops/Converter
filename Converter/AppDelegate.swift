@@ -67,7 +67,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
   
   // Bring ViewController to front with success message
-  func messageDidSendAlert() {
+  func bringMainWindowToFrontWithMessageDidSendAlert() {
     mainWindow.makeKeyAndOrderFront(self)
     let viewController = self.mainWindow.contentViewController as? ViewController
     viewController?.messageDidSendAlert()
