@@ -16,36 +16,39 @@ func sendPostRequest(url: String, data: Dictionary<String, AnyObject>, completio
   request.addValue("application/json", forHTTPHeaderField: "Content-Type")
   
   let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+    
+    // This occurs if the dataTask fails to execute (eg network cuts out or is too slow).
     if error != nil {
-      print("Error sending HTTP request \(error!.localizedDescription)")
-      // TODO: Return proper error message
-      completion(nil, "Error with request")
-      return
+      return completion(nil, error!.localizedDescription)
     }
     
-    // TODO: Return an error to display to user
-    guard let httpResponse = response as? HTTPURLResponse,
-          (200...299).contains(httpResponse.statusCode) else {
-      print("Error with the response, unexpected status code: \(response)")
-      // TODO: Return proper error message
-      completion(nil, "Error with request")
-      return
-    }
+    let httpResponse = response as! HTTPURLResponse
+    let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type") ?? ""
     
-    if data!.count > 0 {
+    var jsonData: Dictionary<String, AnyObject> = [:]
+    
+    if data!.count > 0 && contentType.hasPrefix("application/json") {
       do {
-        let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
-        print("JSON \(json)")
-        
-        completion(json, nil)
+        jsonData = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
       } catch {
-        print("Error with deserializing! \(error.localizedDescription)")
-        // TODO: Return proper error message
-        completion(nil, "Error with request")
+        // TODO: Report error, this should never happen
+        print("Error with deserializing response data \(error)")
+        return completion(jsonData, "Something went wrong, please try again.")
       }
     }
     
-    completion(nil, nil)
+    if httpResponse.statusCode > 299 {
+      if let errorMessage = jsonData["error"] as? String {
+        return completion(jsonData, errorMessage)
+      }
+      else {
+        // TODO: Report error
+        // This means an error occurred but wasn't formatted by our backend error formatter, so likely caused at the GCP level.
+        return completion(jsonData, "Something went wrong, please try again.")
+      }
+    }
+    
+    completion(jsonData, nil)
   })
   
   task.resume()
@@ -64,7 +67,6 @@ struct API {
     
     sendPostRequest(url: Constants.API.errorReportUrl, data: params, completion: completion)
   }
-
 }
 
 
