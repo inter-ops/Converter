@@ -55,7 +55,7 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
   
   func sendMessage(name: String, email: String, topic: String, message: String) {
     
-    self.updateProgressBar(.show)
+    updateProgressBar(.show)
     
     API.contactForm(name: name, email: email, topic: topic, message: message) { responseData, errorMessage in
       
