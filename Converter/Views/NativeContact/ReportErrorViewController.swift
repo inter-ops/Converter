@@ -92,21 +92,29 @@ class ReportErrorViewController: NSViewController {
     case .hide:
       self.indeterminateProgressBar.isHidden = true
       self.indeterminateProgressBar.stopAnimation(self)
-      disableAllFields(false)
+      enableAllFields()
     case .show:
       indeterminateProgressBar.isHidden = false
       indeterminateProgressBar.startAnimation(self)
-      disableAllFields(true)
+      disableAllFields()
     }
   }
   
-  func disableAllFields(_ state: Bool) {
-    nameField.isEnabled = !state
-    emailField.isEnabled = !state
-    messageField.isSelectable = !state
-    if state { messageField.alphaValue = 0.3 }
-    else { messageField.alphaValue = 1 }
-    sendButton.isEnabled = !state
+  func enableAllFields() {
+    toggleFieldsAreEnabled(true)
+  }
+  
+  func disableAllFields() {
+    toggleFieldsAreEnabled(false)
+  }
+  
+  func toggleFieldsAreEnabled(_ state: Bool) {
+    nameField.isEnabled = state
+    emailField.isEnabled = state
+    messageField.isSelectable = state
+    if state { messageField.alphaValue = 1 }
+    else { messageField.alphaValue = 0.3 }
+    sendButton.isEnabled = state
   }
   
   func closeWindow() {
