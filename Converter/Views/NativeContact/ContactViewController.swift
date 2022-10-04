@@ -52,7 +52,6 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
   }
   
   func sendMessage(name: String, email: String, topic: String, message: String) {
-    // TODO: Do we need a spinner / loader?
     
     self.updateProgressBar(.show)
     
