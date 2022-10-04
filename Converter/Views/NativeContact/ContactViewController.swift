@@ -96,6 +96,10 @@ class ContactViewController: NSViewController, NSTextViewDelegate, NSTextFieldDe
   
   func disableAllFields() {
     toggleFieldsAreEnabled(false)
+    // Resign all fields on disable
+    DispatchQueue.main.async {
+      self.view.window?.makeFirstResponder(nil)
+    }
   }
   
   func toggleFieldsAreEnabled(_ state: Bool) {
@@ -104,7 +108,7 @@ class ContactViewController: NSViewController, NSTextViewDelegate, NSTextFieldDe
     topicDropdown.isEnabled = state
     if state { messageField.alphaValue = 1 }
     else { messageField.alphaValue = 0.3 }
-    messageField.isSelectable = state
+    //messageField.isSelectable = state
     sendButton.isEnabled = state
   }
   

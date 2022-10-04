@@ -111,10 +111,14 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
   
   func disableAllFields() {
     toggleFieldsAreEnabled(false)
+    
+    // Resign all fields on disable
+    DispatchQueue.main.async {
+      self.view.window?.makeFirstResponder(nil)
+    }
   }
   
   func toggleFieldsAreEnabled(_ state: Bool) {
-    nameField.becomeFirstResponder()
     nameField.isEnabled = state
     emailField.isEnabled = state
     appLogsCheckbox.isEnabled = state
