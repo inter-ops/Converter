@@ -202,7 +202,7 @@ func getFfmpegCommand(inputVideo: Video, outputFilePath: String) -> String {
   let audioCommand = getAudioConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
   
   let subtitleCommand = getSubtitleConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
-  let command = "-hide_banner -loglevel error -y -i \"\(inputVideo.filePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
   
   return command
 }

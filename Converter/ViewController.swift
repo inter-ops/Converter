@@ -257,6 +257,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           self.updateProgressBar(value: 100)
           self.estimatedTimeText.stringValue = "Error ⛔️"
           
+          // TODO: May need to use getOutput() or getFailStackTrace() now that we print all logs, test this and decide if we should send other info
           let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           print("Error message: \(errorMessage)")
           let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
