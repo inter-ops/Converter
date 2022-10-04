@@ -19,6 +19,8 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
   
   let topics = ["Feedback", "Bug Report", "Feature Request", "Other"]
   
+  let appDelegate = NSApplication.shared.delegate as! AppDelegate
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     initTopicDropdownMenu()
@@ -59,16 +61,13 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
       
       if errorMessage != nil {
         self.updateNotice(withMessage: errorMessage!)
+        self.updateProgressBar(.hide)   // Stop progressBar animation and enable all fields
         return
       }
       
       self.updateProgressBar(.hide) // Hide progressBar
       self.updateNotice(.sent)      // Update noticeText
-      
-      // TODO: Figure out post-async delay
-      // Perhaps call closeWindow upon certain message?
-      // if responceData == "success" { self.closeWindow() }
-      //self.closeWindow()
+      self.closeWindowWithSuccess() // Close window with success alert
     }
   }
   
@@ -97,23 +96,17 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     nameField.isEnabled = state
     emailField.isEnabled = state
     topicDropdown.isEnabled = state
-    messageField.isSelectable = state
     if state { messageField.alphaValue = 1 }
     else { messageField.alphaValue = 0.3 }
+    messageField.isSelectable = state
     sendButton.isEnabled = state
   }
   
-  func closeWindow() {
-    print("closeWindow() called")
-    // Issues with calling both from async thread
-    
-    //    let _ = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { timer in
-    //      self.view.window?.windowController?.close()
-    //    }
-    
-    //    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-    //      self.view.window?.windowController?.close()
-    //    }
+  func closeWindowWithSuccess() {
+    DispatchQueue.main.async {
+      self.view.window?.windowController?.close()
+      self.appDelegate.messageDidSendAlert()
+    }
   }
   
   @IBAction func resetButtonAction(_ sender: NSButton) {

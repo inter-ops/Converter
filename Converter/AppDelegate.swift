@@ -65,6 +65,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
     return true
   }
+  
+  // Bring ViewController to front with success message
+  func messageDidSendAlert() {
+    mainWindow.makeKeyAndOrderFront(self)
+    let viewController = self.mainWindow.contentViewController as? ViewController
+    viewController?.messageDidSendAlert()
+  }
 
   var contactWindowController: NSWindowController?
   func showContactWindow() {
