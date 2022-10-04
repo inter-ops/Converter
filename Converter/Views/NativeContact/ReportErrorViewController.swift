@@ -123,10 +123,14 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
     sendButton.isEnabled = state
   }
   
+  var closeWindowWasCalled = false  // Ensure this function is only called once
   func closeWindowWithSuccess() {
-    DispatchQueue.main.async {
-      self.view.window?.windowController?.close()
-      self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
+    if !closeWindowWasCalled {
+      closeWindowWasCalled = true
+      DispatchQueue.main.async {
+        self.view.window?.windowController?.close()
+        self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
+      }
     }
   }
   
