@@ -13,15 +13,6 @@ func sanitizeFilePaths(textToSanitize: String, inputFilePath: String, outputFile
 
 extension ViewController {
   
-  struct DraftError {
-    static var messageHeader = ""
-    static var sanitizedErrorMessage = ""
-    static var sanitizedFfprobeOutput = ""
-    static var sanitizedFfmpegCommand = ""
-    static var inputExtension = ""
-    static var outputExtension = ""
-  }
-  
   /// Alert user of an error that occured, with the option of forwarding to devs
   func unexpectedErrorAlert(withErrorMessage: String, withFfprobeOutput: String, withFfmpegCommand: String, inputFilePath: String, outputFilePath: String) {
     let a = NSAlert()
@@ -35,15 +26,14 @@ extension ViewController {
       
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
         print("User did choose to send error message")
-        // Format message body and log contents to be used in email
-        DraftError.messageHeader = ErrorLogHeaders.messageHeader
-        DraftError.sanitizedErrorMessage = sanitizeFilePaths(textToSanitize: withErrorMessage, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        DraftError.sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: withFfprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        DraftError.sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        DraftError.inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
-        DraftError.outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
+        let sanitizedErrorMessage = sanitizeFilePaths(textToSanitize: withErrorMessage, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: withFfprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        let inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
+        let outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
+
+        self.segueToErrorReport(errorMessage: sanitizedErrorMessage, ffprobeOutput: sanitizedFfprobeOutput, ffmpegCommand: sanitizedFfmpegCommand, inputExtension: inputExtension, outputExtension: outputExtension)
         
-        self.segue(.showReportError)
       }
       
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
