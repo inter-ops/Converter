@@ -35,6 +35,7 @@ extension ViewController {
         let inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
         let outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
         
+        let applicationLogs = Logger.getLogEntries() // array.joined(separator: ", ")
         // TODO: Open ReportErrorViewController, pass sanitizedErrorMessage, sanitizedFfprobeOutput, sanitizedFfmpegCommand, inputExtension, outputExtension to it
         
 //        AppLogs.mostRecent = messageBody

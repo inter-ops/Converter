@@ -208,9 +208,7 @@ func getFfmpegCommand(inputVideo: Video, outputFilePath: String) -> String {
 }
 
 func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> Void) -> FFmpegSession {
-  if Config.shared.debug {
-    print("Running FFMPEG command: \(command)")
-  }
+  Logger.info("Running FFMPEG command: \(command)")
   
   let session = FFmpegKit.executeAsync(command, withCompleteCallback: onDone)
   

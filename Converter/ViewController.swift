@@ -56,7 +56,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     let response = openPanel.runModal()
     if response == .OK {
       let path = openPanel.url?.path
-      print("path: \(String(describing: path))")
+      Logger.info("path: \(String(describing: path))")
       dragDropViewDidReceive(fileUrl: path!)
     }
   }
@@ -74,7 +74,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Handles all input file requests, checks for validity and adjust the dragDropView box to reflect any errors
   func dragDropViewDidReceive(fileUrl: String) {
-    print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
+    Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
     inputFileUrl = fileUrl.fileURL.absoluteURL
     
@@ -136,7 +136,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Update outputFormat to selected item
     outputFormat = format
     
-    print("User did select \(format.rawValue)")
+    Logger.info("User did select \(format.rawValue)")
   }
   
   /// Calculates the video conversion progress in percentage.
@@ -209,10 +209,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         return
       }
       
-      if inputFileUrl!.path == outputFileUrl!.path {
-        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
-        return
-      }
+//      if inputFileUrl!.path == outputFileUrl!.path {
+//        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
+//        return
+//      }
       
       startConversion()
       actionButton.title = "Stop"
@@ -257,9 +257,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           self.updateProgressBar(value: 100)
           self.estimatedTimeText.stringValue = "Error ⛔️"
           
-          // TODO: May need to use getOutput() or getFailStackTrace() now that we print all logs, test this and decide if we should send other info
+          // TODO: This now returns all logs from the session, since we dont use -loglevel error anymore. If we want only capture the error,
+          // we will need to filter out error logs from this (not trivial). Could always take the last few lines of logs from session.getAllLogs() but
+          // we risk leaving out some error info.
           let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
-          print("Error message: \(errorMessage)")
+          
           let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
           self.unexpectedErrorAlert(withErrorMessage: errorMessage, withFfprobeOutput: ffprobeOutput, withFfmpegCommand: self.ffmpegCommand!, inputFilePath: self.inputFileUrl!.path, outputFilePath: self.outputFileUrl!.path)
         }
