@@ -121,5 +121,16 @@ struct Logger {
       return []
     }
   }
+  
+  static func getAllEntriesAsString() -> String {
+    let allAppLogs = getLogEntries()
+    var logString = ""
+    
+    for entryLog in allAppLogs {
+      logString.append("\(entryLog.composedMessage)\n")
+    }
+    
+    return logString
+  }
 
 }
