@@ -15,7 +15,7 @@ class HelpInfoViewController: NSViewController {
   }
   
   @IBAction func contactButtonAction(sender: NSButton) {
-    print("Contact button was clicked")
+    Logger.debug("Contact button was clicked")
     if let url = URL(string: "mailto:hello@airtv.io") {
       NSWorkspace.shared.open(url)
     }

@@ -20,10 +20,10 @@ extension ViewController {
     
     a.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
-        print("User did acknowledge successful file conversion")
+        Logger.debug("User did acknowledge successful file conversion")
       }
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
-        print("User did select: Reveal in Finder")
+        Logger.debug("User did select: Reveal in Finder")
         self.showInFinder(url: withOutputPath)
       }
     })

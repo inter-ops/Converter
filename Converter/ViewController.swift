@@ -205,10 +205,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       
       // Note that we check this after resetting the app state. This prevents the user from mistaking a previously shown "Done 🚀" message with the state of the canceled conversion. If we checked this before resetting the progress bar, a user may think the conversion they canceled was actually done, since the done message from the previous conversion would still be shown.
       if outputFileUrl == nil {
-        print("User canceled output file selection, skipping conversion")
+        Logger.warning("User canceled output file selection, skipping conversion")
         return
       }
       
+      // TODO: Uncomment
 //      if inputFileUrl!.path == outputFileUrl!.path {
 //        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
 //        return
@@ -360,7 +361,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         return format
       }
     }
-    print("Error, unable to read selected format type\nReturning default type: VideoFormat.mp4")
+    Logger.error("Unable to read selected format type\nReturning default type: VideoFormat.mp4")
     return .mp4
   }
   

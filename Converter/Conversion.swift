@@ -97,6 +97,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     return "-c:v libxvid -qscale:v 5"
   default:
     // For unknown cases, we re-encode to H264
+    Logger.error("Unknown output file type when selecting video codec")
     return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
   }
 }
@@ -170,7 +171,7 @@ func getAudioConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
   case VideoFormat.webm.rawValue:
     return "-c:a libvorbis"
   default:
-    print("Unknown output file type when selecting audio codec")
+    Logger.error("Unknown output file type when selecting audio codec")
     return getAacConversionCommand(inputVideo: inputVideo)
   }
 }
@@ -191,7 +192,7 @@ func getSubtitleConversionCommand(inputVideo: Video, outputFilePath: String) -> 
   case VideoFormat.avi.rawValue:
     return "" // AVI does not support soft-subs.
   default:
-    print("Unknown output file type when selecting subtitle codec")
+    Logger.error("Unknown output file type when selecting subtitle codec")
     return ""
   }
   

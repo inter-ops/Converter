@@ -33,6 +33,7 @@
 		79AF2A8228D60C26009CCB42 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AF2A8128D60C26009CCB42 /* Video.swift */; };
 		79CD2F2328ECBF2B005F34F0 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CD2F2228ECBF2B005F34F0 /* Logger.swift */; };
 		79D95A8B28E8C3660023BECE /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D95A8A28E8C3660023BECE /* API.swift */; };
+		79F0029C28EF46D400AD93BB /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F0029B28EF46D400AD93BB /* Date.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
 		C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */; };
@@ -91,6 +92,7 @@
 		79AF2A8128D60C26009CCB42 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		79CD2F2228ECBF2B005F34F0 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		79D95A8A28E8C3660023BECE /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		79F0029B28EF46D400AD93BB /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
 		C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulProgressIndicator.swift; sourceTree = "<group>"; };
 		C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpInfoViewController.xib; sourceTree = "<group>"; };
@@ -131,6 +133,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		79F0029A28EF46C700AD93BB /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				79F0029B28EF46D400AD93BB /* Date.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		C24745C728BD8812007E128B /* Popover */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +198,7 @@
 		C2D33F4528A950BA00BDCCD4 /* Converter */ = {
 			isa = PBXGroup;
 			children = (
+				79F0029A28EF46C700AD93BB /* Utilities */,
 				C2D94BCD28C11BCE001E14E9 /* Info.plist */,
 				C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */,
 				C2D33F4828A950BA00BDCCD4 /* ViewController.swift */,
@@ -319,6 +330,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79F0029C28EF46D400AD93BB /* Date.swift in Sources */,
 				C2DC46A028AC1BB300EDD3EB /* DragDropView.swift in Sources */,
 				79CD2F2328ECBF2B005F34F0 /* Logger.swift in Sources */,
 				79AF2A7E28D5FDF6009CCB42 /* SubtitleCodec.swift in Sources */,

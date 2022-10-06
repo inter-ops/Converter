@@ -24,7 +24,7 @@ extension ViewController {
     
     a.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
-        print("User did choose to send error message")
+        Logger.debug("User did choose to send error message")
         // Format message body and log contents to be used in email
         let messageHeader = ErrorLogHeaders.messageHeader
 
@@ -35,14 +35,11 @@ extension ViewController {
         let inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
         let outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
         
-        let applicationLogs = Logger.getAllEntriesAsString()
+        let applicationLogs = Logger.getLogsAsString()
         // TODO: Open ReportErrorViewController, pass sanitizedErrorMessage, sanitizedFfprobeOutput, sanitizedFfmpegCommand, inputExtension, outputExtension to it
-        
-        print("applicationLogs:\n\(applicationLogs)")
-        
       }
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
-        print("User did dismiss error message")
+        Logger.debug("User did dismiss error message")
       }
     })
   }

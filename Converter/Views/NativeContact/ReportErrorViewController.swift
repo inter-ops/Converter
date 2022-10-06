@@ -67,7 +67,7 @@ class ReportErrorViewController: NSViewController {
       // TODO: These params should come from the caller of this modal
       // applicationLogs need to be stored manually. See here for implementation https://stackoverflow.com/questions/9097424/logging-data-on-device-and-retrieving-the-log/41741076#41741076
 
-      API.errorReport(name: name, email: email, errorMessage: "", additionalDetails: additionalDetails, ffprobeOutput: "", applicationLogs: "") { responseData, errorMessage in
+      API.errorReport(name: name, email: email, additionalDetails: additionalDetails, ffmpegCommand: "", ffmpegSessionLogs: "", ffprobeOutput: "", applicationLogs: "") { responseData, errorMessage in
         
         if errorMessage != nil {
           // TODO: Show error message
@@ -78,8 +78,6 @@ class ReportErrorViewController: NSViewController {
         self.updateNotice(.sent)
         // TODO: Clear contact form. That should also allow us to remove the archiveDuplicate logic
       }
-      
-      if shouldSendAppLogs { print("ALL LOGS: \(appLogs)\n---") }
     }
   }
   
