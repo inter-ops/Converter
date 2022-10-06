@@ -23,25 +23,23 @@ extension ViewController {
     a.alertStyle = NSAlert.Style.critical
     
     a.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
+      
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
         print("User did choose to send error message")
-        // Format message body and log contents to be used in email
-        let messageHeader = ErrorLogHeaders.messageHeader
-
         let sanitizedErrorMessage = sanitizeFilePaths(textToSanitize: withErrorMessage, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
         let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: withFfprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
         let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        
         let inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
         let outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
+
+        self.segueToErrorReport(errorMessage: sanitizedErrorMessage, ffprobeOutput: sanitizedFfprobeOutput, ffmpegCommand: sanitizedFfmpegCommand, inputExtension: inputExtension, outputExtension: outputExtension)
         
-        // TODO: Open ReportErrorViewController, pass sanitizedErrorMessage, sanitizedFfprobeOutput, sanitizedFfmpegCommand, inputExtension, outputExtension to it
-        
-//        AppLogs.mostRecent = messageBody
       }
+      
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
         print("User did dismiss error message")
       }
+      
     })
   }
   

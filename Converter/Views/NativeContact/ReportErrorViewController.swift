@@ -16,20 +16,42 @@ struct AppLogs {
   }
 }
 
-class ReportErrorViewController: NSViewController {
+class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFieldDelegate {
   
   @IBOutlet weak var nameField: NSTextField!
   @IBOutlet weak var emailField: NSTextField!
   @IBOutlet weak var messageField: NSTextView!
   @IBOutlet weak var appLogsCheckbox: NSButton!
   @IBOutlet weak var noticeText: NSTextField!
+  @IBOutlet weak var sendButton: NSButton!
+  @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
+  
+  var sanitizedErrorMessage: String = ""
+  var sanitizedFfprobeOutput: String = ""
+  var sanitizedFfmpegCommand: String = ""
+  var inputExtension: String = ""
+  var outputExtension: String = ""
+  
+  let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
   override func viewDidLoad() {
     super.viewDidLoad()
     updateNotice(.hide)
+    updateProgressBar(.hide)
     messageField.font = .monospacedSystemFont(ofSize: 13, weight: .medium)
+    
+    nameField.delegate = self
+    emailField.delegate = self
+    messageField.delegate = self
   }
   
+  func passErrorData(errorMessage: String, ffprobeOutput: String, ffmegCommand: String, inExtension: String, outExtension: String) {
+    sanitizedErrorMessage = errorMessage
+    sanitizedFfprobeOutput = ffprobeOutput
+    sanitizedFfmpegCommand = ffmegCommand
+    inputExtension = inExtension
+    outputExtension = outExtension
+  }
   
   @IBAction func sendButtonAction(_ sender: NSButton) {
     let name = nameField.stringValue
@@ -46,43 +68,91 @@ class ReportErrorViewController: NSViewController {
     } else {
       sendMessage(name: name, email: email, additionalDetails: additionalDetails, shouldSendAppLogs: shouldSendAppLogs)
     }
+    
+    updateNotice(.hide)
   }
   
-  var archiveDuplicate: [String] = []
   func sendMessage(name: String, email: String, additionalDetails: String, shouldSendAppLogs: Bool) {
-    if archiveDuplicate == [name, email, additionalDetails] {
-      // Don't send duplicate emails
-    } else {
-      archiveDuplicate = [name, email, additionalDetails]
+    // TODO: Application Logs:
+    // applicationLogs need to be stored manually. See here for implementation https://stackoverflow.com/questions/9097424/logging-data-on-device-and-retrieving-the-log/41741076#41741076
+    
+    updateProgressBar(.show)
+    
+    API.errorReport(name: name, email: email, errorMessage: sanitizedErrorMessage, additionalDetails: additionalDetails, ffprobeOutput: sanitizedFfprobeOutput, applicationLogs: "") { responseData, errorMessage in
       
-      let reportedError = AppLogs.mostRecent
-      var appLogs = ""
-      
-      if shouldSendAppLogs {
-        for entry in AppLogs.currentSession {
-          appLogs.append(entry)
-        }
+      if errorMessage != nil {
+        self.updateNotice(withMessage: errorMessage!)
+        self.updateProgressBar(.hide)   // Stop progressBar animation and enable all fields
+        return
       }
       
-      // TODO: These params should come from the caller of this modal
-      // applicationLogs need to be stored manually. See here for implementation https://stackoverflow.com/questions/9097424/logging-data-on-device-and-retrieving-the-log/41741076#41741076
-
-      API.errorReport(name: name, email: email, errorMessage: "", additionalDetails: additionalDetails, ffprobeOutput: "", applicationLogs: "") { responseData, errorMessage in
-        
-        if errorMessage != nil {
-          // TODO: Show error message
-          return
-        }
-        
-        // Uppdate notice text
-        self.updateNotice(.sent)
-        // TODO: Clear contact form. That should also allow us to remove the archiveDuplicate logic
-      }
-      
-      if shouldSendAppLogs { print("ALL LOGS: \(appLogs)\n---") }
+      self.updateProgressBar(.hide) // Hide progressBar
+      self.updateNotice(.sent)      // Update noticeText
+      self.closeWindowWithSuccess() // Close window with success alert
     }
   }
   
+  func updateProgressBar(_ display: ObjectDisplay) {
+    switch display {
+    case .hide:
+      self.indeterminateProgressBar.isHidden = true
+      self.indeterminateProgressBar.stopAnimation(self)
+      enableAllFields()
+    case .show:
+      indeterminateProgressBar.isHidden = false
+      indeterminateProgressBar.startAnimation(self)
+      disableAllFields()
+    }
+  }
+  
+  func enableAllFields() {
+    toggleFieldsAreEnabled(true)
+  }
+  
+  func disableAllFields() {
+    toggleFieldsAreEnabled(false)
+    
+    // Resign all fields on disable
+    DispatchQueue.main.async {
+      self.view.window?.makeFirstResponder(nil)
+    }
+  }
+  
+  func toggleFieldsAreEnabled(_ state: Bool) {
+    nameField.isEnabled = state
+    emailField.isEnabled = state
+    appLogsCheckbox.isEnabled = state
+    if state { messageField.alphaValue = 1 }
+    else { messageField.alphaValue = 0.3 }
+    //messageField.isSelectable = state
+    sendButton.isEnabled = state
+  }
+  
+  var closeWindowWasCalled = false  // Ensure this function is only called once
+  func closeWindowWithSuccess() {
+    if !closeWindowWasCalled {
+      closeWindowWasCalled = true
+      DispatchQueue.main.async {
+        self.view.window?.windowController?.close()
+        self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
+      }
+    }
+  }
+  
+  func control(_ control: NSControl, textShouldBeginEditing fieldEditor: NSText) -> Bool {
+    updateNotice(.hide)
+    return true
+  }
+  
+  func textDidBeginEditing(_ notification: Notification) {
+    updateNotice(.hide)
+  }
+  
+  func updateNotice(withMessage: String) {
+    noticeText.isHidden = false
+    noticeText.textColor = .systemRed
+    noticeText.stringValue = withMessage
+  }
   
   func updateNotice(_ status: NoticeToggle) {
     noticeText.isHidden = status.hidden
