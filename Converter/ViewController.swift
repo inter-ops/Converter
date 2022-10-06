@@ -209,11 +209,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         return
       }
       
-      // TODO: Uncomment
-//      if inputFileUrl!.path == outputFileUrl!.path {
-//        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
-//        return
-//      }
+      if inputFileUrl!.path == outputFileUrl!.path {
+        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
+        return
+      }
       
       startConversion()
       actionButton.title = "Stop"
