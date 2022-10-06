@@ -31,6 +31,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     debugMenu.isHidden = !Config.shared.debug
     debugMenu.isEnabled = Config.shared.debug
+    
+    Logger.initFfmpegLogs()
   }
   
   // Handles Reopening of Main Window

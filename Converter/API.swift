@@ -8,7 +8,7 @@
 import Foundation
 
 func sendPostRequest(url: String, data: Dictionary<String, AnyObject>, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
-  print("Sending POST request")
+  Logger.debug("Sending POST request")
   
   var request = URLRequest(url: URL(string: url)!)
   request.httpMethod = "POST"
@@ -32,7 +32,7 @@ func sendPostRequest(url: String, data: Dictionary<String, AnyObject>, completio
         jsonData = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, AnyObject>
       } catch {
         // TODO: Report error, this should never happen
-        print("Error with deserializing response data \(error)")
+        Logger.error("Error with deserializing response data \(error)")
         return completion(jsonData, "Something went wrong, please try again.")
       }
     }
@@ -44,6 +44,7 @@ func sendPostRequest(url: String, data: Dictionary<String, AnyObject>, completio
       else {
         // TODO: Report error
         // This means an error occurred but wasn't formatted by our backend error formatter, so likely caused at the GCP level.
+        Logger.error("Unknown error returned from API: \(jsonData)")
         return completion(jsonData, "Something went wrong, please try again.")
       }
     }
@@ -62,8 +63,11 @@ struct API {
     sendPostRequest(url: Constants.API.contactFormUrl, data: params, completion: completion)
   }
   
-  static func errorReport(name: String, email: String, errorMessage: String, additionalDetails: String, ffprobeOutput: String, applicationLogs: String?, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
-    let params = ["name":name, "email":email, "errorMessage": errorMessage, "additionalDetails": additionalDetails, "ffprobeOutput": ffprobeOutput, "applicationLogs": applicationLogs] as Dictionary<String, AnyObject>
+  static func errorReport(name: String, email: String, additionalDetails: String, ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, applicationLogs: String?, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
+    // TODO: Sanitize once merged in with justins changes
+    
+    // TODO: input and output file extension
+    let params = ["name":name, "email":email, "additionalDetails": additionalDetails, "ffmpegCommand": ffmpegCommand, "ffmpegSessionLogs": ffmpegSessionLogs,  "ffprobeOutput": ffprobeOutput, "applicationLogs": applicationLogs] as Dictionary<String, AnyObject>
     
     sendPostRequest(url: Constants.API.errorReportUrl, data: params, completion: completion)
   }

@@ -78,7 +78,7 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
     
     updateProgressBar(.show)
     
-    API.errorReport(name: name, email: email, errorMessage: sanitizedErrorMessage, additionalDetails: additionalDetails, ffprobeOutput: sanitizedFfprobeOutput, applicationLogs: "") { responseData, errorMessage in
+    API.errorReport(name: name, email: email, additionalDetails: additionalDetails, ffmpegCommand: "", ffmpegSessionLogs: "", ffprobeOutput: sanitizedFfprobeOutput, applicationLogs: "") { responseData, errorMessage in
       
       if errorMessage != nil {
         self.updateNotice(withMessage: errorMessage!)
