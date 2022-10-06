@@ -35,10 +35,11 @@ extension ViewController {
         let inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
         let outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
         
-        let applicationLogs = Logger.getLogEntries() // array.joined(separator: ", ")
+        let applicationLogs = Logger.getAllEntriesAsString()
         // TODO: Open ReportErrorViewController, pass sanitizedErrorMessage, sanitizedFfprobeOutput, sanitizedFfmpegCommand, inputExtension, outputExtension to it
         
-//        AppLogs.mostRecent = messageBody
+        print("applicationLogs:\n\(applicationLogs)")
+        
       }
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
         print("User did dismiss error message")
