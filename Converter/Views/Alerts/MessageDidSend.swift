@@ -19,8 +19,7 @@ extension ViewController {
     a.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
       
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
-        print("User did dismiss message")
-        
+        Logger.debug("User did dismiss message")
       }
       
     })
