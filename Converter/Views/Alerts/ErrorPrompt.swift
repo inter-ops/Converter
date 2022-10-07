@@ -7,14 +7,10 @@
 
 import Cocoa
 
-func sanitizeFilePaths(textToSanitize: String, inputFilePath: String, outputFilePath: String) -> String {
-  return textToSanitize.replacingOccurrences(of: inputFilePath, with: "<input-path>").replacingOccurrences(of: outputFilePath, with: "<output-path>")
-}
-
 extension ViewController {
   
   /// Alert user of an error that occured, with the option of forwarding to devs
-  func unexpectedErrorAlert(withErrorMessage: String, withFfprobeOutput: String, withFfmpegCommand: String, inputFilePath: String, outputFilePath: String) {
+  func unexpectedErrorAlert(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
     let a = NSAlert()
     a.messageText = "An error occured"
     a.informativeText = "There was a problem converting your file. Would you like to send this error to the dev team?"
@@ -26,23 +22,12 @@ extension ViewController {
       
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
         Logger.debug("User did choose to send error message")
-        let sanitizedErrorMessage = sanitizeFilePaths(textToSanitize: withErrorMessage, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: withFfprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        let inputExtension = URL(fileURLWithPath: inputFilePath).pathExtension
-        let outputExtension = URL(fileURLWithPath: outputFilePath).pathExtension
-
-        let applicationLogs = Logger.getLogsAsString()
-        
-        // TODO: Ensure right params
-        
-        self.segueToErrorReport(errorMessage: sanitizedErrorMessage, ffprobeOutput: sanitizedFfprobeOutput, ffmpegCommand: sanitizedFfmpegCommand, inputExtension: inputExtension, outputExtension: outputExtension)
+        self.segueToErrorReport(ffmpegCommand: ffmpegCommand, ffmpegSessionLogs: ffmpegSessionLogs, ffprobeOutput: ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
       }
       
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
         Logger.debug("User did dismiss error message")
       }
-      
     })
   }
   
@@ -102,15 +87,17 @@ extension ViewController {
   /// Calls sample alertErrorPrompt() with error output for: unavailable input channels
   @IBAction func triggerAlertErrorTestAction(_ sender: NSMenuItem) {
     let a = AlertErrorTest.self
-    unexpectedErrorAlert(withErrorMessage: a.errorMessage, withFfprobeOutput: a.ffprobeOutput, withFfmpegCommand: a.ffmpegCommand, inputFilePath: "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm", outputFilePath: "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4")
+    unexpectedErrorAlert(ffmpegCommand: a.ffmpegCommand, ffmpegSessionLogs: a.ffmpegSessionLogs, ffprobeOutput: a.ffprobeOutput, inputFilePath: a.inputFilePath, outputFilePath: a.outputFilePath)
   }
 }
 
 struct AlertErrorTest {
+  static let inputFilePath = "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm"
+  static let outputFilePath = "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4"
   static let ffmpegCommand = """
   -hide_banner -loglevel error -y -i "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm" -filter_complex "channelmap=channel_layout=5.1" -c:a aac -c:v libx264 -preset veryfast -crf 26 -c:s mov_text "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4"
   """
-  static let errorMessage = """
+  static let ffmpegSessionLogs = """
   [Parsed_channelmap_0 @ 0x7fb71b812410] input channel #2 not available from input layout 'stereo'
   [Parsed_channelmap_0 @ 0x7fb71b812410] input channel #3 not available from input layout 'stereo'
   [Parsed_channelmap_0 @ 0x7fb71b812410] input channel #4 not available from input layout 'stereo'

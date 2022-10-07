@@ -14,12 +14,12 @@ enum WindowSegues: String, CaseIterable {
 
 extension ViewController {
   
-  func segueToErrorReport(errorMessage: String, ffprobeOutput: String, ffmpegCommand: String, inputExtension: String, outputExtension: String) {
-    DraftError.sanitizedErrorMessage = errorMessage
-    DraftError.sanitizedFfprobeOutput = ffprobeOutput
-    DraftError.sanitizedFfmpegCommand = ffmpegCommand
-    DraftError.inputExtension = inputExtension
-    DraftError.outputExtension = outputExtension
+  func segueToErrorReport(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
+    DraftError.ffmpegCommand = ffmpegCommand
+    DraftError.ffprobeOutput = ffprobeOutput
+    DraftError.ffmpegSessionLogs = ffmpegSessionLogs
+    DraftError.inputFilePath = inputFilePath
+    DraftError.outputFilePath = outputFilePath
     segue(.showReportError)
   }
   
@@ -33,18 +33,18 @@ extension ViewController {
     // Called upon window segue showReportError
     if (segue.identifier == WindowSegues.showReportError.rawValue) {
       if let reportErrorWC = segue.destinationController as? ReportErrorWindowController {
-        reportErrorWC.passErrorData(errorMessage: DraftError.sanitizedErrorMessage, ffprobeOutput: DraftError.sanitizedFfprobeOutput, ffmegCommand: DraftError.sanitizedFfmpegCommand, inExtension: DraftError.inputExtension, outExtension: DraftError.outputExtension)
+        reportErrorWC.passErrorData(ffmpegCommand: DraftError.ffmpegCommand, ffmpegSessionLogs: DraftError.ffmpegSessionLogs, ffprobeOutput: DraftError.ffprobeOutput, inputFilePath: DraftError.inputFilePath, outputFilePath: DraftError.outputFilePath)
       }
     }
     
   }
   
   struct DraftError {
-    static var sanitizedErrorMessage = ""
-    static var sanitizedFfprobeOutput = ""
-    static var sanitizedFfmpegCommand = ""
-    static var inputExtension = ""
-    static var outputExtension = ""
+    static var ffmpegCommand = ""
+    static var ffmpegSessionLogs = ""
+    static var ffprobeOutput = ""
+    static var inputFilePath = ""
+    static var outputFilePath = ""
   }
   
 }

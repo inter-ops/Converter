@@ -16,9 +16,11 @@ func sendPostRequest(url: String, data: Dictionary<String, AnyObject>, completio
   request.addValue("application/json", forHTTPHeaderField: "Content-Type")
   
   let task = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+    Logger.debug("Received an API response")
     
     // This occurs if the dataTask fails to execute (eg network cuts out or is too slow).
     if error != nil {
+      Logger.error("Data task failed to execute")
       return completion(nil, error!.localizedDescription)
     }
     
@@ -63,14 +65,26 @@ struct API {
     sendPostRequest(url: Constants.API.contactFormUrl, data: params, completion: completion)
   }
   
-  static func errorReport(name: String, email: String, additionalDetails: String, ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, applicationLogs: String?, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
-    // TODO: Sanitize once merged in with justins changes
+  static func errorReport(name: String, email: String, additionalDetails: String, ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, applicationLogs: String?, inputFilePath: String, outputFilePath: String, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
     
-    // TODO: input and output file extension
-    let params = ["name":name, "email":email, "additionalDetails": additionalDetails, "ffmpegCommand": ffmpegCommand, "ffmpegSessionLogs": ffmpegSessionLogs,  "ffprobeOutput": ffprobeOutput, "applicationLogs": applicationLogs] as Dictionary<String, AnyObject>
+    let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: ffmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+    let sanitizedFfmpegSessionLogs = sanitizeFilePaths(textToSanitize: ffmpegSessionLogs, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+    let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+    
+    let sanitizedApplicationLogs = applicationLogs != nil ? sanitizeFilePaths(textToSanitize: applicationLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath) : nil
+      
+    let inputFileExtension = URL(fileURLWithPath: inputFilePath).pathExtension
+    let outputFileExtension = URL(fileURLWithPath: outputFilePath).pathExtension
+    
+    let params = ["name":name, "email":email, "additionalDetails": additionalDetails, "ffmpegCommand": sanitizedFfmpegCommand, "ffmpegSessionLogs": sanitizedFfmpegSessionLogs, "ffprobeOutput": sanitizedFfprobeOutput, "applicationLogs": sanitizedApplicationLogs, "inputFileExtension": inputFileExtension, "outputFileExtension": outputFileExtension] as Dictionary<String, AnyObject>
     
     sendPostRequest(url: Constants.API.errorReportUrl, data: params, completion: completion)
   }
+}
+
+// This should be moved to a util if it needs to be used elsewhere.
+func sanitizeFilePaths(textToSanitize: String, inputFilePath: String, outputFilePath: String) -> String {
+  return textToSanitize.replacingOccurrences(of: inputFilePath, with: "{{ input-path }}").replacingOccurrences(of: outputFilePath, with: "{{ output-path }}")
 }
 
 

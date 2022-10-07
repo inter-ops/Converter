@@ -26,11 +26,11 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
   @IBOutlet weak var sendButton: NSButton!
   @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
   
-  var sanitizedErrorMessage: String = ""
-  var sanitizedFfprobeOutput: String = ""
-  var sanitizedFfmpegCommand: String = ""
-  var inputExtension: String = ""
-  var outputExtension: String = ""
+  var ffmpegCommand: String = ""
+  var ffmpegSessionLogs: String = ""
+  var ffprobeOutput: String = ""
+  var inputFilePath: String = ""
+  var outputFilePath: String = ""
   
   let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
@@ -45,12 +45,12 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
     messageField.delegate = self
   }
   
-  func passErrorData(errorMessage: String, ffprobeOutput: String, ffmegCommand: String, inExtension: String, outExtension: String) {
-    sanitizedErrorMessage = errorMessage
-    sanitizedFfprobeOutput = ffprobeOutput
-    sanitizedFfmpegCommand = ffmegCommand
-    inputExtension = inExtension
-    outputExtension = outExtension
+  func setErrorData(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
+    self.ffmpegCommand = ffmpegCommand
+    self.ffmpegSessionLogs = ffmpegSessionLogs
+    self.ffprobeOutput = ffprobeOutput
+    self.inputFilePath = inputFilePath
+    self.outputFilePath = outputFilePath
   }
   
   @IBAction func sendButtonAction(_ sender: NSButton) {
@@ -73,12 +73,11 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
   }
   
   func sendMessage(name: String, email: String, additionalDetails: String, shouldSendAppLogs: Bool) {
-    // TODO: Application Logs:
-    // applicationLogs need to be stored manually. See here for implementation https://stackoverflow.com/questions/9097424/logging-data-on-device-and-retrieving-the-log/41741076#41741076
-    
     updateProgressBar(.show)
     
-    API.errorReport(name: name, email: email, additionalDetails: additionalDetails, ffmpegCommand: "", ffmpegSessionLogs: "", ffprobeOutput: sanitizedFfprobeOutput, applicationLogs: "") { responseData, errorMessage in
+    let applicationLogs = shouldSendAppLogs ? Logger.getLogsAsString() : nil
+    
+    API.errorReport(name: name, email: email, additionalDetails: additionalDetails, ffmpegCommand: self.ffmpegCommand, ffmpegSessionLogs: self.ffmpegSessionLogs, ffprobeOutput: self.ffprobeOutput, applicationLogs: applicationLogs, inputFilePath: self.inputFilePath, outputFilePath: self.outputFilePath) { responseData, errorMessage in
       
       if errorMessage != nil {
         self.updateNotice(withMessage: errorMessage!)

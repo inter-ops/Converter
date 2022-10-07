@@ -15,9 +15,10 @@ class ReportErrorWindowController: NSWindowController, NSWindowDelegate {
     self.window?.delegate = self
   }
   
-  func passErrorData(errorMessage: String, ffprobeOutput: String, ffmegCommand: String, inExtension: String, outExtension: String) {
+
+  func passErrorData(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
     let viewController = window?.contentViewController as? ReportErrorViewController
-    viewController?.passErrorData(errorMessage: errorMessage, ffprobeOutput: ffprobeOutput, ffmegCommand: ffmegCommand, inExtension: inExtension, outExtension: outExtension)
+    viewController?.setErrorData(ffmpegCommand: ffmpegCommand, ffmpegSessionLogs: ffmpegSessionLogs, ffprobeOutput: ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
   }
   
 }

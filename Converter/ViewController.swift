@@ -209,10 +209,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         return
       }
       
-      if inputFileUrl!.path == outputFileUrl!.path {
-        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
-        return
-      }
+//      if inputFileUrl!.path == outputFileUrl!.path {
+//        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
+//        return
+//      }
       
       startConversion()
       actionButton.title = "Stop"
@@ -256,14 +256,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         else if returnCode!.isValueError() {
           self.updateProgressBar(value: 100)
           self.estimatedTimeText.stringValue = "Error ⛔️"
-          
-          // TODO: This now returns all logs from the session, since we dont use -loglevel error anymore. If we want only capture the error,
-          // we will need to filter out error logs from this (not trivial). Could always take the last few lines of logs from session.getAllLogs() but
-          // we risk leaving out some error info.
-          let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
-          
+
+          let ffmpegSessionLogs = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
-          self.unexpectedErrorAlert(withErrorMessage: errorMessage, withFfprobeOutput: ffprobeOutput, withFfmpegCommand: self.ffmpegCommand!, inputFilePath: self.inputFileUrl!.path, outputFilePath: self.outputFileUrl!.path)
+          
+          self.unexpectedErrorAlert(ffmpegCommand: self.ffmpegCommand!, ffmpegSessionLogs: ffmpegSessionLogs, ffprobeOutput: ffprobeOutput, inputFilePath: self.inputFileUrl!.path, outputFilePath: self.outputFileUrl!.path)
         }
         else {
           self.updateProgressBar(value: 100)
