@@ -54,9 +54,9 @@ class ContactViewController: NSViewController, NSTextViewDelegate, NSTextFieldDe
       updateNotice(.validEmail)
     } else {
       sendMessage(name: name, email: email, topic: topic, message: message)
+      updateNotice(.hide)
     }
     
-    updateNotice(.hide)
   }
   
   func sendMessage(name: String, email: String, topic: String, message: String) {

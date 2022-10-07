@@ -67,9 +67,9 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
       updateNotice(.validEmail)
     } else {
       sendMessage(name: name, email: email, additionalDetails: additionalDetails, shouldSendAppLogs: shouldSendAppLogs)
+      updateNotice(.hide)
     }
     
-    updateNotice(.hide)
   }
   
   func sendMessage(name: String, email: String, additionalDetails: String, shouldSendAppLogs: Bool) {
