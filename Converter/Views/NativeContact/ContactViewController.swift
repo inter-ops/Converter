@@ -53,8 +53,8 @@ class ContactViewController: NSViewController, NSTextViewDelegate, NSTextFieldDe
     } else if !isValidEmail {
       updateNotice(.validEmail)
     } else {
-      sendMessage(name: name, email: email, topic: topic, message: message)
       updateNotice(.hide)
+      sendMessage(name: name, email: email, topic: topic, message: message)
     }
     
   }

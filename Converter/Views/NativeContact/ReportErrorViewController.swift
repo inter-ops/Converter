@@ -66,8 +66,8 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
     if !isValidEmail {
       updateNotice(.validEmail)
     } else {
-      sendMessage(name: name, email: email, additionalDetails: additionalDetails, shouldSendAppLogs: shouldSendAppLogs)
       updateNotice(.hide)
+      sendMessage(name: name, email: email, additionalDetails: additionalDetails, shouldSendAppLogs: shouldSendAppLogs)
     }
     
   }
