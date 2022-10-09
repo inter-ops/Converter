@@ -17,6 +17,6 @@ func convertToSubtitleCodec(inputCodec: String) -> SubtitleCodec {
   }
   
   // TODO: Report this to us so that we can add a case for it
-  print("Unknown input subtitle codec \(inputCodec)")
+  Logger.warning("Unknown input subtitle codec \(inputCodec)")
   return .unknown
 }

@@ -7,21 +7,30 @@
 
 import Cocoa
 
-class ContactViewController: NSViewController, NSTextViewDelegate {
+class ContactViewController: NSViewController, NSTextViewDelegate, NSTextFieldDelegate {
   
   @IBOutlet weak var nameField: NSTextField!
   @IBOutlet weak var emailField: NSTextField!
   @IBOutlet weak var topicDropdown: NSPopUpButton!
   @IBOutlet weak var messageField: NSTextView!
   @IBOutlet weak var noticeText: NSTextField!
+  @IBOutlet weak var sendButton: NSButton!
+  @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
   
   let topics = ["Feedback", "Bug Report", "Feature Request", "Other"]
+  
+  let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
   override func viewDidLoad() {
     super.viewDidLoad()
     initTopicDropdownMenu()
     updateNotice(.hide)
+    updateProgressBar(.hide)
     messageField.font = .systemFont(ofSize: NSFont.systemFontSize)
+    
+    nameField.delegate = self
+    emailField.delegate = self
+    messageField.delegate = self
   }
   
   func initTopicDropdownMenu() {
@@ -44,31 +53,95 @@ class ContactViewController: NSViewController, NSTextViewDelegate {
     } else if !isValidEmail {
       updateNotice(.validEmail)
     } else {
+      updateNotice(.hide)
       sendMessage(name: name, email: email, topic: topic, message: message)
+    }
+    
+  }
+  
+  func sendMessage(name: String, email: String, topic: String, message: String) {
+    
+    updateProgressBar(.show)
+    
+    API.contactForm(name: name, email: email, topic: topic, message: message) { responseData, errorMessage in
+      
+      if errorMessage != nil {
+        self.updateNotice(withMessage: errorMessage!)
+        self.updateProgressBar(.hide)   // Stop progressBar animation and enable all fields
+        return
+      }
+      
+      self.updateProgressBar(.hide) // Hide progressBar
+      self.updateNotice(.sent)      // Update noticeText
+      self.closeWindowWithSuccess() // Close window with success alert
     }
   }
   
-  var archiveDuplicate: [String] = []
-  func sendMessage(name: String, email: String, topic: String, message: String) {
-    if archiveDuplicate == [name, email, topic, message] {
-      // Don't send duplicate emails
-    } else {
-      archiveDuplicate = [name, email, topic, message]
-      // TODO: Send email
-      let subject = "Video Converter: \(topic)"
-      let recipient = "\(name) (\(email))"
-      let messageBody = "\(message)"
-      
-      print("SEND EMAIL\n---\nRecipient: \(recipient)\nSubject: \(subject)\nMessage: \(messageBody)\n---")
-      // Uppdate notice text
-      updateNotice(.sent)
+  func updateProgressBar(_ display: ObjectDisplay) {
+    switch display {
+    case .hide:
+      self.indeterminateProgressBar.isHidden = true
+      self.indeterminateProgressBar.stopAnimation(self)
+      enableAllFields()
+    case .show:
+      indeterminateProgressBar.isHidden = false
+      indeterminateProgressBar.startAnimation(self)
+      disableAllFields()
     }
+  }
+  
+  func enableAllFields() {
+    toggleFieldsAreEnabled(true)
+  }
+  
+  func disableAllFields() {
+    toggleFieldsAreEnabled(false)
+    // Resign all fields on disable
+    DispatchQueue.main.async {
+      self.view.window?.makeFirstResponder(nil)
+    }
+  }
+  
+  func toggleFieldsAreEnabled(_ state: Bool) {
+    nameField.isEnabled = state
+    emailField.isEnabled = state
+    topicDropdown.isEnabled = state
+    if state { messageField.alphaValue = 1 }
+    else { messageField.alphaValue = 0.3 }
+    //messageField.isSelectable = state
+    sendButton.isEnabled = state
+  }
+  
+  var closeWindowWasCalled = false  // Ensure this function is only called once
+  func closeWindowWithSuccess() {
+    if !closeWindowWasCalled {
+      closeWindowWasCalled = true
+      DispatchQueue.main.async {
+        self.view.window?.windowController?.close()
+        self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
+      }
+    }
+  }
+  
+  func control(_ control: NSControl, textShouldBeginEditing fieldEditor: NSText) -> Bool {
+    updateNotice(.hide)
+    return true
+  }
+  
+  func textDidBeginEditing(_ notification: Notification) {
+    updateNotice(.hide)
   }
   
   @IBAction func resetButtonAction(_ sender: NSButton) {
     nameField.stringValue = ""
     emailField.stringValue = ""
     messageField.string = ""
+  }
+  
+  func updateNotice(withMessage: String) {
+    noticeText.isHidden = false
+    noticeText.textColor = .systemRed
+    noticeText.stringValue = withMessage
   }
   
   func updateNotice(_ status: NoticeToggle) {

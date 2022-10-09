@@ -16,25 +16,47 @@ struct AppLogs {
   }
 }
 
-class ReportErrorViewController: NSViewController {
+class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFieldDelegate {
   
   @IBOutlet weak var nameField: NSTextField!
   @IBOutlet weak var emailField: NSTextField!
   @IBOutlet weak var messageField: NSTextView!
   @IBOutlet weak var appLogsCheckbox: NSButton!
   @IBOutlet weak var noticeText: NSTextField!
+  @IBOutlet weak var sendButton: NSButton!
+  @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
+  
+  var ffmpegCommand: String = ""
+  var ffmpegSessionLogs: String = ""
+  var ffprobeOutput: String = ""
+  var inputFilePath: String = ""
+  var outputFilePath: String = ""
+  
+  let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
   override func viewDidLoad() {
     super.viewDidLoad()
     updateNotice(.hide)
+    updateProgressBar(.hide)
     messageField.font = .monospacedSystemFont(ofSize: 13, weight: .medium)
+    
+    nameField.delegate = self
+    emailField.delegate = self
+    messageField.delegate = self
   }
   
+  func setErrorData(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
+    self.ffmpegCommand = ffmpegCommand
+    self.ffmpegSessionLogs = ffmpegSessionLogs
+    self.ffprobeOutput = ffprobeOutput
+    self.inputFilePath = inputFilePath
+    self.outputFilePath = outputFilePath
+  }
   
   @IBAction func sendButtonAction(_ sender: NSButton) {
     let name = nameField.stringValue
     let email = emailField.stringValue
-    let message = messageField.string
+    let additionalDetails = messageField.string
     let shouldSendAppLogs = appLogsCheckbox.state == .on
     
     let emailPattern = #"^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$"#
@@ -44,42 +66,92 @@ class ReportErrorViewController: NSViewController {
     if !isValidEmail {
       updateNotice(.validEmail)
     } else {
-      sendMessage(name: name, email: email, message: message, shouldSendAppLogs: shouldSendAppLogs)
+      updateNotice(.hide)
+      sendMessage(name: name, email: email, additionalDetails: additionalDetails, shouldSendAppLogs: shouldSendAppLogs)
     }
+    
   }
   
-  var archiveDuplicate: [String] = []
-  func sendMessage(name: String, email: String, message: String, shouldSendAppLogs: Bool) {
-    if archiveDuplicate == [name, email, message] {
-      // Don't send duplicate emails
-    } else {
-      archiveDuplicate = [name, email, message]
-      // TODO: Send email
-      let subject = "Video Converter: Error Report"
-      let recipient = "\(name) (\(email))"
-      let messageBody = "\(message)"
+  func sendMessage(name: String, email: String, additionalDetails: String, shouldSendAppLogs: Bool) {
+    updateProgressBar(.show)
+    
+    let applicationLogs = shouldSendAppLogs ? Logger.getLogsAsString() : nil
+    
+    API.errorReport(name: name, email: email, additionalDetails: additionalDetails, ffmpegCommand: self.ffmpegCommand, ffmpegSessionLogs: self.ffmpegSessionLogs, ffprobeOutput: self.ffprobeOutput, applicationLogs: applicationLogs, inputFilePath: self.inputFilePath, outputFilePath: self.outputFilePath) { responseData, errorMessage in
       
-      let reportedError = AppLogs.mostRecent
-      var appLogs = ""
-      
-      if shouldSendAppLogs {
-        for entry in AppLogs.currentSession {
-          appLogs.append(entry)
-          appLogs.append("\n\n=====\n\n")
-        }
+      if errorMessage != nil {
+        self.updateNotice(withMessage: errorMessage!)
+        self.updateProgressBar(.hide)   // Stop progressBar animation and enable all fields
+        return
       }
       
-      // TODO: Send email
-      
-      print("SEND EMAIL\n---\nRecipient: \(recipient)\nSubject: \(subject)\nMessage: \(messageBody)\n---")
-      print("ERROR:\n\(reportedError)\n---")
-      if shouldSendAppLogs { print("ALL LOGS: \(appLogs)\n---") }
-      
-      // Uppdate notice text
-      updateNotice(.sent)
+      self.updateProgressBar(.hide) // Hide progressBar
+      self.updateNotice(.sent)      // Update noticeText
+      self.closeWindowWithSuccess() // Close window with success alert
     }
   }
   
+  func updateProgressBar(_ display: ObjectDisplay) {
+    switch display {
+    case .hide:
+      self.indeterminateProgressBar.isHidden = true
+      self.indeterminateProgressBar.stopAnimation(self)
+      enableAllFields()
+    case .show:
+      indeterminateProgressBar.isHidden = false
+      indeterminateProgressBar.startAnimation(self)
+      disableAllFields()
+    }
+  }
+  
+  func enableAllFields() {
+    toggleFieldsAreEnabled(true)
+  }
+  
+  func disableAllFields() {
+    toggleFieldsAreEnabled(false)
+    
+    // Resign all fields on disable
+    DispatchQueue.main.async {
+      self.view.window?.makeFirstResponder(nil)
+    }
+  }
+  
+  func toggleFieldsAreEnabled(_ state: Bool) {
+    nameField.isEnabled = state
+    emailField.isEnabled = state
+    appLogsCheckbox.isEnabled = state
+    if state { messageField.alphaValue = 1 }
+    else { messageField.alphaValue = 0.3 }
+    //messageField.isSelectable = state
+    sendButton.isEnabled = state
+  }
+  
+  var closeWindowWasCalled = false  // Ensure this function is only called once
+  func closeWindowWithSuccess() {
+    if !closeWindowWasCalled {
+      closeWindowWasCalled = true
+      DispatchQueue.main.async {
+        self.view.window?.windowController?.close()
+        self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
+      }
+    }
+  }
+  
+  func control(_ control: NSControl, textShouldBeginEditing fieldEditor: NSText) -> Bool {
+    updateNotice(.hide)
+    return true
+  }
+  
+  func textDidBeginEditing(_ notification: Notification) {
+    updateNotice(.hide)
+  }
+  
+  func updateNotice(withMessage: String) {
+    noticeText.isHidden = false
+    noticeText.textColor = .systemRed
+    noticeText.stringValue = withMessage
+  }
   
   func updateNotice(_ status: NoticeToggle) {
     noticeText.isHidden = status.hidden

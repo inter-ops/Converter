@@ -24,6 +24,6 @@ func convertToChannelLayout(inputChannelLayout: String) -> ChannelLayout {
     }
   }
   
-  print("Unknown input channel layout")
+  Logger.warning("Unknown input channel layout")
   return .unknown
 }

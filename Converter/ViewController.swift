@@ -56,7 +56,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     let response = openPanel.runModal()
     if response == .OK {
       let path = openPanel.url?.path
-      print("path: \(String(describing: path))")
+      Logger.info("path: \(String(describing: path))")
       dragDropViewDidReceive(fileUrl: path!)
     }
   }
@@ -74,7 +74,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Handles all input file requests, checks for validity and adjust the dragDropView box to reflect any errors
   func dragDropViewDidReceive(fileUrl: String) {
-    print("dragDropViewDidReceive(fileUrl: \(fileUrl))")
+    Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
     inputFileUrl = fileUrl.fileURL.absoluteURL
     
@@ -136,7 +136,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Update outputFormat to selected item
     outputFormat = format
     
-    print("User did select \(format.rawValue)")
+    Logger.info("User did select \(format.rawValue)")
   }
   
   /// Calculates the video conversion progress in percentage.
@@ -205,7 +205,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       
       // Note that we check this after resetting the app state. This prevents the user from mistaking a previously shown "Done 🚀" message with the state of the canceled conversion. If we checked this before resetting the progress bar, a user may think the conversion they canceled was actually done, since the done message from the previous conversion would still be shown.
       if outputFileUrl == nil {
-        print("User canceled output file selection, skipping conversion")
+        Logger.warning("User canceled output file selection, skipping conversion")
         return
       }
       
@@ -256,11 +256,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         else if returnCode!.isValueError() {
           self.updateProgressBar(value: 100)
           self.estimatedTimeText.stringValue = "Error ⛔️"
-          
-          let errorMessage = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
-          print("Error message: \(errorMessage)")
+
+          let ffmpegSessionLogs = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
-          self.unexpectedErrorAlert(withErrorMessage: errorMessage, withFfprobeOutput: ffprobeOutput, withFfmpegCommand: self.ffmpegCommand!, inputFilePath: self.inputFileUrl!.path, outputFilePath: self.outputFileUrl!.path)
+          
+          self.unexpectedErrorAlert(ffmpegCommand: self.ffmpegCommand!, ffmpegSessionLogs: ffmpegSessionLogs, ffprobeOutput: ffprobeOutput, inputFilePath: self.inputFileUrl!.path, outputFilePath: self.outputFileUrl!.path)
         }
         else {
           self.updateProgressBar(value: 100)
@@ -357,7 +357,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         return format
       }
     }
-    print("Error, unable to read selected format type\nReturning default type: VideoFormat.mp4")
+    Logger.error("Unable to read selected format type\nReturning default type: VideoFormat.mp4")
     return .mp4
   }
   
@@ -451,6 +451,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Obj-C compatible function for dismissing supportedFormatsPopover from delegate
   func hideSupportedFormatsPopover() {
     hidePopover(supportedFormatsPopover)
+  }
+  func hideHelpInfoPopover() {
+    hidePopover(helpInfoPopover)
   }
   
 }
