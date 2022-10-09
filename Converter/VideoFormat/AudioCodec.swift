@@ -16,7 +16,6 @@ func convertToAudioCodec(inputCodec: String) -> AudioCodec {
     }
   }
   
-  // TODO: Report this to us so that we can add a case for it
-  print("Unknown input audio codec \(inputCodec)")
+  Logger.warning("Unknown input audio codec \(inputCodec)")
   return .unknown
 }

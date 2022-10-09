@@ -195,7 +195,7 @@ func buildVideo(withFfprobeOutput: String, inputFilePath: String) -> Video {
         let subtitleStream = SubtitleStream(ffprobeDict: dict)
         subtitleStreams.append(subtitleStream)
       default:
-        print("Unknown stream type \(streamType)")
+        Logger.error("Unknown stream type \(streamType)")
       }
     }
     else {

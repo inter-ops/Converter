@@ -130,6 +130,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     return "-vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
   default:
     // For unknown cases, we re-encode to H264
+    Logger.error("Unknown output file type when selecting video codec")
     return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
   }
 }
@@ -203,7 +204,7 @@ func getAudioConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
   case VideoFormat.webm.rawValue:
     return "-c:a libvorbis"
   default:
-    print("Unknown output file type when selecting audio codec")
+    Logger.error("Unknown output file type when selecting audio codec")
     return getAacConversionCommand(inputVideo: inputVideo)
   }
 }
@@ -229,7 +230,7 @@ func getSubtitleConversionCommand(inputVideo: Video, outputFilePath: String) -> 
   case VideoFormat.avi.rawValue:
     return "" // AVI does not support soft-subs.
   default:
-    print("Unknown output file type when selecting subtitle codec")
+    Logger.error("Unknown output file type when selecting subtitle codec")
     return ""
   }
   
@@ -241,15 +242,13 @@ func getFfmpegCommand(inputVideo: Video, outputFilePath: String) -> String {
   let audioCommand = getAudioConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
   
   let subtitleCommand = getSubtitleConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
-  let command = "-hide_banner -loglevel error -y -i \"\(inputVideo.filePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
   
   return command
 }
 
 func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> Void) -> FFmpegSession {
-  if Config.shared.debug {
-    print("Running FFMPEG command: \(command)")
-  }
+  Logger.info("Running FFMPEG command: \(command)")
   
   let session = FFmpegKit.executeAsync(command, withCompleteCallback: onDone)
   

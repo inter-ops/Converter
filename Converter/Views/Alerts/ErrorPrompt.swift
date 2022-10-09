@@ -7,14 +7,10 @@
 
 import Cocoa
 
-func sanitizeFilePaths(textToSanitize: String, inputFilePath: String, outputFilePath: String) -> String {
-  return textToSanitize.replacingOccurrences(of: inputFilePath, with: "<input-path>").replacingOccurrences(of: outputFilePath, with: "<output-path>")
-}
-
 extension ViewController {
   
   /// Alert user of an error that occured, with the option of forwarding to devs
-  func unexpectedErrorAlert(withErrorMessage: String, withFfprobeOutput: String, withFfmpegCommand: String, inputFilePath: String, outputFilePath: String) {
+  func unexpectedErrorAlert(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
     let a = NSAlert()
     a.messageText = "An error occured"
     a.informativeText = "There was a problem converting your file. Would you like to send this error to the dev team?"
@@ -23,24 +19,14 @@ extension ViewController {
     a.alertStyle = NSAlert.Style.critical
     
     a.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
+      
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
-        print("User did choose to send error message")
-        // Format message body and log contents to be used in email
-        let messageHeader = ErrorLogHeaders.messageHeader
-
-        let sanitizedErrorMessage = sanitizeFilePaths(textToSanitize: withErrorMessage, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: withFfprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: withFfmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-        
-        let messageBody = messageHeader + "Command: \(sanitizedFfmpegCommand)\n" + "Input extension: \(URL(fileURLWithPath: inputFilePath).pathExtension)\n" + "Output extension: \(URL(fileURLWithPath: outputFilePath).pathExtension)" + "\(ErrorLogHeaders.error)\(sanitizedErrorMessage)\(ErrorLogHeaders.ffprobe)\(sanitizedFfprobeOutput)"
-        // Compose mail client request with message and log contents
-        let service = NSSharingService(named: NSSharingService.Name.composeEmail)
-        service?.recipients = ["hello@airtv.io"]
-        service?.subject = "Help: Video Converter Error"
-        service?.perform(withItems: [messageBody])
+        Logger.debug("User did choose to send error message")
+        self.segueToErrorReport(ffmpegCommand: ffmpegCommand, ffmpegSessionLogs: ffmpegSessionLogs, ffprobeOutput: ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
       }
+      
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
-        print("User did dismiss error message")
+        Logger.debug("User did dismiss error message")
       }
     })
   }
@@ -101,15 +87,17 @@ extension ViewController {
   /// Calls sample alertErrorPrompt() with error output for: unavailable input channels
   @IBAction func triggerAlertErrorTestAction(_ sender: NSMenuItem) {
     let a = AlertErrorTest.self
-    unexpectedErrorAlert(withErrorMessage: a.errorMessage, withFfprobeOutput: a.ffprobeOutput, withFfmpegCommand: a.ffmpegCommand, inputFilePath: "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm", outputFilePath: "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4")
+    unexpectedErrorAlert(ffmpegCommand: a.ffmpegCommand, ffmpegSessionLogs: a.ffmpegSessionLogs, ffprobeOutput: a.ffprobeOutput, inputFilePath: a.inputFilePath, outputFilePath: a.outputFilePath)
   }
 }
 
 struct AlertErrorTest {
+  static let inputFilePath = "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm"
+  static let outputFilePath = "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4"
   static let ffmpegCommand = """
   -hide_banner -loglevel error -y -i "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm" -filter_complex "channelmap=channel_layout=5.1" -c:a aac -c:v libx264 -preset veryfast -crf 26 -c:s mov_text "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4"
   """
-  static let errorMessage = """
+  static let ffmpegSessionLogs = """
   [Parsed_channelmap_0 @ 0x7fb71b812410] input channel #2 not available from input layout 'stereo'
   [Parsed_channelmap_0 @ 0x7fb71b812410] input channel #3 not available from input layout 'stereo'
   [Parsed_channelmap_0 @ 0x7fb71b812410] input channel #4 not available from input layout 'stereo'
