@@ -6,7 +6,7 @@
 //
 
 enum AudioCodec: String, CaseIterable {
-  case aac, ac3, eac3, dts, truehd, mp3, flac, alac, pcm_alaw, pcm_mulaw, vorbis, unknown
+  case aac, ac3, eac3, dts, truehd, mp3, flac, alac, pcm_alaw, pcm_mulaw, vorbis, opus, unknown
 }
 
 func convertToAudioCodec(inputCodec: String) -> AudioCodec {

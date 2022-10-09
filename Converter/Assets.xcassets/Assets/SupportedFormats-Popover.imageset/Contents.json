@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Supported-Formats-Light.png",
+      "filename" : "Supported-Light.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,12 +12,12 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Supported-Formats-Dark.png",
+      "filename" : "Supported-Dark.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Supported-Formats-Light@2x.png",
+      "filename" : "Supported-Light@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -28,12 +28,12 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Supported-Formats-Dark@2x.png",
+      "filename" : "Supported-Dark@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Supported-Formats-Light@3x.png",
+      "filename" : "Supported-Light@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     },
@@ -44,7 +44,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Supported-Formats-Dark@3x.png",
+      "filename" : "Supported-Dark@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
