@@ -10,10 +10,10 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+  /// WindowController.window used to handle and present ViewController
   var mainWindow: NSWindow!
   
-  // Explicitly-defined MenuBar items
-  @IBOutlet weak var debugMenu: NSMenuItem!
+  // MARK: - AppDelegate Methods
   
   /// Called upon initial application launch
   func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -69,20 +69,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   
   
-  // Bring ViewController to front with success message
+  // MARK: - AppMenu Items
+  // Application MainMenu items that must be explicitly defined within AppDelegate
+  
+  /// **MainMenu:** `Debug`
+  @IBOutlet weak var debugMenu: NSMenuItem!
+  
+  
+  
+  // MARK: - Global Functions
+  
+  /// Presents mainWindow ViewController as key window, then calls `messageDidSentAlert()`
   func bringMainWindowToFrontWithMessageDidSendAlert() {
     mainWindow.makeKeyAndOrderFront(self)
     let viewController = mainWindow.contentViewController as? ViewController
     viewController?.messageDidSendAlert()
   }
-
-  var contactWindowController: NSWindowController?
+  
+  /// Presents ContactWindow from the AppDelegate hierarchy and subsequentially dismisses the HelpInfo popover
   func showContactWindow() {
     let viewController = mainWindow.contentViewController as? ViewController
     viewController?.hideHelpInfoPopover()
     let sb = NSStoryboard(name: "Main", bundle: nil)
-    contactWindowController = sb.instantiateController(withIdentifier: "ContactWindowControllerID") as? NSWindowController
+    let contactWindowController = sb.instantiateController(withIdentifier: "ContactWindowControllerID") as? NSWindowController
     contactWindowController?.showWindow(self)
   }
+  
   
 }

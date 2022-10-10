@@ -7,7 +7,7 @@
 
 import Cocoa
 
-// MARK: Debug AppMenu Items
+// MARK: Debug Menu Items
 // MenuBar items accessible from anywhere within the app (non-window specific)
 
 extension AppDelegate {

@@ -7,7 +7,7 @@
 
 import Cocoa
 
-// MARK: Global AppMenu Items
+// MARK: Global Menu Items
 // MenuBar items accessible from anywhere within the app (non-window specific)
 
 extension AppDelegate {
@@ -15,7 +15,7 @@ extension AppDelegate {
   // MARK: - File Menu
   /// Presents to front `mainWindow` and calls `openFileBrowser()` from `ViewController`
   ///
-  /// **MenuBar:** `File > Open...`
+  /// **MainMenu:** `File > Open...`
   @IBAction func openWindowFileMenu(_ sender: NSMenuItem) {
     mainWindow.makeKeyAndOrderFront(self)
     // Open File
@@ -28,7 +28,7 @@ extension AppDelegate {
   // MARK: - Window Menu
   /// Presents to front `mainWindow`
   ///
-  /// **MenuBar:** `Window > Open Video Converter`
+  /// **MainMenu:** `Window > Open Video Converter`
   @IBAction func openMainWindowMenu(_ sender: NSMenuItem) {
     mainWindow.makeKeyAndOrderFront(self)
   }
