@@ -11,46 +11,38 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
 
   var mainWindow: NSWindow!
+  
+  // Explicitly-defined MenuBar items
   @IBOutlet weak var debugMenu: NSMenuItem!
-
-  @IBAction func openMainWindowMenu(_ sender: NSMenuItem) {
-    mainWindow.makeKeyAndOrderFront(self)
-  }
+  //weak var viewController: NSViewController?
   
-  @IBAction func openWindowFileMenu(_ sender: NSMenuItem) {
-    mainWindow.makeKeyAndOrderFront(self)
-    // Open File
-    let viewController = self.mainWindow.contentViewController as? ViewController
-    viewController?.openFileBrowser()
-  }
-  
+  /// Called upon initial application launch
   func applicationDidFinishLaunching(_ aNotification: Notification) {
-    // Insert code here to initialize your application
+    /// Set mainWindow as initial window presented
     mainWindow = NSApplication.shared.windows[0]
     NSApp.activate(ignoringOtherApps: true)
-    
-    debugMenu.isHidden = !Config.shared.debug
-    debugMenu.isEnabled = Config.shared.debug
-    
+    /// Initialize Debug menu
+    initDebugMenu()
+    /// Initialize Logger
     Logger.initFfmpegLogs()
   }
   
-  // Handles Reopening of Main Window
+  /// Called upon request to reactivate NSApp from an inactive state (ie. clicking the app from the dock)
   func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+    /// If the app has no visible windows, open `mainWindow`
     if !flag {
       mainWindow.makeKeyAndOrderFront(self)
     }
     return true
   }
   
-  var openAppWithFilePath: String? = nil
   var mainViewHasAppeared = false
-  
+  var openAppWithFilePath: String? = nil
   // Handles the dropping of a video file onto the App icon
   func application(_ sender: NSApplication, openFile filename: String) -> Bool {
     // Checks to see if the mainView has initialized display
     if mainViewHasAppeared {
-      let viewController = self.mainWindow.contentViewController as? ViewController
+      let viewController = mainWindow.contentViewController as? ViewController
       viewController?.dragDropViewDidReceive(fileUrl: filename)
       mainWindow.makeKeyAndOrderFront(self)
     } else {
@@ -68,16 +60,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
   
+  
+  
   // Bring ViewController to front with success message
   func bringMainWindowToFrontWithMessageDidSendAlert() {
     mainWindow.makeKeyAndOrderFront(self)
-    let viewController = self.mainWindow.contentViewController as? ViewController
+    let viewController = mainWindow.contentViewController as? ViewController
     viewController?.messageDidSendAlert()
   }
 
   var contactWindowController: NSWindowController?
   func showContactWindow() {
-    let viewController = self.mainWindow.contentViewController as? ViewController
+    let viewController = mainWindow.contentViewController as? ViewController
     viewController?.hideHelpInfoPopover()
     let sb = NSStoryboard(name: "Main", bundle: nil)
     contactWindowController = sb.instantiateController(withIdentifier: "ContactWindowControllerID") as? NSWindowController
@@ -85,11 +79,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
   
 }
-
-// TODO: Replace with Environment PR
-// MARK: Preprocessor Debug
-#if DEBUG
-let debug = true
-#else
-let debug = false
-#endif
