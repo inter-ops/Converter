@@ -14,7 +14,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   // Explicitly-defined MenuBar items
   @IBOutlet weak var debugMenu: NSMenuItem!
-  //weak var viewController: NSViewController?
   
   /// Called upon initial application launch
   func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -29,31 +28,39 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   /// Called upon request to reactivate NSApp from an inactive state (ie. clicking the app from the dock)
   func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-    /// If the app has no visible windows, open `mainWindow`
+    /// If the app has no visible windows, present `mainWindow`
     if !flag {
       mainWindow.makeKeyAndOrderFront(self)
     }
     return true
   }
   
+  /// Flag to determine if mainWindow ViewController has loaded to the point of accepting call requests
   var mainViewHasAppeared = false
+  /// String path of the input file, requested to be open with mainWindow ViewController, if applicable
   var openAppWithFilePath: String? = nil
-  // Handles the dropping of a video file onto the App icon
+  /// Handles the opening of the app with an input file, see below
+  ///
+  /// Called regardless of the application's current status (opened/closed) and includes, but is not limited to, such states:
+  ///  * From Finder, right-click input file, `Open With... > [this application]`
+  ///  * Dragging and dropping an input file onto the application icon in dock
   func application(_ sender: NSApplication, openFile filename: String) -> Bool {
-    // Checks to see if the mainView has initialized display
+    /// If the mainWindow ViewController has been loaded and is able to accept calls from AppDelegate
     if mainViewHasAppeared {
+      /// Load the input file request and bring the mainWindow to front
       let viewController = mainWindow.contentViewController as? ViewController
       viewController?.dragDropViewDidReceive(fileUrl: filename)
       mainWindow.makeKeyAndOrderFront(self)
     } else {
-      // Otherwise, set String flag for opening once mainView hasAppeared
+      /// Otherwise, set the String path of the input file for handling by the mainWindow ViewController once it is ready
       openAppWithFilePath = filename
     }
     return true
   }
 
+  ///Called upon application's request to terminate (ie. `App > Quit App`)
   func applicationWillTerminate(_ aNotification: Notification) {
-    // Insert code here to tear down your application
+    Logger.debug("Application is expected to terminate")
   }
 
   func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
