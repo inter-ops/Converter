@@ -8,7 +8,7 @@
 import Cocoa
 
 // MARK: Global Menu Items
-// MenuBar items accessible from anywhere within the app (non-window specific)
+// MainMenu items accessible from anywhere within the app (non-window specific)
 
 extension AppDelegate {
   
