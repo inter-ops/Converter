@@ -475,8 +475,4 @@ enum ConversionState {
   case converting
 }
 
-extension String {
-  var fileURL: URL { return URL(fileURLWithPath: self) }
-  var pathExtension: String { return fileURL.pathExtension.lowercased() }
-  var lastPathComponent: String { return fileURL.lastPathComponent }
-}
+

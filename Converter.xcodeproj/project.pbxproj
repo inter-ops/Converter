@@ -35,6 +35,7 @@
 		79D95A8B28E8C3660023BECE /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D95A8A28E8C3660023BECE /* API.swift */; };
 		79F0029C28EF46D400AD93BB /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F0029B28EF46D400AD93BB /* Date.swift */; };
 		C21CC16C28EC920700176A98 /* MessageDidSend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21CC16B28EC920700176A98 /* MessageDidSend.swift */; };
+		C22287A528F498F400137473 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22287A428F498F400137473 /* String+Extensions.swift */; };
 		C22A4EF328F47AFD0050D739 /* AppMenu+Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */; };
 		C22A4EF528F47FB60050D739 /* AppMenu+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A4EF428F47FB60050D739 /* AppMenu+Debug.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
@@ -100,6 +101,7 @@
 		79D95A8A28E8C3660023BECE /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		79F0029B28EF46D400AD93BB /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		C21CC16B28EC920700176A98 /* MessageDidSend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDidSend.swift; sourceTree = "<group>"; };
+		C22287A428F498F400137473 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppMenu+Global.swift"; sourceTree = "<group>"; };
 		C22A4EF428F47FB60050D739 /* AppMenu+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppMenu+Debug.swift"; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
@@ -148,9 +150,18 @@
 		79F0029A28EF46C700AD93BB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				C22287A328F4988900137473 /* Extensions */,
 				79F0029B28EF46D400AD93BB /* Date.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		C22287A328F4988900137473 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C22287A428F498F400137473 /* String+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		C22A4EF128F47A930050D739 /* AppMenu */ = {
@@ -366,6 +377,7 @@
 				C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */,
 				7908E48728AAAFB500B02512 /* Conversion.swift in Sources */,
 				799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */,
+				C22287A528F498F400137473 /* String+Extensions.swift in Sources */,
 				C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */,
 				C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */,
 				C274CDEB28E5E274005BCE22 /* ContactViewController.swift in Sources */,
