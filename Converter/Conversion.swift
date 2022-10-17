@@ -25,8 +25,11 @@ import ffmpegkit
  */
 
 /// Building FFMPEG
-/// Bare minimum package requirements are "--xcframework --enable-x264 --enable-gpl --enable-libvpx --enable-libvorbis", but we ran into "unknown encoder" errors with certain input videos.
-/// Currently built with the following: "--xcframework  --enable-gpl  --enable-x264 --enable-x265  --enable-xvidcore --enable-macos-zlib  --enable-macos-audiotoolbox --enable-macos-avfoundation  --enable-macos-bzip2  --enable-macos-videotoolbox --enable-macos-libiconv    --enable-macos-coreimage --enable-macos-opencl  --enable-macos-opengl   --enable-chromaprint --enable-fontconfig --enable-freetype   --enable-fribidi --enable-gmp   --enable-kvazaar  --enable-lame  --enable-libaom  --enable-libass --enable-libilbc  --enable-libtheora     --enable-libvorbis  --enable-libvpx  --enable-libxml2  --enable-opencore-amr  --enable-openh264  --enable-openssl     --enable-opus        --enable-sdl --enable-shine  --enable-snappy    --enable-soxr   --enable-speex  --enable-srt --enable-twolame    --enable-vo-amrwbenc      --enable-zimg". This is every non-GPL library other than webp (libgif failed building), tesseract (libgif failed building), gnutls (gnutls failed building), dav1d (failed building), and every GPL library other than rubberband & libvidstab (unnecessary).
+
+/// Currently built with the following: "--xcframework  --enable-macos-zlib  --enable-macos-audiotoolbox --enable-macos-avfoundation  --enable-macos-bzip2  --enable-macos-videotoolbox --enable-macos-libiconv    --enable-macos-coreimage --enable-macos-opencl  --enable-macos-opengl   --enable-chromaprint --enable-fontconfig --enable-freetype   --enable-fribidi --enable-gmp   --enable-kvazaar  --enable-lame  --enable-libaom  --enable-libass --enable-libilbc  --enable-libtheora     --enable-libvorbis  --enable-libvpx  --enable-libxml2  --enable-opencore-amr  --enable-openh264  --enable-openssl     --enable-opus        --enable-sdl --enable-shine  --enable-snappy    --enable-soxr   --enable-speex  --enable-srt --enable-twolame    --enable-vo-amrwbenc      --enable-zimg". This is every non-GPL library other than webp (libgif failed building), tesseract (libgif failed building), gnutls (gnutls failed building), dav1d (failed building), and every GPL library other than rubberband & libvidstab (unnecessary).
+/// NOTE: Bare minimum package requirements are "--xcframework --enable-libvpx --enable-libvorbis", but we ran into "unknown encoder" errors with certain input videos.
+/// NOTE: If we want to go back to use x264, x265 and xvid, we need to add "--enable-gpl  --enable-x264 --enable-xvidcore"
+
 
 
 // TODO: Convert this to a VideoFormat type so that we don't need to use .rawValue everywhere
@@ -42,10 +45,11 @@ func getFileName(filePath: String) -> String {
 
 // TODO: Create a readme for this documentation after refactor is done on this file.
 
-// TODO: This is a temporary func to test libopenh264
-func getCommandFor264(inputVideo: Video) -> String {
-//  return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
-  return "-c:v libopenh264 -preset veryfast -pix_fmt yuv420p -profile high -b:v \(inputVideo.bitRate)"
+// TODO: See if we can use video stream bitrate instead of entire file bitrate, or what the difference even is.
+
+func getVideoCommandForH264(inputVideo: Video) -> String {
+  // TODO: Test HEVC, see if we need to double bitrate
+  return "-c:v h264_videotoolbox -b:v \(inputVideo.bitRate) -pix_fmt yuv420p"
 }
 
 /// Get the video portion of the ffmpeg command.
@@ -80,39 +84,38 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     // If input file is WEBM, we re-encode to H264
     if inputFileType == VideoFormat.webm.rawValue {
 //      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
-      return getCommandFor264(inputVideo: inputVideo)
+      return getVideoCommandForH264(inputVideo: inputVideo)
     }
     
     // If input file is GIF, we re-encode to H264 and ensure the dimensions are divisible by 2. See https://unix.stackexchange.com/a/294892
     if inputFileType == VideoFormat.gif.rawValue || inputVideoCodec == VideoCodec.gif {
       // Note that this command works for most use cases, but odd cases (such as really low FPS & frame number gifs, eg https://github.com/cyburgee/ffmpeg-guide/blob/master/321.gif) will trip up VLC and stop too early.
       // If we are having issues with this, review the method outlined here: https://github.com/cyburgee/ffmpeg-guide I already tried integrating this but found that using fps=source_fps wouldn't fix the issue, the FPS had to be increased. I don't want to screw with FPS too much for now unless we see this become a problem in the wild.
-      return "\(getCommandFor264(inputVideo: inputVideo)) -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
+      return "\(getVideoCommandForH264(inputVideo: inputVideo)) -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
     }
     
     // If input codec is ProRes or unknown, we re-encode to H264
     if inputVideoCodec == VideoCodec.prores || inputVideoCodec == VideoCodec.unknown {
-//      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
-      return getCommandFor264(inputVideo: inputVideo)
+      return getVideoCommandForH264(inputVideo: inputVideo)
     }
     
     // If input codec is HEVC, we re-encode to H264 and 8-bit colour to ensure QuickTime support
     // https://superuser.com/questions/1380946/how-do-i-convert-10-bit-h-265-hevc-videos-to-h-264-without-quality-loss
     if inputVideoCodec == VideoCodec.hevc {
-//      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
-      return getCommandFor264(inputVideo: inputVideo)
+      return getVideoCommandForH264(inputVideo: inputVideo)
     }
     
     // MOV does not support xvid, so we need to re-encode to H264
     if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
-//      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
-      return getCommandFor264(inputVideo: inputVideo)
+      return getVideoCommandForH264(inputVideo: inputVideo)
     }
     
     // For everything else, we copy video codec since it should be supported.
     // TODO: There could still be some cases where this is not true, need to do more testing, or selectively chose when we can support copying based on input codecs.
+    
+    // TODO: Uncomment line below BEFORE MERGING!!!!!!!! This allows us to test conversions which would otherwise remux
 //    return "-c:v copy"
-    return getCommandFor264(inputVideo: inputVideo)
+    return getVideoCommandForH264(inputVideo: inputVideo)
     
   case VideoFormat.avi.rawValue:
     if inputVideoCodec == VideoCodec.mpeg4 {
@@ -142,8 +145,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
   default:
     // For unknown cases, we re-encode to H264
     Logger.error("Unknown output file type when selecting video codec")
-//    return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
-    return getCommandFor264(inputVideo: inputVideo)
+    return getVideoCommandForH264(inputVideo: inputVideo)
   }
 }
 
