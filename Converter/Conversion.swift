@@ -48,9 +48,8 @@ func getFileName(filePath: String) -> String {
 
 // TODO: See if we can use video stream bitrate instead of entire file bitrate, or what the difference even is.
 
-func getVideoCommandForH264(inputVideo: Video) -> String {
-  // TODO: Test HEVC, see if we need to double bitrate
-  return "-c:v h264_videotoolbox -b:v \(inputVideo.bitRate) -pix_fmt yuv420p"
+func getVideoCommandForH264(bitRate: Int) -> String {
+  return "-c:v h264_videotoolbox -b:v \(bitRate) -pix_fmt yuv420p"
 }
 
 /// Get the video portion of the ffmpeg command.
@@ -73,42 +72,43 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     // - https://superuser.com/questions/556463/converting-video-to-webm-with-ffmpeg-avconv
     // - https://superuser.com/a/1280369
     
+    let outputBitrate = inputVideoCodec == VideoCodec.hevc ? inputBitRate * 2 : inputBitRate
     if inputFileType == VideoFormat.gif.rawValue || inputVideoCodec == VideoCodec.gif {
       // This command is identical to the one below, but uses 8-bit color, which is required for gif inputs
-      return "-c:v libvpx -b:v \(inputBitRate) -deadline good -cpu-used 2 -crf 5 -pix_fmt yuv420p"
+      return "-c:v libvpx -b:v \(outputBitrate) -deadline good -cpu-used 2 -crf 5 -pix_fmt yuv420p"
     }
     else {
-      return "-c:v libvpx -b:v \(inputBitRate) -deadline good -cpu-used 2 -crf 5"
+      return "-c:v libvpx -b:v \(outputBitrate) -deadline good -cpu-used 2 -crf 5"
     }
   
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
     // If input file is WEBM, we re-encode to H264
     if inputFileType == VideoFormat.webm.rawValue {
-//      return "-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p"
-      return getVideoCommandForH264(inputVideo: inputVideo)
+      return getVideoCommandForH264(bitRate: inputVideo.bitRate)
     }
     
     // If input file is GIF, we re-encode to H264 and ensure the dimensions are divisible by 2. See https://unix.stackexchange.com/a/294892
     if inputFileType == VideoFormat.gif.rawValue || inputVideoCodec == VideoCodec.gif {
       // Note that this command works for most use cases, but odd cases (such as really low FPS & frame number gifs, eg https://github.com/cyburgee/ffmpeg-guide/blob/master/321.gif) will trip up VLC and stop too early.
       // If we are having issues with this, review the method outlined here: https://github.com/cyburgee/ffmpeg-guide I already tried integrating this but found that using fps=source_fps wouldn't fix the issue, the FPS had to be increased. I don't want to screw with FPS too much for now unless we see this become a problem in the wild.
-      return "\(getVideoCommandForH264(inputVideo: inputVideo)) -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
+      return "\(getVideoCommandForH264(bitRate: inputVideo.bitRate)) -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
     }
     
     // If input codec is ProRes or unknown, we re-encode to H264
     if inputVideoCodec == VideoCodec.prores || inputVideoCodec == VideoCodec.unknown {
-      return getVideoCommandForH264(inputVideo: inputVideo)
+      return getVideoCommandForH264(bitRate: inputVideo.bitRate)
     }
     
-    // If input codec is HEVC, we re-encode to H264 and 8-bit colour to ensure QuickTime support
+    // If input codec is HEVC, we re-encode to H264 and 8-bit colour to ensure QuickTime support, and need to double bitrate
     // https://superuser.com/questions/1380946/how-do-i-convert-10-bit-h-265-hevc-videos-to-h-264-without-quality-loss
     if inputVideoCodec == VideoCodec.hevc {
-      return getVideoCommandForH264(inputVideo: inputVideo)
+      // We need to multiply bitrate by 2 to maintain similar quality when going from HEVC -> H264
+      return getVideoCommandForH264(bitRate: inputVideo.bitRate * 2)
     }
     
     // MOV does not support xvid, so we need to re-encode to H264
     if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
-      return getVideoCommandForH264(inputVideo: inputVideo)
+      return getVideoCommandForH264(bitRate: inputVideo.bitRate)
     }
     
     // For everything else, we copy video codec since it should be supported.
@@ -116,7 +116,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     
     // TODO: Uncomment line below BEFORE MERGING!!!!!!!! This allows us to test conversions which would otherwise remux
 //    return "-c:v copy"
-    return getVideoCommandForH264(inputVideo: inputVideo)
+    return getVideoCommandForH264(bitRate: inputVideo.bitRate)
     
   case VideoFormat.avi.rawValue:
     if inputVideoCodec == VideoCodec.mpeg4 {
@@ -125,13 +125,12 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     
     // AVI conversion docs: https://trac.ffmpeg.org/wiki/Encode/MPEG-4
     
-    // If this command ever causes problems, try https://stackoverflow.com/questions/3212821/animated-gif-to-avi-on-linux https://www.linuxquestions.org/questions/linux-software-2/converting-animated-gif-to-avi-ffmpeg-549839/#edit2729743
-    if inputFileType == VideoFormat.gif.rawValue || inputVideoCodec == VideoCodec.gif {
-      // libxvid throws errors for GIF inputs, so we use the native mpeg4 encoder instead.
-      return "-c:v mpeg4 -vtag xvid -qscale:v 5 -pix_fmt yuv420p"
-    }
+    // NOTE: In the past we used "-c:v libxvid -qscale:v 5" but libxvid is a GPL library so we switched to the native encoder.
+    // If we want to swtich back to libxvid, we still need to use the native encoder for GIF inputs since libxvid throws unknown errors.
     
-    return "-c:v libxvid -qscale:v 5"
+    // If this command ever causes problems for GIF, try https://stackoverflow.com/questions/3212821/animated-gif-to-avi-on-linux https://www.linuxquestions.org/questions/linux-software-2/converting-animated-gif-to-avi-ffmpeg-549839/#edit2729743
+    
+    return "-c:v mpeg4 -vtag xvid -qscale:v 5 -pix_fmt yuv420p"
   case VideoFormat.gif.rawValue:
     // Gif conversion resources:
     // https://superuser.com/a/556031
@@ -146,7 +145,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
   default:
     // For unknown cases, we re-encode to H264
     Logger.error("Unknown output file type when selecting video codec")
-    return getVideoCommandForH264(inputVideo: inputVideo)
+    return getVideoCommandForH264(bitRate: inputVideo.bitRate)
   }
 }
 
