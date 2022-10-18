@@ -18,20 +18,11 @@
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mQA-4g-ndO">
-                    <rect key="frame" x="18" y="176" width="204" height="128"/>
+                    <rect key="frame" x="18" y="148" width="204" height="150"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" selectable="YES" id="t8h-KC-BQO">
-                        <font key="font" metaFont="system"/>
-                        <string key="title">Video Converter is a light, yet powerful program that can convert with universal encodings, with a special bit of care given toward Apple-friendly formats. For this reason, x264 is currently our default output type.</string>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qXc-j8-N0a">
-                    <rect key="frame" x="18" y="85" width="204" height="64"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" selectable="YES" title="Have a desired feature in mind? Or did you find a bug? Let us know! All feedback is greatly appreciated." id="LoY-dm-LqE">
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="system" size="12"/>
+                        <string key="title">Video Converter is a powerful tool focused on optimizing conversion speed and compatibility while maintaining video quality. Media streams are only re-encoded when necessary; in most cases they are copied losslessly (remuxed). This results in conversion speeds and output qualities far exceeding alternative converters.</string>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -52,8 +43,17 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="SupportedFormats-Popover" id="Nt3-KO-pWJ"/>
                 </imageView>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qXc-j8-N0a">
+                    <rect key="frame" x="18" y="83" width="204" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" selectable="YES" title="Have a desired feature in mind? Or did you find a bug? Let us know! All feedback is greatly appreciated." id="LoY-dm-LqE">
+                        <font key="font" metaFont="system" size="12"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
-            <point key="canvasLocation" x="-317" y="148.5"/>
+            <point key="canvasLocation" x="-317" y="148"/>
         </view>
     </objects>
     <resources>
