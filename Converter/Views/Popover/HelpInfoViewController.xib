@@ -13,23 +13,24 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <view id="JnG-cl-jqe">
-            <rect key="frame" x="0.0" y="0.0" width="240" height="470"/>
+        <view misplaced="YES" id="JnG-cl-jqe">
+            <rect key="frame" x="0.0" y="0.0" width="249" height="441"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mQA-4g-ndO">
-                    <rect key="frame" x="18" y="148" width="204" height="150"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="mQA-4g-ndO">
+                    <rect key="frame" x="18" y="145" width="213" height="135"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="209" id="YXp-es-Su1"/>
+                    </constraints>
                     <textFieldCell key="cell" selectable="YES" id="t8h-KC-BQO">
                         <font key="font" metaFont="system" size="12"/>
-                        <string key="title">Video Converter is a powerful tool focused on optimizing conversion speed and compatibility while maintaining video quality. Media streams are only re-encoded when necessary; in most cases they are copied losslessly (remuxed). This results in conversion speeds and output qualities far exceeding alternative converters.</string>
+                        <string key="title">Video Converter is a powerful tool focused on optimizing conversion speed and compatibility while maintaining video quality. Media streams are only re-encoded when necessary; in most cases, they are copied losslessly (remuxed). This results in performance that far exceeds that of alternate converters.</string>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TZd-bg-uVg">
-                    <rect key="frame" x="49" y="26" width="142" height="32"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TZd-bg-uVg">
+                    <rect key="frame" x="54" y="23" width="142" height="32"/>
                     <buttonCell key="cell" type="push" title="Contact the Team" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KR8-da-MPx">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -38,14 +39,16 @@
                         <action selector="contactButtonActionWithSender:" target="-2" id="VtA-Jk-fIK"/>
                     </connections>
                 </button>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjX-lv-JTr">
-                    <rect key="frame" x="0.0" y="305" width="240" height="165"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sjX-lv-JTr">
+                    <rect key="frame" x="5" y="288" width="240" height="165"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="240" id="HT6-7M-AFh"/>
+                        <constraint firstAttribute="height" constant="165" id="Sf0-7n-old"/>
+                    </constraints>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="SupportedFormats-Popover" id="Nt3-KO-pWJ"/>
                 </imageView>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qXc-j8-N0a">
-                    <rect key="frame" x="18" y="83" width="204" height="45"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="qXc-j8-N0a">
+                    <rect key="frame" x="18" y="80" width="213" height="45"/>
                     <textFieldCell key="cell" selectable="YES" title="Have a desired feature in mind? Or did you find a bug? Let us know! All feedback is greatly appreciated." id="LoY-dm-LqE">
                         <font key="font" metaFont="system" size="12"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -53,7 +56,20 @@
                     </textFieldCell>
                 </textField>
             </subviews>
-            <point key="canvasLocation" x="-317" y="148"/>
+            <constraints>
+                <constraint firstItem="mQA-4g-ndO" firstAttribute="top" secondItem="sjX-lv-JTr" secondAttribute="bottom" constant="8" symbolic="YES" id="HOL-Ql-gHh"/>
+                <constraint firstItem="TZd-bg-uVg" firstAttribute="top" secondItem="qXc-j8-N0a" secondAttribute="bottom" constant="30" id="Hhs-4t-d9r"/>
+                <constraint firstItem="sjX-lv-JTr" firstAttribute="centerX" secondItem="JnG-cl-jqe" secondAttribute="centerX" id="Iso-E0-DJG"/>
+                <constraint firstAttribute="trailing" secondItem="qXc-j8-N0a" secondAttribute="trailing" constant="20" symbolic="YES" id="Ukz-J2-LPj"/>
+                <constraint firstItem="mQA-4g-ndO" firstAttribute="leading" secondItem="JnG-cl-jqe" secondAttribute="leading" constant="20" symbolic="YES" id="eeq-gd-lHd"/>
+                <constraint firstItem="TZd-bg-uVg" firstAttribute="centerX" secondItem="JnG-cl-jqe" secondAttribute="centerX" id="f9Z-hx-6jx"/>
+                <constraint firstAttribute="bottom" secondItem="TZd-bg-uVg" secondAttribute="bottom" constant="30" id="gfV-0s-x0Y"/>
+                <constraint firstAttribute="trailing" secondItem="mQA-4g-ndO" secondAttribute="trailing" constant="20" symbolic="YES" id="kKb-FG-5Cs"/>
+                <constraint firstItem="qXc-j8-N0a" firstAttribute="leading" secondItem="JnG-cl-jqe" secondAttribute="leading" constant="20" symbolic="YES" id="llG-Kn-bPp"/>
+                <constraint firstItem="qXc-j8-N0a" firstAttribute="top" secondItem="mQA-4g-ndO" secondAttribute="bottom" constant="20" id="mzk-nk-Moz"/>
+                <constraint firstItem="sjX-lv-JTr" firstAttribute="top" secondItem="JnG-cl-jqe" secondAttribute="top" id="yeF-DQ-f7X"/>
+            </constraints>
+            <point key="canvasLocation" x="-317.5" y="148"/>
         </view>
     </objects>
     <resources>
