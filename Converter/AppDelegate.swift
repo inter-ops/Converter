@@ -86,6 +86,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     viewController?.messageDidSendAlert()
   }
   
+  func bringMainWindowToFront() {
+    mainWindow.makeKeyAndOrderFront(self)
+    let viewController = mainWindow.contentViewController as? ViewController
+  }
+  
   /// Presents ContactWindow from the AppDelegate hierarchy and subsequentially dismisses the HelpInfo popover
   func showContactWindow() {
     let viewController = mainWindow.contentViewController as? ViewController

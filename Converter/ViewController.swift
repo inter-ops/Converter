@@ -45,6 +45,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     hidePopover(helpInfoPopover)
   }
   
+  @IBAction func expandPremiumWindow(_ sender: NSButton) {
+    let randomWindowNumber = Int.random(in: 0...1)
+    
+    if randomWindowNumber == 0 {
+      performSegue(withIdentifier: "showLargeWindow", sender: self)
+    } else {
+      performSegue(withIdentifier: "showCompactWindow", sender: self)
+    }
+    
+    self.view.window?.windowController?.close()
+  }
+  
+  @IBAction func returnToMain(_ sender: NSButton) {
+    self.view.window?.windowController?.close()
+    
+    appDelegate.bringMainWindowToFront()
+    self.view.window?.windowController?.close()
+    
+  }
+  
   func openFileBrowser() {
     let openPanel = NSOpenPanel()
     
