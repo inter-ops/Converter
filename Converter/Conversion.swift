@@ -42,14 +42,17 @@ func getFileName(filePath: String) -> String {
   return URL(fileURLWithPath: filePath).lastPathComponent
 }
 
-// TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases. For testing video quality output, see here: https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
+// TODO: Write a testing suite for comparing conversion speed and output qualities of different commands. This will help us fine tune the FFMPEG commands to be ideal for common use cases. For testing video quality output, see here:
+// - https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
+// - https://netflixtechblog.com/vmaf-the-journey-continues-44b51ee9ed12
+
 
 // TODO: Create a readme for this documentation after refactor is done on this file.
 
 // TODO: See if we can use video stream bitrate instead of entire file bitrate, or what the difference even is.
 
 func getVideoCommandForH264(bitRate: Int) -> String {
-  return "-c:v h264_videotoolbox -b:v \(bitRate) -pix_fmt yuv420p"
+  return "-c:v h264_videotoolbox -b:v \(bitRate) -pix_fmt yuv420p -allow_sw 1"
 }
 
 /// Get the video portion of the ffmpeg command.
