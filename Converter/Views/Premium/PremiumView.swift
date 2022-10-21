@@ -9,6 +9,13 @@ import Cocoa
 
 extension ViewController {
   
+  /// Updates PremiumView with updated options per output format if premium
+  func didSelectNewOutput(format: VideoFormat) {
+    if isPremiumEnabled {
+      initCodecDropdownMenu(forFormat: format)
+    }
+  }
+  
   /// Initialize dropdown menu with titles (see `VideoFormat.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
     codecDropdown.removeAllItems()
