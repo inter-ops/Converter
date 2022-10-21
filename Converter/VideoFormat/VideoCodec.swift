@@ -6,7 +6,7 @@
 //
 
 enum VideoCodec: String, CaseIterable {
-  case h264, hevc, vp8, vp9, mpeg1video, mpeg2video, mpeg4, prores, gif, unknown
+  case hevc, h264, vp8, vp9, mpeg1video, mpeg2video, mpeg4, prores, gif, unknown
   
   var dropdownTitle: String {
     switch self {
