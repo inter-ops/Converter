@@ -32,6 +32,7 @@ enum VideoFormat: String, CaseIterable {
     }
   }
   
+  // Order listed here will determine dropdown order. Thus, keep default options at 0 index.
   var compatibleCodecs: [VideoCodec] {
     switch self {
     case .mp4: return [.h264, .hevc, .mpeg4]
