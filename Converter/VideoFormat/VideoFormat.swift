@@ -26,9 +26,21 @@ enum VideoFormat: String, CaseIterable {
     case .mkv: return "MKV"
     case .m4v: return "M4V"
     case .mov: return "MOV"
-    case .avi: return "AVI"
     case .webm: return "WEBM"
+    case .avi: return "AVI"
     case .gif: return "GIF"
+    }
+  }
+  
+  var compatibleCodecs: [VideoCodec] {
+    switch self {
+    case .mp4: return [.h264, .hevc, .mpeg4]
+    case .mkv: return [.h264, .hevc, .mpeg4, .vp8, .vp9]
+    case .m4v: return [.h264, .hevc, .mpeg4]
+    case .mov: return [.h264, .hevc, .mpeg4]
+    case .webm: return [.vp8, .vp9]
+    case .avi: return [.mpeg4]
+    case .gif: return [.gif]
     }
   }
   
