@@ -91,6 +91,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       }
       self.appDelegate.mainViewHasAppeared = true
     }
+    
+    // TODO: Uncomment PremiumView display:
+    //initPremiumView()
   }
   
   /// Handles all input file requests, checks for validity and adjust the dragDropView box to reflect any errors

@@ -9,6 +9,49 @@ import Cocoa
 
 extension ViewController {
   
+  func initPremiumView() {
+    
+    if isPremiumEnabled {
+      enablePremiumView()
+      expandPremiumDisplay()
+      
+    } else {
+      disablePremiumView()
+      collapsePremiumDisplay()
+      
+    }
+  }
+  
+  func expandPremiumDisplay() {
+    // expandPremiumView(withAnimation:)
+  }
+  
+  func collapsePremiumDisplay() {
+    // collapsePremiumView(withAnimation:)
+  }
+  
+  func enablePremiumView() {
+    codecDropdown.isEnabled = true
+    gpuCheckbox.isEnabled = true
+    //qualitySlider.isEnabled = true
+    qualityDropdown.isEnabled = true
+    includeAllAudioCheckbox.isEnabled = true
+    includeAllSubtitlesCheckbox.isEnabled = true
+    burnInSubtitleCheckbox.isEnabled = true
+    burnInSubtitleDropdown.isEnabled = true
+  }
+  
+  func disablePremiumView() {
+    codecDropdown.isEnabled = false
+    gpuCheckbox.isEnabled = false
+    //qualitySlider.isEnabled = false
+    qualityDropdown.isEnabled = false
+    includeAllAudioCheckbox.isEnabled = false
+    includeAllSubtitlesCheckbox.isEnabled = false
+    burnInSubtitleCheckbox.isEnabled = false
+    burnInSubtitleDropdown.isEnabled = false
+  }
+  
   /// Updates PremiumView with updated options per output format if premium
   func didSelectNewOutput(format: VideoFormat) {
     if isPremiumEnabled {
@@ -25,11 +68,9 @@ extension ViewController {
   
   /// Return VideoFormat title strings as an array for dropdown presentation
   func getCodecDropdownTitles(forFormat: VideoFormat) -> [String] {
-
     for codec in forFormat.compatibleCodecs {
       codecTitles.append(codec.dropdownTitle)
     }
-    
     return codecTitles
   }
   
