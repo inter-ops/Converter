@@ -12,14 +12,14 @@ extension ViewController {
   /// Initialize dropdown menu with titles (see `VideoFormat.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
     codecDropdown.removeAllItems()
-    codecDropdown.addItems(withTitles: getCodecDropdownTitles(format: forFormat))
+    codecDropdown.addItems(withTitles: getCodecDropdownTitles(forFormat: forFormat))
   }
   
   
   /// Return VideoFormat title strings as an array for dropdown presentation
-  func getCodecDropdownTitles(format: VideoFormat) -> [String] {
+  func getCodecDropdownTitles(forFormat: VideoFormat) -> [String] {
 
-    for codec in format.compatibleCodecs {
+    for codec in forFormat.compatibleCodecs {
       codecTitles.append(codec.dropdownTitle)
     }
     
