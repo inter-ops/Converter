@@ -19,6 +19,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var estimatedTimeText: NSTextField!
   @IBOutlet weak var estimatedTimeLabel: NSTextField!
   
+  @IBOutlet weak var expandCollapsePremiumViewButton: NSButton!
+  
   // DragDropView objects
   @IBOutlet weak var dragDropView: NSImageView!
   @IBOutlet weak var dragDropTopTitle: NSTextField!
