@@ -7,16 +7,6 @@
 
 let supportedInputFormats = ["mp4", "mkv", "m4v", "mov", "webm", "avi", "gif"]
 
-// TODO: Naming is confusing between Format and VideoFormat, should clean this file up.
-// We should use a separate list for allowed input formats and allowed output formats
-
-struct Format {
-  static func isSupportedAsInput(_ input: String) -> Bool {
-    let ext = input.lowercased().pathExtension
-    return supportedInputFormats.contains(ext)
-  }
-}
-
 enum VideoFormat: String, CaseIterable {
   case mp4, mkv, m4v, mov, webm, avi, gif
   
@@ -43,6 +33,11 @@ enum VideoFormat: String, CaseIterable {
     case .avi: return [.mpeg4]
     case .gif: return [.gif]
     }
+  }
+  
+  static func isSupportedAsInput(_ input: String) -> Bool {
+    let ext = input.lowercased().pathExtension
+    return supportedInputFormats.contains(ext)
   }
   
 }
