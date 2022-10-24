@@ -10,11 +10,16 @@ import ffmpegkit
 
 class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
+  /// Temp workable premium flag
+  var isPremiumEnabled = false
+  
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
   @IBOutlet weak var actionButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
   @IBOutlet weak var estimatedTimeLabel: NSTextField!
+  
+  @IBOutlet weak var expandCollapsePremiumViewButton: NSButton!
   
   // DragDropView objects
   @IBOutlet weak var dragDropView: NSImageView!
@@ -22,6 +27,23 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
   @IBOutlet weak var clearInputFileButton: NSButton!
   
+  // PremiumView: Video
+  @IBOutlet weak var premiumView: NSView!
+  @IBOutlet weak var codecDropdown: NSPopUpButton!
+  @IBOutlet weak var gpuCheckbox: NSButton!
+  //@IBOutlet weak var qualitySlider: NSSlider!
+  @IBOutlet weak var qualityDropdown: NSPopUpButton!
+  // PremiumView: Audio
+  @IBOutlet weak var includeAllAudioCheckbox: NSButton!
+  // PremiumView: Subtitles
+  @IBOutlet weak var includeAllSubtitlesCheckbox: NSButton!
+  @IBOutlet weak var burnInSubtitleCheckbox: NSButton!
+  @IBOutlet weak var burnInSubtitleDropdown: NSPopUpButton!
+  
+  // PremiumView variables
+  var codecTitles: [String] = []
+  
+  // MainView variables
   var outputFormat: VideoFormat = .mp4   // Default output format
   var inputFileUrl: URL?
   var outputFileUrl: URL?
@@ -71,6 +93,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       }
       self.appDelegate.mainViewHasAppeared = true
     }
+    
+    // TODO: Uncomment PremiumView display:
+    //initPremiumView()
   }
   
   /// Handles all input file requests, checks for validity and adjust the dragDropView box to reflect any errors
