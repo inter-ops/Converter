@@ -66,40 +66,40 @@ func getOutputBitrateForH264(inputVideo: Video) -> String {
   let maxWidth240p = 380 // Regular width: 320
   
   // Resource for values:
-  // - Defaults of Handbrake
+  // - Defaults of Handbrake & manual testing
   // - https://slhck.info/video/2017/02/24/crf-guide.html (For CRF 20, which is what we used to use with libx264)
   // - https://netflixtechblog.com/per-title-encode-optimization-7e99442b62a2
   // - https://netflixtechblog.com/optimized-shot-based-encodes-for-4k-now-streaming-47b516b10bbb
   if inputWidth > maxWidth1080p {
     // 2016p
-    return "12M"
+    return "16M"
   }
   else if inputWidth > maxWidth720p {
     // 1080p
-    return "6M"
+    return "8M"
   }
   else if inputWidth > maxWidth480p {
     // 720p
-    return "3M"
+    return "4M"
   }
   else if inputWidth > maxWidth360p {
     // 576p or 480p
     if inputHeight > 540 {
       // We assume this means 576p
-      return "1.8M"
+      return "3M"
     }
     else {
       // 480p
-      return "1.5M"
+      return "2M"
     }
   }
   else if inputWidth > maxWidth240p {
     // 360p
-    return "750k"
+    return "1M"
   }
   else {
     // 240p
-    return "500k"
+    return "750k"
   }
 }
 
