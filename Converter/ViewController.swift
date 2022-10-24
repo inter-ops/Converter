@@ -104,7 +104,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     inputFileUrl = fileUrl.fileURL.absoluteURL
     
-    if Format.isSupportedAsInput(fileUrl) {
+    if VideoFormat.isSupportedAsInput(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
       displayClearButton(.show)
       
