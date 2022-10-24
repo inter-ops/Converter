@@ -21,6 +21,7 @@ import ffmpegkit
  - https://trac.ffmpeg.org/wiki/Encode/VP8
  - https://gist.github.com/jaydenseric/220c785d6289bcfd7366
  - https://wiki.archlinux.org/title/FFmpeg
+ - https://superuser.com/questions/1380946/how-do-i-convert-10-bit-h-265-hevc-videos-to-h-264-without-quality-loss
  - Filter docs: https://ffmpeg.org/ffmpeg.html#Simple-filtergraphs https://ffmpeg.org/ffmpeg-filters.html#Filtering-Introduction
  */
 
@@ -149,13 +150,9 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
       return getVideoCommandForH264(inputVideo: inputVideo)
     }
     
-    // If input codec is HEVC, we re-encode to H264 and 8-bit colour to ensure QuickTime support, and need to double bitrate
-    // https://superuser.com/questions/1380946/how-do-i-convert-10-bit-h-265-hevc-videos-to-h-264-without-quality-loss
+    // https://brandur.org/fragments/ffmpeg-h265
     if inputVideoCodec == VideoCodec.hevc {
-      // TODO: Remux here
-      // We need to multiply bitrate by 2 to maintain similar quality when going from HEVC -> H264
-      return getVideoCommandForH264(inputVideo: inputVideo)
-//      return getVideoCommandForH264(bitRate: inputVideo.bitRate * 2)
+      return "-c:v copy -tag:v hvc1"
     }
     
     // MOV does not support xvid, so we need to re-encode to H264
