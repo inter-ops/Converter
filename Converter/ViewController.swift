@@ -41,6 +41,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var burnInSubtitleCheckbox: NSButton!
   @IBOutlet weak var burnInSubtitleDropdown: NSPopUpButton!
   
+  // MARK: ViewConstraints
+  @IBOutlet weak var mainViewHeightConstraint: NSLayoutConstraint!
+  @IBOutlet weak var mainViewWidthConstraint: NSLayoutConstraint!
+  
   // PremiumView variables
   var codecTitles: [String] = []
   
@@ -61,6 +65,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Init view
     initDropdownMenu()
     displayClearButton(.hide)
+    // TODO: initPremiumView
+    //collapsePremiumView() //temp
   }
   
   override func viewDidDisappear() {

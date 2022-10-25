@@ -26,13 +26,23 @@ extension ViewController {
   func expandPremiumView() {
     // expandCollapsePremiumViewButton.image = "ArrowUpIcon"
     
-    // expandPremiumView(withAnimation:)
+    mainViewWidthConstraint.animator().constant = 600
+    mainViewHeightConstraint.animator().constant = 600
+    
+    // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
+    
+    // expandDragDropView()
   }
   
   func collapsePremiumView() {
     // expandCollapsePremiumViewButton.image = "ArrowDownIcon"
     
-    // collapsePremiumView(withAnimation:)
+    mainViewWidthConstraint.animator().constant = 350
+    mainViewHeightConstraint.animator().constant = 334
+    
+    // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
+    
+    //collapseDragDropView()
   }
   
   
