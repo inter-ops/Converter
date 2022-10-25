@@ -24,10 +24,14 @@ extension ViewController {
   }
   
   func expandPremiumView() {
+    // expandCollapsePremiumViewButton.image = "ArrowUpIcon"
+    
     // expandPremiumView(withAnimation:)
   }
   
   func collapsePremiumView() {
+    // expandCollapsePremiumViewButton.image = "ArrowDownIcon"
+    
     // collapsePremiumView(withAnimation:)
   }
   
