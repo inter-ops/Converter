@@ -1626,9 +1626,9 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AIm-Ie-9cQ">
-                                            <rect key="frame" x="18" y="15" width="115" height="18"/>
+                                            <rect key="frame" x="18" y="15" width="164" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Keep all tracks" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="g8b-4t-5gx">
+                                            <buttonCell key="cell" type="check" title="Copy all audio streams" bezelStyle="regularSquare" imagePosition="left" inset="2" id="g8b-4t-5gx">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1637,7 +1637,7 @@
                                 </view>
                             </box>
                             <box fixedFrame="YES" title="Subtitles" translatesAutoresizingMaskIntoConstraints="NO" id="LoF-Bk-ged">
-                                <rect key="frame" x="271" y="109" width="212" height="97"/>
+                                <rect key="frame" x="271" y="94" width="212" height="97"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="TPo-93-eU2">
                                     <rect key="frame" x="3" y="3" width="206" height="79"/>
@@ -1757,7 +1757,7 @@
                 </viewController>
                 <customObject id="VfP-HN-Dlp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-81" y="882"/>
+            <point key="canvasLocation" x="75" y="882"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="5CC-la-19d">
