@@ -151,7 +151,8 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     }
     
     // https://brandur.org/fragments/ffmpeg-h265
-    if inputVideoCodec == VideoCodec.hevc {
+    // M4V does not support HEVC so we must re-encode this case
+    if inputVideoCodec == VideoCodec.hevc && outputFileType != "m4v" {
       return "-c:v copy -tag:v hvc1"
     }
     
@@ -257,7 +258,7 @@ func getAudioConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     }
   case VideoFormat.avi.rawValue:
     // Codecs supported by AVI
-    // TODO: We currently can't differentiate between DTS and DTS-HD, so we re-encode for either. In the future, we only need to re-encode for DTS-HD here.
+    // TODO: We don't need to re-encode DTS, only DTS-HD. Should be able to determine this with all the metadata we are capturing.
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.mp3 || inputAudioCodec == AudioCodec.ac3 {
       return "-c:a copy"
     }
@@ -282,14 +283,18 @@ func getSubtitleConversionCommand(inputVideo: Video, outputFilePath: String) -> 
     return ""
   }
   
+  guard let textBasedStreamIndex = inputVideo.subtitleStreams.firstIndex(where: { $0.isTextBased == true }) else {
+    return ""
+  }
+
   switch outputFileType {
-    // TODO: This is resulting in two output subtitle streams, the first one is the correct one, the second one shows "Chapter 1" and nothing else
   case VideoFormat.mp4.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mov.rawValue:
-    return "-c:s mov_text"
+    // NOTE: "-map_metadata:c" is to prevent creating a new subtitle stream with only chapters being shown, see https://www.reddit.com/r/ffmpeg/comments/jtzue6/comment/gc9wz0v/?utm_source=share&utm_medium=web2x&context=3
+    return "-map_metadata:c -1 -map 0:s:\(textBasedStreamIndex) -c:s:0 mov_text"
   case VideoFormat.mkv.rawValue:
-    return "-c:s ass" // We could also use srt, which is a less advanced format but may be better supported
+    return "-map 0:s:\(textBasedStreamIndex) -c:s:0 ass" // We could also use srt, which is a less advanced format but may be better supported
   case VideoFormat.webm.rawValue:
-    return "-c:s webvtt"
+    return "-map 0:s:\(textBasedStreamIndex) -c:s:0 webvtt"
   case VideoFormat.avi.rawValue:
     return "" // AVI does not support soft-subs.
   default:
@@ -305,7 +310,10 @@ func getFfmpegCommand(inputVideo: Video, outputFilePath: String) -> String {
   let audioCommand = getAudioConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
   
   let subtitleCommand = getSubtitleConversionCommand(inputVideo: inputVideo, outputFilePath: outputFilePath)
-  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  
+  // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
+  // converting more than one audio and video stream, the mapping should be moved to getVideoConversionCommand and getAudioConversionCommand
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v -map 0:a  \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
   
   return command
 }

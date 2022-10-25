@@ -6,7 +6,7 @@
 //
 
 enum SubtitleCodec: String, CaseIterable {
-  case ass, srt, ssa, mov_text, stl, subrip, webvtt, text, xsub, unknown
+  case ass, srt, ssa, mov_text, stl, subrip, webvtt, text, xsub, dvd_subtitle, unknown
 }
 
 func convertToSubtitleCodec(inputCodec: String) -> SubtitleCodec {
