@@ -25,7 +25,7 @@ extension ViewController {
   
   func enablePremiumView() {
     codecDropdown.isEnabled = true
-    gpuCheckbox.isEnabled = true
+    //gpuCheckbox.isEnabled = true
     //qualitySlider.isEnabled = true
     qualityDropdown.isEnabled = true
     includeAllAudioCheckbox.isEnabled = true
@@ -36,7 +36,7 @@ extension ViewController {
   
   func disablePremiumView() {
     codecDropdown.isEnabled = false
-    gpuCheckbox.isEnabled = false
+    //gpuCheckbox.isEnabled = false
     //qualitySlider.isEnabled = false
     qualityDropdown.isEnabled = false
     includeAllAudioCheckbox.isEnabled = false

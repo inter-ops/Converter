@@ -29,9 +29,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var clearInputFileButton: NSButton!
   
   // PremiumView: Video
-  @IBOutlet weak var premiumView: NSView!
+  @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var codecDropdown: NSPopUpButton!
-  @IBOutlet weak var gpuCheckbox: NSButton!
+  //@IBOutlet weak var gpuCheckbox: NSButton!
   //@IBOutlet weak var qualitySlider: NSSlider!
   @IBOutlet weak var qualityDropdown: NSPopUpButton!
   // PremiumView: Audio
