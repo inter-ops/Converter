@@ -11,23 +11,16 @@ extension ViewController {
   
   func initPremiumView() {
     
+    // TODO: Always start in collapsed
+    collapsePremiumView()
+    
     if isPremiumEnabled {
       enablePremiumView()
-      expandPremiumDisplay()
       
     } else {
       disablePremiumView()
-      collapsePremiumDisplay()
       
     }
-  }
-  
-  func expandPremiumDisplay() {
-    // expandPremiumView(withAnimation:)
-  }
-  
-  func collapsePremiumDisplay() {
-    // collapsePremiumView(withAnimation:)
   }
   
   func enablePremiumView() {
