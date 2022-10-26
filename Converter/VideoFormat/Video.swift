@@ -105,6 +105,7 @@ struct SubtitleStream {
   let codecType: CodecType
   let codecTagString: String
   let codecTag: String
+  let isTextBased: Bool
   
   let language: String? // From TAG:language if exists
   
@@ -116,6 +117,7 @@ struct SubtitleStream {
     self.codecType = CodecType(rawValue: ffprobeDict["codec_type"]!)!
     self.codecTagString = ffprobeDict["codec_tag_string"] ?? ""
     self.codecTag = ffprobeDict["codec_tag"] ?? ""
+    self.isTextBased = ffprobeDict["width"] == "N/A"
     self.language = ffprobeDict["TAG:language"]
   }
 }

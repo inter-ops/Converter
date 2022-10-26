@@ -286,6 +286,12 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           let ffmpegSessionLogs = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
           let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
           
+          // We don't use the main logger for this because we don't want to crowd application logs with ffmpeg logs. Instead
+          // we just print out so that we can see the error in the Xcode console.
+          if Config.shared.debug {
+            print("Error from ffmpeg command: \(ffmpegSessionLogs)")
+          }
+          
           self.unexpectedErrorAlert(ffmpegCommand: self.ffmpegCommand!, ffmpegSessionLogs: ffmpegSessionLogs, ffprobeOutput: ffprobeOutput, inputFilePath: self.inputFileUrl!.path, outputFilePath: self.outputFileUrl!.path)
         }
         else {
