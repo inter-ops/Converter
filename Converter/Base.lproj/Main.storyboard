@@ -1452,10 +1452,17 @@
         <scene sceneID="mZg-d1-ARi">
             <objects>
                 <viewController id="Lwf-i7-ggD" customClass="ViewController" customModule="Video_Converter" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" misplaced="YES" id="xi8-cK-njC">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="560"/>
+                    <view key="view" id="xi8-cK-njC">
+                        <rect key="frame" x="0.0" y="0.0" width="505" height="560"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="8k2-fD-7tk">
+                                <rect key="frame" x="0.0" y="46" width="505" height="514"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="505" id="1qt-db-ZJX"/>
+                                    <constraint firstAttribute="width" constant="505" id="Fzy-j5-WjV"/>
+                                </constraints>
+                            </customView>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TVO-ks-hzH">
                                 <rect key="frame" x="25" y="371" width="455" height="169"/>
                                 <constraints>
@@ -1464,7 +1471,7 @@
                                 </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="DragDropBox-Icon" id="qTb-E2-IJ6"/>
                             </imageView>
-                            <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lfx-q4-zcd" customClass="DragDropView" customModule="Video_Converter" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Lfx-q4-zcd" customClass="DragDropView" customModule="Video_Converter" customModuleProvider="target">
                                 <rect key="frame" x="25" y="371" width="455" height="169"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kye-3w-wOz">
@@ -1498,7 +1505,6 @@
                                     </textField>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="C2w-cZ-ozO"/>
                                     <constraint firstAttribute="height" constant="169" id="ku8-yg-Vqi"/>
                                 </constraints>
                                 <connections>
@@ -1517,9 +1523,12 @@
                                     <action selector="clickActionButton:" target="Lwf-i7-ggD" id="TCS-hC-1KJ"/>
                                 </connections>
                             </button>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RO6-Jp-E0H" customClass="ColorfulProgressIndicator" customModule="Video_Converter" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="110" width="500" height="6"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="RO6-Jp-E0H" customClass="ColorfulProgressIndicator" customModule="Video_Converter" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="40" width="505" height="6"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="6" id="Hq3-TI-SOw"/>
+                                    <constraint firstAttribute="height" constant="6" id="Jvz-tL-7uV"/>
+                                </constraints>
                             </customView>
                             <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HM6-3f-Dt4">
                                 <rect key="frame" x="22" y="59" width="25" height="25"/>
@@ -1703,8 +1712,8 @@
                                     <action selector="expandCollapsePremiumViewButtonAction:" target="lxv-fP-qSO" id="Tcu-Oo-SjG"/>
                                 </connections>
                             </button>
-                            <visualEffectView misplaced="YES" blendingMode="behindWindow" material="menu" state="active" translatesAutoresizingMaskIntoConstraints="NO" id="2qE-vm-Dan">
-                                <rect key="frame" x="0.0" y="0.0" width="500" height="40"/>
+                            <visualEffectView blendingMode="behindWindow" material="menu" state="active" translatesAutoresizingMaskIntoConstraints="NO" id="2qE-vm-Dan">
+                                <rect key="frame" x="0.0" y="0.0" width="505" height="40"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2ip-DK-lob">
                                         <rect key="frame" x="18" y="12" width="165" height="16"/>
@@ -1735,13 +1744,27 @@
                             </visualEffectView>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="8k2-fD-7tk" secondAttribute="trailing" id="56I-9k-rOr"/>
                             <constraint firstItem="Lfx-q4-zcd" firstAttribute="leading" secondItem="xi8-cK-njC" secondAttribute="leading" constant="25" id="EgU-2j-q6o"/>
+                            <constraint firstItem="RO6-Jp-E0H" firstAttribute="leading" secondItem="xi8-cK-njC" secondAttribute="leading" id="JmJ-fd-C70"/>
                             <constraint firstItem="TVO-ks-hzH" firstAttribute="centerX" secondItem="xi8-cK-njC" secondAttribute="centerX" id="Me9-AS-Jfy"/>
                             <constraint firstAttribute="trailing" secondItem="Lfx-q4-zcd" secondAttribute="trailing" constant="25" id="Qpa-bf-PHo"/>
                             <constraint firstAttribute="trailing" secondItem="2qE-vm-Dan" secondAttribute="trailing" id="TWn-7S-xar"/>
                             <constraint firstItem="TVO-ks-hzH" firstAttribute="top" secondItem="xi8-cK-njC" secondAttribute="top" constant="20" symbolic="YES" id="Umw-co-ljW"/>
+                            <constraint firstItem="8k2-fD-7tk" firstAttribute="top" secondItem="xi8-cK-njC" secondAttribute="top" id="VRP-zQ-fwT"/>
+                            <constraint firstItem="2qE-vm-Dan" firstAttribute="top" secondItem="RO6-Jp-E0H" secondAttribute="bottom" id="WCe-Z0-OG5"/>
                             <constraint firstItem="Lfx-q4-zcd" firstAttribute="top" secondItem="xi8-cK-njC" secondAttribute="top" constant="20" symbolic="YES" id="WLi-yB-IVk"/>
+                            <constraint firstAttribute="trailing" secondItem="RO6-Jp-E0H" secondAttribute="trailing" id="aSE-rf-BZH"/>
                             <constraint firstAttribute="bottom" secondItem="2qE-vm-Dan" secondAttribute="bottom" id="aoQ-7S-aBk"/>
+                            <constraint firstAttribute="trailing" secondItem="RO6-Jp-E0H" secondAttribute="trailing" id="crw-MF-Wth"/>
+                            <constraint firstItem="RO6-Jp-E0H" firstAttribute="top" secondItem="8k2-fD-7tk" secondAttribute="bottom" id="fCS-on-z25"/>
+                            <constraint firstItem="RO6-Jp-E0H" firstAttribute="top" secondItem="8k2-fD-7tk" secondAttribute="bottom" id="jBf-KQ-qX5"/>
+                            <constraint firstAttribute="trailing" secondItem="8k2-fD-7tk" secondAttribute="trailing" id="kuV-Ua-WiR"/>
+                            <constraint firstItem="8k2-fD-7tk" firstAttribute="leading" secondItem="xi8-cK-njC" secondAttribute="leading" id="nld-8N-W3z"/>
+                            <constraint firstItem="RO6-Jp-E0H" firstAttribute="leading" secondItem="xi8-cK-njC" secondAttribute="leading" id="qUF-sM-YBh"/>
+                            <constraint firstItem="8k2-fD-7tk" firstAttribute="top" secondItem="xi8-cK-njC" secondAttribute="top" id="qud-hA-oBS"/>
+                            <constraint firstItem="2qE-vm-Dan" firstAttribute="top" secondItem="RO6-Jp-E0H" secondAttribute="bottom" id="u8E-Vg-KBU"/>
+                            <constraint firstItem="8k2-fD-7tk" firstAttribute="leading" secondItem="xi8-cK-njC" secondAttribute="leading" id="vlC-OC-3Cq"/>
                             <constraint firstItem="2qE-vm-Dan" firstAttribute="leading" secondItem="xi8-cK-njC" secondAttribute="leading" id="xmV-gU-ijx"/>
                         </constraints>
                     </view>
