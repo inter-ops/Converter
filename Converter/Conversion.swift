@@ -50,7 +50,9 @@ func getFileName(filePath: String) -> String {
 
 func getVideoCommandForH264(inputVideo: Video) -> String {
   let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo)
-  return "-c:v h264_videotoolbox -b:v \(outputBitrate) -pix_fmt yuv420p -allow_sw 1"
+  // -allow_sw 1 ensures that VT can be used on machines that don't support hardware encoding
+  // -vf flag is to ensure the output width and height are divisible by 2, see https://stackoverflow.com/a/29582287/8292279
+  return "-c:v h264_videotoolbox -b:v \(outputBitrate) -pix_fmt yuv420p -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
 }
 
 func getOutputBitrateForH264(inputVideo: Video) -> String {
@@ -138,11 +140,11 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
       return getVideoCommandForH264(inputVideo: inputVideo)
     }
     
-    // If input file is GIF, we re-encode to H264 and ensure the dimensions are divisible by 2. See https://unix.stackexchange.com/a/294892
+    // Resource: https://unix.stackexchange.com/a/294892
     if inputFileType == VideoFormat.gif.rawValue || inputVideoCodec == VideoCodec.gif {
       // Note that this command works for most use cases, but odd cases (such as really low FPS & frame number gifs, eg https://github.com/cyburgee/ffmpeg-guide/blob/master/321.gif) will trip up VLC and stop too early.
       // If we are having issues with this, review the method outlined here: https://github.com/cyburgee/ffmpeg-guide I already tried integrating this but found that using fps=source_fps wouldn't fix the issue, the FPS had to be increased. I don't want to screw with FPS too much for now unless we see this become a problem in the wild.
-      return "\(getVideoCommandForH264(inputVideo: inputVideo)) -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
+      return getVideoCommandForH264(inputVideo: inputVideo)
     }
     
     // If input codec is ProRes or unknown, we re-encode to H264
