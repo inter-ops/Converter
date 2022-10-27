@@ -24,7 +24,7 @@ extension ViewController {
   }
   
   func expandPremiumView() {
-    // expandCollapsePremiumViewButton.image = "ArrowUpIcon"
+    expandCollapsePremiumViewButton.image = NSImage(named: "Chevron-Up")
     
     mainViewWidthConstraint.animator().constant = Constants.Frame.expandedViewWidth
     mainViewHeightConstraint.animator().constant = Constants.Frame.expandedViewHeight
@@ -38,7 +38,7 @@ extension ViewController {
   }
   
   func collapsePremiumView() {
-    // expandCollapsePremiumViewButton.image = "ArrowDownIcon"
+    expandCollapsePremiumViewButton.image = NSImage(named: "Chevron-Down")
     
     mainViewWidthConstraint.animator().constant = Constants.Frame.mainViewWidth
     mainViewHeightConstraint.animator().constant = Constants.Frame.mainViewHeight

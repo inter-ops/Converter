@@ -1087,7 +1087,7 @@
                                             <constraint firstAttribute="height" constant="20" id="98U-fr-S7A"/>
                                             <constraint firstAttribute="width" constant="26" id="rVn-gn-zh9"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" image="NSTouchBarGoDownTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="j3y-wu-t0d">
+                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" image="Chevron-Down" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="j3y-wu-t0d">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -2303,6 +2303,7 @@
         <segue reference="AU9-B4-7B8"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="Chevron-Down" width="20" height="16"/>
         <image name="Clear-Icon" width="14" height="14"/>
         <image name="DragDropBox-Icon" width="300" height="169"/>
         <image name="NSTouchBarGoDownTemplate" width="15" height="9"/>
