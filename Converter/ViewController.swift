@@ -63,10 +63,16 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   override func viewDidLoad() {
     super.viewDidLoad()
     // Init view
+    initMainView()
     initDropdownMenu()
     displayClearButton(.hide)
     // TODO: initPremiumView
     //collapsePremiumView() //temp
+  }
+  
+  func initMainView() {
+    mainViewWidthConstraint.constant = 350
+    mainViewHeightConstraint.constant = 334
   }
   
   override func viewDidDisappear() {
