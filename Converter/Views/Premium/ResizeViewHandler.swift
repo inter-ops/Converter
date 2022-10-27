@@ -26,8 +26,8 @@ extension ViewController {
   func expandPremiumView() {
     // expandCollapsePremiumViewButton.image = "ArrowUpIcon"
     
-    mainViewWidthConstraint.animator().constant = 600
-    mainViewHeightConstraint.animator().constant = 600
+    mainViewWidthConstraint.animator().constant = Constants.Frame.expandedViewWidth
+    mainViewHeightConstraint.animator().constant = Constants.Frame.expandedViewHeight
     
     // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
     
@@ -37,8 +37,8 @@ extension ViewController {
   func collapsePremiumView() {
     // expandCollapsePremiumViewButton.image = "ArrowDownIcon"
     
-    mainViewWidthConstraint.animator().constant = 350
-    mainViewHeightConstraint.animator().constant = 334
+    mainViewWidthConstraint.animator().constant = Constants.Frame.mainViewWidth
+    mainViewHeightConstraint.animator().constant = Constants.Frame.mainViewHeight
     
     // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
     

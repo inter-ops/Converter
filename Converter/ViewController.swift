@@ -71,8 +71,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   
   func initMainView() {
-    mainViewWidthConstraint.constant = 350
-    mainViewHeightConstraint.constant = 334
+    mainViewWidthConstraint.constant = Constants.Frame.mainViewWidth
+    mainViewHeightConstraint.constant = Constants.Frame.mainViewHeight
   }
   
   override func viewDidDisappear() {
