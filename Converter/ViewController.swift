@@ -182,7 +182,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Update outputFormat to selected item
     outputFormat = format
     
-    Logger.info("User did select \(format.rawValue)")
+    Logger.info("User did select format: \(format.rawValue)")
     
     // Set default codec for new format type (if premium)
     didSelectNewOutput(format: format)
