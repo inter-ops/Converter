@@ -28,8 +28,8 @@ extension ViewController {
     //gpuCheckbox.isEnabled = true
     //qualitySlider.isEnabled = true
     qualityDropdown.isEnabled = true
-    includeAllAudioCheckbox.isEnabled = true
-    includeAllSubtitlesCheckbox.isEnabled = true
+    copyAllAudioCheckbox.isEnabled = true
+    copyAllSubtitlesCheckbox.isEnabled = true
     burnInSubtitleCheckbox.isEnabled = true
     burnInSubtitleDropdown.isEnabled = true
   }
@@ -39,8 +39,8 @@ extension ViewController {
     //gpuCheckbox.isEnabled = false
     //qualitySlider.isEnabled = false
     qualityDropdown.isEnabled = false
-    includeAllAudioCheckbox.isEnabled = false
-    includeAllSubtitlesCheckbox.isEnabled = false
+    copyAllAudioCheckbox.isEnabled = false
+    copyAllSubtitlesCheckbox.isEnabled = false
     burnInSubtitleCheckbox.isEnabled = false
     burnInSubtitleDropdown.isEnabled = false
   }

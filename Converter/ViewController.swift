@@ -36,9 +36,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   //@IBOutlet weak var qualitySlider: NSSlider!
   @IBOutlet weak var qualityDropdown: NSPopUpButton!
   // PremiumView: Audio
-  @IBOutlet weak var includeAllAudioCheckbox: NSButton!
+  @IBOutlet weak var copyAllAudioCheckbox: NSButton!
   // PremiumView: Subtitles
-  @IBOutlet weak var includeAllSubtitlesCheckbox: NSButton!
+  @IBOutlet weak var copyAllSubtitlesCheckbox: NSButton!
   @IBOutlet weak var burnInSubtitleCheckbox: NSButton!
   @IBOutlet weak var burnInSubtitleDropdown: NSPopUpButton!
   

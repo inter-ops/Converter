@@ -961,7 +961,7 @@
                                             <constraint firstAttribute="height" constant="70" id="XrH-g0-Atj"/>
                                         </constraints>
                                     </box>
-                                    <box title="Audio" translatesAutoresizingMaskIntoConstraints="NO" id="QEJ-rq-dkH">
+                                    <box title="Subtitles" translatesAutoresizingMaskIntoConstraints="NO" id="QEJ-rq-dkH">
                                         <rect key="frame" x="302" y="21" width="226" height="108"/>
                                         <view key="contentView" id="NYd-sh-PD9">
                                             <rect key="frame" x="3" y="3" width="220" height="90"/>
