@@ -13,6 +13,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Temp workable premium flag
   var isPremiumEnabled = false
   
+  @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
   @IBOutlet weak var actionButton: NSButton!
@@ -29,7 +30,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var clearInputFileButton: NSButton!
   
   // PremiumView: Video
-  @IBOutlet weak var mainView: NSView!
+  @IBOutlet weak var expandablePremiumView: NSView!
   @IBOutlet weak var codecDropdown: NSPopUpButton!
   //@IBOutlet weak var gpuCheckbox: NSButton!
   //@IBOutlet weak var qualitySlider: NSSlider!
@@ -76,6 +77,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func initMainView() {
     mainViewWidthConstraint.constant = Constants.Frame.mainViewWidth
     mainViewHeightConstraint.constant = Constants.Frame.mainViewHeight
+    
+    expandablePremiumView.isHidden = true
   }
   
   override func viewDidDisappear() {

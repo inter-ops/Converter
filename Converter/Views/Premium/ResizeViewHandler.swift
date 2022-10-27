@@ -32,6 +32,8 @@ extension ViewController {
     // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
     
     // expandDragDropView()
+    
+    expandablePremiumView.isHidden = false
   }
   
   func collapsePremiumView() {
@@ -43,6 +45,8 @@ extension ViewController {
     // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
     
     //collapseDragDropView()
+    
+    expandablePremiumView.isHidden = true
   }
   
   
