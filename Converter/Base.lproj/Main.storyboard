@@ -770,10 +770,10 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="2rF-NO-8km">
-                                <rect key="frame" x="0.0" y="46" width="350" height="334"/>
+                                <rect key="frame" x="0.0" y="0.0" width="350" height="380"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="F7m-Xg-Rau"/>
-                                    <constraint firstAttribute="height" constant="334" id="sNk-0M-lg5"/>
+                                    <constraint firstAttribute="height" constant="380" id="sNk-0M-lg5"/>
                                 </constraints>
                             </customView>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v9D-vH-xx2">
@@ -971,10 +971,9 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="1os-Ou-Cs8"/>
-                            <constraint firstItem="JZg-d2-J84" firstAttribute="top" secondItem="2rF-NO-8km" secondAttribute="bottom" id="2VQ-GM-zAK"/>
+                            <constraint firstAttribute="bottom" secondItem="2rF-NO-8km" secondAttribute="bottom" id="2VQ-GM-zAK"/>
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="3HO-pW-3cV"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="25" id="3Z6-QI-BqM"/>
-                            <constraint firstItem="v9D-vH-xx2" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="8h1-SZ-hQN"/>
                             <constraint firstItem="kPm-gZ-vwn" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="BET-PE-f07"/>
                             <constraint firstItem="WOp-7k-7wN" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="25" id="GIY-oo-MDS"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="Gdn-Bw-cZu"/>
@@ -1012,7 +1011,7 @@
                         <outlet property="estimatedTimeLabel" destination="xFx-Bv-g0e" id="9Fh-Hm-58c"/>
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
                         <outlet property="expandCollapsePremiumViewButton" destination="Yf0-0I-yAV" id="jjF-fN-q0X"/>
-                        <outlet property="expandablePremiumView" destination="Gfl-op-5Hr" id="7Nd-GG-XQz"/>
+                        <outlet property="expandablePremiumView" destination="Gfl-op-5Hr" id="VM5-Up-esk"/>
                         <outlet property="formatControlRowView" destination="rgh-KN-ah2" id="G7q-1W-MV2"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
                         <outlet property="mainView" destination="2rF-NO-8km" id="3Yl-eL-hNN"/>
