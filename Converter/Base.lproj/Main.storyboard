@@ -779,10 +779,9 @@
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v9D-vH-xx2">
                                 <rect key="frame" x="25" y="191" width="300" height="169"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="Go2-dc-JZW"/>
                                     <constraint firstAttribute="height" constant="169" id="QT1-ae-HYJ"/>
                                 </constraints>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="DragDropBox-Icon" id="Rau-wz-H1A"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="DragDropBox-Icon" id="Rau-wz-H1A"/>
                             </imageView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="WOp-7k-7wN" customClass="DragDropView" customModule="Video_Converter" customModuleProvider="target">
                                 <rect key="frame" x="25" y="191" width="300" height="169"/>
@@ -833,8 +832,11 @@
                                     <outlet property="delegate" destination="XfG-lQ-9wD" id="VSn-6e-VYs"/>
                                 </connections>
                             </customView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Gfl-op-5Hr">
+                                <rect key="frame" x="0.0" y="102" width="350" height="27"/>
+                            </customView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="rgh-KN-ah2">
-                                <rect key="frame" x="0.0" y="131" width="350" height="40"/>
+                                <rect key="frame" x="0.0" y="129" width="350" height="40"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="irQ-Ac-42v">
                                         <rect key="frame" x="23" y="12" width="68" height="16"/>
@@ -895,7 +897,7 @@
                                 </constraints>
                             </customView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="kPm-gZ-vwn">
-                                <rect key="frame" x="0.0" y="58" width="350" height="40"/>
+                                <rect key="frame" x="0.0" y="62" width="350" height="40"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bdx-sF-qWs">
                                         <rect key="frame" x="220" y="3" width="112" height="32"/>
@@ -929,9 +931,6 @@
                                     <constraint firstItem="Bdx-sF-qWs" firstAttribute="centerY" secondItem="kPm-gZ-vwn" secondAttribute="centerY" id="yuF-0c-XBQ"/>
                                     <constraint firstItem="C1X-LD-ymz" firstAttribute="leading" secondItem="kPm-gZ-vwn" secondAttribute="leading" constant="25" id="zQ8-Hp-fgH"/>
                                 </constraints>
-                            </customView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Gfl-op-5Hr">
-                                <rect key="frame" x="0.0" y="98" width="350" height="33"/>
                             </customView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="JZg-d2-J84" customClass="ColorfulProgressIndicator" customModule="Video_Converter" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="40" width="350" height="6"/>
@@ -974,24 +973,26 @@
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="1os-Ou-Cs8"/>
                             <constraint firstItem="JZg-d2-J84" firstAttribute="top" secondItem="2rF-NO-8km" secondAttribute="bottom" id="2VQ-GM-zAK"/>
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="3HO-pW-3cV"/>
+                            <constraint firstItem="v9D-vH-xx2" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="25" id="3Z6-QI-BqM"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="8h1-SZ-hQN"/>
                             <constraint firstItem="kPm-gZ-vwn" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="BET-PE-f07"/>
                             <constraint firstItem="WOp-7k-7wN" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="25" id="GIY-oo-MDS"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="Gdn-Bw-cZu"/>
                             <constraint firstItem="2rF-NO-8km" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="HgJ-gN-KLc"/>
                             <constraint firstItem="WOp-7k-7wN" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="I1B-2Y-bed"/>
-                            <constraint firstItem="JZg-d2-J84" firstAttribute="top" secondItem="kPm-gZ-vwn" secondAttribute="bottom" constant="12" id="Muk-Lo-DRK"/>
+                            <constraint firstItem="JZg-d2-J84" firstAttribute="top" secondItem="kPm-gZ-vwn" secondAttribute="bottom" constant="16" id="Muk-Lo-DRK"/>
                             <constraint firstAttribute="trailing" secondItem="JZg-d2-J84" secondAttribute="trailing" id="OGz-IW-mfq"/>
                             <constraint firstItem="Gfl-op-5Hr" firstAttribute="top" secondItem="rgh-KN-ah2" secondAttribute="bottom" id="P4y-Cy-T4a"/>
                             <constraint firstAttribute="trailing" secondItem="WOp-7k-7wN" secondAttribute="trailing" constant="25" id="R2C-Qs-qgK"/>
                             <constraint firstAttribute="bottom" secondItem="F5s-5R-gtP" secondAttribute="bottom" id="V5S-Sl-QW2"/>
                             <constraint firstAttribute="trailing" secondItem="F5s-5R-gtP" secondAttribute="trailing" id="VUO-Pf-tCp"/>
-                            <constraint firstItem="rgh-KN-ah2" firstAttribute="top" secondItem="v9D-vH-xx2" secondAttribute="bottom" constant="20" id="VeL-Tl-t0B"/>
+                            <constraint firstItem="rgh-KN-ah2" firstAttribute="top" secondItem="WOp-7k-7wN" secondAttribute="bottom" constant="22" id="VeL-Tl-t0B"/>
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="top" secondItem="JZg-d2-J84" secondAttribute="bottom" id="Zkz-kA-UXX"/>
                             <constraint firstItem="Gfl-op-5Hr" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="aGA-L6-T1f"/>
                             <constraint firstAttribute="trailing" secondItem="2rF-NO-8km" secondAttribute="trailing" id="eg5-NL-ziO"/>
                             <constraint firstAttribute="bottom" secondItem="F5s-5R-gtP" secondAttribute="bottom" id="f8C-Qr-Bdl"/>
                             <constraint firstItem="JZg-d2-J84" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="hbe-8o-O26"/>
+                            <constraint firstAttribute="trailing" secondItem="v9D-vH-xx2" secondAttribute="trailing" constant="25" id="hc3-3G-5Kl"/>
                             <constraint firstItem="rgh-KN-ah2" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="ktf-Gp-Bvm"/>
                             <constraint firstAttribute="trailing" secondItem="F5s-5R-gtP" secondAttribute="trailing" id="lVN-kg-wwT"/>
                             <constraint firstItem="kPm-gZ-vwn" firstAttribute="top" secondItem="Gfl-op-5Hr" secondAttribute="bottom" id="oZz-BP-B1r"/>
@@ -1003,13 +1004,15 @@
                     </view>
                     <connections>
                         <outlet property="actionButton" destination="Bdx-sF-qWs" id="TcE-73-pkG"/>
+                        <outlet property="actionControlRowView" destination="kPm-gZ-vwn" id="yna-6t-Nfp"/>
                         <outlet property="clearInputFileButton" destination="qVc-80-BUu" id="op8-FL-cCu"/>
+                        <outlet property="dragDropBackgroundImageView" destination="v9D-vH-xx2" id="OQy-LN-aW5"/>
                         <outlet property="dragDropBottomTitle" destination="t3K-S7-h56" id="PYQ-hS-1yp"/>
                         <outlet property="dragDropTopTitle" destination="wI2-qE-TlK" id="loF-4s-gyn"/>
-                        <outlet property="dragDropView" destination="v9D-vH-xx2" id="i3t-qm-CIt"/>
                         <outlet property="estimatedTimeLabel" destination="xFx-Bv-g0e" id="9Fh-Hm-58c"/>
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
                         <outlet property="expandCollapsePremiumViewButton" destination="Yf0-0I-yAV" id="jjF-fN-q0X"/>
+                        <outlet property="formatControlRowView" destination="rgh-KN-ah2" id="G7q-1W-MV2"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
                         <outlet property="mainView" destination="2rF-NO-8km" id="3Yl-eL-hNN"/>
                         <outlet property="mainViewHeightConstraint" destination="sNk-0M-lg5" id="hPp-c5-leF"/>
@@ -1860,7 +1863,7 @@
                 </viewController>
                 <customObject id="VfP-HN-Dlp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="74.5" y="882"/>
+            <point key="canvasLocation" x="76" y="1150"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="5CC-la-19d">

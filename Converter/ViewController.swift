@@ -23,7 +23,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var premiumViewIsExpanded = false
   
   // DragDropView objects
-  @IBOutlet weak var dragDropView: NSImageView!
+  @IBOutlet weak var dragDropBackgroundImageView: NSImageView!
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
   @IBOutlet weak var clearInputFileButton: NSButton!
@@ -40,6 +40,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var includeAllSubtitlesCheckbox: NSButton!
   @IBOutlet weak var burnInSubtitleCheckbox: NSButton!
   @IBOutlet weak var burnInSubtitleDropdown: NSPopUpButton!
+  
+  @IBOutlet weak var formatControlRowView: NSView!
+  @IBOutlet weak var actionControlRowView: NSView!
   
   // MARK: ViewConstraints
   @IBOutlet weak var mainViewHeightConstraint: NSLayoutConstraint!
@@ -111,7 +114,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     //initPremiumView()
   }
   
-  /// Handles all input file requests, checks for validity and adjust the dragDropView box to reflect any errors
+  /// Handles all input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceive(fileUrl: String) {
     Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
@@ -162,7 +165,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
   func updateDragDropView(_ forType: DragDropBox) {
-    dragDropView.image = forType.image
+    dragDropBackgroundImageView.image = forType.image
   }
   /// Sets the dragDropBox title text without affecting the box style (ie. `bottom: inputFileName`)
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {
@@ -461,9 +464,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     popover.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
     return popover
   }()
-  /// Displays `supportedFormatsPopover` to maxX-position of `dragDropView`
+  /// Displays `supportedFormatsPopover` to maxX-position of `dragDropBackgroundImageView`
   func showSupportedFormatsPopover() {
-    let positioningView = dragDropView!
+    let positioningView = dragDropBackgroundImageView!
     let positioningRect = NSZeroRect
     let preferredEdge = NSRectEdge.maxX
     supportedFormatsPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
