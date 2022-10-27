@@ -714,8 +714,11 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" id="TDx-RF-cpG">
                                                 <items>
-                                                    <menuItem title="Toggle ExpandCollapse" id="aO7-gu-7Ec">
+                                                    <menuItem title="Toggle PremiumView" id="aO7-gu-7Ec">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="toggleExpandCollapsePremiumView:" target="Voe-Tx-rLC" id="V9d-lw-tTo"/>
+                                                        </connections>
                                                     </menuItem>
                                                 </items>
                                             </menu>
@@ -1715,8 +1718,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="EQ5-Om-Sgo"/>
-        <segue reference="AU9-B4-7B8"/>
+        <segue reference="wed-Vm-xLL"/>
+        <segue reference="AZd-SB-erv"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Chevron-Down" width="20" height="16"/>

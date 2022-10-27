@@ -16,14 +16,14 @@ extension ViewController {
   @IBAction func toggleExpandCollapsePremiumView(_ sender: Any?) {
     if premiumViewIsExpanded {
       collapsePremiumView()
-      premiumViewIsExpanded = false
     } else {
       expandPremiumView()
-      premiumViewIsExpanded = true
     }
   }
   
   func expandPremiumView() {
+    premiumViewIsExpanded = true
+    
     expandCollapsePremiumViewButton.image = NSImage(named: "Chevron-Up")
     
     mainViewWidthConstraint.animator().constant = Constants.Frame.expandedViewWidth
@@ -38,6 +38,8 @@ extension ViewController {
   }
   
   func collapsePremiumView() {
+    premiumViewIsExpanded = false
+    
     expandCollapsePremiumViewButton.image = NSImage(named: "Chevron-Down")
     
     mainViewWidthConstraint.animator().constant = Constants.Frame.mainViewWidth

@@ -18,4 +18,9 @@ extension AppDelegate {
     debugMenu.isEnabled = Config.shared.debug
   }
   
+  @IBAction func toggleExpandCollapsePremiumView(_ sender: NSMenuItem) {
+    let viewController = mainWindow.contentViewController as? ViewController
+    viewController?.toggleExpandCollapsePremiumView(self)
+  }
+  
 }
