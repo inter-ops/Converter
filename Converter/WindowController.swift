@@ -9,11 +9,11 @@ import Cocoa
 
 class WindowController: NSWindowController {
   
-  let minWindowWidth = 350
-  let minWindowHeight = 456
+  let minWindowWidth = Constants.Frame.mainViewWidth
+  let minWindowHeight = Constants.Frame.mainViewHeight + 22 // Custom window with size for title bar
   
-  let minViewWidth = 350
-  let minViewHeight = 380
+  let minViewWidth = Constants.Frame.mainViewWidth
+  let minViewHeight = Constants.Frame.mainViewHeight
   
   override func windowDidLoad() {
     super.windowDidLoad()
