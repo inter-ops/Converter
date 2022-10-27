@@ -33,7 +33,8 @@ extension ViewController {
     
     // expandDragDropView()
     
-    expandablePremiumView.isHidden = false
+    //expandablePremiumView.isHidden = false
+    expandablePremiumView.animator().isHidden = false
   }
   
   func collapsePremiumView() {
@@ -46,7 +47,8 @@ extension ViewController {
     
     //collapseDragDropView()
     
-    expandablePremiumView.isHidden = true
+    //expandablePremiumView.isHidden = true
+    expandablePremiumView.animator().isHidden = true
   }
   
   
