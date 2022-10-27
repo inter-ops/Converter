@@ -860,6 +860,9 @@
                                                                     </items>
                                                                 </menu>
                                                             </popUpButtonCell>
+                                                            <connections>
+                                                                <action selector="selectCodec:" target="XfG-lQ-9wD" id="9pK-vf-DNg"/>
+                                                            </connections>
                                                         </popUpButton>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p7O-iG-Q3b">
                                                             <rect key="frame" x="22" y="9" width="44" height="16"/>

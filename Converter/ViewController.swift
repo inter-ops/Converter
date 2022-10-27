@@ -10,8 +10,8 @@ import ffmpegkit
 
 class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
-  /// Temp workable premium flag
-  var isPremiumEnabled = false
+  /// Set to `true` if user has purchased premium
+  var isPremiumEnabled = true
   
   @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
@@ -52,8 +52,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   // PremiumView variables
   var codecTitles: [String] = []
   
-  // MainView variables
-  var outputFormat: VideoFormat = .mp4   // Default output format
+  // Video object variables
+  var outputFormat: VideoFormat = .mp4  //  User select output format (mp4 default)
+  var outputCodec: VideoCodec = .h264   // User select output codec (h264 default)
+  
   var inputFileUrl: URL?
   var outputFileUrl: URL?
   var startOfConversion: Date?
@@ -70,8 +72,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     initMainView()
     initDropdownMenu()
     displayClearButton(.hide)
-    // TODO: initPremiumView
-    //collapsePremiumView() //temp
+    initPremiumView()
   }
   
   func initMainView() {
@@ -182,6 +183,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     outputFormat = format
     
     Logger.info("User did select \(format.rawValue)")
+    
+    // Set default codec for new format type (if premium)
+    didSelectNewOutput(format: format)
+    
   }
   
   /// Calculates the video conversion progress in percentage.
@@ -420,8 +425,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Handler function
     userDidSelectFormat(userSelectedFormatType)
   }
+  // selectFormat(sender:)
   var userSelectedFormat = VideoFormat.mp4.dropdownTitle
   var userSelectedFormatType: VideoFormat = .mp4
+  // selectCodec(sender:)
+  var userSelectedCodec = VideoCodec.h264.dropdownTitle
+  var userSelectedCodecType: VideoCodec = .h264
+  
   
   @IBAction func clickActionButton(_ sender: Any) {
     // User did click button: "Convert" or "Stop"

@@ -13,6 +13,7 @@ extension ViewController {
     
     // TODO: Always start in collapsed
     collapsePremiumView()
+    didSelectNewOutput(format: outputFormat)  // Set default output format MP4
     
     if isPremiumEnabled {
       enablePremiumView()
@@ -31,7 +32,7 @@ extension ViewController {
     copyAllAudioCheckbox.isEnabled = true
     copyAllSubtitlesCheckbox.isEnabled = true
     burnInSubtitleCheckbox.isEnabled = true
-    burnInSubtitleDropdown.isEnabled = true
+    burnInSubtitleDropdown.isEnabled = false // disable by default, until checkbox.state = .on
   }
   
   func disablePremiumView() {
@@ -45,26 +46,62 @@ extension ViewController {
     burnInSubtitleDropdown.isEnabled = false
   }
   
-  /// Updates PremiumView with updated options per output format if premium
-  func didSelectNewOutput(format: VideoFormat) {
-    if isPremiumEnabled {
-      initCodecDropdownMenu(forFormat: format)
-    }
-  }
+  // MARK: Update UI
   
+  
+  // MARK: Codecs
+  /// Updates PremiumView with updated options per output format (ie. update codec dropdown list with available codecs)
+  func didSelectNewOutput(format: VideoFormat) {
+    //if isPremiumEnabled {
+      initCodecDropdownMenu(forFormat: format)
+    //}
+  }
   /// Initialize dropdown menu with titles (see `VideoFormat.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
     codecDropdown.removeAllItems()
     codecDropdown.addItems(withTitles: getCodecDropdownTitles(forFormat: forFormat))
+    
+    // Set new default output codec based on format
+    outputCodec = forFormat.compatibleCodecs[0]
+    userSelectedCodecType = outputCodec
+    
+    Logger.info("New default codec selected: \(outputCodec.rawValue)")
   }
-  
-  
-  /// Return VideoFormat title strings as an array for dropdown presentation
+  /// Return VideoCodec title strings as an array for dropdown presentation
   func getCodecDropdownTitles(forFormat: VideoFormat) -> [String] {
+    codecTitles = []  // clear all codec types
     for codec in forFormat.compatibleCodecs {
       codecTitles.append(codec.dropdownTitle)
     }
     return codecTitles
+  }
+  
+  /// Return VideoFormat type from dropdown item selection
+  func getUserSelectedCodec(_ item: String) -> VideoCodec {
+    for codec in VideoCodec.allCases {
+      if item == codec.dropdownTitle {
+        return codec
+      }
+    }
+    Logger.error("Unable to read selected format type\nReturning default type: VideoCodec.h264")
+    return .h264
+  }
+  
+  /// Returns VideoCodec type upon user dropdown selection (ie. `.h264`)
+  func userDidSelectCodec(_ codec: VideoCodec) {
+    // Update outputFormat to selected item
+    outputCodec = codec
+    
+    Logger.info("User did select codec: \(codec.rawValue)")
+    
+  }
+  
+  /// Called when the user updates dropdown selection item
+  @IBAction func selectCodec(_ sender: NSPopUpButton) {
+    userSelectedCodec = sender.titleOfSelectedItem!
+    userSelectedCodecType = getUserSelectedCodec(userSelectedCodec)
+    // Handler function
+    userDidSelectCodec(userSelectedCodecType)
   }
   
 }
