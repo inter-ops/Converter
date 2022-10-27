@@ -940,7 +940,7 @@
                                                     <subviews>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BLz-qY-TiN">
                                                             <rect key="frame" x="18" y="8" width="164" height="18"/>
-                                                            <buttonCell key="cell" type="check" title="Copy all audio streams" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Lu8-vs-8LW">
+                                                            <buttonCell key="cell" type="check" title="Copy all audio streams" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Lu8-vs-8LW">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
@@ -1718,8 +1718,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wed-Vm-xLL"/>
-        <segue reference="AZd-SB-erv"/>
+        <segue reference="EQ5-Om-Sgo"/>
+        <segue reference="AU9-B4-7B8"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Chevron-Down" width="20" height="16"/>
