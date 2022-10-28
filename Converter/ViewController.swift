@@ -106,9 +106,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     let inputFileUrl = fileUrl.fileURL.absoluteURL
     
     if VideoFormat.isSupportedAsInput(fileUrl) {
-      updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
-      displayClearButton(.show)
-      
       if isFileValid(inputFilePath: inputFileUrl.path) {
         // TODO: May want some sort of info that they are selecting the output file location, or a button for the user to do this explicitely
         
@@ -125,6 +122,16 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         
         let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl, outputFileUrl: outputFileUrl!)
         inputVideos.append(inputVideo)
+        
+        displayClearButton(.show)
+        if inputVideos.count == 1 {
+          updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
+        }
+        else {
+          // TODO: For now we're just setting the file name to the list of files, but we should come up with a cleaner way to do this.
+          let messageArray = inputVideos.enumerated().map { "\($0+1). \($1.filePath.lastPathComponent)" }
+          updateDragDrop(subtitle: messageArray.joined(separator: "\n"), withStyle: .videoFile)
+        }
       }
       else {
         updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
