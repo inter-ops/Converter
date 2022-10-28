@@ -109,6 +109,10 @@ func getOutputBitrateForH264(inputVideo: Video) -> String {
 /// For x264, we always use 8-bit colour (pixfmt yuv420p) to ensure maximum support. See "Encoding for dumb players" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
 /// We use a crf of 20. The default is 23, and 17-18 is considered visually lossless. See "Choose a CRF value" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
 func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> String {
+  if inputVideo.videoStreams.isEmpty {
+    return ""
+  }
+  
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
   let outputFileType = getFileExtension(filePath: outputFilePath)
@@ -317,7 +321,7 @@ func getFfmpegCommand(inputVideo: Video, outputFilePath: String) -> String {
   
   // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
   // converting more than one audio and video stream, the mapping should be moved to getVideoConversionCommand and getAudioConversionCommand
-  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? -map 0:a?  \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? -map 0:a? \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
   
   return command
 }
