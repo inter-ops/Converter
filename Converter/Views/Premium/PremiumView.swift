@@ -123,7 +123,7 @@ extension ViewController {
   
   /// Returns VideoQuality type upon user dropdown selection (ie. `.balanced`)
   func userDidSelectQuality(_ quality: VideoQuality) {
-    // Update outputFormat to selected item
+    // Update outputQuality to selected item
     outputQuality = quality
     
     Logger.info("User did select quality: \(quality.rawValue)")
