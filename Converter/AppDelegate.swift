@@ -35,6 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
   
+  // TODO: @JB Add multi-file Open-With (if possible)
   /// Flag to determine if mainWindow ViewController has loaded to the point of accepting call requests
   var mainViewHasAppeared = false
   /// String path of the input file, requested to be open with mainWindow ViewController, if applicable
