@@ -11,11 +11,12 @@ import ffmpegkit
 class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
   /// Set to `true` if user has purchased premium
-  var userDidPurchasePremium = false
-  /// Set to `false` to disable all premium UI components
-  var isPremiumEnabled = false //true
+  //var userDidPurchasePremium = false
+  
   /// Set to `true` to hide the expandable button, as well as all the premium features
-  var isPremiumHiddenFromApp = true
+  var isPremiumHiddenFromApp = true // false will also isPremiumEnable = true
+  /// Set to `true` to enable all premium UI components
+  var isPremiumEnabled = false
   
   @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
@@ -87,9 +88,12 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     expandablePremiumView.isHidden = true
     
+    // TODO: Remove once premium is ready for prod
     if isPremiumHiddenFromApp {
       expandCollapsePremiumViewButton.isHidden = true
       expandCollapsePremiumButtonTrailingConstraint.constant = -8
+    } else {
+      isPremiumEnabled = true
     }
   }
   
