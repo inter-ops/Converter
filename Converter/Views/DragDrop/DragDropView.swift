@@ -15,6 +15,7 @@ import Cocoa
   func showSupportedFormatsPopover()
   func hideSupportedFormatsPopover()
   func openFileBrowser()
+  func inputFileHandler(fileUrls: [String])
 }
 
 class DragDropView: NSView {
@@ -22,6 +23,7 @@ class DragDropView: NSView {
   @IBOutlet weak var delegate: DragDropViewDelegate?
   
   var filePath: String?
+  var fileUrls: [String]?
   
   let clearColor = NSColor.clear.cgColor
   
@@ -40,9 +42,7 @@ class DragDropView: NSView {
       delegate?.openFileBrowser()
     }
   }
-  
-  // TODO: If wrong file ext is dragged in, show "Supported extensions" message to clarify to user
-  // TODO: Hide "Drag and drop your video here" when a video is dropped, and instead show an "x" button to let the user remove it if they want to swap it out
+
   override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
     if checkExtension(sender) == true {
       layer?.backgroundColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor //NSColor.blue.cgColor
@@ -76,11 +76,14 @@ class DragDropView: NSView {
   override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
     // TODO: If the user draps multiple files, show an error
     guard let pasteboard = sender.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
-          let path = pasteboard[0] as? String
+          let path = pasteboard[0] as? String,
+          let fileUrls = pasteboard as? [String]
     else { return false }
     
     filePath = path
-    delegate?.dragDropViewDidReceive(fileUrl: path)
+    
+    //delegate?.dragDropViewDidReceive(fileUrl: path)
+    delegate?.inputFileHandler(fileUrls: fileUrls)
     
     return true
   }

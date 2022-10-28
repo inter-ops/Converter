@@ -127,12 +127,24 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       }
       self.appDelegate.mainViewHasAppeared = true
     }
-    
-    // TODO: Uncomment PremiumView display:
-    //initPremiumView()
   }
   
-  /// Handles all input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
+  
+  func inputFileHandler(fileUrls: [String]) {
+    if fileUrls.count > 1 {
+      dragDropViewDidReceiveMultiple(fileUrls: fileUrls)
+    } else {
+      dragDropViewDidReceive(fileUrl: fileUrls[0])
+    }
+  }
+  
+  /// Handles all multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
+  func dragDropViewDidReceiveMultiple(fileUrls: [String]) {
+    Logger.debug("User did input multiple urls: \(fileUrls)")
+    // inputVideos = fileUrls
+  }
+  
+  /// Handles all singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceive(fileUrl: String) {
     Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
