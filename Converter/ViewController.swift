@@ -107,6 +107,12 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     if VideoFormat.isSupportedAsInput(fileUrl) {
       if isFileValid(inputFilePath: inputFileUrl.path) {
+        
+        // If the input video has already been added, ignore it
+        if !inputVideos.allSatisfy({ $0.filePath != inputFileUrl.path }) {
+          return
+        }
+        
         let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl)
         inputVideos.append(inputVideo)
         
@@ -243,33 +249,38 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func handleActionButton(withStatus: ConversionState) {
     switch withStatus {
     case .ready:
-      let userSelectedOutputDirectory = selectOutputDirectory()
-      if userSelectedOutputDirectory == nil {
-        self.errorAlert(withMessage: "You must select an output file path to add this file.")
-        return
+      if inputVideos.count > 1 {
+        let userSelectedOutputDirectory = selectOutputDirectory()
+        if userSelectedOutputDirectory == nil {
+          self.errorAlert(withMessage: "You must select an output file path to add this file.")
+          return
+        }
+        
+        let dateString = Date().iso8601withFractionalSeconds
+        let generatedOutputDirectory = "Video-Converter-\(dateString)"
+        
+        let outputDirectory = userSelectedOutputDirectory!.appendingPathComponent(generatedOutputDirectory)
+        
+        do {
+          try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: false)
+        } catch {
+          // TODO: Handle this better
+          self.errorAlert(withMessage: "Something went wrong!\n\(error.localizedDescription)")
+          return
+        }
+        
+        var startMessage = "Converting input videos\n"
+        self.inputVideos.enumerated().forEach { (i, inputVideo) in
+          let outputFileUrl = outputDirectory.appendingPathComponent(inputVideo.fileUrl.lastPathComponent)
+          inputVideos[i].outputFileUrl = outputFileUrl
+          startMessage += "\(i+1). \(inputVideo.filePath) -> \(outputFileUrl.path)\n"
+        }
+        Logger.info(startMessage)
       }
-      
-      let dateString = Date().iso8601withFractionalSeconds
-      let generatedOutputDirectory = "Video-Converter-\(dateString)"
-      
-      let outputDirectory = userSelectedOutputDirectory!.appendingPathComponent(generatedOutputDirectory)
-      
-      do {
-        try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: false)
-      } catch {
-        // TODO: Show user error
-        print("Error creating directory \(error)")
-        return
+      else {
+        let outputFileUrl = selectOutputFileUrl(format: outputFormat, inputFileUrl: inputVideos[0].fileUrl)
+        inputVideos[0].outputFileUrl = outputFileUrl
       }
-      
-      var startMessage = "Converting input videos\n"
-      self.inputVideos.enumerated().forEach { (i, inputVideo) in
-        let outputFileUrl = outputDirectory.appendingPathComponent(inputVideo.fileUrl.lastPathComponent)
-        inputVideos[i].outputFileUrl = outputFileUrl
-        startMessage += "\(i+1). \(inputVideo.filePath) -> \(outputFileUrl.path)\n"
-      }
-      
-      Logger.info(startMessage)
       
       startConversion(activeVideoIndex: 0)
       actionButton.title = "Stop"
