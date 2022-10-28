@@ -44,13 +44,10 @@ extension ViewController {
 extension NSControl.StateValue {
   /// Returns string value of NSControl StateValue (ie. `checkbox == .on, return "on"`)
   var toString: String {
-    if self == .on {
-      return "on"
-    } else if self == .off {
-      return "off"
-    } else {
-      return "unknown"
-    }
+    if self == .on { return "on" }
+    else if self == .off { return "off" }
+    else if self == .mixed { return "mixed" }
+    else { return "unknown" }
   }
   
 }
