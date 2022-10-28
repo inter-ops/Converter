@@ -1002,7 +1002,7 @@
                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="dVG-tg-mMT">
                                                     <rect key="frame" x="0.0" y="12" width="220" height="34"/>
                                                     <subviews>
-                                                        <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5hq-7m-pOI">
+                                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5hq-7m-pOI">
                                                             <rect key="frame" x="18" y="8" width="69" height="18"/>
                                                             <buttonCell key="cell" type="check" title="Burn in" bezelStyle="regularSquare" imagePosition="left" inset="2" id="bLt-3b-ka0">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1012,10 +1012,10 @@
                                                                 <action selector="selectBurnInSubtitlesCheckbox:" target="XfG-lQ-9wD" id="NSz-cL-vDw"/>
                                                             </connections>
                                                         </button>
-                                                        <popUpButton verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DtH-UZ-ofq">
+                                                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtH-UZ-ofq">
                                                             <rect key="frame" x="92" y="3" width="112" height="25"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="500" constant="105" id="7u3-Gk-yn0"/>
+                                                                <constraint firstAttribute="width" relation="lessThanOrEqual" priority="500" constant="105" id="7u3-Gk-yn0"/>
                                                             </constraints>
                                                             <popUpButtonCell key="cell" type="push" title="0: English" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="qWp-Eg-9n9" id="c76-88-23R">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
