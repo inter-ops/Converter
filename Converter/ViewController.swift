@@ -59,6 +59,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   // PremiumView variables
   var codecTitles: [String] = []
   var qualityTitles: [String] = []
+  var copyAllAudioState: NSControl.StateValue = .off      // default unchecked
+  var copyAllSubtitlesState: NSControl.StateValue = .off  // default unchecked
+  var burnInSubtitleState: NSControl.StateValue = .off    // default unchecked
 
   // Video object variables
   var outputFormat: VideoFormat = .mp4  //  User select output format (mp4 default)
