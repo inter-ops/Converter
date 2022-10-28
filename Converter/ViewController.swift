@@ -147,6 +147,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     } else {
       // if free user, route first dragged file to singular dragDropDidReceive
       dragDropViewDidReceive(fileUrl: fileUrls[0])
+      // show notice: maximum one file input, upgrade for more
+      //premiumNotice()
     }
   }
   
