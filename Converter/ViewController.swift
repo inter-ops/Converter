@@ -136,6 +136,12 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func dragDropViewDidReceive(fileUrl: String) {
     Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
+    if !isPremiumEnabled && inputVideos.count > 0 {
+      // TODO: Prompt user to buy premium
+      print("Premium is disabled, clearing previously selected videos")
+      inputVideos = []
+    }
+    
     resetProgressBar()
     
     let inputFileUrl = fileUrl.fileURL.absoluteURL
