@@ -369,6 +369,16 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
             self.estimatedTimeText.stringValue = "Error ⛔️"
             self.unexpectedErrorAlert(inputVideos: self.inputVideos)
           }
+          else {
+            if self.inputVideos.count > 1 {
+              let parentDir = self.inputVideos[0].outputFileUrl!.deletingLastPathComponent()
+              self.alertConversionDidComplete(withOutputUrl: parentDir)
+            }
+            else {
+              self.alertConversionDidComplete(withOutputUrl: self.inputVideos[0].outputFileUrl!)
+            }
+            
+          }
         }
         else {
           self.startConversion(activeVideoIndex: activeVideoIndex + 1)
