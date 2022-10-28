@@ -65,18 +65,41 @@ struct API {
     sendPostRequest(url: Constants.API.contactFormUrl, data: params, completion: completion)
   }
   
-  static func errorReport(name: String, email: String, additionalDetails: String, ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, applicationLogs: String?, inputFilePath: String, outputFilePath: String, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
+  static func errorReport(name: String, email: String, additionalDetails: String, inputVideos: [Video], applicationLogs: String?, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
     
-    let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: ffmpegCommand, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-    let sanitizedFfmpegSessionLogs = sanitizeFilePaths(textToSanitize: ffmpegSessionLogs, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-    let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+    var videosData = [] as [Dictionary<String, AnyObject>]
     
-    let sanitizedApplicationLogs = applicationLogs != nil ? sanitizeFilePaths(textToSanitize: applicationLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath) : nil
+    var sanitizedApplicationLogs = applicationLogs
+    
+    inputVideos.forEach { inputVideo in
+      let inputFilePath = inputVideo.filePath
+      let outputFilePath = inputVideo.outputFilePath
       
-    let inputFileExtension = URL(fileURLWithPath: inputFilePath).pathExtension
-    let outputFileExtension = URL(fileURLWithPath: outputFilePath).pathExtension
+      // Remove current input and output file paths from application logs. This is done for all videos, whether errored or not.
+      sanitizedApplicationLogs = sanitizedApplicationLogs != nil ? sanitizeFilePaths(textToSanitize: sanitizedApplicationLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath) : nil
+      
+      // Skip videos that did not have errors
+      if !inputVideo.didError {
+        return
+      }
+      
+      let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegCommand!, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+      let sanitizedFfmpegSessionLogs = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegSessionLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+      let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: inputVideo.ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+
+      let inputFileExtension = URL(fileURLWithPath: inputFilePath).pathExtension
+      let outputFileExtension = URL(fileURLWithPath: outputFilePath).pathExtension
+      
+      let videoData = ["ffmpegCommand": sanitizedFfmpegCommand, "ffmpegSessionLogs": sanitizedFfmpegSessionLogs, "ffprobeOutput": sanitizedFfprobeOutput, "inputFileExtension": inputFileExtension, "outputFileExtension": outputFileExtension] as Dictionary<String, AnyObject>
+      
+      videosData.append(videoData)
+    }
     
-    let params = ["name":name, "email":email, "additionalDetails": additionalDetails, "ffmpegCommand": sanitizedFfmpegCommand, "ffmpegSessionLogs": sanitizedFfmpegSessionLogs, "ffprobeOutput": sanitizedFfprobeOutput, "applicationLogs": sanitizedApplicationLogs, "inputFileExtension": inputFileExtension, "outputFileExtension": outputFileExtension] as Dictionary<String, AnyObject>
+    
+    
+    // TODO: Change API to accept an array of videos
+    
+    var params = ["name":name, "email":email, "additionalDetails": additionalDetails, "videos": videosData, "applicationLogs": sanitizedApplicationLogs ?? ""] as Dictionary<String, AnyObject>
     
     sendPostRequest(url: Constants.API.errorReportUrl, data: params, completion: completion)
   }

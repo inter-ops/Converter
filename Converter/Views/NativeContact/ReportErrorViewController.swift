@@ -7,15 +7,6 @@
 
 import Cocoa
 
-struct AppLogs {
-  static var currentSession = ["START SESSION"]
-  static var mostRecent = ""
-  
-  static func add(_ entry: String) {
-    currentSession.append(entry)
-  }
-}
-
 class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFieldDelegate {
   
   @IBOutlet weak var nameField: NSTextField!
@@ -26,12 +17,7 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
   @IBOutlet weak var sendButton: NSButton!
   @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
   
-  var ffmpegCommand: String = ""
-  var ffmpegSessionLogs: String = ""
-  var ffprobeOutput: String = ""
-  var inputFilePath: String = ""
-  var outputFilePath: String = ""
-  
+  var inputVideos: [Video] = []
   let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
   override func viewDidLoad() {
@@ -45,12 +31,8 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
     messageField.delegate = self
   }
   
-  func setErrorData(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
-    self.ffmpegCommand = ffmpegCommand
-    self.ffmpegSessionLogs = ffmpegSessionLogs
-    self.ffprobeOutput = ffprobeOutput
-    self.inputFilePath = inputFilePath
-    self.outputFilePath = outputFilePath
+  func setErrorData(inputVideos: [Video]) {
+    self.inputVideos = inputVideos
   }
   
   @IBAction func sendButtonAction(_ sender: NSButton) {
@@ -77,7 +59,7 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
     
     let applicationLogs = shouldSendAppLogs ? Logger.getLogsAsString() : nil
     
-    API.errorReport(name: name, email: email, additionalDetails: additionalDetails, ffmpegCommand: self.ffmpegCommand, ffmpegSessionLogs: self.ffmpegSessionLogs, ffprobeOutput: self.ffprobeOutput, applicationLogs: applicationLogs, inputFilePath: self.inputFilePath, outputFilePath: self.outputFilePath) { responseData, errorMessage in
+    API.errorReport(name: name, email: email, additionalDetails: additionalDetails, inputVideos: inputVideos, applicationLogs: applicationLogs) { responseData, errorMessage in
       
       if errorMessage != nil {
         self.updateNotice(withMessage: errorMessage!)
