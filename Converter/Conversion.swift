@@ -170,9 +170,7 @@ func getVideoConversionCommand(inputVideo: Video, outputFilePath: String) -> Str
     // For everything else, we copy video codec since it should be supported.
     // TODO: There could still be some cases where this is not true, need to do more testing, or selectively chose when we can support copying based on input codecs.
     
-    // TODO: Uncomment line below BEFORE MERGING!!!!!!!! This allows us to test conversions which would otherwise remux
-//    return "-c:v copy"
-    return  getVideoCommandForH264(inputVideo: inputVideo)
+    return "-c:v copy"
     
   case VideoFormat.avi.rawValue:
     if inputVideoCodec == VideoCodec.mpeg4 {
