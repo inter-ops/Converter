@@ -128,10 +128,10 @@ struct Video {
   let title: String? // This comes from TAG:title if exists
   let fileUrl: URL
   let filePath: String
-  var outputFileUrl: URL
-  var outputFilePath: String  {
+  var outputFileUrl: URL?
+  var outputFilePath: String?  {
     get {
-      return outputFileUrl.path
+      return outputFileUrl != nil ? outputFileUrl!.path : nil
     }
   }
 
@@ -157,12 +157,11 @@ struct Video {
   let audioStreams: [AudioStream]
   let subtitleStreams: [SubtitleStream]
   
-  init(ffprobeDict: [String: String], fileUrl: URL, outputFileUrl: URL, ffprobeOutput: String, videoStreams: [VideoStream], audioStreams: [AudioStream], subtitleStreams: [SubtitleStream]) {
+  init(ffprobeDict: [String: String], fileUrl: URL, ffprobeOutput: String, videoStreams: [VideoStream], audioStreams: [AudioStream], subtitleStreams: [SubtitleStream]) {
     self.title = ffprobeDict["TAG:title"]
     self.encoder = ffprobeDict["TAG:ENCODER"]
     self.fileUrl = fileUrl
     self.filePath = fileUrl.path
-    self.outputFileUrl = outputFileUrl
     self.ffprobeOutput = ffprobeOutput
     
     self.duration = Double(ffprobeDict["duration"] ?? "0")!
@@ -176,7 +175,7 @@ struct Video {
   }
 }
 
-func buildVideo(withFfprobeOutput: String, inputFileUrl: URL, outputFileUrl: URL) -> Video {
+func buildVideo(withFfprobeOutput: String, inputFileUrl: URL) -> Video {
   let components = withFfprobeOutput.components(separatedBy: "[/STREAM]\n");
   
   var videoStreams: [VideoStream] = []
@@ -226,7 +225,7 @@ func buildVideo(withFfprobeOutput: String, inputFileUrl: URL, outputFileUrl: URL
     }
     else {
       // Create video properties
-      video = Video(ffprobeDict: dict, fileUrl: inputFileUrl, outputFileUrl: outputFileUrl, ffprobeOutput: withFfprobeOutput, videoStreams: videoStreams, audioStreams: audioStreams, subtitleStreams: subtitleStreams)
+      video = Video(ffprobeDict: dict, fileUrl: inputFileUrl, ffprobeOutput: withFfprobeOutput, videoStreams: videoStreams, audioStreams: audioStreams, subtitleStreams: subtitleStreams)
     }
   }
   
