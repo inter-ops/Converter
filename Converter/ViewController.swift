@@ -286,7 +286,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   
   func setEstimatedTimeLabel(_ label: String) {
-    if isPremiumEnabled && activeVideoIndex != nil {
+    if inputVideos.count > 1 && activeVideoIndex != nil {
       self.estimatedTimeLabel.stringValue = "(\(activeVideoIndex!+1)/\(inputVideos.count)) \(label)"
     }
     else {
