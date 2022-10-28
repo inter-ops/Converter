@@ -95,11 +95,7 @@ struct API {
       videosData.append(videoData)
     }
     
-    
-    
-    // TODO: Change API to accept an array of videos
-    
-    var params = ["name":name, "email":email, "additionalDetails": additionalDetails, "videos": videosData, "applicationLogs": sanitizedApplicationLogs ?? ""] as Dictionary<String, AnyObject>
+    let params = ["name":name, "email":email, "additionalDetails": additionalDetails, "videos": videosData, "applicationLogs": sanitizedApplicationLogs ?? ""] as Dictionary<String, AnyObject>
     
     sendPostRequest(url: Constants.API.errorReportUrl, data: params, completion: completion)
   }
