@@ -129,7 +129,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
   }
   
-  
+  /// Handles and routes both singular file and multi-file imports
   func inputFileHandler(fileUrls: [String]) {
     if fileUrls.count > 1 {
       dragDropViewDidReceiveMultiple(fileUrls: fileUrls)
@@ -138,13 +138,19 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
   }
   
-  /// Handles all multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
+  /// Handles multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceiveMultiple(fileUrls: [String]) {
     Logger.debug("User did input multiple urls: \(fileUrls)")
-    // inputVideos = fileUrls
+    // if premium, handle multi-file
+    if isPremiumEnabled {
+      // inputVideos = fileUrls
+    } else {
+      // if free user, route first dragged file to singular dragDropDidReceive
+      dragDropViewDidReceive(fileUrl: fileUrls[0])
+    }
   }
   
-  /// Handles all singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
+  /// Handles singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceive(fileUrl: String) {
     Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
