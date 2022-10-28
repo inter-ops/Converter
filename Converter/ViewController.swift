@@ -11,7 +11,9 @@ import ffmpegkit
 class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
   /// Set to `true` if user has purchased premium
-  var isPremiumEnabled = true
+  var userDidPurchasePremium = false
+  /// Set to `false` to disable all premium UI components
+  var isPremiumEnabled = false //true
   /// Set to `true` to hide the expandable button, as well as all the premium features
   var isPremiumHiddenFromApp = true
   
