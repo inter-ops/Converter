@@ -14,7 +14,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   //var userDidPurchasePremium = false
   
   /// Set to `true` to hide the expandable button, as well as all the premium features
-  var isPremiumHiddenFromApp = true // false will also isPremiumEnable = true
+  var isPremiumHiddenFromApp = true // false will also isPremiumEnabled = true
   /// Set to `true` to enable all premium UI components
   var isPremiumEnabled = false
   
@@ -93,6 +93,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       expandCollapsePremiumViewButton.isHidden = true
       expandCollapsePremiumButtonTrailingConstraint.constant = -8
     } else {
+      // If premium is shown, enable premium components
       isPremiumEnabled = true
     }
   }

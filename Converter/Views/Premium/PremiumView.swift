@@ -11,9 +11,8 @@ extension ViewController {
   
   func initPremiumView() {
     
-    // TODO: Always start in collapsed
     collapsePremiumView()
-    didSelectNewOutput(format: outputFormat)  // Set default output format MP4
+    didSelectNewOutput(format: outputFormat)  // Set default codec on launch based on default output format
     
     if isPremiumEnabled {
       enablePremiumView()
@@ -56,7 +55,7 @@ extension ViewController {
       initCodecDropdownMenu(forFormat: format)
     //}
   }
-  /// Initialize dropdown menu with titles (see `VideoFormat.dropdownTitle` for values)
+  /// Initialize dropdown menu with titles (see `VideoCodec.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
     codecDropdown.removeAllItems()
     codecDropdown.addItems(withTitles: getCodecDropdownTitles(forFormat: forFormat))
@@ -76,7 +75,7 @@ extension ViewController {
     return codecTitles
   }
   
-  /// Return VideoFormat type from dropdown item selection
+  /// Return VideoCodec type from dropdown item selection
   func getUserSelectedCodec(_ item: String) -> VideoCodec {
     for codec in VideoCodec.allCases {
       if item == codec.dropdownTitle {
