@@ -12,7 +12,7 @@ extension ViewController {
   /// Called when the user toggles the state of the copy all audio streams checkmark
   @IBAction func toggleCopyAllAudioCheckbox(_ sender: NSButton) {
     copyAllAudioState = sender.state
-    Logger.info("Copy all audio streams: \(sender.state)")
+    Logger.info("Copy all audio streams: \(copyAllAudioState.toString)")
   }
   
 }

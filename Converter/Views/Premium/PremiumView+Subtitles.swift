@@ -12,7 +12,7 @@ extension ViewController {
   /// Called when the user toggles the state of the copy all subtitles checkmark
   @IBAction func toggleCopyAllSubtitlesCheckbox(_ sender: NSButton) {
     copyAllSubtitlesState = sender.state
-    Logger.info("Copy all subtitle streams: \(sender.state)")
+    Logger.info("Copy all subtitle streams: \(copyAllSubtitlesState.toString)")
   }
   
   /// Called when the user toggles the state of the burn-in subtitles checkmark
@@ -24,7 +24,7 @@ extension ViewController {
     } else {
       burnInSubtitleDropdown.isEnabled = false
     }
-    Logger.info("Burn in subtitles: \(sender.state)")
+    Logger.info("Burn in subtitles: \(burnInSubtitleState.toString)")
   }
   /// Populate the dropdown with subtitle tracks
   func updateBurnInSubtitles(subtitleList: [String]) {
@@ -35,6 +35,22 @@ extension ViewController {
   func getSelectedBurnInSubtitles() -> String {
     Logger.info("Burn in with selected subtitle: \(String(describing: burnInSubtitleDropdown.titleOfSelectedItem))")
     return burnInSubtitleDropdown.titleOfSelectedItem!
+  }
+  
+}
+
+
+
+extension NSControl.StateValue {
+  /// Returns string value of NSControl StateValue (ie. `checkbox == .on, return "on"`)
+  var toString: String {
+    if self == .on {
+      return "on"
+    } else if self == .off {
+      return "off"
+    } else {
+      return "unknown"
+    }
   }
   
 }
