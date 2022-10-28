@@ -142,20 +142,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     if VideoFormat.isSupportedAsInput(fileUrl) {
       if isFileValid(inputFilePath: inputFileUrl.path) {
-        // TODO: May want some sort of info that they are selecting the output file location, or a button for the user to do this explicitely
-        
-        let outputFileUrl = selectOutputFileUrl(format: outputFormat, inputFileUrl: inputFileUrl)
-        
-        if outputFileUrl == nil {
-          self.errorAlert(withMessage: "You must select an output file path to add this file.")
-          return
-        }
-        else if inputFileUrl.path == outputFileUrl!.path {
-          self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
-          return
-        }
-        
-        let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl, outputFileUrl: outputFileUrl!)
+        let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl)
         inputVideos.append(inputVideo)
         
         displayClearButton(.show)
@@ -295,10 +282,30 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func handleActionButton(withStatus: ConversionState) {
     switch withStatus {
     case .ready:
-      // If the user had previously canceled a conversion, this will be set to true. Reset it to false to ensure the conversion completion block executes properly.
+      let userSelectedOutputDirectory = selectOutputDirectory()
+      if userSelectedOutputDirectory == nil {
+        self.errorAlert(withMessage: "You must select an output file path to add this file.")
+        return
+      }
+      
+      let dateString = Date().iso8601withFractionalSeconds
+      let generatedOutputDirectory = "Video-Converter-\(dateString)"
+      
+      let outputDirectory = userSelectedOutputDirectory!.appendingPathComponent(generatedOutputDirectory)
+      
+      do {
+        try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: false)
+      } catch {
+        // TODO: Show user error
+        print("Error creating directory \(error)")
+        return
+      }
+      
       var startMessage = "Converting input videos\n"
       self.inputVideos.enumerated().forEach { (i, inputVideo) in
-        startMessage += "\(i+1). \(inputVideo.filePath) -> \(inputVideo.outputFilePath)\n"
+        let outputFileUrl = outputDirectory.appendingPathComponent(inputVideo.fileUrl.lastPathComponent)
+        inputVideos[i].outputFileUrl = outputFileUrl
+        startMessage += "\(i+1). \(inputVideo.filePath) -> \(outputFileUrl.path)\n"
       }
       
       Logger.info(startMessage)
@@ -440,6 +447,25 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     } else {
       // FFMPEG has a slight lag after frames are done processing but before the conversion is compelete, so we show the user a message to avoid freezing the time estimate.
       estimatedTimeText.stringValue = "Finishing up..."
+    }
+  }
+  
+  func selectOutputDirectory() -> URL? {
+    let savePanel = NSOpenPanel()
+    savePanel.canCreateDirectories = true
+    savePanel.canChooseDirectories = true
+    savePanel.canChooseFiles = false
+    savePanel.title = "Save your videos"
+    savePanel.message = "Choose a directory for your converted videos"
+    
+    savePanel.isExtensionHidden = true
+    
+    let response = savePanel.runModal()
+    if response == .OK {
+      return savePanel.url!
+    }
+    else {
+      return nil
     }
   }
   

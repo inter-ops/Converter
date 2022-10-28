@@ -89,6 +89,8 @@ extension ViewController {
   /// Calls sample alertErrorPrompt() with error output for: unavailable input channels
   @IBAction func triggerAlertErrorTestAction(_ sender: NSMenuItem) {
     let a = AlertErrorTest.self
+    a.inputVideo.outputFileUrl = a.outputFileUrl
+    
     unexpectedErrorAlert(inputVideos: [a.inputVideo])
   }
 }
@@ -132,5 +134,5 @@ struct AlertErrorTest {
       DURATION        : 00:03:49.501000000
   """
   
-  static let inputVideo = buildVideo(withFfprobeOutput: ffprobeOutput, inputFileUrl: inputFileUrl, outputFileUrl: outputFileUrl)
+  static var inputVideo = buildVideo(withFfprobeOutput: ffprobeOutput, inputFileUrl: inputFileUrl)
 }

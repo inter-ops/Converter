@@ -115,7 +115,7 @@ func getVideoConversionCommand(inputVideo: Video) -> String {
   
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
-  let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath)
+  let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   let inputFileType = getFileExtension(filePath: inputVideo.filePath)
   
   switch outputFileType {
@@ -222,7 +222,7 @@ func getAacConversionCommand(inputVideo: Video) -> String {
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
 func getAudioConversionCommand(inputVideo: Video) -> String {
-  let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath)
+  let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
   // If we don't have any audio streams, or we are converting to GIF, we don't need an audio conversion command
   if inputVideo.audioStreams.isEmpty || outputFileType == VideoFormat.gif.rawValue {
@@ -280,7 +280,7 @@ func getAudioConversionCommand(inputVideo: Video) -> String {
 /// Get the subtitle conversion portion of the FFMPEG command.
 /// https://en.wikibooks.org/wiki/FFMPEG_An_Intermediate_Guide/subtitle_options
 func getSubtitleConversionCommand(inputVideo: Video) -> String {
-  let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath)
+  let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
   // If we don't have any audio streams, or we are converting to GIF, we don't need a subtitle conversion command
   if inputVideo.subtitleStreams.isEmpty || outputFileType == VideoFormat.gif.rawValue {
@@ -318,7 +318,7 @@ func getFfmpegCommand(inputVideo: Video) -> String {
   
   // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
   // converting more than one audio and video stream, the mapping should be moved to getVideoConversionCommand and getAudioConversionCommand
-  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? -map 0:a? \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath)\""
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? -map 0:a? \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
   
   return command
 }
@@ -331,11 +331,11 @@ func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> 
   return session!
 }
 
-func getAllVideoProperties(inputFileUrl: URL, outputFileUrl: URL) -> Video {
+func getAllVideoProperties(inputFileUrl: URL) -> Video {
   let session = FFprobeKit.execute("-loglevel error -show_entries stream:format \"\(inputFileUrl.path)\"")
   let logs = session?.getAllLogsAsString()!.trimmingCharacters(in: .whitespacesAndNewlines)
 
-  return buildVideo(withFfprobeOutput: logs!, inputFileUrl: inputFileUrl, outputFileUrl: outputFileUrl)
+  return buildVideo(withFfprobeOutput: logs!, inputFileUrl: inputFileUrl)
 }
 
 // This uses the same command as getAllVideoProperties but we leave out the loglevel field to include additional metadata

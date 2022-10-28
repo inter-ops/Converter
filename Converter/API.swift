@@ -76,19 +76,19 @@ struct API {
       let outputFilePath = inputVideo.outputFilePath
       
       // Remove current input and output file paths from application logs. This is done for all videos, whether errored or not.
-      sanitizedApplicationLogs = sanitizedApplicationLogs != nil ? sanitizeFilePaths(textToSanitize: sanitizedApplicationLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath) : nil
+      sanitizedApplicationLogs = sanitizedApplicationLogs != nil ? sanitizeFilePaths(textToSanitize: sanitizedApplicationLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath!) : nil
       
       // Skip videos that did not have errors
       if !inputVideo.didError {
         return
       }
       
-      let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegCommand!, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-      let sanitizedFfmpegSessionLogs = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegSessionLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
-      let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: inputVideo.ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+      let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegCommand!, inputFilePath: inputFilePath, outputFilePath: outputFilePath!)
+      let sanitizedFfmpegSessionLogs = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegSessionLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath!)
+      let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: inputVideo.ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath!)
 
       let inputFileExtension = URL(fileURLWithPath: inputFilePath).pathExtension
-      let outputFileExtension = URL(fileURLWithPath: outputFilePath).pathExtension
+      let outputFileExtension = URL(fileURLWithPath: outputFilePath!).pathExtension
       
       let videoData = ["ffmpegCommand": sanitizedFfmpegCommand, "ffmpegSessionLogs": sanitizedFfmpegSessionLogs, "ffprobeOutput": sanitizedFfprobeOutput, "inputFileExtension": inputFileExtension, "outputFileExtension": outputFileExtension] as Dictionary<String, AnyObject>
       
