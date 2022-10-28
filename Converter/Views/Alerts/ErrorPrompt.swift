@@ -15,8 +15,7 @@ extension ViewController {
     
     let a = NSAlert()
     a.messageText = "An error occured"
-    // TODO: Tweak message if there was multiple videos
-    a.informativeText = "There was a problem converting \(inputVideos.count > 1 ? "your file" : "\(errorVideos.count)/\(inputVideos.count) of your files"). Would you like to send this error to the dev team?"
+    a.informativeText = "There was a problem converting \(inputVideos.count > 1 ? "\(errorVideos.count)/\(inputVideos.count) of your files" : "your file"). Would you like to send this error to the dev team?"
     a.addButton(withTitle: "Send")
     a.addButton(withTitle: "Dismiss")
     a.alertStyle = NSAlert.Style.critical

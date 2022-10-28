@@ -136,6 +136,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func dragDropViewDidReceive(fileUrl: String) {
     Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
+    resetProgressBar()
+    
     let inputFileUrl = fileUrl.fileURL.absoluteURL
     
     if VideoFormat.isSupportedAsInput(fileUrl) {
@@ -287,9 +289,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     switch withStatus {
     case .ready:
       // If the user had previously canceled a conversion, this will be set to true. Reset it to false to ensure the conversion completion block executes properly.
-      resetProgressBar()
-      
-      var startMessage = "Starting input videos\n"
+      var startMessage = "Converting input videos\n"
       self.inputVideos.enumerated().forEach { (i, inputVideo) in
         startMessage += "\(i+1). \(inputVideo.filePath) -> \(inputVideo.outputFilePath)\n"
       }
@@ -318,7 +318,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   
   func setEstimatedTimeLabel(_ label: String) {
-    if isPremiumEnabled {
+    if isPremiumEnabled && activeVideoIndex != nil {
       self.estimatedTimeLabel.stringValue = "(\(activeVideoIndex!+1)/\(inputVideos.count)) \(label)"
     }
     else {
@@ -327,6 +327,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   
   func startConversion(activeVideoIndex: Int) {
+    resetProgressBar()
     var analyticsTimer = Timer()
     
     self.activeVideoIndex = activeVideoIndex
@@ -366,6 +367,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
             print("Error from ffmpeg command: \(ffmpegSessionLogs)")
           }
           
+          // TODO: Show error toast
           self.estimatedTimeText.stringValue = "Error ⛔️"
         }
         else {
@@ -378,6 +380,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           self.resetActionButton()
           
           if !self.inputVideos.allSatisfy({ $0.didError == false }) {
+            self.estimatedTimeText.stringValue = "Error ⛔️"
             self.unexpectedErrorAlert(inputVideos: self.inputVideos)
           }
         }
@@ -507,6 +510,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   func resetProgressBar() {
     updateProgressBar(value: 0)
+    setEstimatedTimeLabel(Constants.estimatedTimeLabelText)
     estimatedTimeText.stringValue = "–:–"
   }
   
@@ -517,6 +521,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBAction func clearInputFile(_ sender: Any) {
     updateDragDrop(withStyle: .empty)
     inputVideos = []
+    resetProgressBar()
     displayClearButton(.hide)   // Hide clear button
   }
   /// Set the display state of clearInputFileButton: `.hide` or `.show`
