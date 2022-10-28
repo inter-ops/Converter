@@ -317,7 +317,7 @@ func getFfmpegCommand(inputVideo: Video, outputFilePath: String) -> String {
   
   // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
   // converting more than one audio and video stream, the mapping should be moved to getVideoConversionCommand and getAudioConversionCommand
-  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v -map 0:a  \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? -map 0:a?  \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(outputFilePath)\""
   
   return command
 }
