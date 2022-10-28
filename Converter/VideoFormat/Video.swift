@@ -5,6 +5,8 @@
 //  Created by Francesco Virga on 2022-09-17.
 //
 
+import ffmpegkit
+
 enum CodecType: String {
   case video, audio, subtitle
 }
@@ -124,7 +126,26 @@ struct SubtitleStream {
 
 struct Video {
   let title: String? // This comes from TAG:title if exists
+  let fileUrl: URL
   let filePath: String
+  var outputFileUrl: URL
+  var outputFilePath: String  {
+    get {
+      return outputFileUrl.path
+    }
+  }
+
+  
+  let ffprobeOutput: String
+  var ffmpegCommand: String?
+  
+  // Only set after conversion completes
+  var ffmpegSessionLogs: String?
+  
+  var startOfConversion: Date?
+  var isComplete: Bool = false
+  var didError: Bool = false
+  
   let duration: Double // Seconds
   let bitRate: Int // This is in bits/s
   let size: Int // This is in bytes
@@ -136,10 +157,13 @@ struct Video {
   let audioStreams: [AudioStream]
   let subtitleStreams: [SubtitleStream]
   
-  init(ffprobeDict: [String: String], filePath: String, videoStreams: [VideoStream], audioStreams: [AudioStream], subtitleStreams: [SubtitleStream]) {
+  init(ffprobeDict: [String: String], fileUrl: URL, outputFileUrl: URL, ffprobeOutput: String, videoStreams: [VideoStream], audioStreams: [AudioStream], subtitleStreams: [SubtitleStream]) {
     self.title = ffprobeDict["TAG:title"]
     self.encoder = ffprobeDict["TAG:ENCODER"]
-    self.filePath = filePath
+    self.fileUrl = fileUrl
+    self.filePath = fileUrl.path
+    self.outputFileUrl = outputFileUrl
+    self.ffprobeOutput = ffprobeOutput
     
     self.duration = Double(ffprobeDict["duration"] ?? "0")!
     self.bitRate = Int(ffprobeDict["bit_rate"] ?? "0")!
@@ -152,7 +176,7 @@ struct Video {
   }
 }
 
-func buildVideo(withFfprobeOutput: String, inputFilePath: String) -> Video {
+func buildVideo(withFfprobeOutput: String, inputFileUrl: URL, outputFileUrl: URL) -> Video {
   let components = withFfprobeOutput.components(separatedBy: "[/STREAM]\n");
   
   var videoStreams: [VideoStream] = []
@@ -202,7 +226,7 @@ func buildVideo(withFfprobeOutput: String, inputFilePath: String) -> Video {
     }
     else {
       // Create video properties
-      video = Video(ffprobeDict: dict, filePath: inputFilePath, videoStreams: videoStreams, audioStreams: audioStreams, subtitleStreams: subtitleStreams)
+      video = Video(ffprobeDict: dict, fileUrl: inputFileUrl, outputFileUrl: outputFileUrl, ffprobeOutput: withFfprobeOutput, videoStreams: videoStreams, audioStreams: audioStreams, subtitleStreams: subtitleStreams)
     }
   }
   

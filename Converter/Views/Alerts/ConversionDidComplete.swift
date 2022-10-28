@@ -10,7 +10,7 @@ import Cocoa
 extension ViewController {
   
   /// Alert user of successful conversion output and display "Reveal in Finder" option
-  func alertConversionDidComplete(withOutputPath: URL) {
+  func alertConversionDidComplete(withOutputPath: String) {
     let a = NSAlert()
     a.messageText = "Conversion Complete"
     a.informativeText = "Your video file has been converted successfully!"
@@ -24,17 +24,17 @@ extension ViewController {
       }
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
         Logger.debug("User did select: Reveal in Finder")
-        self.showInFinder(url: withOutputPath)
+        self.showInFinder(path: withOutputPath)
       }
     })
   }
   
   /// Open Finder with selected file at designated `url`
-  func showInFinder(url: URL?) {
-    guard let url = url else { return }
+  func showInFinder(path: String) {
+    let url = URL(fileURLWithPath: path)
     
     if url.isDirectory {
-      NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: url.path)
+      NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: path)
     } else {
       NSWorkspace.shared.activateFileViewerSelecting([url])
     }

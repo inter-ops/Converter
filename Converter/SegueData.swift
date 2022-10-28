@@ -14,12 +14,8 @@ enum WindowSegues: String, CaseIterable {
 
 extension ViewController {
   
-  func segueToErrorReport(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
-    DraftError.ffmpegCommand = ffmpegCommand
-    DraftError.ffprobeOutput = ffprobeOutput
-    DraftError.ffmpegSessionLogs = ffmpegSessionLogs
-    DraftError.inputFilePath = inputFilePath
-    DraftError.outputFilePath = outputFilePath
+  func segueToErrorReport(inputVideos: [Video]) {
+    DraftError.inputVideos = inputVideos
     segue(.showReportError)
   }
   
@@ -33,18 +29,14 @@ extension ViewController {
     // Called upon window segue showReportError
     if (segue.identifier == WindowSegues.showReportError.rawValue) {
       if let reportErrorWC = segue.destinationController as? ReportErrorWindowController {
-        reportErrorWC.passErrorData(ffmpegCommand: DraftError.ffmpegCommand, ffmpegSessionLogs: DraftError.ffmpegSessionLogs, ffprobeOutput: DraftError.ffprobeOutput, inputFilePath: DraftError.inputFilePath, outputFilePath: DraftError.outputFilePath)
+        reportErrorWC.passErrorData(inputVideos: DraftError.inputVideos)
       }
     }
     
   }
   
   struct DraftError {
-    static var ffmpegCommand = ""
-    static var ffmpegSessionLogs = ""
-    static var ffprobeOutput = ""
-    static var inputFilePath = ""
-    static var outputFilePath = ""
+    static var inputVideos: [Video] = []
   }
   
 }

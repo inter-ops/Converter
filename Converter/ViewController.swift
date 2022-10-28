@@ -58,18 +58,15 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   // PremiumView variables
   var codecTitles: [String] = []
-  
+
   // Video object variables
   var outputFormat: VideoFormat = .mp4  //  User select output format (mp4 default)
   var outputCodec: VideoCodec = .h264   // User select output codec (h264 default)
   
-  var inputFileUrl: URL?
-  var outputFileUrl: URL?
-  var startOfConversion: Date?
-  var isTimeRemainingStable = false
-  var ffmpegCommand: String?
+  var inputVideos: [Video] = []
+  var activeVideoIndex: Int?
   
-  var inputVideo: Video?
+  var isTimeRemainingStable = false
   
   let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
@@ -103,6 +100,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     hidePopover(helpInfoPopover)
   }
   
+  // TODO: This needs to be accessible even if a file is already selected, only in premium
   func openFileBrowser() {
     let openPanel = NSOpenPanel()
     
@@ -138,16 +136,31 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func dragDropViewDidReceive(fileUrl: String) {
     Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
-    inputFileUrl = fileUrl.fileURL.absoluteURL
+    let inputFileUrl = fileUrl.fileURL.absoluteURL
     
     if VideoFormat.isSupportedAsInput(fileUrl) {
       updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
       displayClearButton(.show)
       
-      let isValid = isFileValid(inputFilePath: inputFileUrl!.path)
-      if !isValid {
+      if isFileValid(inputFilePath: inputFileUrl.path) {
+        // TODO: May want some sort of info that they are selecting the output file location, or a button for the user to do this explicitely
+        
+        let outputFileUrl = selectOutputFileUrl(format: outputFormat, inputFileUrl: inputFileUrl)
+        
+        if outputFileUrl == nil {
+          self.errorAlert(withMessage: "You must select an output file path to add this file.")
+          return
+        }
+        else if inputFileUrl.path == outputFileUrl!.path {
+          self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
+          return
+        }
+        
+        let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl, outputFileUrl: outputFileUrl!)
+        inputVideos.append(inputVideo)
+      }
+      else {
         updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
-        inputFileUrl = nil
       }
     } else {
       updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
@@ -205,21 +218,27 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
   }
   
-  /// Calculates the video conversion progress in percentage.
-  func getProgressPercentage(statistics: Statistics) -> Double {
-    let timeElapsed = self.startOfConversion!.timeIntervalSinceNow * -1
+  
+  // TODO: These methods should be moved to a util
+  func getEstimatedTotalConversionTime(statistics: Statistics, timeElapsed: Double) -> Double {
     let videoTime = Double(statistics.getTime())/1000
-    let totalConversionTime = timeElapsed * (self.inputVideo!.duration / videoTime)
+    let totalConversionTime = timeElapsed * (self.inputVideos[self.activeVideoIndex!].duration / videoTime)
+    return totalConversionTime
+  }
+  
+  /// Calculates the video conversion progress in percentage.
+  func getProgressPercentage(statistics: Statistics, startOfConversion: Date) -> Double {
+    let timeElapsed = startOfConversion.timeIntervalSinceNow * -1
+    let totalConversionTime = getEstimatedTotalConversionTime(statistics: statistics, timeElapsed: timeElapsed)
     
     let progressPercentage = (timeElapsed / totalConversionTime) * 100
     return progressPercentage
   }
   
   /// Calculates an estimated time remaining for the active video conversion.
-  func getEstimatedTimeRemaining(statistics: Statistics, progressPercentage: Double) -> Double {
-    let timeElapsed = self.startOfConversion!.timeIntervalSinceNow * -1
-    let videoTime = Double(statistics.getTime())/1000
-    let totalConversionTime = timeElapsed * (self.inputVideo!.duration / videoTime)
+  func getEstimatedTimeRemaining(statistics: Statistics, startOfConversion: Date, progressPercentage: Double) -> Double {
+    let timeElapsed = startOfConversion.timeIntervalSinceNow * -1
+    let totalConversionTime = getEstimatedTotalConversionTime(statistics: statistics, timeElapsed: timeElapsed)
     
     let timeRemaining = totalConversionTime - timeElapsed
     return timeRemaining
@@ -237,11 +256,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       return
     }
     
-    let progressPercentage = getProgressPercentage(statistics: statisticsArray[statisticsArray.count-1])
-    let timeRemaining = getEstimatedTimeRemaining(statistics: statisticsArray[statisticsArray.count-1], progressPercentage: progressPercentage)
+    let inputVideo = inputVideos[activeVideoIndex!]
+    let startOfConversion = inputVideo.startOfConversion!
     
-    let lastProgressPercentage = getProgressPercentage(statistics: statisticsArray[statisticsArray.count-2])
-    let lastTimeRemaining = getEstimatedTimeRemaining(statistics: statisticsArray[statisticsArray.count-2], progressPercentage: lastProgressPercentage)
+    let progressPercentage = getProgressPercentage(statistics: statisticsArray[statisticsArray.count-1], startOfConversion: startOfConversion)
+    let timeRemaining = getEstimatedTimeRemaining(statistics: statisticsArray[statisticsArray.count-1], startOfConversion: startOfConversion, progressPercentage: progressPercentage)
+    
+    let lastProgressPercentage = getProgressPercentage(statistics: statisticsArray[statisticsArray.count-2], startOfConversion: startOfConversion)
+    let lastTimeRemaining = getEstimatedTimeRemaining(statistics: statisticsArray[statisticsArray.count-2], startOfConversion: startOfConversion, progressPercentage: lastProgressPercentage)
     
     // Since the last statistic will have been checked Constants.progressUpdateInterval earlier then the current one, we need to adjust it for comparison
     let adjustedLastTimeRemaining = lastTimeRemaining - Constants.progressUpdateInterval
@@ -254,7 +276,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var currentStatus: ConversionState = .ready
   /// Triggers the action button handler if there exists a valid input file; if no input exists, show an error
   func userDidClickActionButton() {
-    if inputFileUrl == nil {
+    if inputVideos.count == 0 {
       updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
     } else {
       handleActionButton(withStatus: currentStatus)
@@ -263,24 +285,18 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Handles the action button states, and their respective actions, based on the current ConversionState: `.ready` or `.converting`
   func handleActionButton(withStatus: ConversionState) {
     switch withStatus {
-    case .ready:      
-      selectOutputFileUrl(format: outputFormat)
-      
+    case .ready:
       // If the user had previously canceled a conversion, this will be set to true. Reset it to false to ensure the conversion completion block executes properly.
       resetProgressBar()
       
-      // Note that we check this after resetting the app state. This prevents the user from mistaking a previously shown "Done 🚀" message with the state of the canceled conversion. If we checked this before resetting the progress bar, a user may think the conversion they canceled was actually done, since the done message from the previous conversion would still be shown.
-      if outputFileUrl == nil {
-        Logger.warning("User canceled output file selection, skipping conversion")
-        return
+      var startMessage = "Starting input videos\n"
+      self.inputVideos.enumerated().forEach { (i, inputVideo) in
+        startMessage += "\(i+1). \(inputVideo.filePath) -> \(inputVideo.outputFilePath)\n"
       }
       
-      if inputFileUrl!.path == outputFileUrl!.path {
-        self.errorAlert(withMessage: "Input and output file names are the same. Please choose a different name.")
-        return
-      }
+      Logger.info(startMessage)
       
-      startConversion()
+      startConversion(activeVideoIndex: 0)
       actionButton.title = "Stop"
       currentStatus = .converting
     case .converting:
@@ -301,58 +317,78 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     FFmpegKit.cancel()
   }
   
-  func startConversion() {
+  func setEstimatedTimeLabel(_ label: String) {
+    if isPremiumEnabled {
+      self.estimatedTimeLabel.stringValue = "(\(activeVideoIndex!+1)/\(inputVideos.count)) \(label)"
+    }
+    else {
+      self.estimatedTimeLabel.stringValue = label
+    }
+  }
+  
+  func startConversion(activeVideoIndex: Int) {
     var analyticsTimer = Timer()
     
-    self.inputVideo = getAllVideoProperties(inputFilePath: inputFileUrl!.path)
+    self.activeVideoIndex = activeVideoIndex
+    let ffmpegCommand = getFfmpegCommand(inputVideo: inputVideos[activeVideoIndex])
+    self.inputVideos[activeVideoIndex].startOfConversion = Date()
+    self.inputVideos[activeVideoIndex].ffmpegCommand = ffmpegCommand
     
-    self.startOfConversion = Date()
-    self.ffmpegCommand = getFfmpegCommand(inputVideo: inputVideo!, outputFilePath: outputFileUrl!.path)
-    
-    let ffmpegSession = runFfmpegCommand(command: ffmpegCommand!) { session in
+    let ffmpegSession = runFfmpegCommand(command: ffmpegCommand) { session in
       let returnCode = session!.getReturnCode()
       analyticsTimer.invalidate()
       
       DispatchQueue.main.async {
         // Reference: https://github.com/tanersener/ffmpeg-kit-test/blob/main/macos/test-app-cocoapods/FFmpegKitMACOS/CommandViewController.m
+        
         if returnCode!.isValueCancel() {
           self.updateProgressBar(value: 0)
           self.estimatedTimeText.stringValue = "Canceled ⚠️"
+          self.activeVideoIndex = nil
+          return
         }
-        else if returnCode!.isValueError() {
-          self.updateProgressBar(value: 100)
-          self.estimatedTimeText.stringValue = "Error ⛔️"
-
+        
+        self.updateProgressBar(value: 100)
+        self.isTimeRemainingStable = false
+        // In case the conversion finished before the time remaining was estimated
+        self.setEstimatedTimeLabel(Constants.estimatedTimeLabelText)
+        
+        let isLastVideo = self.activeVideoIndex == self.inputVideos.count-1
+        self.inputVideos[self.activeVideoIndex!].isComplete = true
+        
+        if returnCode!.isValueError() {
           let ffmpegSessionLogs = session!.getAllLogsAsString().trimmingCharacters(in: .whitespacesAndNewlines)
-          let ffprobeOutput = getFfprobeOutput(inputFilePath: self.inputFileUrl!.path)
-          
+          self.inputVideos[self.activeVideoIndex!].ffmpegSessionLogs = ffmpegSessionLogs
+          self.inputVideos[self.activeVideoIndex!].didError = true
           // We don't use the main logger for this because we don't want to crowd application logs with ffmpeg logs. Instead
           // we just print out so that we can see the error in the Xcode console.
           if Config.shared.debug {
             print("Error from ffmpeg command: \(ffmpegSessionLogs)")
           }
           
-          self.unexpectedErrorAlert(ffmpegCommand: self.ffmpegCommand!, ffmpegSessionLogs: ffmpegSessionLogs, ffprobeOutput: ffprobeOutput, inputFilePath: self.inputFileUrl!.path, outputFilePath: self.outputFileUrl!.path)
+          self.estimatedTimeText.stringValue = "Error ⛔️"
         }
         else {
-          self.updateProgressBar(value: 100)
+          // TODO: Show success toast
           self.estimatedTimeText.stringValue = "Done 🚀"
-          self.alertConversionDidComplete(withOutputPath: self.outputFileUrl!)
         }
         
-        self.resetActionButton()
-        self.outputFileUrl = nil
-        self.isTimeRemainingStable = false
-        self.inputVideo = nil
-        self.startOfConversion = nil
-        self.ffmpegCommand = nil
+        if isLastVideo {
+          self.activeVideoIndex = nil
+          self.resetActionButton()
+          
+          if !self.inputVideos.allSatisfy({ $0.didError == false }) {
+            self.unexpectedErrorAlert(inputVideos: self.inputVideos)
+          }
+        }
+        else {
+          self.startConversion(activeVideoIndex: activeVideoIndex + 1)
+        }
         
-        // In case the conversion finished before the time remaining was estimated
-        self.estimatedTimeLabel.stringValue = Constants.estimatedTimeLabelText
       }
     }
     
-    estimatedTimeLabel.stringValue = Constants.estimatingTimeLabelText
+    setEstimatedTimeLabel(Constants.estimatingTimeLabelText)
     
     // This currently updates progress every 0.5 seconds
     analyticsTimer = Timer.scheduledTimer(withTimeInterval: Constants.progressUpdateInterval, repeats: true, block: { _ in
@@ -363,8 +399,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         
         let lastStatistics = statisticsArray[statisticsArray.count - 1]
         
-        let progressPercentage = self.getProgressPercentage(statistics: lastStatistics)
-        let timeRemaining = self.getEstimatedTimeRemaining(statistics: lastStatistics, progressPercentage: progressPercentage)
+        let startOfConversion = self.inputVideos[self.activeVideoIndex!].startOfConversion!
+        let progressPercentage = self.getProgressPercentage(statistics: lastStatistics, startOfConversion: startOfConversion)
+        let timeRemaining = self.getEstimatedTimeRemaining(statistics: lastStatistics, startOfConversion: startOfConversion, progressPercentage: progressPercentage)
         
         self.updateProgressBar(value: progressPercentage)
         self.updateTimeRemaining(timeRemaining)
@@ -396,13 +433,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
   }
   
-  func selectOutputFileUrl(format: VideoFormat) {
+  func selectOutputFileUrl(format: VideoFormat, inputFileUrl: URL) -> URL? {
     let savePanel = NSSavePanel()
     savePanel.canCreateDirectories = true
     savePanel.title = "Save your video"
     savePanel.message = "Choose a name for your converted video:"
     savePanel.nameFieldLabel = "Video file name:"
-    savePanel.nameFieldStringValue = inputFileUrl!.deletingPathExtension().lastPathComponent // Input file name with extension removed
+    savePanel.nameFieldStringValue = inputFileUrl.deletingPathExtension().lastPathComponent // Input file name with extension removed
     
     savePanel.allowedFileTypes = [format.rawValue]
     savePanel.allowsOtherFileTypes = false
@@ -410,7 +447,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     let response = savePanel.runModal()
     if response == .OK {
-      outputFileUrl = savePanel.url!
+      return savePanel.url!
+    }
+    else {
+      return nil
     }
   }
   
@@ -470,13 +510,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     estimatedTimeText.stringValue = "–:–"
   }
   
-  
+  // TODO: Rename to clearAllInputFiles
   
   // MARK: Clear Input File Button
   /// Clear the input file and revert UI to default state; hide clearInputFileButton when complete
   @IBAction func clearInputFile(_ sender: Any) {
     updateDragDrop(withStyle: .empty)
-    inputFileUrl = nil
+    inputVideos = []
     displayClearButton(.hide)   // Hide clear button
   }
   /// Set the display state of clearInputFileButton: `.hide` or `.show`
