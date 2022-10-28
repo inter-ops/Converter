@@ -1232,6 +1232,7 @@
                         <outlet property="dragDropTopTitle" destination="wI2-qE-TlK" id="loF-4s-gyn"/>
                         <outlet property="estimatedTimeLabel" destination="xFx-Bv-g0e" id="9Fh-Hm-58c"/>
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
+                        <outlet property="expandCollapsePremiumButtonTrailingConstraint" destination="owb-la-udg" id="uXh-Jm-ub7"/>
                         <outlet property="expandCollapsePremiumViewButton" destination="Yf0-0I-yAV" id="jjF-fN-q0X"/>
                         <outlet property="expandablePremiumView" destination="Gfl-op-5Hr" id="VM5-Up-esk"/>
                         <outlet property="formatControlRowView" destination="rgh-KN-ah2" id="G7q-1W-MV2"/>

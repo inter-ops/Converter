@@ -12,6 +12,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Set to `true` if user has purchased premium
   var isPremiumEnabled = true
+  /// Set to `true` to hide the expandable button, as well as all the premium features
+  var isPremiumHiddenFromApp = true
   
   @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
@@ -49,6 +51,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var mainViewHeightConstraint: NSLayoutConstraint!
   @IBOutlet weak var mainViewWidthConstraint: NSLayoutConstraint!
   
+  @IBOutlet weak var expandCollapsePremiumButtonTrailingConstraint: NSLayoutConstraint!
+  
   // PremiumView variables
   var codecTitles: [String] = []
   
@@ -80,6 +84,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     mainViewHeightConstraint.constant = Constants.Frame.mainViewHeight
     
     expandablePremiumView.isHidden = true
+    
+    if isPremiumHiddenFromApp {
+      expandCollapsePremiumViewButton.isHidden = true
+      expandCollapsePremiumButtonTrailingConstraint.constant = -8
+    }
   }
   
   override func viewDidDisappear() {
