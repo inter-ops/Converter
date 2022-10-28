@@ -34,6 +34,8 @@
 		79D352B028FDDDE900F8CD39 /* libswscale.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 79D3529428FDDD4500F8CD39 /* libswscale.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		79D95A8B28E8C3660023BECE /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D95A8A28E8C3660023BECE /* API.swift */; };
 		79F0029C28EF46D400AD93BB /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F0029B28EF46D400AD93BB /* Date.swift */; };
+		C205DB1C2908358C00A1C6F8 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205DB1B2908358C00A1C6F8 /* WindowController.swift */; };
+		C205DB1F290836AA00A1C6F8 /* ResizeViewHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C205DB1E290836AA00A1C6F8 /* ResizeViewHandler.swift */; };
 		C21CC16C28EC920700176A98 /* MessageDidSend.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21CC16B28EC920700176A98 /* MessageDidSend.swift */; };
 		C22287A528F498F400137473 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22287A428F498F400137473 /* String+Extensions.swift */; };
 		C22A4EF328F47AFD0050D739 /* AppMenu+Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */; };
@@ -101,6 +103,8 @@
 		79D3529828FDDD4600F8CD39 /* ffmpegkit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = ffmpegkit.xcframework; sourceTree = "<group>"; };
 		79D95A8A28E8C3660023BECE /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		79F0029B28EF46D400AD93BB /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		C205DB1B2908358C00A1C6F8 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
+		C205DB1E290836AA00A1C6F8 /* ResizeViewHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeViewHandler.swift; sourceTree = "<group>"; };
 		C21CC16B28EC920700176A98 /* MessageDidSend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDidSend.swift; sourceTree = "<group>"; };
 		C22287A428F498F400137473 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppMenu+Global.swift"; sourceTree = "<group>"; };
@@ -156,6 +160,15 @@
 				79F0029B28EF46D400AD93BB /* Date.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		C205DB1D2908363D00A1C6F8 /* DragDrop */ = {
+			isa = PBXGroup;
+			children = (
+				C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */,
+				C2DC46A128AD618500EDD3EB /* DragDropBox.swift */,
+			);
+			path = DragDrop;
 			sourceTree = "<group>";
 		};
 		C22287A328F4988900137473 /* Extensions */ = {
@@ -219,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */,
+				C205DB1E290836AA00A1C6F8 /* ResizeViewHandler.swift */,
 			);
 			path = Premium;
 			sourceTree = "<group>";
@@ -247,6 +261,7 @@
 				C2D94BCD28C11BCE001E14E9 /* Info.plist */,
 				C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */,
 				C22A4EF128F47A930050D739 /* AppMenu */,
+				C205DB1B2908358C00A1C6F8 /* WindowController.swift */,
 				C2D33F4828A950BA00BDCCD4 /* ViewController.swift */,
 				C2638D5B28EB446A00841C47 /* SegueData.swift */,
 				C2DC469E28AC1B9800EDD3EB /* Views */,
@@ -284,8 +299,7 @@
 				C24745C728BD8812007E128B /* Popover */,
 				C256C46A28BA878A00F4DE98 /* ProgressBar */,
 				C289E8AA28BA6DD10002CDA3 /* Alerts */,
-				C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */,
-				C2DC46A128AD618500EDD3EB /* DragDropBox.swift */,
+				C205DB1D2908363D00A1C6F8 /* DragDrop */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -391,6 +405,7 @@
 				799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */,
 				C22287A528F498F400137473 /* String+Extensions.swift in Sources */,
 				C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */,
+				C205DB1C2908358C00A1C6F8 /* WindowController.swift in Sources */,
 				C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */,
 				C274CDEB28E5E274005BCE22 /* ContactViewController.swift in Sources */,
 				7948AA6228CF9916003DB5E2 /* Configuration.swift in Sources */,
@@ -400,6 +415,7 @@
 				794AA2CA28C2D61900AADF36 /* ChannelLayout.swift in Sources */,
 				C2638D5428EA20CA00841C47 /* ContactWindowController.swift in Sources */,
 				C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */,
+				C205DB1F290836AA00A1C6F8 /* ResizeViewHandler.swift in Sources */,
 				79D95A8B28E8C3660023BECE /* API.swift in Sources */,
 				C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */,
 				79AF2A8228D60C26009CCB42 /* Video.swift in Sources */,

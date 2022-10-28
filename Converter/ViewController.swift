@@ -10,9 +10,15 @@ import ffmpegkit
 
 class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
-  /// Temp workable premium flag
+  /// Set to `true` if user has purchased premium
+  //var userDidPurchasePremium = false
+  
+  /// Set to `true` to hide the expandable button, as well as all the premium features
+  var isPremiumHiddenFromApp = true // false will also isPremiumEnabled = true
+  /// Set to `true` to enable all premium UI components
   var isPremiumEnabled = false
   
+  @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
   @IBOutlet weak var actionButton: NSButton!
@@ -20,31 +26,43 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var estimatedTimeLabel: NSTextField!
   
   @IBOutlet weak var expandCollapsePremiumViewButton: NSButton!
+  var premiumViewIsExpanded = false
   
   // DragDropView objects
-  @IBOutlet weak var dragDropView: NSImageView!
+  @IBOutlet weak var dragDropBackgroundImageView: NSImageView!
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
   @IBOutlet weak var clearInputFileButton: NSButton!
   
   // PremiumView: Video
-  @IBOutlet weak var premiumView: NSView!
+  @IBOutlet weak var expandablePremiumView: NSView!
   @IBOutlet weak var codecDropdown: NSPopUpButton!
-  @IBOutlet weak var gpuCheckbox: NSButton!
+  //@IBOutlet weak var gpuCheckbox: NSButton!
   //@IBOutlet weak var qualitySlider: NSSlider!
   @IBOutlet weak var qualityDropdown: NSPopUpButton!
   // PremiumView: Audio
-  @IBOutlet weak var includeAllAudioCheckbox: NSButton!
+  @IBOutlet weak var copyAllAudioCheckbox: NSButton!
   // PremiumView: Subtitles
-  @IBOutlet weak var includeAllSubtitlesCheckbox: NSButton!
+  @IBOutlet weak var copyAllSubtitlesCheckbox: NSButton!
   @IBOutlet weak var burnInSubtitleCheckbox: NSButton!
   @IBOutlet weak var burnInSubtitleDropdown: NSPopUpButton!
+  
+  @IBOutlet weak var formatControlRowView: NSView!
+  @IBOutlet weak var actionControlRowView: NSView!
+  
+  // MARK: ViewConstraints
+  @IBOutlet weak var mainViewHeightConstraint: NSLayoutConstraint!
+  @IBOutlet weak var mainViewWidthConstraint: NSLayoutConstraint!
+  
+  @IBOutlet weak var expandCollapsePremiumButtonTrailingConstraint: NSLayoutConstraint!
   
   // PremiumView variables
   var codecTitles: [String] = []
   
-  // MainView variables
-  var outputFormat: VideoFormat = .mp4   // Default output format
+  // Video object variables
+  var outputFormat: VideoFormat = .mp4  //  User select output format (mp4 default)
+  var outputCodec: VideoCodec = .h264   // User select output codec (h264 default)
+  
   var inputFileUrl: URL?
   var outputFileUrl: URL?
   var startOfConversion: Date?
@@ -58,8 +76,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   override func viewDidLoad() {
     super.viewDidLoad()
     // Init view
+    initMainView()
     initDropdownMenu()
     displayClearButton(.hide)
+    initPremiumView()
+  }
+  
+  func initMainView() {
+    mainViewWidthConstraint.constant = Constants.Frame.mainViewWidth
+    mainViewHeightConstraint.constant = Constants.Frame.mainViewHeight
+    
+    expandablePremiumView.isHidden = true
+    
+    // TODO: Remove once premium is ready for prod
+    if isPremiumHiddenFromApp {
+      expandCollapsePremiumViewButton.isHidden = true
+      expandCollapsePremiumButtonTrailingConstraint.constant = -8
+    } else {
+      // If premium is shown, enable premium components
+      isPremiumEnabled = true
+    }
   }
   
   override func viewDidDisappear() {
@@ -98,7 +134,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     //initPremiumView()
   }
   
-  /// Handles all input file requests, checks for validity and adjust the dragDropView box to reflect any errors
+  /// Handles all input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceive(fileUrl: String) {
     Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
     
@@ -149,7 +185,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
   func updateDragDropView(_ forType: DragDropBox) {
-    dragDropView.image = forType.image
+    dragDropBackgroundImageView.image = forType.image
   }
   /// Sets the dragDropBox title text without affecting the box style (ie. `bottom: inputFileName`)
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {
@@ -162,7 +198,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Update outputFormat to selected item
     outputFormat = format
     
-    Logger.info("User did select \(format.rawValue)")
+    Logger.info("User did select format: \(format.rawValue)")
+    
+    // Set default codec for new format type (if premium)
+    didSelectNewOutput(format: format)
+    
   }
   
   /// Calculates the video conversion progress in percentage.
@@ -407,8 +447,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Handler function
     userDidSelectFormat(userSelectedFormatType)
   }
+  // selectFormat(sender:)
   var userSelectedFormat = VideoFormat.mp4.dropdownTitle
   var userSelectedFormatType: VideoFormat = .mp4
+  // selectCodec(sender:)
+  var userSelectedCodec = VideoCodec.h264.dropdownTitle
+  var userSelectedCodecType: VideoCodec = .h264
+  
   
   @IBAction func clickActionButton(_ sender: Any) {
     // User did click button: "Convert" or "Stop"
@@ -454,9 +499,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     popover.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
     return popover
   }()
-  /// Displays `supportedFormatsPopover` to maxX-position of `dragDropView`
+  /// Displays `supportedFormatsPopover` to maxX-position of `dragDropBackgroundImageView`
   func showSupportedFormatsPopover() {
-    let positioningView = dragDropView!
+    let positioningView = dragDropBackgroundImageView!
     let positioningRect = NSZeroRect
     let preferredEdge = NSRectEdge.maxX
     supportedFormatsPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)

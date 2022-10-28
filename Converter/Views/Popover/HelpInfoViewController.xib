@@ -23,7 +23,7 @@
                         <constraint firstAttribute="width" constant="209" id="YXp-es-Su1"/>
                     </constraints>
                     <textFieldCell key="cell" selectable="YES" id="t8h-KC-BQO">
-                        <font key="font" metaFont="system" size="12"/>
+                        <font key="font" metaFont="cellTitle"/>
                         <string key="title">Video Converter is a powerful tool focused on optimizing conversion speed and compatibility while maintaining video quality. Media streams are only re-encoded when necessary; in most cases, they are copied losslessly (remuxed). This results in performance that far exceeds that of alternate converters.</string>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -50,7 +50,7 @@
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="qXc-j8-N0a">
                     <rect key="frame" x="18" y="80" width="213" height="45"/>
                     <textFieldCell key="cell" selectable="YES" title="Have a desired feature in mind? Or did you find a bug? Let us know! All feedback is greatly appreciated." id="LoY-dm-LqE">
-                        <font key="font" metaFont="system" size="12"/>
+                        <font key="font" metaFont="cellTitle"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>

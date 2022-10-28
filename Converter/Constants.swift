@@ -18,5 +18,12 @@ struct Constants {
     static let errorReportUrl = "https://error-report-u7kjuwr4da-uc.a.run.app"
   }
   
+  struct Frame {
+    static let mainViewWidth = CGFloat(350)
+    static let mainViewHeight = CGFloat(370) //380 //320 //334
+    static let expandedViewWidth = CGFloat(550)
+    static let expandedViewHeight = CGFloat(580)
+  }
+  
 }
 
