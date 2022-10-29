@@ -35,3 +35,16 @@ func convertToVideoCodec(inputCodec: String) -> VideoCodec {
   Logger.warning("Unknown input video codec \(inputCodec)")
   return .unknown
 }
+
+enum VideoQuality: String, CaseIterable {
+  case betterQuality, balanced, smallerSize
+  
+  var dropdownTitle: String {
+    switch self {
+    case .betterQuality: return "Better Quality"
+    case .balanced: return "Balanced"
+    case .smallerSize: return "Smaller Size"
+    }
+  }
+  
+}

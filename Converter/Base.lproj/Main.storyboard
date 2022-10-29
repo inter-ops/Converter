@@ -892,12 +892,15 @@
                                                                 <font key="font" metaFont="menu"/>
                                                                 <menu key="menu" id="42O-zB-3mO">
                                                                     <items>
-                                                                        <menuItem title="Best Quality" id="wL2-9w-ArN"/>
+                                                                        <menuItem title="Better Quality" id="wL2-9w-ArN"/>
                                                                         <menuItem title="Balanced" state="on" id="z2G-GU-XsX"/>
-                                                                        <menuItem title="Smallest Size" id="lDO-7k-UzX"/>
+                                                                        <menuItem title="Smaller Size" id="lDO-7k-UzX"/>
                                                                     </items>
                                                                 </menu>
                                                             </popUpButtonCell>
+                                                            <connections>
+                                                                <action selector="selectQuality:" target="XfG-lQ-9wD" id="JoS-HE-1pw"/>
+                                                            </connections>
                                                         </popUpButton>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SnC-bF-ohz">
                                                             <rect key="frame" x="20" y="9" width="47" height="16"/>

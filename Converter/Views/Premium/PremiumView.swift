@@ -13,6 +13,7 @@ extension ViewController {
     
     collapsePremiumView()
     didSelectNewOutput(format: outputFormat)  // Set default codec on launch based on default output format
+    initQualityDropdownMenu()
     
     if isPremiumEnabled {
       enablePremiumView()
@@ -45,10 +46,10 @@ extension ViewController {
     burnInSubtitleDropdown.isEnabled = false
   }
   
-  // MARK: Update UI
   
   
-  // MARK: Codecs
+  // MARK: - Video Codecs
+  
   /// Updates PremiumView with updated options per output format (ie. update codec dropdown list with available codecs)
   func didSelectNewOutput(format: VideoFormat) {
     //if isPremiumEnabled {
@@ -74,7 +75,6 @@ extension ViewController {
     }
     return codecTitles
   }
-  
   /// Return VideoCodec type from dropdown item selection
   func getUserSelectedCodec(_ item: String) -> VideoCodec {
     for codec in VideoCodec.allCases {
@@ -82,10 +82,9 @@ extension ViewController {
         return codec
       }
     }
-    Logger.error("Unable to read selected format type\nReturning default type: VideoCodec.h264")
+    Logger.error("Unable to read selected codec type\nReturning default type: VideoCodec.h264")
     return .h264
   }
-  
   /// Returns VideoCodec type upon user dropdown selection (ie. `.h264`)
   func userDidSelectCodec(_ codec: VideoCodec) {
     // Update outputFormat to selected item
@@ -94,7 +93,6 @@ extension ViewController {
     Logger.info("User did select codec: \(codec.rawValue)")
     
   }
-  
   /// Called when the user updates dropdown selection item
   @IBAction func selectCodec(_ sender: NSPopUpButton) {
     userSelectedCodec = sender.titleOfSelectedItem!
@@ -102,5 +100,53 @@ extension ViewController {
     // Handler function
     userDidSelectCodec(userSelectedCodecType)
   }
+  
+  
+  
+  // MARK: - Video Quality
+  
+  /// Initialize dropdown menu with titles (see `VideoQuality.dropdownTitle` for values)
+  func initQualityDropdownMenu() {
+    qualityDropdown.removeAllItems()
+    qualityDropdown.addItems(withTitles: getQualityDropdownTitles())
+    // Set middle item (balanced) as default selection
+    qualityDropdown.selectItem(withTitle: VideoQuality.balanced.dropdownTitle)
+  }
+  /// Return VideoQuality title strings as an array for dropdown presentation
+  func getQualityDropdownTitles() -> [String] {
+    qualityTitles = []  // clear all quality types
+      for quality in VideoQuality.allCases {
+      qualityTitles.append(quality.dropdownTitle)
+    }
+    return qualityTitles
+  }
+  
+  /// Returns VideoQuality type upon user dropdown selection (ie. `.balanced`)
+  func userDidSelectQuality(_ quality: VideoQuality) {
+    // Update outputQuality to selected item
+    outputQuality = quality
+    
+    Logger.info("User did select quality: \(quality.rawValue)")
+    
+  }
+  /// Return VideoQuality type from dropdown item selection
+  func getUserSelectedQuality(_ item: String) -> VideoQuality {
+    for quality in VideoQuality.allCases {
+      if item == quality.dropdownTitle {
+        return quality
+      }
+    }
+    Logger.error("Unable to read selected quality type\nReturning default type: VideoQuality.balanced")
+    return .balanced
+  }
+  /// Called when the user updates dropdown selection item
+  @IBAction func selectQuality(_ sender: NSPopUpButton) {
+    userSelectedQuality = sender.titleOfSelectedItem!
+    userSelectedQualityType = getUserSelectedQuality(userSelectedQuality)
+    // Handler function
+    userDidSelectQuality(userSelectedQualityType)
+  }
+  
+  
   
 }

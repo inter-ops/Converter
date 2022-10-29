@@ -58,10 +58,12 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   // PremiumView variables
   var codecTitles: [String] = []
+  var qualityTitles: [String] = []
 
   // Video object variables
   var outputFormat: VideoFormat = .mp4  //  User select output format (mp4 default)
   var outputCodec: VideoCodec = .h264   // User select output codec (h264 default)
+  var outputQuality: VideoQuality = .balanced // User select output quality (balanced default)
   
   var inputVideos: [Video] = []
   var activeVideoIndex: Int?
@@ -556,7 +558,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   // selectCodec(sender:)
   var userSelectedCodec = VideoCodec.h264.dropdownTitle
   var userSelectedCodecType: VideoCodec = .h264
-  
+  // selectQuality(sender:)
+  var userSelectedQuality = VideoQuality.balanced.dropdownTitle
+  var userSelectedQualityType: VideoQuality = .balanced
   
   @IBAction func clickActionButton(_ sender: Any) {
     // User did click button: "Convert" or "Stop"
