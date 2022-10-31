@@ -143,11 +143,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     Logger.debug("User did input multiple urls: \(fileUrls)")
     // if premium, handle multi-file
     if isPremiumEnabled {
-      // inputVideos = fileUrls
+      // TODO: If more than 5 files, show a loading animation and disable "Convert" button
+      fileUrls.forEach { fileUrl in
+        dragDropViewDidReceive(fileUrl: fileUrl)
+      }
     } else {
       // if free user, route first dragged file to singular dragDropDidReceive
       dragDropViewDidReceive(fileUrl: fileUrls[0])
-      // show notice: maximum one file input, upgrade for more
+      // TODO: show notice: maximum one file input, upgrade for more
       //premiumNotice()
     }
   }
