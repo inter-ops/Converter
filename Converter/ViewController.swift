@@ -35,6 +35,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
   @IBOutlet weak var clearInputFileButton: NSButton!
+  @IBOutlet weak var showInputFilesButton: NSButton!
   
   // PremiumView: Video
   @IBOutlet weak var expandablePremiumView: NSView!
@@ -243,7 +244,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// ```
   func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [""], icon: DragDropBoxIcon = .empty, withStyle: DragDropBoxStyle) {
     dragDropBoxStyleState = withStyle
-    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) {
+    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && videoList.count == 1 {
       updateDragDrop(title: "Drag and drop your video here", subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
     } else {
       
@@ -251,12 +252,15 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       
       if videoList.count > 1 {
         updateDragDropTitle(bottom: "\(videoList.count) videos selected")
+        dragDropIconImageView.image = icon.image // DragDropBoxIcon.getIconForVideoCount(Int)
         // show button
+        showInputFilesButton.isHidden = false
         
       } else {
         updateDragDropTitle(title, bottom: subtitle)
         dragDropIconImageView.image = icon.image
         // hide button
+        showInputFilesButton.isHidden = true
         
       }
     }
