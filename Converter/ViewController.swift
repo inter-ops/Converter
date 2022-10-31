@@ -58,6 +58,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   // PremiumView variables
   var codecTitles: [String] = []
+
   var qualityTitles: [String] = []
   var copyAllAudioState: NSControl.StateValue = .off      // default unchecked
   var copyAllSubtitlesState: NSControl.StateValue = .off  // default unchecked
@@ -119,7 +120,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     if response == .OK {
       let path = openPanel.url?.path
       Logger.info("path: \(String(describing: path))")
-      dragDropViewDidReceive(fileUrl: path!)
+      dragDropViewDidReceive(filePath: path!)
     }
   }
   
@@ -127,58 +128,104 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Handles opening of file in application on launch after initial load
     DispatchQueue.main.async {
       if self.appDelegate.openAppWithFilePath != nil {
-        self.dragDropViewDidReceive(fileUrl: self.appDelegate.openAppWithFilePath!)
+        self.dragDropViewDidReceive(filePath: self.appDelegate.openAppWithFilePath!)
         self.appDelegate.openAppWithFilePath = nil
       }
       self.appDelegate.mainViewHasAppeared = true
     }
-    
-    // TODO: Uncomment PremiumView display:
-    //initPremiumView()
   }
   
-  /// Handles all input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
-  func dragDropViewDidReceive(fileUrl: String) {
-    Logger.debug("dragDropViewDidReceive(fileUrl: \(fileUrl))")
-    
-    if !isPremiumEnabled && inputVideos.count > 0 {
-      // TODO: Prompt user to buy premium
-      print("Premium is disabled, clearing previously selected videos")
-      inputVideos = []
+  
+  enum InputFileState {
+    case valid, unsupported, corrupt, duplicate
+  }
+  
+  func validateInputFile(fileUrl: URL) -> InputFileState {
+    if !VideoFormat.isSupportedAsInput(fileUrl.path) {
+      return .unsupported
     }
+    
+    if !isFileValid(inputFilePath: fileUrl.path) {
+      return .corrupt
+    }
+    
+    if !inputVideos.allSatisfy({ $0.filePath != fileUrl.path }) {
+      return .duplicate
+    }
+    
+    return .valid
+  }
+  
+  
+  func dragDropViewDidReceive(filePath: String) {
+    dragDropViewDidReceive(filePaths: [filePath])
+  }
+  
+  /// Handles multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
+  func dragDropViewDidReceive(filePaths: [String]) {
+    Logger.debug("Processing input paths: \(filePaths)")
     
     resetProgressBar()
     
-    let inputFileUrl = fileUrl.fileURL.absoluteURL
-    
-    if VideoFormat.isSupportedAsInput(fileUrl) {
-      if isFileValid(inputFilePath: inputFileUrl.path) {
-        
-        // If the input video has already been added, ignore it
-        if !inputVideos.allSatisfy({ $0.filePath != inputFileUrl.path }) {
-          return
-        }
-        
-        let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl)
-        inputVideos.append(inputVideo)
-        
-        displayClearButton(.show)
-        if inputVideos.count == 1 {
-          updateDragDrop(subtitle: fileUrl.lastPathComponent, withStyle: .videoFile)
-        }
-        else {
-          // TODO: For now we're just setting the file name to the list of files, but we should come up with a cleaner way to do this.
-          let messageArray = inputVideos.enumerated().map { "\($0+1). \($1.filePath.lastPathComponent)" }
-          updateDragDrop(subtitle: messageArray.joined(separator: "\n"), withStyle: .videoFile)
-        }
-      }
-      else {
-        updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
-      }
-    } else {
-      updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
-      showSupportedFormatsPopover()
+    // Clear existing input videos
+    if inputVideos.count > 0 {
+      inputVideos = []
     }
+    
+    var filteredPaths: [String] = []
+    
+    // TODO: Disable convert button while this executes, also may want a loading animation, especially for a large number of files
+    for filePath in filePaths {
+      let inputFileUrl = filePath.fileURL.absoluteURL
+      
+      switch validateInputFile(fileUrl: inputFileUrl) {
+      case .unsupported:
+        updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
+        showSupportedFormatsPopover()
+        return
+      case .corrupt:
+        updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
+        return
+      case .duplicate:
+        break
+      case .valid:
+        filteredPaths.append(filePath)
+        break
+      }
+    }
+    
+    // if premium, handle multi-file
+    if isPremiumEnabled {
+      for filePath in filteredPaths {
+        addVideoToInputs(filePath: filePath)
+      }
+    }
+    else {
+      // if free user, route first dragged file to singular dragDropDidReceive
+      addVideoToInputs(filePath: filePaths[0])
+      // TODO: show notice: maximum one file input, upgrade for more
+      //premiumNotice()
+    }
+  }
+  
+  /// Handles singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
+  func addVideoToInputs(filePath: String) {
+    let inputFileUrl = filePath.fileURL.absoluteURL
+    
+    let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl)
+    inputVideos.append(inputVideo)
+    
+    displayClearButton(.show)
+    
+    if inputVideos.count == 1 {
+      updateDragDrop(subtitle: filePath.lastPathComponent, withStyle: .videoFile)
+    }
+    else {
+      // TODO: For now we're just setting the file name to the list of files, but we should come up with a cleaner way to do this.
+      let messageArray = inputVideos.enumerated().map { "\($0+1). \($1.filePath.lastPathComponent)" }
+      updateDragDrop(subtitle: messageArray.joined(separator: "\n"), withStyle: .videoFile)
+    }
+    
   }
   
   /// Handler for all things dragDropBox related; set `withStyle: .empty` for default state
@@ -569,7 +616,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // User did click button: "Convert" or "Stop"
     userDidClickActionButton()
   }
-
+  
   /// Update progress bar animation with Double value
   func updateProgressBar(value: Double, withInterval: Double = 0.5) {
     progressBar.animate(to: value)
@@ -662,5 +709,3 @@ enum ConversionState {
   case ready
   case converting
 }
-
-
