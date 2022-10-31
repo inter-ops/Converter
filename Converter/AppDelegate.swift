@@ -50,7 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     if mainViewHasAppeared {
       /// Load the input file request and bring the mainWindow to front
       let viewController = mainWindow.contentViewController as? ViewController
-      viewController?.dragDropViewDidReceive(fileUrl: filename)
+      viewController?.dragDropViewDidReceive(filePath: filename)
       mainWindow.makeKeyAndOrderFront(self)
     } else {
       /// Otherwise, set the String path of the input file for handling by the mainWindow ViewController once it is ready
