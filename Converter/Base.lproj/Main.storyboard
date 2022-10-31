@@ -784,7 +784,15 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="169" id="QT1-ae-HYJ"/>
                                 </constraints>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="DragDropBox-Icon" id="Rau-wz-H1A"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="dbox-default" id="Rau-wz-H1A"/>
+                            </imageView>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PEi-Si-rDf">
+                                <rect key="frame" x="158" y="450" width="234" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="234" id="K9c-Ox-rnh"/>
+                                    <constraint firstAttribute="height" constant="50" id="isg-5f-8jv"/>
+                                </constraints>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="dbox-icon-empty" id="JKu-Mw-Tlx"/>
                             </imageView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="WOp-7k-7wN" customClass="DragDropView" customModule="Video_Converter" customModuleProvider="target">
                                 <rect key="frame" x="25" y="391" width="500" height="169"/>
@@ -819,6 +827,14 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ric-Xf-0xi">
+                                        <rect key="frame" x="431" y="11" width="68" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="push" title="Show" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="90o-cq-0fZ">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="t3K-S7-h56" secondAttribute="bottom" constant="20" symbolic="YES" id="3gA-oh-jml"/>
@@ -1203,6 +1219,7 @@
                             <constraint firstAttribute="bottom" secondItem="2rF-NO-8km" secondAttribute="bottom" id="2VQ-GM-zAK"/>
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="3HO-pW-3cV"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="25" id="3Z6-QI-BqM"/>
+                            <constraint firstItem="PEi-Si-rDf" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="80" id="922-y3-yGN"/>
                             <constraint firstItem="kPm-gZ-vwn" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="BET-PE-f07"/>
                             <constraint firstItem="WOp-7k-7wN" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="25" id="GIY-oo-MDS"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="Gdn-Bw-cZu"/>
@@ -1219,8 +1236,10 @@
                             <constraint firstItem="Gfl-op-5Hr" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="aGA-L6-T1f"/>
                             <constraint firstAttribute="trailing" secondItem="2rF-NO-8km" secondAttribute="trailing" id="eg5-NL-ziO"/>
                             <constraint firstAttribute="bottom" secondItem="F5s-5R-gtP" secondAttribute="bottom" id="f8C-Qr-Bdl"/>
+                            <constraint firstItem="rgh-KN-ah2" firstAttribute="top" secondItem="PEi-Si-rDf" secondAttribute="bottom" constant="81" id="fu2-U5-6OZ"/>
                             <constraint firstItem="JZg-d2-J84" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="hbe-8o-O26"/>
                             <constraint firstAttribute="trailing" secondItem="v9D-vH-xx2" secondAttribute="trailing" constant="25" id="hc3-3G-5Kl"/>
+                            <constraint firstItem="PEi-Si-rDf" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="kMh-eI-SIv"/>
                             <constraint firstItem="rgh-KN-ah2" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="ktf-Gp-Bvm"/>
                             <constraint firstAttribute="trailing" secondItem="F5s-5R-gtP" secondAttribute="trailing" id="lVN-kg-wwT"/>
                             <constraint firstItem="kPm-gZ-vwn" firstAttribute="top" secondItem="Gfl-op-5Hr" secondAttribute="bottom" id="oZz-BP-B1r"/>
@@ -1241,6 +1260,7 @@
                         <outlet property="copyAllSubtitlesCheckbox" destination="ahx-BL-VQd" id="1wl-fC-Hqa"/>
                         <outlet property="dragDropBackgroundImageView" destination="v9D-vH-xx2" id="OQy-LN-aW5"/>
                         <outlet property="dragDropBottomTitle" destination="t3K-S7-h56" id="PYQ-hS-1yp"/>
+                        <outlet property="dragDropIconImageView" destination="PEi-Si-rDf" id="zmR-Pw-fpo"/>
                         <outlet property="dragDropTopTitle" destination="wI2-qE-TlK" id="loF-4s-gyn"/>
                         <outlet property="estimatedTimeLabel" destination="xFx-Bv-g0e" id="9Fh-Hm-58c"/>
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
@@ -1254,6 +1274,7 @@
                         <outlet property="mainViewWidthConstraint" destination="F7m-Xg-Rau" id="lZQ-li-wVq"/>
                         <outlet property="progressBar" destination="JZg-d2-J84" id="oEX-c3-c8A"/>
                         <outlet property="qualityDropdown" destination="wVb-4m-7Tg" id="TYz-ud-tKv"/>
+                        <outlet property="showInputFilesButton" destination="Ric-Xf-0xi" id="Lh4-HG-Nkg"/>
                         <segue destination="yR0-6c-gBs" kind="show" identifier="showReportError" id="EQ5-Om-Sgo"/>
                         <segue destination="s4d-AT-TJn" kind="show" identifier="showContact" id="AU9-B4-7B8"/>
                     </connections>
@@ -1740,7 +1761,8 @@
     <resources>
         <image name="Chevron-Down" width="20" height="16"/>
         <image name="Clear-Icon" width="14" height="14"/>
-        <image name="DragDropBox-Icon" width="300" height="169"/>
+        <image name="dbox-default" width="300" height="169"/>
+        <image name="dbox-icon-empty" width="234" height="50"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
