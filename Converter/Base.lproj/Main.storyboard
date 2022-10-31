@@ -950,6 +950,9 @@
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
+                                                            <connections>
+                                                                <action selector="toggleCopyAllAudioCheckbox:" target="XfG-lQ-9wD" id="bCO-h9-ajz"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <constraints>
@@ -985,6 +988,9 @@
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
+                                                            <connections>
+                                                                <action selector="toggleCopyAllSubtitlesCheckbox:" target="XfG-lQ-9wD" id="9eh-MD-BGp"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <constraints>
@@ -1002,11 +1008,14 @@
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
+                                                            <connections>
+                                                                <action selector="selectBurnInSubtitlesCheckbox:" target="XfG-lQ-9wD" id="NSz-cL-vDw"/>
+                                                            </connections>
                                                         </button>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtH-UZ-ofq">
                                                             <rect key="frame" x="92" y="3" width="112" height="25"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="500" constant="105" id="7u3-Gk-yn0"/>
+                                                                <constraint firstAttribute="width" relation="lessThanOrEqual" priority="500" constant="105" id="7u3-Gk-yn0"/>
                                                             </constraints>
                                                             <popUpButtonCell key="cell" type="push" title="0: English" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="qWp-Eg-9n9" id="c76-88-23R">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1014,8 +1023,8 @@
                                                                 <menu key="menu" id="3Qn-u9-ef5">
                                                                     <items>
                                                                         <menuItem title="0: English" state="on" id="qWp-Eg-9n9"/>
-                                                                        <menuItem title="Item 2" id="KYa-Tw-J4r"/>
-                                                                        <menuItem title="Item 3" id="crK-QV-2Wd"/>
+                                                                        <menuItem title="1: Italian" id="KYa-Tw-J4r"/>
+                                                                        <menuItem title="2: Commentary" id="crK-QV-2Wd"/>
                                                                     </items>
                                                                 </menu>
                                                             </popUpButtonCell>
