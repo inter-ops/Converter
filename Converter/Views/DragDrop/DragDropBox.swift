@@ -22,3 +22,41 @@ enum DragDropBox {
   }
   
 }
+
+enum DragDropBoxWindowState {
+  case regular, wide
+}
+
+enum DragDropBoxStyle {
+  
+  case regular, warning
+  
+  var backgroundImage: NSImage {
+    switch self {
+    case .regular: return NSImage(named: "dbox-default")!
+    case .warning: return NSImage(named: "dbox-red")!
+    }
+  }
+  
+  var backgroundImageWide: NSImage {
+    switch self {
+    case .regular: return NSImage(named: "dbox-default-wide")!
+    case .warning: return NSImage(named: "dbox-red-wide")!
+    }
+  }
+  
+}
+
+enum DragDropBoxIcon {
+  
+  case empty, warning, videoFile//, videoFileTwo, videoFileThree, videoFileFour, videoFilePlus
+  
+  var image: NSImage {
+    switch self {
+    case .empty:      return NSImage(named: "dbox-icon-empty")!
+    case .warning:    return NSImage(named: "dbox-icon-warning")!
+    case .videoFile:  return NSImage(named: "dbox-icon-videofile")!
+    }
+  }
+  
+}

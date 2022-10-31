@@ -27,9 +27,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   @IBOutlet weak var expandCollapsePremiumViewButton: NSButton!
   var premiumViewIsExpanded = false
+  var dragDropBoxStyleState: DragDropBoxStyle = .regular
   
   // DragDropView objects
   @IBOutlet weak var dragDropBackgroundImageView: NSImageView!
+  @IBOutlet weak var dragDropIconImageView: NSImageView!
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
   @IBOutlet weak var clearInputFileButton: NSButton!
@@ -218,12 +220,12 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     displayClearButton(.show)
     
     if inputVideos.count == 1 {
-      updateDragDrop(subtitle: filePath.lastPathComponent, withStyle: .videoFile)
+      updateDragDrop(subtitle: filePath.lastPathComponent, icon: .videoFile, withStyle: .regular)
     }
     else {
       // TODO: For now we're just setting the file name to the list of files, but we should come up with a cleaner way to do this.
       let messageArray = inputVideos.enumerated().map { "\($0+1). \($1.filePath.lastPathComponent)" }
-      updateDragDrop(subtitle: messageArray.joined(separator: "\n"), withStyle: .videoFile)
+      updateDragDrop(videoList: messageArray, icon: .videoFile, withStyle: .regular)
     }
     
   }
@@ -239,26 +241,44 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// // Red box with error message
   /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
   /// ```
-  func updateDragDrop(title: String = "", subtitle: String = "", withStyle: DragDropBox) {
-    if withStyle == .empty && (title.isEmpty && subtitle.isEmpty) {
-      updateDragDrop(title: "Drag and drop your video here", subtitle: "or double click to browse...", withStyle: .empty)
+  func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [""], icon: DragDropBoxIcon = .empty, withStyle: DragDropBoxStyle) {
+    dragDropBoxStyleState = withStyle
+    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) {
+      updateDragDrop(title: "Drag and drop your video here", subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
     } else {
+      
       updateDragDropView(withStyle)
-      updateDragDropTitle(title, bottom: subtitle)
+      
+      if videoList.count > 1 {
+        updateDragDropTitle(bottom: "\(videoList.count) videos selected")
+        // show button
+        
+      } else {
+        updateDragDropTitle(title, bottom: subtitle)
+        dragDropIconImageView.image = icon.image
+        // hide button
+        
+      }
     }
   }
   /// Obj-C compatible function for passing updateDragDop through delegate
   func updateDragDrop(title: String, subtitle: String, withWarning: Bool) {
     if withWarning {
-      updateDragDrop(title: title, subtitle: subtitle, withStyle: .warning)
+      updateDragDrop(title: title, subtitle: subtitle, icon: .warning, withStyle: .warning)
     } else {
-      updateDragDrop(title: title, subtitle: subtitle, withStyle: .videoFile)
+      updateDragDrop(title: title, subtitle: subtitle, icon: .videoFile, withStyle: .regular)
       hidePopover(supportedFormatsPopover)
     }
   }
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
-  func updateDragDropView(_ forType: DragDropBox) {
-    dragDropBackgroundImageView.image = forType.image
+  func updateDragDropView(_ forType: DragDropBoxStyle) {
+    if premiumViewIsExpanded {
+      dragDropBackgroundImageView.image = forType.backgroundImageWide
+    } else {
+      dragDropBackgroundImageView.image = forType.backgroundImage
+    }
+    
+   
   }
   /// Sets the dragDropBox title text without affecting the box style (ie. `bottom: inputFileName`)
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {
@@ -633,7 +653,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   // MARK: Clear Input File Button
   /// Clear the input file and revert UI to default state; hide clearInputFileButton when complete
   @IBAction func clearInputFile(_ sender: Any) {
-    updateDragDrop(withStyle: .empty)
+    updateDragDrop(icon: .empty, withStyle: .regular)
     inputVideos = []
     resetProgressBar()
     displayClearButton(.hide)   // Hide clear button

@@ -19,6 +19,7 @@ extension ViewController {
     } else {
       expandPremiumView()
     }
+    updateDragDropView(dragDropBoxStyleState)
   }
   
   func expandPremiumView() {
