@@ -10,12 +10,12 @@
 import Cocoa
 
 @objc protocol DragDropViewDelegate {
-  func dragDropViewDidReceive(fileUrl: String)
+  func dragDropViewDidReceive(filePath: String)
+  func dragDropViewDidReceive(filePaths: [String])
   func updateDragDrop(title: String, subtitle: String, withWarning: Bool)
   func showSupportedFormatsPopover()
   func hideSupportedFormatsPopover()
   func openFileBrowser()
-  func inputFileHandler(fileUrls: [String])
 }
 
 class DragDropView: NSView {
@@ -23,7 +23,7 @@ class DragDropView: NSView {
   @IBOutlet weak var delegate: DragDropViewDelegate?
   
   var filePath: String?
-  var fileUrls: [String]?
+  var filePaths: [String]?
   
   let clearColor = NSColor.clear.cgColor
   
@@ -77,13 +77,12 @@ class DragDropView: NSView {
     // TODO: If the user draps multiple files, show an error
     guard let pasteboard = sender.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
           let path = pasteboard[0] as? String,
-          let fileUrls = pasteboard as? [String]
+          let filePaths = pasteboard as? [String]
     else { return false }
     
     filePath = path
     
-    //delegate?.dragDropViewDidReceive(fileUrl: path)
-    delegate?.inputFileHandler(fileUrls: fileUrls)
+    delegate?.dragDropViewDidReceive(filePaths: filePaths)
     
     return true
   }
