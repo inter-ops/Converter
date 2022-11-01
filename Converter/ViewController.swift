@@ -27,7 +27,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   @IBOutlet weak var expandCollapsePremiumViewButton: NSButton!
   var premiumViewIsExpanded = false
-  var dragDropBoxStyleState: DragDropBoxStyle = .regular
+  var dragDropBoxStyleState: DragDropBox.Style = .regular
   
   // DragDropView objects
   @IBOutlet weak var dragDropBackgroundImageView: NSImageView!
@@ -242,7 +242,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// // Red box with error message
   /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
   /// ```
-  func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [""], icon: DragDropBoxIcon = .empty, withStyle: DragDropBoxStyle) {
+  func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [""], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
     dragDropBoxStyleState = withStyle
     if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && videoList.count == 1 {
       updateDragDrop(title: "Drag and drop your video here", subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
@@ -252,7 +252,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       
       if videoList.count > 1 {
         updateDragDropTitle(bottom: "\(videoList.count) videos selected")
-        dragDropIconImageView.image = icon.image // DragDropBoxIcon.getIconForVideoCount(Int)
+        dragDropIconImageView.image = DragDropBox.getMultiVideoFileIcons(forCount: videoList.count)
         // show button
         showInputFilesButton.isHidden = false
         
@@ -275,7 +275,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
   }
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
-  func updateDragDropView(_ forType: DragDropBoxStyle) {
+  func updateDragDropView(_ forType: DragDropBox.Style) {
     if premiumViewIsExpanded {
       dragDropBackgroundImageView.image = forType.backgroundImageWide
     } else {
