@@ -255,6 +255,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         dragDropIconImageView.image = DragDropBox.getMultiVideoFileIcons(forCount: videoList.count)
         // show button
         showInputFilesButton.isHidden = false
+        DragDropBox.videoFilesList = videoList
         
       } else {
         updateDragDropTitle(title, bottom: subtitle)

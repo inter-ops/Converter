@@ -51,4 +51,6 @@ struct DragDropBox {
     }
   }
   
+  static var videoFilesList = [""]
+  
 }
