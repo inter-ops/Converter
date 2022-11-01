@@ -14,7 +14,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   //var userDidPurchasePremium = false
   
   /// Set to `true` to hide the expandable button, as well as all the premium features
-  var isPremiumHiddenFromApp = false // false will also isPremiumEnabled = true
+  var isPremiumHiddenFromApp = true // false will also isPremiumEnabled = true
   /// Set to `true` to enable all premium UI components
   var isPremiumEnabled = false
   
@@ -245,7 +245,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [""], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
     dragDropBoxStyleState = withStyle
     if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && videoList.count == 1 {
-      updateDragDrop(title: "Drag and drop your videos here", subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
+      updateDragDrop(title: topTitleString, subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
     } else {
       
       updateDragDropView(withStyle)
@@ -264,6 +264,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         showInputFilesButton.isHidden = true
         
       }
+    }
+  }
+  /// Sets the DragDropBox top title string depending on premium status
+  var topTitleString: String {
+    if isPremiumEnabled {
+      return "Drag and drop your videos here"
+    } else {
+      return "Drag and drop your video here"
     }
   }
   /// Obj-C compatible function for passing updateDragDop through delegate
