@@ -787,7 +787,7 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="dbox-default" id="Rau-wz-H1A"/>
                             </imageView>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PEi-Si-rDf">
-                                <rect key="frame" x="158" y="450" width="234" height="50"/>
+                                <rect key="frame" x="158" y="446" width="234" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="234" id="K9c-Ox-rnh"/>
                                     <constraint firstAttribute="height" constant="50" id="isg-5f-8jv"/>
@@ -827,9 +827,8 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ric-Xf-0xi">
-                                        <rect key="frame" x="432" y="11" width="66" height="31"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ric-Xf-0xi">
+                                        <rect key="frame" x="415" y="11" width="57" height="27"/>
                                         <buttonCell key="cell" type="push" title="Show" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="90o-cq-0fZ">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="smallSystem"/>
@@ -839,10 +838,12 @@
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="t3K-S7-h56" secondAttribute="bottom" constant="20" symbolic="YES" id="3gA-oh-jml"/>
                                     <constraint firstAttribute="trailing" secondItem="t3K-S7-h56" secondAttribute="trailing" constant="8" id="4Xs-2u-sZR"/>
+                                    <constraint firstAttribute="bottom" secondItem="Ric-Xf-0xi" secondAttribute="bottom" constant="18" id="GEv-Hh-h0H"/>
                                     <constraint firstAttribute="trailing" secondItem="wI2-qE-TlK" secondAttribute="trailing" constant="8" id="J8i-lT-Nty"/>
                                     <constraint firstItem="wI2-qE-TlK" firstAttribute="leading" secondItem="WOp-7k-7wN" secondAttribute="leading" constant="8" id="Q2o-0E-xWP"/>
                                     <constraint firstItem="t3K-S7-h56" firstAttribute="leading" secondItem="WOp-7k-7wN" secondAttribute="leading" constant="8" id="dZm-eu-ZGv"/>
                                     <constraint firstItem="wI2-qE-TlK" firstAttribute="top" secondItem="qVc-80-BUu" secondAttribute="bottom" constant="4" id="fVU-kf-W1T"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ric-Xf-0xi" secondAttribute="trailing" constant="34" id="fht-r8-nAQ"/>
                                     <constraint firstAttribute="trailing" secondItem="qVc-80-BUu" secondAttribute="trailing" constant="8" id="rKm-2w-SnJ"/>
                                     <constraint firstAttribute="height" constant="169" id="wXQ-EM-eKq"/>
                                     <constraint firstItem="qVc-80-BUu" firstAttribute="top" secondItem="WOp-7k-7wN" secondAttribute="top" constant="8" id="yAW-39-QdM"/>
@@ -1219,7 +1220,7 @@
                             <constraint firstAttribute="bottom" secondItem="2rF-NO-8km" secondAttribute="bottom" id="2VQ-GM-zAK"/>
                             <constraint firstItem="F5s-5R-gtP" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="3HO-pW-3cV"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="25" id="3Z6-QI-BqM"/>
-                            <constraint firstItem="PEi-Si-rDf" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="80" id="922-y3-yGN"/>
+                            <constraint firstItem="PEi-Si-rDf" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="84" id="922-y3-yGN"/>
                             <constraint firstItem="kPm-gZ-vwn" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="BET-PE-f07"/>
                             <constraint firstItem="WOp-7k-7wN" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="25" id="GIY-oo-MDS"/>
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="Gdn-Bw-cZu"/>
@@ -1236,7 +1237,6 @@
                             <constraint firstItem="Gfl-op-5Hr" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="aGA-L6-T1f"/>
                             <constraint firstAttribute="trailing" secondItem="2rF-NO-8km" secondAttribute="trailing" id="eg5-NL-ziO"/>
                             <constraint firstAttribute="bottom" secondItem="F5s-5R-gtP" secondAttribute="bottom" id="f8C-Qr-Bdl"/>
-                            <constraint firstItem="rgh-KN-ah2" firstAttribute="top" secondItem="PEi-Si-rDf" secondAttribute="bottom" constant="81" id="fu2-U5-6OZ"/>
                             <constraint firstItem="JZg-d2-J84" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="hbe-8o-O26"/>
                             <constraint firstAttribute="trailing" secondItem="v9D-vH-xx2" secondAttribute="trailing" constant="25" id="hc3-3G-5Kl"/>
                             <constraint firstItem="PEi-Si-rDf" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="kMh-eI-SIv"/>
