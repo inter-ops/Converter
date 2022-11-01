@@ -86,6 +86,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     initDropdownMenu()
     displayClearButton(.hide)
     initPremiumView()
+    updateDragDrop(withStyle: .regular)
   }
   
   func initMainView() {
