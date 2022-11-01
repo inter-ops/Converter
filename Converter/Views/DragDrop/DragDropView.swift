@@ -16,6 +16,7 @@ import Cocoa
   func showSupportedFormatsPopover()
   func hideSupportedFormatsPopover()
   func openFileBrowser()
+  func alertReplaceFilesConfirmation(filePaths: [String])
 }
 
 class DragDropView: NSView {
@@ -24,6 +25,7 @@ class DragDropView: NSView {
   
   var filePath: String?
   var filePaths: [String]?
+  var lastDroppedFiles = [""]
   
   let clearColor = NSColor.clear.cgColor
   
@@ -82,7 +84,12 @@ class DragDropView: NSView {
     
     filePath = path
     
-    delegate?.dragDropViewDidReceive(filePaths: filePaths)
+    if lastDroppedFiles.count > 1 {
+      delegate?.alertReplaceFilesConfirmation(filePaths: filePaths)
+    } else {
+      delegate?.dragDropViewDidReceive(filePaths: filePaths)
+    }
+    lastDroppedFiles = filePaths
     
     return true
   }
