@@ -799,7 +799,7 @@
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wI2-qE-TlK">
                                         <rect key="frame" x="6" y="123" width="488" height="20"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Drag and drop your video here" id="brH-tr-9li">
+                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Drag and drop your videos here" id="brH-tr-9li">
                                             <font key="font" metaFont="system" size="17"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

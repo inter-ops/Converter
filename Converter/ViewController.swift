@@ -14,7 +14,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   //var userDidPurchasePremium = false
   
   /// Set to `true` to hide the expandable button, as well as all the premium features
-  var isPremiumHiddenFromApp = true // false will also isPremiumEnabled = true
+  var isPremiumHiddenFromApp = false // false will also isPremiumEnabled = true
   /// Set to `true` to enable all premium UI components
   var isPremiumEnabled = false
   
@@ -245,7 +245,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [""], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
     dragDropBoxStyleState = withStyle
     if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && videoList.count == 1 {
-      updateDragDrop(title: "Drag and drop your video here", subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
+      updateDragDrop(title: "Drag and drop your videos here", subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
     } else {
       
       updateDragDropView(withStyle)
@@ -282,8 +282,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     } else {
       dragDropBackgroundImageView.image = forType.backgroundImage
     }
-    
-   
   }
   /// Sets the dragDropBox title text without affecting the box style (ie. `bottom: inputFileName`)
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {
