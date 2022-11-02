@@ -41,7 +41,6 @@
 		C22A4EF328F47AFD0050D739 /* AppMenu+Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */; };
 		C22A4EF528F47FB60050D739 /* AppMenu+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A4EF428F47FB60050D739 /* AppMenu+Debug.swift */; };
 		C239899E29109D130062A466 /* InputMultiFilesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C239899D29109D130062A466 /* InputMultiFilesListViewController.swift */; };
-		C23989A02911881C0062A466 /* ReplaceFilesConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C239899F2911881C0062A466 /* ReplaceFilesConfirmation.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
 		C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */; };
@@ -115,7 +114,6 @@
 		C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppMenu+Global.swift"; sourceTree = "<group>"; };
 		C22A4EF428F47FB60050D739 /* AppMenu+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppMenu+Debug.swift"; sourceTree = "<group>"; };
 		C239899D29109D130062A466 /* InputMultiFilesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMultiFilesListViewController.swift; sourceTree = "<group>"; };
-		C239899F2911881C0062A466 /* ReplaceFilesConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceFilesConfirmation.swift; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
 		C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulProgressIndicator.swift; sourceTree = "<group>"; };
 		C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpInfoViewController.xib; sourceTree = "<group>"; };
@@ -235,7 +233,6 @@
 				C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */,
 				C2E1F22028C29A17005A8B48 /* ErrorPrompt.swift */,
 				C21CC16B28EC920700176A98 /* MessageDidSend.swift */,
-				C239899F2911881C0062A466 /* ReplaceFilesConfirmation.swift */,
 			);
 			path = Alerts;
 			sourceTree = "<group>";
@@ -428,7 +425,6 @@
 				7948AA6228CF9916003DB5E2 /* Configuration.swift in Sources */,
 				C2E1F22128C29A17005A8B48 /* ErrorPrompt.swift in Sources */,
 				C21CC16C28EC920700176A98 /* MessageDidSend.swift in Sources */,
-				C23989A02911881C0062A466 /* ReplaceFilesConfirmation.swift in Sources */,
 				7978DA6B28BAE30400BC254B /* Constants.swift in Sources */,
 				794AA2CA28C2D61900AADF36 /* ChannelLayout.swift in Sources */,
 				C2638D5428EA20CA00841C47 /* ContactWindowController.swift in Sources */,
