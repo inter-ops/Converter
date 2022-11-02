@@ -108,6 +108,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   override func viewDidDisappear() {
     hidePopover(supportedFormatsPopover)
     hidePopover(helpInfoPopover)
+    hidePopover(multiFilesListPopover)
   }
   
   // TODO: This needs to be accessible even if a file is already selected, only in premium
@@ -184,11 +185,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       
       switch validateInputFile(fileUrl: inputFileUrl) {
       case .unsupported:
-        updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
-        showSupportedFormatsPopover()
+        showUnsupportedFileTypeBox()
         return
       case .corrupt:
-        updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
+        showCorruptVideoFileBox()
         return
       case .duplicate:
         break
@@ -230,6 +230,12 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       updateDragDrop(videoList: messageArray, icon: .videoFile, withStyle: .regular)
     }
     
+  }
+  
+  /// Clears input videos and hides clearInputFileButton
+  func clearInputVideos() {
+    inputVideos = []
+    clearInputFileButton.alphaValue = 0
   }
   
   /// Handler for all things dragDropBox related; set `withStyle: .empty` for default state
@@ -296,6 +302,19 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {
     if !top.isEmpty { dragDropTopTitle.stringValue = top }
     if !bottom.isEmpty { dragDropBottomTitle.stringValue = bottom }
+  }
+  /// Sets DragDropBox for error state: Unsupported file type
+  func showUnsupportedFileTypeBox() {
+    clearInputVideos()
+    updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
+    showSupportedFormatsPopover()
+    Logger.info("User did input unsupported file type")
+  }
+  /// Sets DragDropBox for error state: Corrupted video file
+  func showCorruptVideoFileBox() {
+    clearInputVideos() // here too?
+    updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
+    Logger.info("User did input corrupted video file")
   }
   
   /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
