@@ -312,7 +312,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   /// Sets DragDropBox for error state: Corrupted video file
   func showCorruptVideoFileBox() {
-    clearInputVideos() // here too?
+    clearInputVideos()
     updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
     Logger.info("User did input corrupted video file")
   }

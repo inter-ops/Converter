@@ -45,7 +45,7 @@ class DragDropView: NSView {
     delegate?.hideMultiFilesListPopover()
     
     if checkExtension(sender) == true {
-      layer?.backgroundColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor //NSColor.blue.cgColor
+      layer?.backgroundColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
       delegate?.hideSupportedFormatsPopover()
       return .copy
     }
