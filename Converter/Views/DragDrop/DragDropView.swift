@@ -48,11 +48,11 @@ class DragDropView: NSView {
       layer?.backgroundColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor //NSColor.blue.cgColor
       delegate?.hideSupportedFormatsPopover()
       return .copy
-    } else {
-      layer?.backgroundColor = NSColor(red: 225, green: 0, blue: 0, alpha: 0.2).cgColor
-      delegate?.showUnsupportedFileTypeBox()
-      return NSDragOperation()
     }
+    
+    layer?.backgroundColor = NSColor(red: 225, green: 0, blue: 0, alpha: 0.2).cgColor
+    delegate?.showUnsupportedFileTypeBox()
+    return NSDragOperation()
   }
   
   fileprivate func checkExtension(_ drag: NSDraggingInfo) -> Bool {
