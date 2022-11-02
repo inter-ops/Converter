@@ -55,6 +55,8 @@
 		C29D1A4B290C839500711C14 /* PremiumView+Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29D1A4A290C839500711C14 /* PremiumView+Audio.swift */; };
 		C29D1A4D290C83F300711C14 /* PremiumView+Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29D1A4C290C83F300711C14 /* PremiumView+Video.swift */; };
 		C2BEEEFB2903141E00F9FFD8 /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */; };
+		C2C9C3D62912D87A00307251 /* MultiFilesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C9C3D42912D87A00307251 /* MultiFilesListViewController.swift */; };
+		C2C9C3D72912D87A00307251 /* MultiFilesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2C9C3D52912D87A00307251 /* MultiFilesListViewController.xib */; };
 		C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */; };
 		C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4828A950BA00BDCCD4 /* ViewController.swift */; };
 		C2D33F4B28A950BF00BDCCD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2D33F4A28A950BF00BDCCD4 /* Assets.xcassets */; };
@@ -127,6 +129,8 @@
 		C29D1A4A290C839500711C14 /* PremiumView+Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PremiumView+Audio.swift"; sourceTree = "<group>"; };
 		C29D1A4C290C83F300711C14 /* PremiumView+Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PremiumView+Video.swift"; sourceTree = "<group>"; };
 		C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
+		C2C9C3D42912D87A00307251 /* MultiFilesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiFilesListViewController.swift; sourceTree = "<group>"; };
+		C2C9C3D52912D87A00307251 /* MultiFilesListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MultiFilesListViewController.xib; sourceTree = "<group>"; };
 		C2D33F4328A950BA00BDCCD4 /* Video Converter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Video Converter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C2D33F4828A950BA00BDCCD4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -201,6 +205,8 @@
 				C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */,
 				C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */,
 				C257C19728BE70F200E2849D /* SupportedFormatsViewController.xib */,
+				C2C9C3D42912D87A00307251 /* MultiFilesListViewController.swift */,
+				C2C9C3D52912D87A00307251 /* MultiFilesListViewController.xib */,
 			);
 			path = Popover;
 			sourceTree = "<group>";
@@ -390,6 +396,7 @@
 				C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */,
 				C2D33F4B28A950BF00BDCCD4 /* Assets.xcassets in Resources */,
 				C2D33F4E28A950BF00BDCCD4 /* Main.storyboard in Resources */,
+				C2C9C3D72912D87A00307251 /* MultiFilesListViewController.xib in Resources */,
 				C257C19828BE70F200E2849D /* SupportedFormatsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -410,6 +417,7 @@
 				C22A4EF328F47AFD0050D739 /* AppMenu+Global.swift in Sources */,
 				C22A4EF528F47FB60050D739 /* AppMenu+Debug.swift in Sources */,
 				C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */,
+				C2C9C3D62912D87A00307251 /* MultiFilesListViewController.swift in Sources */,
 				7908E48728AAAFB500B02512 /* Conversion.swift in Sources */,
 				799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */,
 				C22287A528F498F400137473 /* String+Extensions.swift in Sources */,

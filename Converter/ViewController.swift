@@ -27,12 +27,15 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   @IBOutlet weak var expandCollapsePremiumViewButton: NSButton!
   var premiumViewIsExpanded = false
+  var dragDropBoxStyleState: DragDropBox.Style = .regular
   
   // DragDropView objects
   @IBOutlet weak var dragDropBackgroundImageView: NSImageView!
+  @IBOutlet weak var dragDropIconImageView: NSImageView!
   @IBOutlet weak var dragDropTopTitle: NSTextField!
   @IBOutlet weak var dragDropBottomTitle: NSTextField!
   @IBOutlet weak var clearInputFileButton: NSButton!
+  @IBOutlet weak var showInputFilesButton: NSButton!
   
   // PremiumView: Video
   @IBOutlet weak var expandablePremiumView: NSView!
@@ -83,6 +86,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     initDropdownMenu()
     displayClearButton(.hide)
     initPremiumView()
+    updateDragDrop(withStyle: .regular)
   }
   
   func initMainView() {
@@ -104,6 +108,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   override func viewDidDisappear() {
     hidePopover(supportedFormatsPopover)
     hidePopover(helpInfoPopover)
+    hidePopover(multiFilesListPopover)
   }
   
   // TODO: This needs to be accessible even if a file is already selected, only in premium
@@ -180,11 +185,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       
       switch validateInputFile(fileUrl: inputFileUrl) {
       case .unsupported:
-        updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
-        showSupportedFormatsPopover()
+        showUnsupportedFileTypeBox()
         return
       case .corrupt:
-        updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
+        showCorruptVideoFileBox()
         return
       case .duplicate:
         break
@@ -218,14 +222,20 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     displayClearButton(.show)
     
     if inputVideos.count == 1 {
-      updateDragDrop(subtitle: filePath.lastPathComponent, withStyle: .videoFile)
+      updateDragDrop(subtitle: filePath.lastPathComponent, icon: .videoFile, withStyle: .regular)
     }
     else {
       // TODO: For now we're just setting the file name to the list of files, but we should come up with a cleaner way to do this.
       let messageArray = inputVideos.enumerated().map { "\($0+1). \($1.filePath.lastPathComponent)" }
-      updateDragDrop(subtitle: messageArray.joined(separator: "\n"), withStyle: .videoFile)
+      updateDragDrop(videoList: messageArray, icon: .videoFile, withStyle: .regular)
     }
     
+  }
+  
+  /// Clears input videos and hides clearInputFileButton
+  func clearInputVideos() {
+    inputVideos = []
+    clearInputFileButton.alphaValue = 0
   }
   
   /// Handler for all things dragDropBox related; set `withStyle: .empty` for default state
@@ -239,31 +249,72 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// // Red box with error message
   /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
   /// ```
-  func updateDragDrop(title: String = "", subtitle: String = "", withStyle: DragDropBox) {
-    if withStyle == .empty && (title.isEmpty && subtitle.isEmpty) {
-      updateDragDrop(title: "Drag and drop your video here", subtitle: "or double click to browse...", withStyle: .empty)
+  func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
+    dragDropBoxStyleState = withStyle
+    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && videoList.count == 0 {
+      updateDragDrop(title: topTitleString, subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
     } else {
+      
       updateDragDropView(withStyle)
+      
+      if videoList.count > 1 {
+        updateDragDropTitle(bottom: "\(videoList.count) videos selected")
+        dragDropIconImageView.image = DragDropBox.getMultiVideoFileIcons(forCount: videoList.count)
+        // show button
+        showInputFilesButton.isHidden = false
+        DragDropBox.videoFilesList = videoList
+        return
+      }
+      
       updateDragDropTitle(title, bottom: subtitle)
+      dragDropIconImageView.image = icon.image
+      // hide button
+      showInputFilesButton.isHidden = true
+      
+    }
+  }
+  /// Sets the DragDropBox top title string depending on premium status
+  var topTitleString: String {
+    if isPremiumEnabled {
+      return "Drag and drop your videos here"
+    } else {
+      return "Drag and drop your video here"
     }
   }
   /// Obj-C compatible function for passing updateDragDop through delegate
   func updateDragDrop(title: String, subtitle: String, withWarning: Bool) {
     if withWarning {
-      updateDragDrop(title: title, subtitle: subtitle, withStyle: .warning)
+      updateDragDrop(title: title, subtitle: subtitle, icon: .warning, withStyle: .warning)
     } else {
-      updateDragDrop(title: title, subtitle: subtitle, withStyle: .videoFile)
+      updateDragDrop(title: title, subtitle: subtitle, icon: .videoFile, withStyle: .regular)
       hidePopover(supportedFormatsPopover)
     }
   }
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
-  func updateDragDropView(_ forType: DragDropBox) {
-    dragDropBackgroundImageView.image = forType.image
+  func updateDragDropView(_ forType: DragDropBox.Style) {
+    if premiumViewIsExpanded {
+      dragDropBackgroundImageView.image = forType.backgroundImageWide
+    } else {
+      dragDropBackgroundImageView.image = forType.backgroundImage
+    }
   }
   /// Sets the dragDropBox title text without affecting the box style (ie. `bottom: inputFileName`)
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {
     if !top.isEmpty { dragDropTopTitle.stringValue = top }
     if !bottom.isEmpty { dragDropBottomTitle.stringValue = bottom }
+  }
+  /// Sets DragDropBox for error state: Unsupported file type
+  func showUnsupportedFileTypeBox() {
+    clearInputVideos()
+    updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
+    showSupportedFormatsPopover()
+    Logger.info("User did input unsupported file type")
+  }
+  /// Sets DragDropBox for error state: Corrupted video file
+  func showCorruptVideoFileBox() {
+    clearInputVideos()
+    updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
+    Logger.info("User did input corrupted video file")
   }
   
   /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
@@ -633,7 +684,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   // MARK: Clear Input File Button
   /// Clear the input file and revert UI to default state; hide clearInputFileButton when complete
   @IBAction func clearInputFile(_ sender: Any) {
-    updateDragDrop(withStyle: .empty)
+    updateDragDrop(icon: .empty, withStyle: .regular)
     inputVideos = []
     resetProgressBar()
     displayClearButton(.hide)   // Hide clear button
@@ -685,6 +736,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       helpInfoPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
     }
   }
+  /// Initialize popover to call `MultiFilesListViewController`
+  lazy var multiFilesListPopover: NSPopover = {
+    let popover = NSPopover()
+    popover.behavior = .semitransient
+    popover.contentViewController = MultiFilesListViewController()
+    popover.delegate = self
+    popover.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+    return popover
+  }()
+  /// Displays `multiFilesListPopover` to minY-position of object sender: `(?)`
+  @IBAction func showMultiFileListPopover(sender: NSButton) {
+    if (multiFilesListPopover.isShown) {
+      hidePopover(multiFilesListPopover)
+    } else {
+      let positioningView = sender
+      let positioningRect = NSZeroRect
+      let preferredEdge = NSRectEdge.minY
+      multiFilesListPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
+    }
+  }
   /// Hide specific NSPopover object
   func hidePopover(_ popover: NSPopover) {
     if popover.isShown {
@@ -697,6 +768,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   func hideHelpInfoPopover() {
     hidePopover(helpInfoPopover)
+  }
+  func hideMultiFilesListPopover() {
+    hidePopover(multiFilesListPopover)
   }
   
 }
