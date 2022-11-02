@@ -717,6 +717,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       helpInfoPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
     }
   }
+  /// Initialize popover to call `MultiFilesListViewController`
+  lazy var multiFilesListPopover: NSPopover = {
+    let popover = NSPopover()
+    popover.behavior = .semitransient
+    popover.contentViewController = MultiFilesListViewController()
+    popover.delegate = self
+    popover.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+    return popover
+  }()
+  /// Displays `multiFilesListPopover` to minY-position of object sender: `(?)`
+  @IBAction func showMultiFileListPopover(sender: NSButton) {
+    if (multiFilesListPopover.isShown) {
+      hidePopover(multiFilesListPopover)
+    } else {
+      let positioningView = sender
+      let positioningRect = NSZeroRect
+      let preferredEdge = NSRectEdge.minY
+      multiFilesListPopover.show(relativeTo: positioningRect, of: positioningView, preferredEdge: preferredEdge)
+    }
+  }
   /// Hide specific NSPopover object
   func hidePopover(_ popover: NSPopover) {
     if popover.isShown {
@@ -729,6 +749,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   func hideHelpInfoPopover() {
     hidePopover(helpInfoPopover)
+  }
+  func hideMultiFilesListPopover() {
+    hidePopover(multiFilesListPopover)
   }
   
 }

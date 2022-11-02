@@ -1,19 +1,26 @@
 //
-//  InputMultiFilesListViewController.swift
+//  MultiFilesListViewController.swift
 //  Converter
 //
-//  Created by Justin Bush on 10/31/22.
+//  Created by Justin Bush on 11/2/22.
 //
 
 import Cocoa
 
-class InputMultiFilesListViewController: NSViewController {
+class MultiFilesListViewController: NSViewController {
   
   @IBOutlet weak var multiFilesListView: NSTextField!
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
+  }
+  
+  override func viewDidAppear() {
+    updateMultiFilesListView()
+  }
+  
+  func updateMultiFilesListView() {
     var outputString = ""
     
     for file in DragDropBox.videoFilesList {

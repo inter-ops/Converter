@@ -15,6 +15,7 @@ import Cocoa
   func updateDragDrop(title: String, subtitle: String, withWarning: Bool)
   func showSupportedFormatsPopover()
   func hideSupportedFormatsPopover()
+  func hideMultiFilesListPopover()
   func openFileBrowser()
 }
 
@@ -44,6 +45,9 @@ class DragDropView: NSView {
   }
 
   override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+    // Hide current multi-files list if open
+    delegate?.hideMultiFilesListPopover()
+    
     if checkExtension(sender) == true {
       layer?.backgroundColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor //NSColor.blue.cgColor
       delegate?.hideSupportedFormatsPopover()
