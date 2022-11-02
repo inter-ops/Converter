@@ -16,7 +16,6 @@ import Cocoa
   func showSupportedFormatsPopover()
   func hideSupportedFormatsPopover()
   func openFileBrowser()
-  func alertReplaceFilesConfirmation(filePaths: [String])
 }
 
 class DragDropView: NSView {
