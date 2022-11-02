@@ -243,9 +243,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// // Red box with error message
   /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
   /// ```
-  func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [""], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
+  func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
     dragDropBoxStyleState = withStyle
-    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && videoList.count == 1 {
+    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && videoList.count == 0 {
       updateDragDrop(title: topTitleString, subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
     } else {
       
