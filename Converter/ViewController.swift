@@ -145,7 +145,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     case valid, unsupported, corrupt, duplicate
   }
   
+  // TODO: Erge with checkExtension
   func validateInputFile(fileUrl: URL) -> InputFileState {
+    // TODO: Allow directories
+  
+    print("IS DIR \(fileUrl.isDirectory))")
     if !VideoFormat.isSupportedAsInput(fileUrl.path) {
       return .unsupported
     }
@@ -168,6 +172,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Handles multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceive(filePaths: [String]) {
+    
+    let firstFileUrl = filePaths[0].fileURL.absoluteURL
+    
+    // https://stackoverflow.com/questions/27721418/getting-list-of-files-in-documents-folder
+    // https://stackoverflow.com/questions/57640119/listing-all-files-in-a-folder-recursively-with-swift
+    if filePaths.count == 1 && firstFileUrl.isDirectory {
+      var files = [URL]()
+      if let enumerator = FileManager.default.enumerator(at: firstFileUrl, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+        for case let fileURL as URL in enumerator {
+          do {
+            let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
+            if fileAttributes.isRegularFile! {
+              files.append(fileURL)
+            }
+          } catch { print(error, fileURL) }
+        }
+        print(files)
+      }
+    }
+ 
     Logger.debug("Processing input paths: \(filePaths)")
     
     resetProgressBar()

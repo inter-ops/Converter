@@ -62,6 +62,7 @@ class DragDropView: NSView {
     
     let testFilePath = path.lowercased()
     return VideoFormat.isSupportedAsInput(testFilePath)
+//    return true
   }
   
   override func draggingExited(_ sender: NSDraggingInfo?) {
