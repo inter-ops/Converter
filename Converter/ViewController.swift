@@ -257,14 +257,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         // show button
         showInputFilesButton.isHidden = false
         DragDropBox.videoFilesList = videoList
-        
-      } else {
-        updateDragDropTitle(title, bottom: subtitle)
-        dragDropIconImageView.image = icon.image
-        // hide button
-        showInputFilesButton.isHidden = true
-        
+        return
       }
+      
+      updateDragDropTitle(title, bottom: subtitle)
+      dragDropIconImageView.image = icon.image
+      // hide button
+      showInputFilesButton.isHidden = true
+      
     }
   }
   /// Sets the DragDropBox top title string depending on premium status
