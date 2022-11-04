@@ -720,8 +720,11 @@
                                                             <action selector="toggleExpandCollapsePremiumView:" target="Voe-Tx-rLC" id="V9d-lw-tTo"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Toggle PurchasePremium View" id="h3W-h4-eRK">
+                                                    <menuItem title="Toggle PurchasePremiumView" id="h3W-h4-eRK">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="togglePurchasePremiumView:" target="Voe-Tx-rLC" id="WlX-c4-JXq"/>
+                                                        </connections>
                                                     </menuItem>
                                                 </items>
                                             </menu>
@@ -1283,6 +1286,7 @@
                         <outlet property="showInputFilesButton" destination="Ric-Xf-0xi" id="Lh4-HG-Nkg"/>
                         <segue destination="yR0-6c-gBs" kind="show" identifier="showReportError" id="EQ5-Om-Sgo"/>
                         <segue destination="s4d-AT-TJn" kind="show" identifier="showContact" id="AU9-B4-7B8"/>
+                        <segue destination="lLy-C5-2W2" kind="sheet" identifier="sheetPurchasePremium" id="O2R-dE-DDj"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1804,7 +1808,7 @@
                 </viewController>
                 <customObject id="ytj-Jv-tNa" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="565" y="901"/>
+            <point key="canvasLocation" x="732" y="895"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

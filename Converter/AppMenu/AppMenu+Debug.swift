@@ -23,4 +23,9 @@ extension AppDelegate {
     viewController?.toggleExpandCollapsePremiumView(self)
   }
   
+  @IBAction func togglePurchasePremiumView(_ sender: NSMenuItem) {
+    let viewController = mainWindow.contentViewController as? ViewController
+    viewController?.segue(.sheetPurchasePremium)
+  }
+  
 }
