@@ -32,8 +32,44 @@ class PurchasePremiumViewController: NSViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    // Collapse video preview by default
+    initVideoPreview()
+  }
+  
+  func initVideoPreview() {
+    videoPreviewHeightConstraint.constant = 80
+    videoPreviewWebView.isHidden = true
+    dismissVideoPreviewButton.isHidden = true
     
+  }
+  
+  func expandAndPlayVideo() {
+    expandVideoView()
+  }
+  
+  func collapseAndStopVideo() {
+    collapseVideoView()
+  }
+  
+  @IBAction func presentVideoPreviewButtonAction(_ sender: NSButton) {
+    expandAndPlayVideo()
+  }
+  
+  @IBAction func dismissVideoPreviewButtonAction(_ sender: NSButton) {
+    collapseAndStopVideo()
+  }
+  
+  func expandVideoView() {
+    videoPreviewHeightConstraint.animator().constant = 190
+    videoPreviewWebView.isHidden = false
+    dismissVideoPreviewButton.isHidden = false
+    presentVideoPreviewButton.isHidden = true
+  }
+  
+  func collapseVideoView() {
+    videoPreviewHeightConstraint.animator().constant = 80
+    videoPreviewWebView.isHidden = true
+    dismissVideoPreviewButton.isHidden = true
+    presentVideoPreviewButton.isHidden = false
   }
   
   // TODO: Begin load video in background

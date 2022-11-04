@@ -1807,7 +1807,7 @@
                                             <constraint firstItem="Jgb-wv-4OX" firstAttribute="top" secondItem="Cep-uE-8yu" secondAttribute="top" id="yHy-wc-Qcu"/>
                                         </constraints>
                                     </customView>
-                                    <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f1N-g9-5IS">
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f1N-g9-5IS">
                                         <rect key="frame" x="10" y="386" width="24" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="24" id="Fb0-ff-ivA"/>
@@ -1858,6 +1858,9 @@
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
+                                                <connections>
+                                                    <action selector="dismissVideoPreviewButtonAction:" target="lLy-C5-2W2" id="XaY-qA-JRL"/>
+                                                </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U26-TB-jWb">
                                                 <rect key="frame" x="120" y="25" width="110" height="30"/>
@@ -1869,6 +1872,9 @@
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
+                                                <connections>
+                                                    <action selector="presentVideoPreviewButtonAction:" target="lLy-C5-2W2" id="1TM-rM-sW1"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -1931,9 +1937,11 @@
                                     </customView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="f1N-g9-5IS" firstAttribute="top" secondItem="mGz-JP-Qbn" secondAttribute="top" constant="10" id="3c9-mR-4lw"/>
                                     <constraint firstItem="hAV-uT-J1P" firstAttribute="leading" secondItem="mGz-JP-Qbn" secondAttribute="leading" id="3wQ-3G-z5r"/>
                                     <constraint firstAttribute="trailing" secondItem="o84-8O-bt7" secondAttribute="trailing" id="EVa-nj-eCG"/>
                                     <constraint firstItem="GcM-8O-QqD" firstAttribute="top" secondItem="Cep-uE-8yu" secondAttribute="bottom" constant="10" id="RTw-wi-l39"/>
+                                    <constraint firstItem="f1N-g9-5IS" firstAttribute="leading" secondItem="mGz-JP-Qbn" secondAttribute="leading" constant="10" id="W0P-xE-WCt"/>
                                     <constraint firstAttribute="bottom" secondItem="hAV-uT-J1P" secondAttribute="bottom" id="ai6-Jm-qcj"/>
                                     <constraint firstItem="o84-8O-bt7" firstAttribute="leading" secondItem="mGz-JP-Qbn" secondAttribute="leading" id="bE4-bJ-5Uh"/>
                                     <constraint firstItem="Cep-uE-8yu" firstAttribute="centerX" secondItem="mGz-JP-Qbn" secondAttribute="centerX" id="cfx-sY-IUd"/>
@@ -1955,7 +1963,7 @@
                     </view>
                     <connections>
                         <outlet property="actionRowView" destination="hAV-uT-J1P" id="MOh-cp-HOT"/>
-                        <outlet property="dismissVideoPreviewButton" destination="U26-TB-jWb" id="Nf5-Wf-PIq"/>
+                        <outlet property="dismissVideoPreviewButton" destination="J9e-8V-Jhs" id="JkK-Zq-hWp"/>
                         <outlet property="dismissViewButton" destination="f1N-g9-5IS" id="GGb-Vq-Ikl"/>
                         <outlet property="mainView" destination="mGz-JP-Qbn" id="OTV-Ze-BtT"/>
                         <outlet property="premiumDetailsImageView" destination="E3c-0d-A3j" id="Lx3-JG-hPZ"/>
