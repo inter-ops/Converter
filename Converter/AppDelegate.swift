@@ -35,6 +35,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
   
+  // openFiles: https://developer.apple.com/documentation/appkit/nsapplicationdelegate/1428742-application
+  // open urls: https://developer.apple.com/documentation/appkit/nsapplicationdelegate/2887193-application
   /// Flag to determine if mainWindow ViewController has loaded to the point of accepting call requests
   var mainViewHasAppeared = false
   /// String path of the input file, requested to be open with mainWindow ViewController, if applicable
