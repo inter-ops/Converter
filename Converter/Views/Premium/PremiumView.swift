@@ -15,7 +15,7 @@ extension ViewController {
     didSelectNewOutput(format: outputFormat)  // Set default codec on launch based on default output format
     initQualityDropdownMenu()
     
-    if isPremiumEnabled {
+    if isPremiumEnabled && userDidPurchasePremium {
       enablePremiumView()
       
     } else {
