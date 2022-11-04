@@ -12,7 +12,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// `true` if user has purchased premium or app is in debug environment
   var userDidPurchasePremium: Bool {
-    if Config.shared.debug { return true } // set to false to preview app as free user
+    if Config.shared.debug { return true } // comment this line to preview app as free user
     return false
   }
   /// `true` if premium features should be hidden from app. `false` if app is in debug environment
