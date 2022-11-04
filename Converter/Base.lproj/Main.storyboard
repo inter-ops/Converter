@@ -1768,15 +1768,15 @@
         <scene sceneID="1cf-U6-hsg">
             <objects>
                 <viewController id="lLy-C5-2W2" customClass="PurchasePremiumViewController" customModule="Video_Converter" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="msr-Wu-JnD">
-                        <rect key="frame" x="0.0" y="0.0" width="350" height="530"/>
+                    <view key="view" misplaced="YES" id="msr-Wu-JnD">
+                        <rect key="frame" x="0.0" y="0.0" width="350" height="550"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="mGz-JP-Qbn">
-                                <rect key="frame" x="0.0" y="0.0" width="350" height="530"/>
+                                <rect key="frame" x="0.0" y="0.0" width="350" height="550"/>
                                 <subviews>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="Cep-uE-8yu">
-                                        <rect key="frame" x="90" y="460" width="171" height="60"/>
+                                        <rect key="frame" x="90" y="480" width="171" height="60"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="isy-zh-t5R">
                                                 <rect key="frame" x="86" y="7" width="67" height="47"/>
@@ -1808,7 +1808,7 @@
                                         </constraints>
                                     </customView>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f1N-g9-5IS">
-                                        <rect key="frame" x="10" y="496" width="24" height="24"/>
+                                        <rect key="frame" x="10" y="516" width="24" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="24" id="Fb0-ff-ivA"/>
                                             <constraint firstAttribute="height" constant="24" id="gMj-AR-1Xe"/>
@@ -1819,7 +1819,7 @@
                                         </buttonCell>
                                     </button>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="GcM-8O-QqD">
-                                        <rect key="frame" x="0.0" y="250" width="350" height="200"/>
+                                        <rect key="frame" x="0.0" y="270" width="350" height="200"/>
                                         <subviews>
                                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="E3c-0d-A3j">
                                                 <rect key="frame" x="0.0" y="0.0" width="350" height="200"/>
@@ -1835,7 +1835,7 @@
                                         </constraints>
                                     </customView>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="o84-8O-bt7">
-                                        <rect key="frame" x="0.0" y="60" width="350" height="190"/>
+                                        <rect key="frame" x="0.0" y="80" width="350" height="190"/>
                                         <subviews>
                                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tRW-iH-s92">
                                                 <rect key="frame" x="0.0" y="0.0" width="350" height="190"/>
@@ -1900,14 +1900,14 @@
                                         </constraints>
                                     </customView>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="hAV-uT-J1P">
-                                        <rect key="frame" x="0.0" y="0.0" width="350" height="60"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="80"/>
                                         <subviews>
                                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vsT-OO-9qi">
-                                                <rect key="frame" x="0.0" y="0.0" width="350" height="60"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="350" height="80"/>
                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="purple-bg" id="Vbr-HJ-jC1"/>
                                             </imageView>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T8t-6f-R3J">
-                                                <rect key="frame" x="230" y="15" width="100" height="30"/>
+                                                <rect key="frame" x="230" y="25" width="100" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="H8J-Wy-bCq"/>
                                                     <constraint firstAttribute="height" constant="30" id="bA9-dD-pfX"/>
@@ -1916,9 +1916,12 @@
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
+                                                <connections>
+                                                    <action selector="purchaseButtonAction:" target="lLy-C5-2W2" id="dD4-jI-74n"/>
+                                                </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MkJ-tb-gaF">
-                                                <rect key="frame" x="20" y="15" width="162" height="30"/>
+                                                <rect key="frame" x="20" y="25" width="162" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="162" id="0SG-zk-mrI"/>
                                                     <constraint firstAttribute="height" constant="30" id="0rx-Bw-iff"/>
@@ -1927,6 +1930,9 @@
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
+                                                <connections>
+                                                    <action selector="restorePurchaseButtonAction:" target="lLy-C5-2W2" id="Ljc-f7-0Wp"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -1936,7 +1942,7 @@
                                             <constraint firstAttribute="trailing" secondItem="T8t-6f-R3J" secondAttribute="trailing" constant="20" symbolic="YES" id="NM5-3g-W2j"/>
                                             <constraint firstAttribute="bottom" secondItem="vsT-OO-9qi" secondAttribute="bottom" id="NmL-kh-EnQ"/>
                                             <constraint firstItem="vsT-OO-9qi" firstAttribute="leading" secondItem="hAV-uT-J1P" secondAttribute="leading" id="aXf-xY-PyA"/>
-                                            <constraint firstAttribute="height" constant="60" id="qb9-0R-tgD"/>
+                                            <constraint firstAttribute="height" constant="80" id="qb9-0R-tgD"/>
                                             <constraint firstItem="T8t-6f-R3J" firstAttribute="centerY" secondItem="hAV-uT-J1P" secondAttribute="centerY" id="wnk-V2-j5C"/>
                                             <constraint firstItem="MkJ-tb-gaF" firstAttribute="leading" secondItem="hAV-uT-J1P" secondAttribute="leading" constant="20" symbolic="YES" id="xcd-AX-ejc"/>
                                         </constraints>

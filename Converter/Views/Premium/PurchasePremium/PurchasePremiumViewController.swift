@@ -37,62 +37,75 @@ class PurchasePremiumViewController: NSViewController {
     collapseAndStopVideo()
   }
   
+  @IBAction func purchaseButtonAction(_ sender: NSButton) {
+    Logger.info("PurchasePremium: User did select purchase button")
+    // Call In-App Purchase window
+  }
+  
+  @IBAction func restorePurchaseButtonAction(_ sender: NSButton) {
+    Logger.info("PurchasePremium: User did select restore purchase button")
+    // Call Purchase Restore window
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     initVideoPreview()
   }
   
+  
+  // MARK: - Video Player
+  /// Initialize premium video player
   func initVideoPreview() {
     expandVideoView()
     initVideo()
   }
-  
+  /// Expand video player view and play video
   func expandAndPlayVideo() {
     expandVideoView()
     playVideo()
   }
-  
+  /// Collapse video player view and pause video
   func collapseAndStopVideo() {
     collapseVideoView()
     stopVideo()
   }
-  
+  /// Expand video view with `animator()`
   func expandVideoView() {
     videoPreviewHeightConstraint.animator().constant = 190
-    dismissVideoPreviewButton.isHidden = false
-    presentVideoPreviewButton.isHidden = true
+    dismissVideoPreviewButton.animator().isHidden = false
+    presentVideoPreviewButton.animator().isHidden = true
     darkOverlayImageView.animator().isHidden = true
   }
-  
+  /// Collapse video view with `animator()`
   func collapseVideoView() {
     videoPreviewHeightConstraint.animator().constant = 80
-    dismissVideoPreviewButton.isHidden = true
-    presentVideoPreviewButton.isHidden = false
+    dismissVideoPreviewButton.animator().isHidden = true
+    presentVideoPreviewButton.animator().isHidden = false
     darkOverlayImageView.animator().isHidden = false
   }
-  
+  /// Initialize AVPlayer and play video from source
   func initVideo() {
+    // TODO: Replace with premium video preview once premium implementation is complete
     let videoUrl = URL(string: "https://converter.airtv.io/app-assets/premium-preview.mov")
     let player = AVPlayer(url: videoUrl!)
     videoPlayer.player = player
     player.play()
     player.actionAtItemEnd = .none
-    
+    // NotificationCenter observer for looping video at end
     NotificationCenter.default.addObserver(self,
                                            selector: #selector(playerItemDidReachEnd(notification:)),
                                            name: .AVPlayerItemDidPlayToEndTime,
                                            object: player.currentItem)
   }
-  
+  /// `play()` AVPlayer contents
   func playVideo() {
     videoPlayer.player?.play()
   }
-  
+  /// `pause()` AVPlayer contents
   func stopVideo() {
     videoPlayer.player?.pause()
   }
-  
-
+  /// On observed Notification, seek video at 0:00
   @objc func playerItemDidReachEnd(notification: Notification) {
     if let playerItem = notification.object as? AVPlayerItem {
       playerItem.seek(to: CMTime.zero, completionHandler: nil)
