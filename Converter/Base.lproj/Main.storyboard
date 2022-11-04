@@ -1817,6 +1817,9 @@
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <connections>
+                                            <action selector="dismissController:" target="lLy-C5-2W2" id="oEI-T6-Jkc"/>
+                                        </connections>
                                     </button>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="GcM-8O-QqD">
                                         <rect key="frame" x="0.0" y="270" width="350" height="200"/>
