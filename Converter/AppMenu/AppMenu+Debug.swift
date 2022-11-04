@@ -28,4 +28,9 @@ extension AppDelegate {
     viewController?.segue(.sheetPurchasePremium)
   }
   
+  @IBAction func collapsePremiumView(_ sender: Any) {
+    let viewController = mainWindow.contentViewController as? ViewController
+    viewController?.collapsePremiumIfExpanded()
+  }
+  
 }
