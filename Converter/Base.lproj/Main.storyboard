@@ -720,6 +720,9 @@
                                                             <action selector="toggleExpandCollapsePremiumView:" target="Voe-Tx-rLC" id="V9d-lw-tTo"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem title="Toggle PurchasePremium View" id="h3W-h4-eRK">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
                                                 </items>
                                             </menu>
                                         </menuItem>
@@ -1761,38 +1764,55 @@
             <objects>
                 <viewController id="lLy-C5-2W2" sceneMemberID="viewController">
                     <view key="view" id="msr-Wu-JnD">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="350" height="540"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AMf-JC-bN8">
-                                <rect key="frame" x="323" y="13" width="114" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Purchase" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F9R-At-pEC">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zW0-4M-rXp">
-                                <rect key="frame" x="13" y="13" width="148" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Restore Purchases" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7YZ-wS-dRb">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
+                            <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cep-uE-8yu">
+                                <rect key="frame" x="90" y="469" width="171" height="60"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="isy-zh-t5R">
+                                        <rect key="frame" x="86" y="7" width="67" height="47"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Pro" id="8Ks-5V-XuR">
+                                            <font key="font" metaFont="systemBold" size="40"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jgb-wv-4OX">
+                                        <rect key="frame" x="20" y="0.0" width="60" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="KUL-Nc-0tT"/>
+                                            <constraint firstAttribute="height" constant="60" id="OwS-Zw-4p1"/>
+                                        </constraints>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="AppIconLogo" id="ESQ-T6-8qr"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="isy-zh-t5R" firstAttribute="leading" secondItem="Jgb-wv-4OX" secondAttribute="trailing" constant="8" symbolic="YES" id="2aM-gm-5Oa"/>
+                                    <constraint firstAttribute="width" constant="171" id="4eo-EM-U2d"/>
+                                    <constraint firstItem="isy-zh-t5R" firstAttribute="centerY" secondItem="Cep-uE-8yu" secondAttribute="centerY" id="Tbx-9h-oy7"/>
+                                    <constraint firstItem="Jgb-wv-4OX" firstAttribute="centerY" secondItem="Cep-uE-8yu" secondAttribute="centerY" id="fYa-xa-foz"/>
+                                    <constraint firstAttribute="trailing" secondItem="isy-zh-t5R" secondAttribute="trailing" constant="20" symbolic="YES" id="h37-Q7-QJs"/>
+                                    <constraint firstItem="Jgb-wv-4OX" firstAttribute="leading" secondItem="Cep-uE-8yu" secondAttribute="leading" constant="20" symbolic="YES" id="jaV-RX-3TT"/>
+                                    <constraint firstAttribute="bottom" secondItem="Jgb-wv-4OX" secondAttribute="bottom" id="omm-MO-uBf"/>
+                                    <constraint firstAttribute="height" constant="60" id="uP7-tW-bcH"/>
+                                    <constraint firstItem="Jgb-wv-4OX" firstAttribute="top" secondItem="Cep-uE-8yu" secondAttribute="top" id="yHy-wc-Qcu"/>
+                                </constraints>
+                            </customView>
                         </subviews>
                     </view>
                 </viewController>
                 <customObject id="ytj-Jv-tNa" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="697" y="817"/>
+            <point key="canvasLocation" x="565" y="901"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="EQ5-Om-Sgo"/>
-        <segue reference="AU9-B4-7B8"/>
+        <segue reference="wed-Vm-xLL"/>
+        <segue reference="AZd-SB-erv"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="AppIconLogo" width="60" height="60"/>
         <image name="Chevron-Down" width="20" height="16"/>
         <image name="Clear-Icon" width="14" height="14"/>
         <image name="dbox-default" width="300" height="169"/>
