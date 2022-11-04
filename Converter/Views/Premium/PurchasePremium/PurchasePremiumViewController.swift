@@ -30,9 +30,12 @@ class PurchasePremiumViewController: NSViewController {
   @IBOutlet weak var restorePurchaseButton: NSButton!
   
   @IBAction func dismissSheetViewController(_ sender: NSButton) {
+    videoPlayer.player?.pause() // Ensure player stop
+    // Dismiss sheet view
     dismiss(self)
     let appDelegate = NSApplication.shared.delegate as! AppDelegate
     appDelegate.collapsePremiumView(self)
+    
   }
   
   @IBAction func presentVideoPreviewButtonAction(_ sender: NSButton) {
