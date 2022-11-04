@@ -35,31 +35,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
   
-  // TODO: @JB Add multi-file Open-With (if possible)
   /// Flag to determine if mainWindow ViewController has loaded to the point of accepting call requests
   var mainViewHasAppeared = false
   /// String path of the input file, requested to be open with mainWindow ViewController, if applicable
-  var openAppWithFilePath: String? = nil
-  /// Handles the opening of the app with an input file, see below
+  var openAppWithFilePaths: [String] = []
+  /// Handles the opening of the app with multiple input files (see below).
   ///
   /// Called regardless of the application's current status (opened/closed) and includes, but is not limited to, such states:
   ///  * From Finder, right-click input file, `Open With... > [this application]`
   ///  * Dragging and dropping an input file onto the application icon in dock
-  func application(_ sender: NSApplication, openFile filename: String) -> Bool {
+  func application(_ application: NSApplication, open urls: [URL]) {
+    var inputFilePaths: [String] = []
+    // Append each url to inputFilePaths as a String
+    for url in urls {
+      inputFilePaths.append(url.path)
+    }
     /// If the mainWindow ViewController has been loaded and is able to accept calls from AppDelegate
     if mainViewHasAppeared {
       /// Load the input file request and bring the mainWindow to front
       let viewController = mainWindow.contentViewController as? ViewController
-      viewController?.dragDropViewDidReceive(filePath: filename)
+      viewController?.dragDropViewDidReceive(filePaths: inputFilePaths)
       mainWindow.makeKeyAndOrderFront(self)
     } else {
       /// Otherwise, set the String path of the input file for handling by the mainWindow ViewController once it is ready
-      openAppWithFilePath = filename
+      openAppWithFilePaths = inputFilePaths
     }
-    return true
   }
 
-  ///Called upon application's request to terminate (ie. `App > Quit App`)
+  /// Called upon application's request to terminate (ie. `App > Quit App`)
   func applicationWillTerminate(_ aNotification: Notification) {
     Logger.debug("Application is expected to terminate")
   }

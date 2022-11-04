@@ -132,10 +132,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   override func viewDidAppear() {
     // Handles opening of file in application on launch after initial load
     DispatchQueue.main.async {
-      if self.appDelegate.openAppWithFilePath != nil {
-        self.dragDropViewDidReceive(filePath: self.appDelegate.openAppWithFilePath!)
-        self.appDelegate.openAppWithFilePath = nil
+      // If openAppWithFilesPaths is not empty
+      if self.appDelegate.openAppWithFilePaths != [] {
+        // Queue multiple video file paths for when viewDidAppear is called
+        self.dragDropViewDidReceive(filePaths: self.appDelegate.openAppWithFilePaths)
+        self.appDelegate.openAppWithFilePaths = []  // Empty openAppWithFilePaths
       }
+      // Set mainViewHasAppeared to handle input files immediately
       self.appDelegate.mainViewHasAppeared = true
     }
   }
