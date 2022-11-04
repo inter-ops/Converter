@@ -1818,7 +1818,7 @@
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
-                                            <action selector="dismissController:" target="lLy-C5-2W2" id="oEI-T6-Jkc"/>
+                                            <action selector="dismissSheetViewController:" target="lLy-C5-2W2" id="1iT-nY-n7T"/>
                                         </connections>
                                     </button>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="GcM-8O-QqD">
@@ -1999,8 +1999,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wed-Vm-xLL"/>
-        <segue reference="AZd-SB-erv"/>
+        <segue reference="EQ5-Om-Sgo"/>
+        <segue reference="AU9-B4-7B8"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AppIconLogo" width="60" height="60"/>

@@ -36,6 +36,8 @@ extension ViewController {
     
     //expandablePremiumView.isHidden = false
     expandablePremiumView.animator().isHidden = false
+    
+    checkAndShowPurchasePremium()
   }
   
   func collapsePremiumView() {
@@ -52,6 +54,13 @@ extension ViewController {
     
     //expandablePremiumView.isHidden = true
     expandablePremiumView.animator().isHidden = true
+  }
+  
+  /// Collapse PremiumView if currently expanded
+  func collapsePremiumIfExpanded() {
+    if premiumViewIsExpanded {
+      collapsePremiumView()
+    }
   }
   
   
