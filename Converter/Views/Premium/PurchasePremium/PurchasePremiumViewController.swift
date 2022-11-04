@@ -6,7 +6,7 @@
 //
 
 import Cocoa
-import WebKit
+import AVKit
 
 class PurchasePremiumViewController: NSViewController {
   
@@ -21,34 +21,13 @@ class PurchasePremiumViewController: NSViewController {
   @IBOutlet weak var videoPreviewView: NSView!
   @IBOutlet weak var presentVideoPreviewButton: NSButton!
   @IBOutlet weak var dismissVideoPreviewButton: NSButton!
-  @IBOutlet weak var videoPreviewWebView: WKWebView!
+  @IBOutlet weak var darkOverlayImageView: NSImageView!
+  @IBOutlet weak var videoPlayer: AVPlayerView!
   @IBOutlet weak var videoPreviewHeightConstraint: NSLayoutConstraint!
   // 4. Bottom: Action Buttons
   @IBOutlet weak var actionRowView: NSView!
   @IBOutlet weak var purchasePremiumButton: NSButton!
   @IBOutlet weak var restorePurchaseButton: NSButton!
-
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    
-    initVideoPreview()
-  }
-  
-  func initVideoPreview() {
-    videoPreviewHeightConstraint.constant = 80
-    videoPreviewWebView.isHidden = true
-    dismissVideoPreviewButton.isHidden = true
-    
-  }
-  
-  func expandAndPlayVideo() {
-    expandVideoView()
-  }
-  
-  func collapseAndStopVideo() {
-    collapseVideoView()
-  }
   
   @IBAction func presentVideoPreviewButtonAction(_ sender: NSButton) {
     expandAndPlayVideo()
@@ -58,22 +37,67 @@ class PurchasePremiumViewController: NSViewController {
     collapseAndStopVideo()
   }
   
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    initVideoPreview()
+  }
+  
+  func initVideoPreview() {
+    expandVideoView()
+    initVideo()
+  }
+  
+  func expandAndPlayVideo() {
+    expandVideoView()
+    playVideo()
+  }
+  
+  func collapseAndStopVideo() {
+    collapseVideoView()
+    stopVideo()
+  }
+  
   func expandVideoView() {
     videoPreviewHeightConstraint.animator().constant = 190
-    videoPreviewWebView.isHidden = false
     dismissVideoPreviewButton.isHidden = false
     presentVideoPreviewButton.isHidden = true
+    darkOverlayImageView.animator().isHidden = true
   }
   
   func collapseVideoView() {
     videoPreviewHeightConstraint.animator().constant = 80
-    videoPreviewWebView.isHidden = true
     dismissVideoPreviewButton.isHidden = true
     presentVideoPreviewButton.isHidden = false
+    darkOverlayImageView.animator().isHidden = false
   }
   
-  // TODO: Begin load video in background
+  func initVideo() {
+    let videoUrl = URL(string: "https://converter.airtv.io/app-assets/premium-preview.mov")
+    let player = AVPlayer(url: videoUrl!)
+    videoPlayer.player = player
+    player.play()
+    player.actionAtItemEnd = .none
+    
+    NotificationCenter.default.addObserver(self,
+                                           selector: #selector(playerItemDidReachEnd(notification:)),
+                                           name: .AVPlayerItemDidPlayToEndTime,
+                                           object: player.currentItem)
+  }
   
-  // TODO: Expand to autoplay video, collapse to restart and stop video
+  func playVideo() {
+    videoPlayer.player?.play()
+  }
+  
+  func stopVideo() {
+    videoPlayer.player?.pause()
+  }
+  
+
+  @objc func playerItemDidReachEnd(notification: Notification) {
+    if let playerItem = notification.object as? AVPlayerItem {
+      playerItem.seek(to: CMTime.zero, completionHandler: nil)
+    }
+  }
+
   
 }
