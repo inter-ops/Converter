@@ -30,11 +30,6 @@ extension ViewController {
     mainViewWidthConstraint.animator().constant = Constants.Frame.expandedViewWidth
     mainViewHeightConstraint.animator().constant = Constants.Frame.expandedViewHeight
     
-    // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
-    
-    // expandDragDropView()
-    
-    //expandablePremiumView.isHidden = false
     expandablePremiumView.animator().isHidden = false
     
     checkAndShowPurchasePremium()
@@ -48,11 +43,6 @@ extension ViewController {
     mainViewWidthConstraint.animator().constant = Constants.Frame.mainViewWidth
     mainViewHeightConstraint.animator().constant = Constants.Frame.mainViewHeight
     
-    // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
-    
-    //collapseDragDropView()
-    
-    //expandablePremiumView.isHidden = true
     expandablePremiumView.animator().isHidden = true
   }
   
