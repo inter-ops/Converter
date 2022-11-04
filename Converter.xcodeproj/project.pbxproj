@@ -40,7 +40,6 @@
 		C22287A528F498F400137473 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22287A428F498F400137473 /* String+Extensions.swift */; };
 		C22A4EF328F47AFD0050D739 /* AppMenu+Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */; };
 		C22A4EF528F47FB60050D739 /* AppMenu+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A4EF428F47FB60050D739 /* AppMenu+Debug.swift */; };
-		C2404C83291570E400CD9430 /* ViewController+Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2404C82291570E400CD9430 /* ViewController+Purchase.swift */; };
 		C2404C8529157DD200CD9430 /* WebView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2404C8429157DD200CD9430 /* WebView+Extensions.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
@@ -57,7 +56,6 @@
 		C29D1A4B290C839500711C14 /* PremiumView+Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29D1A4A290C839500711C14 /* PremiumView+Audio.swift */; };
 		C29D1A4D290C83F300711C14 /* PremiumView+Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29D1A4C290C83F300711C14 /* PremiumView+Video.swift */; };
 		C2B26F5129142CC3001FBD6A /* PurchasePremiumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B26F5029142CC3001FBD6A /* PurchasePremiumViewController.swift */; };
-		C2B26F5329142CD6001FBD6A /* PurchasePremiumWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B26F5229142CD6001FBD6A /* PurchasePremiumWindowController.swift */; };
 		C2BEEEFB2903141E00F9FFD8 /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */; };
 		C2C9C3D62912D87A00307251 /* MultiFilesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C9C3D42912D87A00307251 /* MultiFilesListViewController.swift */; };
 		C2C9C3D72912D87A00307251 /* MultiFilesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2C9C3D52912D87A00307251 /* MultiFilesListViewController.xib */; };
@@ -118,7 +116,6 @@
 		C22287A428F498F400137473 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppMenu+Global.swift"; sourceTree = "<group>"; };
 		C22A4EF428F47FB60050D739 /* AppMenu+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppMenu+Debug.swift"; sourceTree = "<group>"; };
-		C2404C82291570E400CD9430 /* ViewController+Purchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Purchase.swift"; sourceTree = "<group>"; };
 		C2404C8429157DD200CD9430 /* WebView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WebView+Extensions.swift"; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
 		C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulProgressIndicator.swift; sourceTree = "<group>"; };
@@ -135,7 +132,6 @@
 		C29D1A4A290C839500711C14 /* PremiumView+Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PremiumView+Audio.swift"; sourceTree = "<group>"; };
 		C29D1A4C290C83F300711C14 /* PremiumView+Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PremiumView+Video.swift"; sourceTree = "<group>"; };
 		C2B26F5029142CC3001FBD6A /* PurchasePremiumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasePremiumViewController.swift; sourceTree = "<group>"; };
-		C2B26F5229142CD6001FBD6A /* PurchasePremiumWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasePremiumWindowController.swift; sourceTree = "<group>"; };
 		C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
 		C2C9C3D42912D87A00307251 /* MultiFilesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiFilesListViewController.swift; sourceTree = "<group>"; };
 		C2C9C3D52912D87A00307251 /* MultiFilesListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MultiFilesListViewController.xib; sourceTree = "<group>"; };
@@ -253,8 +249,6 @@
 			isa = PBXGroup;
 			children = (
 				C2B26F5029142CC3001FBD6A /* PurchasePremiumViewController.swift */,
-				C2B26F5229142CD6001FBD6A /* PurchasePremiumWindowController.swift */,
-				C2404C82291570E400CD9430 /* ViewController+Purchase.swift */,
 			);
 			path = PurchasePremium;
 			sourceTree = "<group>";
@@ -434,7 +428,6 @@
 				C2404C8529157DD200CD9430 /* WebView+Extensions.swift in Sources */,
 				79CD2F2328ECBF2B005F34F0 /* Logger.swift in Sources */,
 				C2BEEEFB2903141E00F9FFD8 /* PremiumView.swift in Sources */,
-				C2404C83291570E400CD9430 /* ViewController+Purchase.swift in Sources */,
 				79AF2A7E28D5FDF6009CCB42 /* SubtitleCodec.swift in Sources */,
 				C22A4EF328F47AFD0050D739 /* AppMenu+Global.swift in Sources */,
 				C22A4EF528F47FB60050D739 /* AppMenu+Debug.swift in Sources */,
@@ -457,7 +450,6 @@
 				C2638D5428EA20CA00841C47 /* ContactWindowController.swift in Sources */,
 				C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */,
 				C205DB1F290836AA00A1C6F8 /* ResizeViewHandler.swift in Sources */,
-				C2B26F5329142CD6001FBD6A /* PurchasePremiumWindowController.swift in Sources */,
 				79D95A8B28E8C3660023BECE /* API.swift in Sources */,
 				C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */,
 				79AF2A8228D60C26009CCB42 /* Video.swift in Sources */,
