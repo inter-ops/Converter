@@ -34,6 +34,8 @@ extension ViewController {
   }
   
   func errorAlert(withMessage: String) {
+    Logger.debug("Error alert shown with message \(withMessage)")
+    
     let a = NSAlert()
     a.messageText = "An error occured"
     a.informativeText = withMessage

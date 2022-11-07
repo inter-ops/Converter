@@ -142,24 +142,25 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   
   enum InputFileState {
-    case valid, unsupported, corrupt, duplicate
+    case valid, unsupported, corrupt, duplicate, directory
   }
   
-  // TODO: Erge with checkExtension
+  // TODO: Check if corrupt check slows down drag drop interaction
   func validateInputFile(fileUrl: URL) -> InputFileState {
-    // TODO: Allow directories
-  
-    print("IS DIR \(fileUrl.isDirectory))")
+    if fileUrl.isDirectory {
+      return .directory
+    }
+    
     if !VideoFormat.isSupportedAsInput(fileUrl.path) {
       return .unsupported
     }
     
-    if !isFileValid(inputFilePath: fileUrl.path) {
-      return .corrupt
-    }
-    
     if !inputVideos.allSatisfy({ $0.filePath != fileUrl.path }) {
       return .duplicate
+    }
+    
+    if !isFileValid(inputFilePath: fileUrl.path) {
+      return .corrupt
     }
     
     return .valid
@@ -170,28 +171,33 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     dragDropViewDidReceive(filePaths: [filePath])
   }
   
-  /// Handles multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
-  func dragDropViewDidReceive(filePaths: [String]) {
-    
-    let firstFileUrl = filePaths[0].fileURL.absoluteURL
-    
+  // TODO: Test whether this gets too long for too many files, we could enumerate directly in here if needed
+  func getVideoPathsInDirectory(baseUrl: URL) -> [String] {
     // https://stackoverflow.com/questions/27721418/getting-list-of-files-in-documents-folder
     // https://stackoverflow.com/questions/57640119/listing-all-files-in-a-folder-recursively-with-swift
-    if filePaths.count == 1 && firstFileUrl.isDirectory {
-      var files = [URL]()
-      if let enumerator = FileManager.default.enumerator(at: firstFileUrl, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
-        for case let fileURL as URL in enumerator {
+    
+    var filePaths = [String]()
+    if let enumerator = FileManager.default.enumerator(at: baseUrl, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+        
+        for case let fileUrl as URL in enumerator {
           do {
-            let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
-            if fileAttributes.isRegularFile! {
-              files.append(fileURL)
+            let fileAttributes = try fileUrl.resourceValues(forKeys:[.isRegularFileKey])
+            
+            if fileAttributes.isRegularFile! && VideoFormat.isSupportedAsInput(fileUrl.path) {
+              filePaths.append(fileUrl.path)
             }
-          } catch { print(error, fileURL) }
+          } catch {
+            Logger.error("Error getting resource values for file \(fileUrl.path): \(error.localizedDescription)")
+          }
         }
-        print(files)
       }
-    }
- 
+    
+    
+    return filePaths
+  }
+  
+  /// Handles multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
+  func dragDropViewDidReceive(filePaths: [String]) {
     Logger.debug("Processing input paths: \(filePaths)")
     
     resetProgressBar()
@@ -216,7 +222,23 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         return
       case .duplicate:
         break
+      case .directory:
+        // TODO: Ensure dir files maintain dir structure
+        let directoryPaths = getVideoPathsInDirectory(baseUrl: inputFileUrl)
+        
+        if filteredPaths.count + directoryPaths.count > Constants.fileCountLimit {
+          showTooManyInputVideosBox()
+          return
+        }
+        
+        filteredPaths.append(contentsOf: directoryPaths)
+        break
       case .valid:
+        if filteredPaths.count + 1 > Constants.fileCountLimit {
+          showTooManyInputVideosBox()
+          return
+        }
+        
         filteredPaths.append(filePath)
         break
       }
@@ -224,6 +246,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     // if premium, handle multi-file
     if isPremiumEnabled {
+      // TODO: Create a func to add them all at once so we dont need to call updateDragDrop so many times, this likely slows UI
       for filePath in filteredPaths {
         addVideoToInputs(filePath: filePath)
       }
@@ -329,16 +352,23 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   /// Sets DragDropBox for error state: Unsupported file type
   func showUnsupportedFileTypeBox() {
+    Logger.debug("Displaying unsupported file error")
     clearInputVideos()
     updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
     showSupportedFormatsPopover()
-    Logger.info("User did input unsupported file type")
   }
   /// Sets DragDropBox for error state: Corrupted video file
   func showCorruptVideoFileBox() {
+    Logger.debug("Displaying corrupt file error")
     clearInputVideos()
     updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
-    Logger.info("User did input corrupted video file")
+  }
+  
+  /// Sets DragDropBox for error state: Too many input videos
+  func showTooManyInputVideosBox() {
+    Logger.debug("Displaying too many videos error")
+    clearInputVideos()
+    updateDragDrop(subtitle: "Too many videos selected (maximum \(Constants.fileCountLimit))", withStyle: .warning)
   }
   
   /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
@@ -346,11 +376,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Update outputFormat to selected item
     outputFormat = format
     
-    Logger.info("User did select format: \(format.rawValue)")
+    Logger.debug("User selected output format: \(format.rawValue)")
     
     // Set default codec for new format type (if premium)
     didSelectNewOutput(format: format)
-    
   }
   
   
@@ -417,6 +446,47 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       handleActionButton(withStatus: currentStatus)
     }
   }
+  
+  func configureOutputDirectory(outputDirectory: URL) -> String {
+    do {
+      try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: false)
+    } catch {
+      // TODO: Handle this better
+      self.errorAlert(withMessage: "Something went wrong!\n\(error.localizedDescription)")
+      return ""
+    }
+    
+    var directories: Set<String> = []
+    
+    for inputVideo in inputVideos {
+      let parentDirectory = inputVideo.fileUrl.deletingLastPathComponent()
+      
+      directories.insert(parentDirectory.path)
+    }
+    
+    // Sort paths based on length
+    var sortedDirectories = directories.sorted(by: { $0.count < $1.count })
+    
+    let baseDirectory = sortedDirectories.removeFirst()
+    
+    for dir in sortedDirectories {
+      let relativePath = dir.replacingOccurrences(of: baseDirectory, with: "")
+      let directoryToCreate = outputDirectory.appendingPathComponent(relativePath)
+
+      do {
+        try FileManager.default.createDirectory(at: directoryToCreate, withIntermediateDirectories: false)
+      } catch {
+        // TODO: Handle this better
+        self.errorAlert(withMessage: "Something went wrong!\n\(error.localizedDescription)")
+        return ""
+      }
+    }
+    
+    // TODO: Come up with better way to manage passing basedir, maybe split this func up into 2
+    return baseDirectory
+  }
+  
+  
   /// Handles the action button states, and their respective actions, based on the current ConversionState: `.ready` or `.converting`
   func handleActionButton(withStatus: ConversionState) {
     switch withStatus {
@@ -429,21 +499,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         }
         
         let dateString = Date().iso8601withFractionalSeconds
+        // TODO: Clean generated title up
         let generatedOutputDirectory = "Video-Converter-\(dateString)"
         
         let outputDirectory = userSelectedOutputDirectory!.appendingPathComponent(generatedOutputDirectory)
         
-        do {
-          try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: false)
-        } catch {
-          // TODO: Handle this better
-          self.errorAlert(withMessage: "Something went wrong!\n\(error.localizedDescription)")
-          return
-        }
+        let baseDirectory = configureOutputDirectory(outputDirectory: outputDirectory)
+        
+        // TODO: Bug with halfway through the estimated time not showing (4/9)
         
         var startMessage = "Converting input videos\n"
         self.inputVideos.enumerated().forEach { (i, inputVideo) in
-          let outputFileUrl = outputDirectory.appendingPathComponent(inputVideo.fileUrl.lastPathComponent)
+        
+          // Replace input file extension with output extension and remove the base dir to turn into a relative path
+          let relativeOutputPath = inputVideo.fileUrl
+              .deletingPathExtension()
+              .appendingPathExtension(outputFormat.rawValue).path
+              .replacingOccurrences(of: baseDirectory, with: "")
+            
+          let outputFileUrl = outputDirectory.appendingPathComponent(relativeOutputPath)
+          
           inputVideos[i].outputFileUrl = outputFileUrl
           startMessage += "\(i+1). \(inputVideo.filePath) -> \(outputFileUrl.path)\n"
         }

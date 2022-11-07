@@ -13,6 +13,8 @@ struct Constants {
   static let estimatedTimeLabelText = "Estimated time remaining"
   static let estimatingTimeLabelText = "Estimating time remaining..."
   
+  static let fileCountLimit = 100
+  
   struct API {
     static let contactFormUrl = "https://contact-form-u7kjuwr4da-uc.a.run.app"
     static let errorReportUrl = "https://error-report-u7kjuwr4da-uc.a.run.app"
