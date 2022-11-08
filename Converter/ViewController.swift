@@ -223,7 +223,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       case .duplicate:
         break
       case .directory:
-        // TODO: Ensure dir files maintain dir structure
         let directoryPaths = getVideoPathsInDirectory(baseUrl: inputFileUrl)
         
         if filteredPaths.count + directoryPaths.count > Constants.fileCountLimit {
@@ -246,7 +245,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     // if premium, handle multi-file
     if isPremiumEnabled {
-      // TODO: Create a func to add them all at once so we dont need to call updateDragDrop so many times, this likely slows UI
       for filePath in filteredPaths {
         addVideoToInputs(filePath: filePath)
       }
@@ -257,26 +255,15 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       // TODO: show notice: maximum one file input, upgrade for more
       //premiumNotice()
     }
+    
+    updateDragDrop(selectedVideos: inputVideos, icon: .videoFile, withStyle: .regular)
   }
   
   /// Handles singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func addVideoToInputs(filePath: String) {
     let inputFileUrl = filePath.fileURL.absoluteURL
-    
     let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl)
     inputVideos.append(inputVideo)
-    
-    displayClearButton(.show)
-    
-    if inputVideos.count == 1 {
-      updateDragDrop(subtitle: filePath.lastPathComponent, icon: .videoFile, withStyle: .regular)
-    }
-    else {
-      // TODO: For now we're just setting the file name to the list of files, but we should come up with a cleaner way to do this.
-      let messageArray = inputVideos.enumerated().map { "\($0+1). \($1.filePath.lastPathComponent)" }
-      updateDragDrop(videoList: messageArray, icon: .videoFile, withStyle: .regular)
-    }
-    
   }
   
   /// Clears input videos and hides clearInputFileButton
@@ -285,6 +272,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     clearInputFileButton.alphaValue = 0
   }
   
+  // TODO: The updateDragDrop functions have become way too multi purpose and muddled. We should rething the abstractions and split them up better
   /// Handler for all things dragDropBox related; set `withStyle: .empty` for default state
   /// - parameters:
   ///   - title: Edits the top title text of the box (ie. "Drag and drop your video here")
@@ -296,28 +284,36 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// // Red box with error message
   /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
   /// ```
-  func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
+  func updateDragDrop(title: String = "", subtitle: String = "", selectedVideos: [Video] = [], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
     dragDropBoxStyleState = withStyle
-    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && videoList.count == 0 {
+    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && selectedVideos.count == 0 {
       updateDragDrop(title: topTitleString, subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
     } else {
       
       updateDragDropView(withStyle)
       
-      if videoList.count > 1 {
-        updateDragDropTitle(bottom: "\(videoList.count) videos selected")
-        dragDropIconImageView.image = DragDropBox.getMultiVideoFileIcons(forCount: videoList.count)
-        // show button
-        showInputFilesButton.isHidden = false
-        DragDropBox.videoFilesList = videoList
-        return
+      if selectedVideos.count > 1 {
+        updateDragDropTitle(bottom: "\(inputVideos.count) videos selected")
+        dragDropIconImageView.image = DragDropBox.getMultiVideoFileIcons(forCount: selectedVideos.count)
+        showInputFilesButton.isHidden = false // Button to show list of multiple files
+        displayClearButton(.show)
+        
+        // TODO: For now we're just setting the file name to the list of files, but we should come up with a cleaner way to do this.
+        let videoFilesList = inputVideos.map { $0.filePath.lastPathComponent }
+        DragDropBox.videoFilesList = videoFilesList
       }
-      
-      updateDragDropTitle(title, bottom: subtitle)
-      dragDropIconImageView.image = icon.image
-      // hide button
-      showInputFilesButton.isHidden = true
-      
+      else if selectedVideos.count == 1 {
+        updateDragDropTitle(bottom: selectedVideos[0].filePath.lastPathComponent)
+        dragDropIconImageView.image = icon.image
+        showInputFilesButton.isHidden = true  // Button to show list of multiple files
+        displayClearButton(.show)
+      }
+      else {
+        updateDragDropTitle(title, bottom: subtitle)
+        dragDropIconImageView.image = icon.image
+        // hide button
+        showInputFilesButton.isHidden = true
+      }
     }
   }
   /// Sets the DragDropBox top title string depending on premium status
@@ -432,8 +428,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Since the last statistic will have been checked Constants.progressUpdateInterval earlier then the current one, we need to adjust it for comparison
     let adjustedLastTimeRemaining = lastTimeRemaining - Constants.progressUpdateInterval
     
-    // We determine the time remaining to be stable if timeRemaining and adjustedTimeRemaining are within 20% of each other
-    self.isTimeRemainingStable = max(timeRemaining, adjustedLastTimeRemaining) / min(timeRemaining, adjustedLastTimeRemaining) < 1.2
+    // We determine the time remaining to be stable if timeRemaining and adjustedTimeRemaining are within 20% of each other, or if we've already processed more than 20% of the video (we should have a stable time by this point, if we don't it means the video is processing quickly)
+    self.isTimeRemainingStable = (max(timeRemaining, adjustedLastTimeRemaining) / min(timeRemaining, adjustedLastTimeRemaining) < 1.2) || progressPercentage > 20
   }
   
   /// Determines the state of the conversion process for the Action button (ie. if `.ready`, the app is ready to begin the process; if `.converting`, the app is undergoing conversion
@@ -503,10 +499,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         let generatedOutputDirectory = "Video-Converter-\(dateString)"
         
         let outputDirectory = userSelectedOutputDirectory!.appendingPathComponent(generatedOutputDirectory)
-        
         let baseDirectory = configureOutputDirectory(outputDirectory: outputDirectory)
-        
-        // TODO: Bug with halfway through the estimated time not showing (4/9)
         
         var startMessage = "Converting input videos\n"
         self.inputVideos.enumerated().forEach { (i, inputVideo) in
@@ -662,7 +655,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       return
     }
     
-    estimatedTimeLabel.stringValue = Constants.estimatedTimeLabelText
+    setEstimatedTimeLabel(Constants.estimatedTimeLabelText)
     
     let seconds = Int(remainingInSeconds)
     let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
