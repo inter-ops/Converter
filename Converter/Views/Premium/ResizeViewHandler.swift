@@ -24,15 +24,16 @@ extension ViewController {
   
   func expandPremiumView() {
     premiumViewIsExpanded = true
-    
     expandCollapsePremiumViewButton.image = NSImage(named: "Chevron-Up")
     
-    mainViewWidthConstraint.animator().constant = Constants.Frame.expandedViewWidth
-    mainViewHeightConstraint.animator().constant = Constants.Frame.expandedViewHeight
-    
-    expandablePremiumView.animator().isHidden = false
-    
-    checkAndShowPurchasePremium()
+    NSAnimationContext.runAnimationGroup({ (_) in
+      mainViewWidthConstraint.animator().constant = Constants.Frame.expandedViewWidth
+      mainViewHeightConstraint.animator().constant = Constants.Frame.expandedViewHeight
+      expandablePremiumView.animator().isHidden = false
+    }) {
+      // NSAnimationContext did complete, show PurchasePremiumView
+      self.checkAndShowPurchasePremium()
+    }
   }
   
   func collapsePremiumView() {
