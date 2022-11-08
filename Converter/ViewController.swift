@@ -171,14 +171,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     dragDropViewDidReceive(filePaths: [filePath])
   }
   
-  // TODO: Test whether this gets too long for too many files, we could enumerate directly in here if needed
   func getVideoPathsInDirectory(baseUrl: URL) -> [String] {
     // https://stackoverflow.com/questions/27721418/getting-list-of-files-in-documents-folder
     // https://stackoverflow.com/questions/57640119/listing-all-files-in-a-folder-recursively-with-swift
     
     var filePaths = [String]()
     if let enumerator = FileManager.default.enumerator(at: baseUrl, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
-        
+      
         for case let fileUrl as URL in enumerator {
           do {
             let fileAttributes = try fileUrl.resourceValues(forKeys:[.isRegularFileKey])
@@ -211,7 +210,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     var filteredPaths: [String] = []
     
-    // TODO: Disable convert button while this executes, also may want a loading animation, especially for a large number of files
     for filePath in filePaths {
       let inputFileUrl = filePath.fileURL.absoluteURL
       
@@ -245,8 +243,15 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       }
     }
     
+    // This means the user passed in a directory, but after traversing the directory we did not find any supported files
+    if filteredPaths.isEmpty {
+      showNoSupportedFilesBox()
+      return
+    }
+    
     // if premium, handle multi-file
     if isPremiumEnabled {
+      // TODO: May want a loading animation for this, it can be slow with 100 files
       for filePath in filteredPaths {
         addVideoToInputs(filePath: filePath)
       }
@@ -360,6 +365,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     Logger.debug("Displaying corrupt file error")
     clearInputVideos()
     updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
+  }
+  
+  func showNoSupportedFilesBox() {
+    Logger.debug("Displaying no supported files error")
+    clearInputVideos()
+    updateDragDrop(subtitle: "No supported files we're found", withStyle: .warning)
+    showSupportedFormatsPopover()
   }
   
   /// Sets DragDropBox for error state: Too many input videos
