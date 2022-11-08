@@ -451,48 +451,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
   }
   
-  func configureOutputDirectory(outputDirectory: URL) -> String {
+  func configureOutputDirectory(outputDirectory: URL, inputBaseDirectory: String, inputSubdirectories: [String]) {
     do {
+      // Create output directory
       try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: false)
+      
+      // Create output subdirectories
+      for dir in inputSubdirectories {
+        // If we remove baseDirectory from the path, we now have a file path relative to the baseDirectory
+        let relativePath = dir.replacingOccurrences(of: inputBaseDirectory, with: "")
+        
+        // Append the relative directory to our outputDirectory and we get an absolute path
+        let directoryToCreate = outputDirectory.appendingPathComponent(relativePath)
+        
+        try FileManager.default.createDirectory(at: directoryToCreate, withIntermediateDirectories: false)
+      }
     } catch {
       // TODO: Handle this better
       self.errorAlert(withMessage: "Something went wrong!\n\(error.localizedDescription)")
-      return ""
+      return
     }
-    
-    // This is a set of directories that we need to create in our output folder. We use a set to avoid duplication.
-    var directories: Set<String> = []
-    
-    for inputVideo in inputVideos {
-      let parentDirectory = inputVideo.fileUrl.deletingLastPathComponent()
-      
-      directories.insert(parentDirectory.path)
-    }
-    
-    // Sort paths based on length, shorted first
-    var sortedDirectories = directories.sorted(by: { $0.count < $1.count })
-    
-    // This will be the base directory that all selected input files are in. We remove this from sortedDirectories since we don't need to create this one in the output directory. The `outputDirectory` URL that we created a file for above takes the place of this directory.
-    let baseDirectory = sortedDirectories.removeFirst()
-    
-    for dir in sortedDirectories {
-      // If we remove baseDirectory from the path, we now have a file path relative to the baseDirectory
-      let relativePath = dir.replacingOccurrences(of: baseDirectory, with: "")
-      
-      // Append the relative directory to our outputDirectory and we get an absolute path
-      let directoryToCreate = outputDirectory.appendingPathComponent(relativePath)
-
-      do {
-        try FileManager.default.createDirectory(at: directoryToCreate, withIntermediateDirectories: false)
-      } catch {
-        // TODO: Handle this better
-        self.errorAlert(withMessage: "Something went wrong!\n\(error.localizedDescription)")
-        return ""
-      }
-    }
-    
-    // TODO: Come up with better way to manage passing basedir, maybe split this func up into 2
-    return baseDirectory
   }
   
   
@@ -512,7 +490,24 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         let generatedOutputDirectory = "Video-Converter-\(dateString)"
         
         let outputDirectory = userSelectedOutputDirectory!.appendingPathComponent(generatedOutputDirectory)
-        let baseDirectory = configureOutputDirectory(outputDirectory: outputDirectory)
+        
+        // This is a set of directories that we need to create in our output folder. We use a set to avoid duplication.
+        var inputSubdirectories: Set<String> = []
+        
+        for inputVideo in inputVideos {
+          let parentDirectory = inputVideo.fileUrl.deletingLastPathComponent()
+          
+          inputSubdirectories.insert(parentDirectory.path)
+        }
+      
+        // Sort paths based on length, shorted first
+        var sortedInputDirectories = inputSubdirectories.sorted(by: { $0.count < $1.count })
+        
+        // This will be the base directory that all selected input files are in. We remove this from sortedDirectories since we don't need to create this one in the output directory. The `outputDirectory` URL that we created a file for above takes the place of this directory.
+        let inputBaseDirectory = sortedInputDirectories.removeFirst()
+        
+        // Generate the output directory and create any subdirectories it needs. This way we can freely generate output files without worrying about a subdirectory missing.
+        configureOutputDirectory(outputDirectory: outputDirectory, inputBaseDirectory: inputBaseDirectory, inputSubdirectories: sortedInputDirectories)
         
         var startMessage = "Converting input videos\n"
         self.inputVideos.enumerated().forEach { (i, inputVideo) in
@@ -521,7 +516,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           let relativeOutputPath = inputVideo.fileUrl
               .deletingPathExtension()
               .appendingPathExtension(outputFormat.rawValue).path
-              .replacingOccurrences(of: baseDirectory, with: "")
+              .replacingOccurrences(of: inputBaseDirectory, with: "")
             
           let outputFileUrl = outputDirectory.appendingPathComponent(relativeOutputPath)
           
