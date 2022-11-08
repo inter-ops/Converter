@@ -460,6 +460,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       return ""
     }
     
+    // This is a set of directories that we need to create in our output folder. We use a set to avoid duplication.
     var directories: Set<String> = []
     
     for inputVideo in inputVideos {
@@ -468,13 +469,17 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       directories.insert(parentDirectory.path)
     }
     
-    // Sort paths based on length
+    // Sort paths based on length, shorted first
     var sortedDirectories = directories.sorted(by: { $0.count < $1.count })
     
+    // This will be the base directory that all selected input files are in. We remove this from sortedDirectories since we don't need to create this one in the output directory. The `outputDirectory` URL that we created a file for above takes the place of this directory.
     let baseDirectory = sortedDirectories.removeFirst()
     
     for dir in sortedDirectories {
+      // If we remove baseDirectory from the path, we now have a file path relative to the baseDirectory
       let relativePath = dir.replacingOccurrences(of: baseDirectory, with: "")
+      
+      // Append the relative directory to our outputDirectory and we get an absolute path
       let directoryToCreate = outputDirectory.appendingPathComponent(relativePath)
 
       do {
