@@ -20,8 +20,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     if Config.shared.debug { return false }
     return true
   }
-  /// Set to `true` to enable all premium UI components
-  var isPremiumEnabled = false
   
   @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
@@ -104,9 +102,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     if isPremiumHiddenFromApp {
       expandCollapsePremiumViewButton.isHidden = true
       expandCollapsePremiumButtonTrailingConstraint.constant = -8
-    } else {
-      // If premium is shown, enable premium components
-      isPremiumEnabled = true
     }
   }
   
@@ -204,7 +199,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
     
     // if premium, handle multi-file
-    if isPremiumEnabled {
+    if userDidPurchasePremium {
       for filePath in filteredPaths {
         addVideoToInputs(filePath: filePath)
       }
@@ -280,7 +275,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   /// Sets the DragDropBox top title string depending on premium status
   var topTitleString: String {
-    if isPremiumEnabled {
+    if userDidPurchasePremium {
       return "Drag and drop your videos here"
     } else {
       return "Drag and drop your video here"
