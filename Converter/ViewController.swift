@@ -145,7 +145,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     case valid, unsupported, corrupt, duplicate, directory
   }
   
-  // TODO: Check if corrupt check slows down drag drop interaction
   func validateInputFile(fileUrl: URL) -> InputFileState {
     if fileUrl.isDirectory {
       return .directory
