@@ -196,6 +196,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     return filePaths
   }
   
+  // TODO: If a user clears or replaces the current input files during a multi-file conversion, it crashes the app. The dragdrop box and the clear button should be disabled during processing.
+  
   /// Handles multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceive(filePaths: [String]) {
     Logger.debug("Processing input paths: \(filePaths)")
@@ -251,7 +253,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
     else {
       // if free user, route first dragged file to singular dragDropDidReceive
-      addVideoToInputs(filePath: filePaths[0])
+      addVideoToInputs(filePath: filteredPaths[0])
       // TODO: show notice: maximum one file input, upgrade for more
       //premiumNotice()
     }
