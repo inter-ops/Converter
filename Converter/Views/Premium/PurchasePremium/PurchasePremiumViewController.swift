@@ -65,8 +65,8 @@ class PurchasePremiumViewController: NSViewController {
   // MARK: - Video Player
   /// Initialize premium video player
   func initVideoPreview() {
-    expandVideoView()
     initVideo()
+    initVideoView()
   }
   /// Expand video player view and play video
   func expandAndPlayVideo() {
@@ -92,13 +92,19 @@ class PurchasePremiumViewController: NSViewController {
     presentVideoPreviewButton.animator().isHidden = false
     darkOverlayImageView.animator().isHidden = false
   }
+  /// Initialize video container in collapsed state and without animation context
+  func initVideoView() {
+    videoPreviewHeightConstraint.constant = 80
+    dismissVideoPreviewButton.isHidden = true
+    presentVideoPreviewButton.isHidden = false
+    darkOverlayImageView.isHidden = false
+  }
   /// Initialize AVPlayer and play video from source
   func initVideo() {
     // TODO: Replace with premium video preview once premium implementation is complete
     let videoUrl = URL(string: "https://converter.airtv.io/app-assets/premium-preview.mov")
     let player = AVPlayer(url: videoUrl!)
     videoPlayer.player = player
-    player.play()
     player.actionAtItemEnd = .none
     // NotificationCenter observer for looping video at end
     NotificationCenter.default.addObserver(self,
