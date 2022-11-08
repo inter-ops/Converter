@@ -142,7 +142,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   
   enum InputFileState {
-    case valid, unsupported, corrupt, duplicate, directory
+    case valid, unsupported, corrupt, directory
   }
   
   func validateInputFile(fileUrl: URL) -> InputFileState {
@@ -152,10 +152,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     if !VideoFormat.isSupportedAsInput(fileUrl.path) {
       return .unsupported
-    }
-    
-    if !inputVideos.allSatisfy({ $0.filePath != fileUrl.path }) {
-      return .duplicate
     }
     
     if !isFileValid(inputFilePath: fileUrl.path) {
@@ -219,8 +215,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       case .corrupt:
         showCorruptVideoFileBox()
         return
-      case .duplicate:
-        break
       case .directory:
         let directoryPaths = getVideoPathsInDirectory(baseUrl: inputFileUrl)
         
