@@ -453,14 +453,19 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
   }
   
-  func configureOutputDirectory(outputDirectory: URL, inputBaseDirectory: String, inputSubdirectories: [String]) {
+  func configureOutputDirectory(outputDirectory: URL, inputBaseDirectory: URL, inputSubdirectories: [String]) {
     // Create output directory
     outputDirectory.createDirectory()
       
     // Create output subdirectories
     for dir in inputSubdirectories {
       // If we remove baseDirectory from the path, we now have a file path relative to the baseDirectory
-      let relativePath = dir.replacingOccurrences(of: inputBaseDirectory, with: "")
+      let relativePath = dir.replacingOccurrences(of: inputBaseDirectory.path, with: "")
+      
+      // This can occur when a user drags a folder in which contains both files and subfolders, since the root folder will be listed as one of the subdirectories.
+      if relativePath.isEmpty {
+        continue
+      }
       
       // Append the relative directory to our outputDirectory and we get an absolute path
       let directoryToCreate = outputDirectory.appendingPathComponent(relativePath)
@@ -489,17 +494,48 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         // This is a set of directories that we need to create in our output folder. We use a set to avoid duplication.
         var inputSubdirectories: Set<String> = []
         
+        var baseDirectoryComponents: [String] = []
         for inputVideo in inputVideos {
+          // Add sub directory to inputSubdirectories list
           let parentDirectory = inputVideo.fileUrl.deletingLastPathComponent()
-          
           inputSubdirectories.insert(parentDirectory.path)
+          
+          // Determine base directory for all files (largest common path).
+          
+          if baseDirectoryComponents.isEmpty {
+            // This executes on the first loop when we haven't set one yet
+            baseDirectoryComponents = parentDirectory.pathComponents
+          }
+          else {
+            // This snippet of code essentially sets baseDirectoryComponents to the intersection of baseDirectoryComponents and candidateComponents
+            let candidateComponents = parentDirectory.pathComponents
+            
+            // We use this to keep track of the last common position in component arrays
+            var lastCommonIndex: Int? = nil
+            
+            // Loop through baseDirectoryComponents and compare components with the candidate. Once we find a mismatch, we can assume that the position prior to the mismatch is the last common index.
+            for (i, component) in baseDirectoryComponents.enumerated() {
+              if i > candidateComponents.count - 1 || candidateComponents[i] != component {
+                lastCommonIndex = i-1
+                break
+              }
+            }
+            
+            // If we found a last common index, we now trim the candidateBaseDirectory array to only include the common elements of both.
+            if lastCommonIndex != nil {
+              baseDirectoryComponents.removeLast(baseDirectoryComponents.count-1-lastCommonIndex!)
+            }
+          }
         }
-      
-        // Sort paths based on length, shorted first
-        var sortedInputDirectories = inputSubdirectories.sorted(by: { $0.count < $1.count })
         
-        // This will be the base directory that all selected input files are in. We remove this from sortedDirectories since we don't need to create this one in the output directory. The `outputDirectory` URL that we created a file for above takes the place of this directory.
-        let inputBaseDirectory = sortedInputDirectories.removeFirst()
+        // baseDirectoryComponents now looks like: ["/", "Users", "francescovirga", "Desktop", "Test"]
+        
+        baseDirectoryComponents.removeFirst() // Remove "/"
+        
+        let inputBaseDirectory = "/\(baseDirectoryComponents.joined(separator: "/"))".fileURL
+      
+        // Sort paths based on length, shorted first. This ensures that we don't try to create a subdirectory with parents that don't exist.
+        var sortedInputDirectories = inputSubdirectories.sorted(by: { $0.count < $1.count })
         
         // Generate the output directory and create any subdirectories it needs. This way we can freely generate output files without worrying about a subdirectory missing.
         configureOutputDirectory(outputDirectory: outputDirectory, inputBaseDirectory: inputBaseDirectory, inputSubdirectories: sortedInputDirectories)
@@ -511,7 +547,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           let relativeOutputPath = inputVideo.fileUrl
               .deletingPathExtension()
               .appendingPathExtension(outputFormat.rawValue).path
-              .replacingOccurrences(of: inputBaseDirectory, with: "")
+              .replacingOccurrences(of: inputBaseDirectory.path, with: "")
             
           let outputFileUrl = outputDirectory.appendingPathComponent(relativeOutputPath)
           
