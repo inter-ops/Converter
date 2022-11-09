@@ -10,6 +10,7 @@ import Cocoa
 enum WindowSegues: String, CaseIterable {
   case showReportError
   case showContact
+  case sheetPurchasePremium
 }
 
 extension ViewController {

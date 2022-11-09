@@ -13,9 +13,7 @@ extension ViewController {
   
   /// Updates PremiumView with updated options per output format (ie. update codec dropdown list with available codecs)
   func didSelectNewOutput(format: VideoFormat) {
-    //if isPremiumEnabled {
     initCodecDropdownMenu(forFormat: format)
-    //}
   }
   /// Initialize dropdown menu with titles (see `VideoCodec.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
