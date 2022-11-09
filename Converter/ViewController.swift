@@ -453,24 +453,18 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   
   func configureOutputDirectory(outputDirectory: URL, inputBaseDirectory: String, inputSubdirectories: [String]) {
-    do {
-      // Create output directory
-      try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: false)
+    // Create output directory
+    outputDirectory.createDirectory()
       
-      // Create output subdirectories
-      for dir in inputSubdirectories {
-        // If we remove baseDirectory from the path, we now have a file path relative to the baseDirectory
-        let relativePath = dir.replacingOccurrences(of: inputBaseDirectory, with: "")
-        
-        // Append the relative directory to our outputDirectory and we get an absolute path
-        let directoryToCreate = outputDirectory.appendingPathComponent(relativePath)
-        
-        try FileManager.default.createDirectory(at: directoryToCreate, withIntermediateDirectories: false)
-      }
-    } catch {
-      // TODO: Handle this better
-      self.errorAlert(withMessage: "Something went wrong!\n\(error.localizedDescription)")
-      return
+    // Create output subdirectories
+    for dir in inputSubdirectories {
+      // If we remove baseDirectory from the path, we now have a file path relative to the baseDirectory
+      let relativePath = dir.replacingOccurrences(of: inputBaseDirectory, with: "")
+      
+      // Append the relative directory to our outputDirectory and we get an absolute path
+      let directoryToCreate = outputDirectory.appendingPathComponent(relativePath)
+      
+      directoryToCreate.createDirectory()
     }
   }
   
