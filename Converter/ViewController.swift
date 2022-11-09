@@ -166,6 +166,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     dragDropViewDidReceive(filePaths: [filePath])
   }
   
+  // TODO: Disable all UI while this executes and show a loading indicator
   func getVideoPathsInDirectory(baseUrl: URL) -> [String] {
     // https://stackoverflow.com/questions/27721418/getting-list-of-files-in-documents-folder
     // https://stackoverflow.com/questions/57640119/listing-all-files-in-a-folder-recursively-with-swift
@@ -244,7 +245,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     // if premium, handle multi-file
     if isPremiumEnabled {
-      // TODO: May want a loading animation for this, it can be slow with 100 files
+      // TODO: Add a loading animation for this and disable UI, it can be slow with 100 files. If we want to let the user still interact with the UI, we could use ffprobe.executeAsync for these calls.
       for filePath in filteredPaths {
         addVideoToInputs(filePath: filePath)
       }
