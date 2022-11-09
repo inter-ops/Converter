@@ -480,9 +480,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           return
         }
         
-        let dateString = Date().iso8601withFractionalSeconds
-        // TODO: Clean generated title up
-        let generatedOutputDirectory = "Video-Converter-\(dateString)"
+        let dateString = Date().stringFormat("yyyy-MM-dd 'at' h.mm.ss a") // 2022-11-08 at 10.20.23 AM
+        let generatedOutputDirectory = "Video Converter \(dateString)"
         
         let outputDirectory = userSelectedOutputDirectory!.appendingPathComponent(generatedOutputDirectory)
         
