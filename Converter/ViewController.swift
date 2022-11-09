@@ -266,10 +266,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     inputVideos.append(inputVideo)
   }
   
-  /// Clears input videos and hides clearInputFileButton
+  /// Clears input videos
   func clearInputVideos() {
     inputVideos = []
-    clearInputFileButton.alphaValue = 0
   }
   
   // TODO: The updateDragDrop functions have become way too multi purpose and muddled. We should rething the abstractions and split them up better
@@ -333,8 +332,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       hidePopover(supportedFormatsPopover)
     }
   }
-  /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
+  /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`). Show clearInputFileButton on `.warning`.
   func updateDragDropView(_ forType: DragDropBox.Style) {
+    if forType == .warning { displayClearButton(.show) }
+    
     if premiumViewIsExpanded {
       dragDropBackgroundImageView.image = forType.backgroundImageWide
     } else {
