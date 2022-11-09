@@ -266,10 +266,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     inputVideos.append(inputVideo)
   }
   
-  /// Clears input videos and hides clearInputFileButton
+  /// Clears input videos
   func clearInputVideos() {
     inputVideos = []
-    clearInputFileButton.alphaValue = 0
   }
   
   // TODO: The updateDragDrop functions have become way too multi purpose and muddled. We should rething the abstractions and split them up better
@@ -352,12 +351,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     clearInputVideos()
     updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
     showSupportedFormatsPopover()
+    displayClearButton(.show)
   }
   /// Sets DragDropBox for error state: Corrupted video file
   func showCorruptVideoFileBox() {
     Logger.debug("Displaying corrupt file error")
     clearInputVideos()
     updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
+    displayClearButton(.show)
   }
   
   /// Sets DragDropBox for error state: Too many input videos
@@ -365,6 +366,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     Logger.debug("Displaying too many videos error")
     clearInputVideos()
     updateDragDrop(subtitle: "Too many videos selected (maximum \(Constants.fileCountLimit))", withStyle: .warning)
+    displayClearButton(.show)
   }
   
   /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
