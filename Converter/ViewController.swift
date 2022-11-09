@@ -334,6 +334,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
   func updateDragDropView(_ forType: DragDropBox.Style) {
+    if forType == .warning {
+      displayClearButton(.show)
+    }
+    
     if premiumViewIsExpanded {
       dragDropBackgroundImageView.image = forType.backgroundImageWide
     } else {
@@ -351,14 +355,12 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     clearInputVideos()
     updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
     showSupportedFormatsPopover()
-    displayClearButton(.show)
   }
   /// Sets DragDropBox for error state: Corrupted video file
   func showCorruptVideoFileBox() {
     Logger.debug("Displaying corrupt file error")
     clearInputVideos()
     updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
-    displayClearButton(.show)
   }
   
   /// Sets DragDropBox for error state: Too many input videos
@@ -366,7 +368,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     Logger.debug("Displaying too many videos error")
     clearInputVideos()
     updateDragDrop(subtitle: "Too many videos selected (maximum \(Constants.fileCountLimit))", withStyle: .warning)
-    displayClearButton(.show)
   }
   
   /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
