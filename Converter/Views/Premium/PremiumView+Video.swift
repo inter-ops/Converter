@@ -24,7 +24,7 @@ extension ViewController {
     outputCodec = forFormat.compatibleCodecs[0]
     userSelectedCodecType = outputCodec
     
-    Logger.info("New default codec selected: \(outputCodec.rawValue)")
+    Logger.debug("New default codec selected: \(outputCodec.rawValue)")
   }
   /// Return VideoCodec title strings as an array for dropdown presentation
   func getCodecDropdownTitles(forFormat: VideoFormat) -> [String] {
