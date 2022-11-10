@@ -10,13 +10,16 @@ import ffmpegkit
 
 class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate {
   
-  /// Set to `true` if user has purchased premium
-  //var userDidPurchasePremium = false
-  
-  /// Set to `true` to hide the expandable button, as well as all the premium features
-  var isPremiumHiddenFromApp = false // false will also isPremiumEnabled = true
-  /// Set to `true` to enable all premium UI components
-  var isPremiumEnabled = false
+  /// `true` if user has purchased premium or app is in debug environment
+  var userDidPurchasePremium: Bool {
+    if Config.shared.debug { return true } // comment this line to preview app as free user
+    return false
+  }
+  /// `true` if premium features should be hidden from app. `false` if app is in debug environment
+  var isPremiumHiddenFromApp: Bool {
+    if Config.shared.debug { return false }
+    return true
+  }
   
   @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
@@ -100,9 +103,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     if isPremiumHiddenFromApp {
       expandCollapsePremiumViewButton.isHidden = true
       expandCollapsePremiumButtonTrailingConstraint.constant = -8
-    } else {
-      // If premium is shown, enable premium components
-      isPremiumEnabled = true
     }
   }
   
@@ -245,7 +245,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
     
     // if premium, handle multi-file
-    if isPremiumEnabled {
+    if userDidPurchasePremium {
       // TODO: Add a loading animation for this and disable UI, it can be slow with 100 files. If we want to let the user still interact with the UI, we could use ffprobe.executeAsync for these calls.
       for filePath in filteredPaths {
         addVideoToInputs(filePath: filePath)
@@ -319,7 +319,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   /// Sets the DragDropBox top title string depending on premium status
   var topTitleString: String {
-    if isPremiumEnabled {
+    if userDidPurchasePremium {
       return "Drag and drop your videos here"
     } else {
       return "Drag and drop your video here"
