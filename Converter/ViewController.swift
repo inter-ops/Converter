@@ -483,7 +483,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       if inputVideos.count > 1 {
         let userSelectedOutputDirectory = selectOutputDirectory()
         if userSelectedOutputDirectory == nil {
-          self.errorAlert(withMessage: "You must select an output file path to add this file.")
+          self.errorAlert(withMessage: "You must select an output folder.")
           return
         }
         
@@ -558,8 +558,12 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         Logger.info(startMessage)
       }
       else {
-        let outputFileUrl = selectOutputFileUrl(format: outputFormat, inputFileUrl: inputVideos[0].fileUrl)
-        inputVideos[0].outputFileUrl = outputFileUrl
+        let userSelectedOutputFileUrl = selectOutputFileUrl(format: outputFormat, inputFileUrl: inputVideos[0].fileUrl)
+        if userSelectedOutputFileUrl == nil {
+          self.errorAlert(withMessage: "You must select an output folder.")
+          return
+        }
+        inputVideos[0].outputFileUrl = userSelectedOutputFileUrl
       }
       
       startConversion(activeVideoIndex: 0)
