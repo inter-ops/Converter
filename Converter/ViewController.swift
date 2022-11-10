@@ -74,6 +74,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   var inputVideos: [Video] = []
   var activeVideoIndex: Int?
+  var generatedOutputDirectory: URL?
   
   var isTimeRemainingStable = false
   
@@ -487,9 +488,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         }
         
         let dateString = Date().stringFormat("yyyy-MM-dd 'at' h.mm.ss a") // 2022-11-08 at 10.20.23 AM
-        let generatedOutputDirectory = "Video Converter \(dateString)"
+        let outputDirectoryName = "Video Converter \(dateString)"
         
-        let outputDirectory = userSelectedOutputDirectory!.appendingPathComponent(generatedOutputDirectory)
+        generatedOutputDirectory = userSelectedOutputDirectory!.appendingPathComponent(outputDirectoryName)
         
         // This is a set of directories that we need to create in our output folder. We use a set to avoid duplication.
         var inputSubdirectories: Set<String> = []
@@ -535,10 +536,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         let inputBaseDirectory = "/\(baseDirectoryComponents.joined(separator: "/"))".fileURL
       
         // Sort paths based on length, shorted first. This ensures that we don't try to create a subdirectory with parents that don't exist.
-        var sortedInputDirectories = inputSubdirectories.sorted(by: { $0.count < $1.count })
+        let sortedInputDirectories = inputSubdirectories.sorted(by: { $0.count < $1.count })
         
         // Generate the output directory and create any subdirectories it needs. This way we can freely generate output files without worrying about a subdirectory missing.
-        configureOutputDirectory(outputDirectory: outputDirectory, inputBaseDirectory: inputBaseDirectory, inputSubdirectories: sortedInputDirectories)
+        configureOutputDirectory(outputDirectory: generatedOutputDirectory!, inputBaseDirectory: inputBaseDirectory, inputSubdirectories: sortedInputDirectories)
         
         var startMessage = "Converting input videos\n"
         self.inputVideos.enumerated().forEach { (i, inputVideo) in
@@ -549,7 +550,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
               .appendingPathExtension(outputFormat.rawValue).path
               .replacingOccurrences(of: inputBaseDirectory.path, with: "")
             
-          let outputFileUrl = outputDirectory.appendingPathComponent(relativeOutputPath)
+          let outputFileUrl = generatedOutputDirectory!.appendingPathComponent(relativeOutputPath)
           
           inputVideos[i].outputFileUrl = outputFileUrl
           startMessage += "\(i+1). \(inputVideo.filePath) -> \(outputFileUrl.path)\n"
@@ -611,6 +612,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           self.updateProgressBar(value: 0)
           self.estimatedTimeText.stringValue = "Canceled ⚠️"
           self.activeVideoIndex = nil
+          self.generatedOutputDirectory = nil
           return
         }
         
@@ -641,7 +643,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         }
         
         if isLastVideo {
+          let outputUrl = self.inputVideos.count > 1 && self.generatedOutputDirectory != nil ? self.generatedOutputDirectory! : self.inputVideos[0].outputFileUrl!
+          
           self.activeVideoIndex = nil
+          self.generatedOutputDirectory = nil
           self.resetActionButton()
           
           if !self.inputVideos.allSatisfy({ $0.didError == false }) {
@@ -649,14 +654,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
             self.unexpectedErrorAlert(inputVideos: self.inputVideos)
           }
           else {
-            if self.inputVideos.count > 1 {
-              let parentDir = self.inputVideos[0].outputFileUrl!.deletingLastPathComponent()
-              self.alertConversionDidComplete(withOutputUrl: parentDir)
-            }
-            else {
-              self.alertConversionDidComplete(withOutputUrl: self.inputVideos[0].outputFileUrl!)
-            }
-            
+            self.alertConversionDidComplete(withOutputUrl: outputUrl)
           }
         }
         else {
