@@ -77,6 +77,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   var inputVideos: [Video] = []
   var activeVideoIndex: Int?
+  var generatedOutputDirectory: URL?
   
   var isTimeRemainingStable = false
   
@@ -142,20 +143,20 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   
   enum InputFileState {
-    case valid, unsupported, corrupt, duplicate
+    case valid, unsupported, corrupt, directory
   }
   
   func validateInputFile(fileUrl: URL) -> InputFileState {
+    if fileUrl.isDirectory {
+      return .directory
+    }
+    
     if !VideoFormat.isSupportedAsInput(fileUrl.path) {
       return .unsupported
     }
     
     if !isFileValid(inputFilePath: fileUrl.path) {
       return .corrupt
-    }
-    
-    if !inputVideos.allSatisfy({ $0.filePath != fileUrl.path }) {
-      return .duplicate
     }
     
     return .valid
@@ -165,6 +166,33 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func dragDropViewDidReceive(filePath: String) {
     dragDropViewDidReceive(filePaths: [filePath])
   }
+  
+  // TODO: Disable all UI while this executes and show a loading indicator
+  func getVideoPathsInDirectory(baseUrl: URL) -> [String] {
+    // https://stackoverflow.com/questions/27721418/getting-list-of-files-in-documents-folder
+    // https://stackoverflow.com/questions/57640119/listing-all-files-in-a-folder-recursively-with-swift
+    
+    var filePaths = [String]()
+    if let enumerator = FileManager.default.enumerator(at: baseUrl, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+      
+        for case let fileUrl as URL in enumerator {
+          do {
+            let fileAttributes = try fileUrl.resourceValues(forKeys:[.isRegularFileKey])
+            
+            if fileAttributes.isRegularFile! && VideoFormat.isSupportedAsInput(fileUrl.path) {
+              filePaths.append(fileUrl.path)
+            }
+          } catch {
+            Logger.error("Error getting resource values for file \(fileUrl.path): \(error.localizedDescription)")
+          }
+        }
+      }
+    
+    
+    return filePaths
+  }
+  
+  // TODO: If a user clears or replaces the current input files during a multi-file conversion, it crashes the app. The dragdrop box and the clear button should be disabled during processing.
   
   /// Handles multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceive(filePaths: [String]) {
@@ -179,7 +207,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     
     var filteredPaths: [String] = []
     
-    // TODO: Disable convert button while this executes, also may want a loading animation, especially for a large number of files
     for filePath in filePaths {
       let inputFileUrl = filePath.fileURL.absoluteURL
       
@@ -190,54 +217,63 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       case .corrupt:
         showCorruptVideoFileBox()
         return
-      case .duplicate:
+      case .directory:
+        let directoryPaths = getVideoPathsInDirectory(baseUrl: inputFileUrl)
+        
+        if filteredPaths.count + directoryPaths.count > Constants.fileCountLimit {
+          showTooManyInputVideosBox()
+          return
+        }
+        
+        filteredPaths.append(contentsOf: directoryPaths)
         break
       case .valid:
+        if filteredPaths.count + 1 > Constants.fileCountLimit {
+          showTooManyInputVideosBox()
+          return
+        }
+        
         filteredPaths.append(filePath)
         break
       }
     }
     
+    // This means the user passed in a directory, but after traversing the directory we did not find any supported files
+    if filteredPaths.isEmpty {
+      showNoSupportedFilesBox()
+      return
+    }
+    
     // if premium, handle multi-file
     if userDidPurchasePremium {
+      // TODO: Add a loading animation for this and disable UI, it can be slow with 100 files. If we want to let the user still interact with the UI, we could use ffprobe.executeAsync for these calls.
       for filePath in filteredPaths {
         addVideoToInputs(filePath: filePath)
       }
     }
     else {
       // if free user, route first dragged file to singular dragDropDidReceive
-      addVideoToInputs(filePath: filePaths[0])
+      addVideoToInputs(filePath: filteredPaths[0])
       // TODO: show notice: maximum one file input, upgrade for more
       //premiumNotice()
     }
+    
+    updateDragDrop(selectedVideos: inputVideos, icon: .videoFile, withStyle: .regular)
   }
   
   /// Handles singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func addVideoToInputs(filePath: String) {
     let inputFileUrl = filePath.fileURL.absoluteURL
-    
     let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl)
     inputVideos.append(inputVideo)
-    
-    displayClearButton(.show)
-    
-    if inputVideos.count == 1 {
-      updateDragDrop(subtitle: filePath.lastPathComponent, icon: .videoFile, withStyle: .regular)
-    }
-    else {
-      // TODO: For now we're just setting the file name to the list of files, but we should come up with a cleaner way to do this.
-      let messageArray = inputVideos.enumerated().map { "\($0+1). \($1.filePath.lastPathComponent)" }
-      updateDragDrop(videoList: messageArray, icon: .videoFile, withStyle: .regular)
-    }
-    
   }
   
-  /// Clears input videos and hides clearInputFileButton
+  /// Clears input videos
   func clearInputVideos() {
     inputVideos = []
-    clearInputFileButton.alphaValue = 0
   }
   
+  // TODO: The updateDragDrop functions have become way too multi purpose and muddled. We should rething the abstractions and split them up better
   /// Handler for all things dragDropBox related; set `withStyle: .empty` for default state
   /// - parameters:
   ///   - title: Edits the top title text of the box (ie. "Drag and drop your video here")
@@ -249,28 +285,36 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// // Red box with error message
   /// updateDragDrop(subtitle: "Please select a file first", withStyle: .warning)
   /// ```
-  func updateDragDrop(title: String = "", subtitle: String = "", videoList: [String] = [], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
+  func updateDragDrop(title: String = "", subtitle: String = "", selectedVideos: [Video] = [], icon: DragDropBox.Icon = .empty, withStyle: DragDropBox.Style) {
     dragDropBoxStyleState = withStyle
-    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && videoList.count == 0 {
+    if withStyle == .regular && (title.isEmpty && subtitle.isEmpty) && selectedVideos.count == 0 {
       updateDragDrop(title: topTitleString, subtitle: "or double click to browse...", icon: .empty, withStyle: .regular)
     } else {
       
       updateDragDropView(withStyle)
       
-      if videoList.count > 1 {
-        updateDragDropTitle(bottom: "\(videoList.count) videos selected")
-        dragDropIconImageView.image = DragDropBox.getMultiVideoFileIcons(forCount: videoList.count)
-        // show button
-        showInputFilesButton.isHidden = false
-        DragDropBox.videoFilesList = videoList
-        return
+      if selectedVideos.count > 1 {
+        updateDragDropTitle(bottom: "\(inputVideos.count) videos selected")
+        dragDropIconImageView.image = DragDropBox.getMultiVideoFileIcons(forCount: selectedVideos.count)
+        showInputFilesButton.isHidden = false // Button to show list of multiple files
+        displayClearButton(.show)
+        
+        // TODO: For now we're just setting the file name to the list of files, but we should come up with a cleaner way to do this.
+        let videoFilesList = inputVideos.map { $0.filePath.lastPathComponent }
+        DragDropBox.videoFilesList = videoFilesList
       }
-      
-      updateDragDropTitle(title, bottom: subtitle)
-      dragDropIconImageView.image = icon.image
-      // hide button
-      showInputFilesButton.isHidden = true
-      
+      else if selectedVideos.count == 1 {
+        updateDragDropTitle(bottom: selectedVideos[0].filePath.lastPathComponent)
+        dragDropIconImageView.image = icon.image
+        showInputFilesButton.isHidden = true  // Button to show list of multiple files
+        displayClearButton(.show)
+      }
+      else {
+        updateDragDropTitle(title, bottom: subtitle)
+        dragDropIconImageView.image = icon.image
+        // hide button
+        showInputFilesButton.isHidden = true
+      }
     }
   }
   /// Sets the DragDropBox top title string depending on premium status
@@ -290,8 +334,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       hidePopover(supportedFormatsPopover)
     }
   }
-  /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`)
+  /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`). Show clearInputFileButton on `.warning`.
   func updateDragDropView(_ forType: DragDropBox.Style) {
+    if forType == .warning { displayClearButton(.show) }
+    
     if premiumViewIsExpanded {
       dragDropBackgroundImageView.image = forType.backgroundImageWide
     } else {
@@ -305,16 +351,31 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   /// Sets DragDropBox for error state: Unsupported file type
   func showUnsupportedFileTypeBox() {
+    Logger.debug("Displaying unsupported file error")
     clearInputVideos()
     updateDragDrop(subtitle: "Unsupported file type", withStyle: .warning)
     showSupportedFormatsPopover()
-    Logger.info("User did input unsupported file type")
   }
   /// Sets DragDropBox for error state: Corrupted video file
   func showCorruptVideoFileBox() {
+    Logger.debug("Displaying corrupt file error")
     clearInputVideos()
     updateDragDrop(subtitle: "Video file is corrupt", withStyle: .warning)
-    Logger.info("User did input corrupted video file")
+  }
+  
+  /// Sets DragDropBox for error state: No supported files found in input directory
+  func showNoSupportedFilesBox() {
+    Logger.debug("Displaying no supported files error")
+    clearInputVideos()
+    updateDragDrop(subtitle: "No supported files we're found", withStyle: .warning)
+    showSupportedFormatsPopover()
+  }
+  
+  /// Sets DragDropBox for error state: Too many input videos
+  func showTooManyInputVideosBox() {
+    Logger.debug("Displaying too many videos error")
+    clearInputVideos()
+    updateDragDrop(subtitle: "Too many videos selected (maximum \(Constants.fileCountLimit))", withStyle: .warning)
   }
   
   /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
@@ -322,11 +383,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Update outputFormat to selected item
     outputFormat = format
     
-    Logger.info("User did select format: \(format.rawValue)")
+    Logger.debug("User selected output format: \(format.rawValue)")
     
     // Set default codec for new format type (if premium)
     didSelectNewOutput(format: format)
-    
   }
   
   
@@ -379,8 +439,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // Since the last statistic will have been checked Constants.progressUpdateInterval earlier then the current one, we need to adjust it for comparison
     let adjustedLastTimeRemaining = lastTimeRemaining - Constants.progressUpdateInterval
     
-    // We determine the time remaining to be stable if timeRemaining and adjustedTimeRemaining are within 20% of each other
-    self.isTimeRemainingStable = max(timeRemaining, adjustedLastTimeRemaining) / min(timeRemaining, adjustedLastTimeRemaining) < 1.2
+    // We determine the time remaining to be stable if timeRemaining and adjustedTimeRemaining are within 20% of each other, or if we've already processed more than 20% of the video (we should have a stable time by this point, if we don't it means the video is processing quickly)
+    self.isTimeRemainingStable = (max(timeRemaining, adjustedLastTimeRemaining) / min(timeRemaining, adjustedLastTimeRemaining) < 1.2) || progressPercentage > 20
   }
   
   /// Determines the state of the conversion process for the Action button (ie. if `.ready`, the app is ready to begin the process; if `.converting`, the app is undergoing conversion
@@ -393,6 +453,29 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       handleActionButton(withStatus: currentStatus)
     }
   }
+  
+  func configureOutputDirectory(outputDirectory: URL, inputBaseDirectory: URL, inputSubdirectories: [String]) {
+    // Create output directory
+    outputDirectory.createDirectory()
+      
+    // Create output subdirectories
+    for dir in inputSubdirectories {
+      // If we remove baseDirectory from the path, we now have a file path relative to the baseDirectory
+      let relativePath = dir.replacingOccurrences(of: inputBaseDirectory.path, with: "")
+      
+      // This can occur when a user drags a folder in which contains both files and subfolders, since the root folder will be listed as one of the subdirectories.
+      if relativePath.isEmpty {
+        continue
+      }
+      
+      // Append the relative directory to our outputDirectory and we get an absolute path
+      let directoryToCreate = outputDirectory.appendingPathComponent(relativePath)
+      
+      directoryToCreate.createDirectory()
+    }
+  }
+  
+  
   /// Handles the action button states, and their respective actions, based on the current ConversionState: `.ready` or `.converting`
   func handleActionButton(withStatus: ConversionState) {
     switch withStatus {
@@ -400,34 +483,87 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       if inputVideos.count > 1 {
         let userSelectedOutputDirectory = selectOutputDirectory()
         if userSelectedOutputDirectory == nil {
-          self.errorAlert(withMessage: "You must select an output file path to add this file.")
+          self.errorAlert(withMessage: "You must select an output folder.")
           return
         }
         
-        let dateString = Date().iso8601withFractionalSeconds
-        let generatedOutputDirectory = "Video-Converter-\(dateString)"
+        let dateString = Date().stringFormat("yyyy-MM-dd 'at' h.mm.ss a") // 2022-11-08 at 10.20.23 AM
+        let outputDirectoryName = "Video Converter \(dateString)"
         
-        let outputDirectory = userSelectedOutputDirectory!.appendingPathComponent(generatedOutputDirectory)
+        generatedOutputDirectory = userSelectedOutputDirectory!.appendingPathComponent(outputDirectoryName)
         
-        do {
-          try FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: false)
-        } catch {
-          // TODO: Handle this better
-          self.errorAlert(withMessage: "Something went wrong!\n\(error.localizedDescription)")
-          return
+        // This is a set of directories that we need to create in our output folder. We use a set to avoid duplication.
+        var inputSubdirectories: Set<String> = []
+        
+        var baseDirectoryComponents: [String] = []
+        for inputVideo in inputVideos {
+          // Add sub directory to inputSubdirectories list
+          let parentDirectory = inputVideo.fileUrl.deletingLastPathComponent()
+          inputSubdirectories.insert(parentDirectory.path)
+          
+          // Determine base directory for all files (largest common path).
+          
+          if baseDirectoryComponents.isEmpty {
+            // This executes on the first loop when we haven't set one yet
+            baseDirectoryComponents = parentDirectory.pathComponents
+          }
+          else {
+            // This snippet of code essentially sets baseDirectoryComponents to the intersection of baseDirectoryComponents and candidateComponents
+            let candidateComponents = parentDirectory.pathComponents
+            
+            // We use this to keep track of the last common position in component arrays
+            var lastCommonIndex: Int? = nil
+            
+            // Loop through baseDirectoryComponents and compare components with the candidate. Once we find a mismatch, we can assume that the position prior to the mismatch is the last common index.
+            for (i, component) in baseDirectoryComponents.enumerated() {
+              if i > candidateComponents.count - 1 || candidateComponents[i] != component {
+                lastCommonIndex = i-1
+                break
+              }
+            }
+            
+            // If we found a last common index, we now trim the candidateBaseDirectory array to only include the common elements of both.
+            if lastCommonIndex != nil {
+              baseDirectoryComponents.removeLast(baseDirectoryComponents.count-1-lastCommonIndex!)
+            }
+          }
         }
+        
+        // baseDirectoryComponents now looks like: ["/", "Users", "francescovirga", "Desktop", "Test"]
+        
+        baseDirectoryComponents.removeFirst() // Remove "/"
+        
+        let inputBaseDirectory = "/\(baseDirectoryComponents.joined(separator: "/"))".fileURL
+      
+        // Sort paths based on length, shorted first. This ensures that we don't try to create a subdirectory with parents that don't exist.
+        let sortedInputDirectories = inputSubdirectories.sorted(by: { $0.count < $1.count })
+        
+        // Generate the output directory and create any subdirectories it needs. This way we can freely generate output files without worrying about a subdirectory missing.
+        configureOutputDirectory(outputDirectory: generatedOutputDirectory!, inputBaseDirectory: inputBaseDirectory, inputSubdirectories: sortedInputDirectories)
         
         var startMessage = "Converting input videos\n"
         self.inputVideos.enumerated().forEach { (i, inputVideo) in
-          let outputFileUrl = outputDirectory.appendingPathComponent(inputVideo.fileUrl.lastPathComponent)
+        
+          // Replace input file extension with output extension and remove the base dir to turn into a relative path
+          let relativeOutputPath = inputVideo.fileUrl
+              .deletingPathExtension()
+              .appendingPathExtension(outputFormat.rawValue).path
+              .replacingOccurrences(of: inputBaseDirectory.path, with: "")
+            
+          let outputFileUrl = generatedOutputDirectory!.appendingPathComponent(relativeOutputPath)
+          
           inputVideos[i].outputFileUrl = outputFileUrl
           startMessage += "\(i+1). \(inputVideo.filePath) -> \(outputFileUrl.path)\n"
         }
         Logger.info(startMessage)
       }
       else {
-        let outputFileUrl = selectOutputFileUrl(format: outputFormat, inputFileUrl: inputVideos[0].fileUrl)
-        inputVideos[0].outputFileUrl = outputFileUrl
+        let userSelectedOutputFileUrl = selectOutputFileUrl(format: outputFormat, inputFileUrl: inputVideos[0].fileUrl)
+        if userSelectedOutputFileUrl == nil {
+          self.errorAlert(withMessage: "You must select an output folder.")
+          return
+        }
+        inputVideos[0].outputFileUrl = userSelectedOutputFileUrl
       }
       
       startConversion(activeVideoIndex: 0)
@@ -480,6 +616,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           self.updateProgressBar(value: 0)
           self.estimatedTimeText.stringValue = "Canceled ⚠️"
           self.activeVideoIndex = nil
+          self.generatedOutputDirectory = nil
           return
         }
         
@@ -510,7 +647,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         }
         
         if isLastVideo {
+          let outputUrl = self.inputVideos.count > 1 && self.generatedOutputDirectory != nil ? self.generatedOutputDirectory! : self.inputVideos[0].outputFileUrl!
+          
           self.activeVideoIndex = nil
+          self.generatedOutputDirectory = nil
           self.resetActionButton()
           
           if !self.inputVideos.allSatisfy({ $0.didError == false }) {
@@ -518,14 +658,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
             self.unexpectedErrorAlert(inputVideos: self.inputVideos)
           }
           else {
-            if self.inputVideos.count > 1 {
-              let parentDir = self.inputVideos[0].outputFileUrl!.deletingLastPathComponent()
-              self.alertConversionDidComplete(withOutputUrl: parentDir)
-            }
-            else {
-              self.alertConversionDidComplete(withOutputUrl: self.inputVideos[0].outputFileUrl!)
-            }
-            
+            self.alertConversionDidComplete(withOutputUrl: outputUrl)
           }
         }
         else {
@@ -563,7 +696,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       return
     }
     
-    estimatedTimeLabel.stringValue = Constants.estimatedTimeLabelText
+    setEstimatedTimeLabel(Constants.estimatedTimeLabelText)
     
     let seconds = Int(remainingInSeconds)
     let (h, m, s) = (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)

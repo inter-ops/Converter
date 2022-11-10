@@ -44,7 +44,7 @@ class DragDropView: NSView {
     // Hide current multi-files list if open
     delegate?.hideMultiFilesListPopover()
     
-    if checkExtension(sender) == true {
+    if checkExtension(sender) {
       layer?.backgroundColor = NSColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
       delegate?.hideSupportedFormatsPopover()
       return .copy
@@ -55,13 +55,13 @@ class DragDropView: NSView {
     return NSDragOperation()
   }
   
+  // TODO: This should be merged with validateInputFile
   fileprivate func checkExtension(_ drag: NSDraggingInfo) -> Bool {
     guard let board = drag.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
           let path = board[0] as? String
     else { return false }
     
-    let testFilePath = path.lowercased()
-    return VideoFormat.isSupportedAsInput(testFilePath)
+    return VideoFormat.isSupportedAsInput(path) || path.fileURL.isDirectory
   }
   
   override func draggingExited(_ sender: NSDraggingInfo?) {
