@@ -16,9 +16,9 @@ class ReportErrorWindowController: NSWindowController, NSWindowDelegate {
   }
   
 
-  func passErrorData(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
+  func passErrorData(inputVideos: [Video]) {
     let viewController = window?.contentViewController as? ReportErrorViewController
-    viewController?.setErrorData(ffmpegCommand: ffmpegCommand, ffmpegSessionLogs: ffmpegSessionLogs, ffprobeOutput: ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+    viewController?.setErrorData(inputVideos: inputVideos)
   }
   
 }

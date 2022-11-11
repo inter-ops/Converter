@@ -10,10 +10,12 @@ import Cocoa
 extension ViewController {
   
   /// Alert user of an error that occured, with the option of forwarding to devs
-  func unexpectedErrorAlert(ffmpegCommand: String, ffmpegSessionLogs: String, ffprobeOutput: String, inputFilePath: String, outputFilePath: String) {
+  func unexpectedErrorAlert(inputVideos: [Video]) {
+    let errorVideos = inputVideos.filter({ $0.didError == true })
+    
     let a = NSAlert()
     a.messageText = "An error occured"
-    a.informativeText = "There was a problem converting your file. Would you like to send this error to the dev team?"
+    a.informativeText = "There was a problem converting \(inputVideos.count > 1 ? "\(errorVideos.count)/\(inputVideos.count) of your files" : "your file"). Would you like to send this error to the dev team?"
     a.addButton(withTitle: "Send")
     a.addButton(withTitle: "Dismiss")
     a.alertStyle = NSAlert.Style.critical
@@ -22,7 +24,7 @@ extension ViewController {
       
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
         Logger.debug("User did choose to send error message")
-        self.segueToErrorReport(ffmpegCommand: ffmpegCommand, ffmpegSessionLogs: ffmpegSessionLogs, ffprobeOutput: ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath)
+        self.segueToErrorReport(inputVideos: inputVideos)
       }
       
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
@@ -32,6 +34,8 @@ extension ViewController {
   }
   
   func errorAlert(withMessage: String) {
+    Logger.debug("Error alert shown with message \(withMessage)")
+    
     let a = NSAlert()
     a.messageText = "An error occured"
     a.informativeText = withMessage
@@ -87,13 +91,15 @@ extension ViewController {
   /// Calls sample alertErrorPrompt() with error output for: unavailable input channels
   @IBAction func triggerAlertErrorTestAction(_ sender: NSMenuItem) {
     let a = AlertErrorTest.self
-    unexpectedErrorAlert(ffmpegCommand: a.ffmpegCommand, ffmpegSessionLogs: a.ffmpegSessionLogs, ffprobeOutput: a.ffprobeOutput, inputFilePath: a.inputFilePath, outputFilePath: a.outputFilePath)
+    a.inputVideo.outputFileUrl = a.outputFileUrl
+    
+    unexpectedErrorAlert(inputVideos: [a.inputVideo])
   }
 }
 
 struct AlertErrorTest {
-  static let inputFilePath = "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm"
-  static let outputFilePath = "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4"
+  static let inputFileUrl = URL(fileURLWithPath: "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm")
+  static let outputFileUrl = URL(fileURLWithPath: "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4")
   static let ffmpegCommand = """
   -hide_banner -loglevel error -y -i "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm" -filter_complex "channelmap=channel_layout=5.1" -c:a aac -c:v libx264 -preset veryfast -crf 26 -c:s mov_text "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4"
   """
@@ -129,4 +135,6 @@ struct AlertErrorTest {
     Metadata:
       DURATION        : 00:03:49.501000000
   """
+  
+  static var inputVideo = buildVideo(withFfprobeOutput: ffprobeOutput, inputFileUrl: inputFileUrl)
 }

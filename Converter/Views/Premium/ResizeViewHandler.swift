@@ -19,22 +19,21 @@ extension ViewController {
     } else {
       expandPremiumView()
     }
+    updateDragDropView(dragDropBoxStyleState)
   }
   
   func expandPremiumView() {
     premiumViewIsExpanded = true
-    
     expandCollapsePremiumViewButton.image = NSImage(named: "Chevron-Up")
     
-    mainViewWidthConstraint.animator().constant = Constants.Frame.expandedViewWidth
-    mainViewHeightConstraint.animator().constant = Constants.Frame.expandedViewHeight
-    
-    // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
-    
-    // expandDragDropView()
-    
-    //expandablePremiumView.isHidden = false
-    expandablePremiumView.animator().isHidden = false
+    NSAnimationContext.runAnimationGroup({ (_) in
+      mainViewWidthConstraint.animator().constant = Constants.Frame.expandedViewWidth
+      mainViewHeightConstraint.animator().constant = Constants.Frame.expandedViewHeight
+      expandablePremiumView.animator().isHidden = false
+    }) {
+      // NSAnimationContext did complete, show PurchasePremiumView
+      self.checkAndShowPurchasePremium()
+    }
   }
   
   func collapsePremiumView() {
@@ -45,12 +44,14 @@ extension ViewController {
     mainViewWidthConstraint.animator().constant = Constants.Frame.mainViewWidth
     mainViewHeightConstraint.animator().constant = Constants.Frame.mainViewHeight
     
-    // TODO: NSContextAnimator w/ CGFloat and CompletionHandler
-    
-    //collapseDragDropView()
-    
-    //expandablePremiumView.isHidden = true
     expandablePremiumView.animator().isHidden = true
+  }
+  
+  /// Collapse PremiumView if currently expanded
+  func collapsePremiumIfExpanded() {
+    if premiumViewIsExpanded {
+      collapsePremiumView()
+    }
   }
   
   

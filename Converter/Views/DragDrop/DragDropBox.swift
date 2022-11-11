@@ -7,18 +7,50 @@
 
 import Cocoa
 
-enum DragDropBox {
+struct DragDropBox {
   
-  case empty
-  case videoFile
-  case warning
+  enum Style {
+    case regular, warning
+    
+    var backgroundImage: NSImage {
+      switch self {
+      case .regular: return NSImage(named: "dbox-default")!
+      case .warning: return NSImage(named: "dbox-red")!
+      }
+    }
+    
+    var backgroundImageWide: NSImage {
+      switch self {
+      case .regular: return NSImage(named: "dbox-default-wide")!
+      case .warning: return NSImage(named: "dbox-red-wide")!
+      }
+    }
+    
+  }
   
-  var image: NSImage {
-    switch self {
-    case .empty:        return NSImage(named: "DragDropBox-Icon")!
-    case .videoFile:    return NSImage(named: "DragDropBox-Icon-Selected")!
-    case .warning:      return NSImage(named: "DragDropBox-Warning")!
+  
+  
+  enum Icon {
+    case empty, warning, videoFile
+    
+    var image: NSImage {
+      switch self {
+      case .empty:      return NSImage(named: "dbox-icon-empty")!
+      case .warning:    return NSImage(named: "dbox-icon-warning")!
+      case .videoFile:  return NSImage(named: "dbox-icon-videofile")!
+      }
+    }
+    
+  }
+  
+  static func getMultiVideoFileIcons(forCount: Int) -> NSImage {
+    if forCount > 9 {
+      return NSImage(named: "dbox-icon-videofiles-10")!
+    } else {
+      return NSImage(named: "dbox-icon-videofiles-\(forCount)")!
     }
   }
+  
+  static var videoFilesList = [""]
   
 }

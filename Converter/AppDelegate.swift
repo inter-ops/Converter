@@ -35,6 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
   
+  // TODO: @JB Add multi-file Open-With (if possible)
   /// Flag to determine if mainWindow ViewController has loaded to the point of accepting call requests
   var mainViewHasAppeared = false
   /// String path of the input file, requested to be open with mainWindow ViewController, if applicable
@@ -49,7 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     if mainViewHasAppeared {
       /// Load the input file request and bring the mainWindow to front
       let viewController = mainWindow.contentViewController as? ViewController
-      viewController?.dragDropViewDidReceive(fileUrl: filename)
+      viewController?.dragDropViewDidReceive(filePath: filename)
       mainWindow.makeKeyAndOrderFront(self)
     } else {
       /// Otherwise, set the String path of the input file for handling by the mainWindow ViewController once it is ready
