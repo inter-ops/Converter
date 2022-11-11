@@ -30,7 +30,7 @@ extension ViewController {
     hideProcessLoaderAnimation()
   }
   
-  func disableUI() {
+  func disableUI(withLoaderAnimation: Bool = true) {
     let isEnabled = false
     formatDropdown.isEnabled = isEnabled
     actionButton.isEnabled = isEnabled
@@ -45,14 +45,13 @@ extension ViewController {
     // Custom DragDropView handling
     disableDragDropView()
     
-    showProcessLoaderAnimation()
+    if withLoaderAnimation { showProcessLoaderAnimation() }
   }
   
   func enableDragDropView() {
     let isEnabled = true
     clearInputFileButton.isEnabled = isEnabled
     showInputFilesButton.isEnabled = isEnabled
-    
     dragDropIconImageView.isEnabled = isEnabled
     dragDropBackgroundImageView.isEnabled = isEnabled
     dragDropTopTitle.textColor = .textColor
@@ -65,7 +64,6 @@ extension ViewController {
     let isEnabled = false
     clearInputFileButton.isEnabled = isEnabled
     showInputFilesButton.isEnabled = isEnabled
-    
     dragDropIconImageView.isEnabled = isEnabled
     dragDropBackgroundImageView.isEnabled = isEnabled
     dragDropTopTitle.textColor = .disabledControlTextColor
