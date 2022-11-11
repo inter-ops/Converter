@@ -26,6 +26,8 @@ extension ViewController {
     _ = burnInSubtitles // var burnInSubtitles handles dropdown based on current state
     // Custom DragDropView handling
     enableDragDropView()
+    
+    hideProcessLoaderAnimation()
   }
   
   func disableUI() {
@@ -42,6 +44,8 @@ extension ViewController {
     burnInSubtitleCheckbox.isEnabled = isEnabled
     // Custom DragDropView handling
     disableDragDropView()
+    
+    showProcessLoaderAnimation()
   }
   
   func enableDragDropView() {
