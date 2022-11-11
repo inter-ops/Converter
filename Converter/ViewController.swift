@@ -25,6 +25,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
   @IBOutlet weak var actionButton: NSButton!
+  @IBOutlet weak var helpInfoButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!
   @IBOutlet weak var estimatedTimeLabel: NSTextField!
   
@@ -33,6 +34,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   var dragDropBoxStyleState: DragDropBox.Style = .regular
   
   // DragDropView objects
+  @IBOutlet weak var dragDropView: DragDropView!
   @IBOutlet weak var dragDropBackgroundImageView: NSImageView!
   @IBOutlet weak var dragDropIconImageView: NSImageView!
   @IBOutlet weak var dragDropTopTitle: NSTextField!
@@ -64,10 +66,36 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   // PremiumView variables
   var codecTitles: [String] = []
-
   var qualityTitles: [String] = []
+  
+  /// Returns true if the `copyAllAudioCheckbox` has been selected; otherwise, returns false.
+  var copyAllAudio: Bool {
+    if copyAllAudioState == .on {
+      return true
+    }
+    return false
+  }
   var copyAllAudioState: NSControl.StateValue = .off      // default unchecked
+  
+  /// Returns true if the `copyAllSubtitlesCheckbox` has been selected; otherwise, returns false.
+  var copyAllSubtitles: Bool {
+    if copyAllSubtitlesState == .on {
+      return true
+    }
+    return false
+  }
   var copyAllSubtitlesState: NSControl.StateValue = .off  // default unchecked
+  
+  /// Returns true if the `burnInSubtitlesCheckbox` has been selected; otherwise, returns false.
+  /// Also enables/disables `burnInSubtitleDropdown` based on `burnInSubtitlesCheckbox` current state.
+  var burnInSubtitles: Bool {
+    if burnInSubtitleState == .on {
+      burnInSubtitleDropdown.isEnabled = true
+      return true
+    }
+    burnInSubtitleDropdown.isEnabled = false
+    return false
+  }
   var burnInSubtitleState: NSControl.StateValue = .off    // default unchecked
 
   // Video object variables
@@ -192,8 +220,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     return filePaths
   }
   
-  // TODO: If a user clears or replaces the current input files during a multi-file conversion, it crashes the app. The dragdrop box and the clear button should be disabled during processing.
-  
+  // TODO: Disable UI(?) and loader animation for delay
   /// Handles multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceive(filePaths: [String]) {
     Logger.debug("Processing input paths: \(filePaths)")
