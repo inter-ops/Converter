@@ -49,7 +49,12 @@ extension ViewController {
     clearInputFileButton.isEnabled = isEnabled
     showInputFilesButton.isEnabled = isEnabled
     
-    // TODO: Hide dark overlay, enable input files
+    dragDropIconImageView.isEnabled = isEnabled
+    dragDropBackgroundImageView.isEnabled = isEnabled
+    dragDropTopTitle.textColor = .textColor
+    dragDropBottomTitle.textColor = .textColor
+    
+    // TODO: Enable global input files
   }
   
   func disableDragDropView() {
@@ -57,7 +62,12 @@ extension ViewController {
     clearInputFileButton.isEnabled = isEnabled
     showInputFilesButton.isEnabled = isEnabled
     
-    // TODO: Show dark overlay, disable input files
+    dragDropIconImageView.isEnabled = isEnabled
+    dragDropBackgroundImageView.isEnabled = isEnabled
+    dragDropTopTitle.textColor = .disabledControlTextColor
+    dragDropBottomTitle.textColor = .disabledControlTextColor
+    
+    // TODO: Disable global input files
   }
   
 }
