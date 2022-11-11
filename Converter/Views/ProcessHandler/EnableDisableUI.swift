@@ -16,8 +16,8 @@ extension ViewController {
     hideProcessLoaderAnimation()  // Hide processLoader and stop animation
   }
   /// Disable all UI elements. Show process loader with animation state.
-  /// Call `disableUI(withLoaderAnimation: false)` to disable the UI without any animated loaders.
-  func disableUI(withLoaderAnimation: Bool = true) {
+  /// Call `disableUI(withLoaderAnimation: true)` to also show the process loader animation.
+  func disableUI(withLoaderAnimation: Bool = false) {
     disableAllOnScreenElements()  // Set isEnabled state of individual UI elements
     disableDragDropView()         // Custom DragDropView handling for disabled state
     // Show process loader by default, with option to disable without animation

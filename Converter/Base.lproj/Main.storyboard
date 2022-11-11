@@ -726,6 +726,12 @@
                                                             <action selector="disableViewControllerUI:" target="Voe-Tx-rLC" id="n7y-cJ-tzq"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem title="Disable UI with Animation" id="Hon-H1-Alb">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="disableViewControllerUIWithAnimation:" target="Voe-Tx-rLC" id="ou8-NY-AIM"/>
+                                                        </connections>
+                                                    </menuItem>
                                                 </items>
                                             </menu>
                                         </menuItem>
@@ -2027,8 +2033,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="EQ5-Om-Sgo"/>
-        <segue reference="AU9-B4-7B8"/>
+        <segue reference="wed-Vm-xLL"/>
+        <segue reference="yPM-Jk-fVy"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AppIconLogo" width="60" height="60"/>
