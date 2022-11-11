@@ -24,6 +24,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!
+  @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
   @IBOutlet weak var actionButton: NSButton!
   @IBOutlet weak var helpInfoButton: NSButton!
   @IBOutlet weak var estimatedTimeText: NSTextField!

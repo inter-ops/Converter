@@ -1213,6 +1213,9 @@
                                     <constraint firstAttribute="height" constant="6" id="rk5-6p-ceM"/>
                                 </constraints>
                             </customView>
+                            <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="D1h-3E-4Fq">
+                                <rect key="frame" x="-2" y="34" width="554" height="20"/>
+                            </progressIndicator>
                             <visualEffectView blendingMode="behindWindow" material="menu" state="active" translatesAutoresizingMaskIntoConstraints="NO" id="F5s-5R-gtP">
                                 <rect key="frame" x="0.0" y="0.0" width="550" height="40"/>
                                 <subviews>
@@ -1255,7 +1258,9 @@
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="Gdn-Bw-cZu"/>
                             <constraint firstItem="2rF-NO-8km" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="HgJ-gN-KLc"/>
                             <constraint firstItem="WOp-7k-7wN" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="I1B-2Y-bed"/>
+                            <constraint firstItem="D1h-3E-4Fq" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="-2" id="KOv-hn-hwY"/>
                             <constraint firstItem="JZg-d2-J84" firstAttribute="top" secondItem="kPm-gZ-vwn" secondAttribute="bottom" constant="16" id="Muk-Lo-DRK"/>
+                            <constraint firstAttribute="trailing" secondItem="D1h-3E-4Fq" secondAttribute="trailing" constant="-2" id="NSG-du-sPT"/>
                             <constraint firstAttribute="trailing" secondItem="JZg-d2-J84" secondAttribute="trailing" id="OGz-IW-mfq"/>
                             <constraint firstItem="Gfl-op-5Hr" firstAttribute="top" secondItem="rgh-KN-ah2" secondAttribute="bottom" id="P4y-Cy-T4a"/>
                             <constraint firstAttribute="trailing" secondItem="WOp-7k-7wN" secondAttribute="trailing" constant="25" id="R2C-Qs-qgK"/>
@@ -1276,6 +1281,7 @@
                             <constraint firstAttribute="trailing" secondItem="Gfl-op-5Hr" secondAttribute="trailing" id="sMq-Wn-OhA"/>
                             <constraint firstAttribute="trailing" secondItem="kPm-gZ-vwn" secondAttribute="trailing" id="tQS-j9-EzD"/>
                             <constraint firstItem="2rF-NO-8km" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="yjg-OF-Rcg"/>
+                            <constraint firstItem="F5s-5R-gtP" firstAttribute="top" secondItem="D1h-3E-4Fq" secondAttribute="bottom" constant="-5" id="ztE-Zp-SfB"/>
                         </constraints>
                     </view>
                     <connections>
@@ -1300,6 +1306,7 @@
                         <outlet property="formatControlRowView" destination="rgh-KN-ah2" id="G7q-1W-MV2"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
                         <outlet property="helpInfoButton" destination="C1X-LD-ymz" id="GaW-2Z-nLT"/>
+                        <outlet property="indeterminateProgressBar" destination="D1h-3E-4Fq" id="fAZ-Qb-5uS"/>
                         <outlet property="mainView" destination="2rF-NO-8km" id="3Yl-eL-hNN"/>
                         <outlet property="mainViewHeightConstraint" destination="sNk-0M-lg5" id="hPp-c5-leF"/>
                         <outlet property="mainViewWidthConstraint" destination="F7m-Xg-Rau" id="lZQ-li-wVq"/>
