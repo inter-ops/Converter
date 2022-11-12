@@ -31,10 +31,10 @@ extension ViewController {
     
     setOrMaintainMenuItem(selectedCodec: selectedCodecMenuItem, forFormat: forFormat)
   }
-  
+  /// Sets new video codec menu items, but maintains the selection if compatible and appropriate (see ignoreDefaultCases).
   func setOrMaintainMenuItem(selectedCodec: VideoCodec, forFormat: VideoFormat) {
     // If user selected menu item is available with new format, maintain format
-    if forFormat.compatibleCodecs.contains(selectedCodec) && selectedCodec != .mpeg4 {
+    if forFormat.compatibleCodecs.contains(selectedCodec) && ignoreDefaultCases(selectedCodec) {
       codecDropdown.selectItem(withTitle: selectedCodec.dropdownTitle)
       return
     }
@@ -42,6 +42,15 @@ extension ViewController {
     outputCodec = forFormat.defaultCodec
     codecDropdown.selectItem(withTitle: outputCodec.dropdownTitle)
     Logger.debug("New default codec selected: \(outputCodec.rawValue)")
+  }
+  /// Ignores specific edge cases for MPEG-4 and VP8 video codecs; ie.
+  /// Switching from MKV (H.264) to WebM (VP8) and back would otherwise result in MKV (VP8) due to compatibility.
+  func ignoreDefaultCases(_ selectedCodec: VideoCodec) -> Bool {
+    let ignoredCases: [VideoCodec] = [.mpeg4, .vp8]
+    if ignoredCases.contains(selectedCodec) {
+      return false
+    }
+    return true
   }
   
   /// Return VideoCodec title strings as an array for dropdown presentation
@@ -83,7 +92,7 @@ extension ViewController {
     
     setOrMaintainMenuItem(selectedQuality: selectedQualityMenuItem, forCodec: forCodec)
   }
-  
+  /// Sets new video quality menu items, but maintains the selection if compatible.
   func setOrMaintainMenuItem(selectedQuality: VideoQuality, forCodec: VideoCodec) {
     // If user selected menu item is available with new format, maintain format
     if forCodec.qualityTypes.contains(selectedQuality) {
