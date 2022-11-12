@@ -266,7 +266,12 @@ func getVideoConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec? 
       return getVideoCommandForVp9(inputVideo: inputVideo)
     case .gif:
       return getVideoCommandForGif(inputVideo: inputVideo)
-    // TODO: prores
+    // TODO: Add ProRes. Resources:
+    // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
+    // - https://www.reddit.com/r/ffmpeg/comments/pn383s/command_line_for_transcoding_mp4_to_prores/
+    // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
+    // - https://video.stackexchange.com/questions/14712/how-to-encode-apple-prores-on-windows-or-linux
+    //
     default:
       // This should never happen
       Logger.error("Unexpected output video codec selected by user \(outputVideoCodec!)")
