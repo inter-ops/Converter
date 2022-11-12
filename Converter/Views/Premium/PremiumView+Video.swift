@@ -29,10 +29,12 @@ extension ViewController {
     codecDropdown.removeAllItems()
     codecDropdown.addItems(withTitles: titles)
     
-    setOrMaintainMenuItem(selectedCodec: selectedCodecMenuItem, forFormat: forFormat)
+    setOutputCodec(selectedCodec: selectedCodecMenuItem, forFormat: forFormat)
   }
   /// Sets new video codec menu items, but maintains the selection if compatible and appropriate (see ignoreDefaultCases).
-  func setOrMaintainMenuItem(selectedCodec: VideoCodec, forFormat: VideoFormat) {
+  func setOutputCodec(selectedCodec: VideoCodec, forFormat: VideoFormat) {
+    // TODO: if Remux has been detected { return }
+    
     // If user selected menu item is available with new format, maintain format
     if forFormat.compatibleCodecs.contains(selectedCodec) && ignoreDefaultCases(selectedCodec) {
       codecDropdown.selectItem(withTitle: selectedCodec.dropdownTitle)
@@ -94,10 +96,10 @@ extension ViewController {
     qualityDropdown.removeAllItems()
     qualityDropdown.addItems(withTitles: titles)
     
-    setOrMaintainMenuItem(selectedQuality: selectedQualityMenuItem, forCodec: forCodec)
+    setOutputQuality(selectedQuality: selectedQualityMenuItem, forCodec: forCodec)
   }
   /// Sets new video quality menu items, but maintains the selection if compatible.
-  func setOrMaintainMenuItem(selectedQuality: VideoQuality, forCodec: VideoCodec) {
+  func setOutputQuality(selectedQuality: VideoQuality, forCodec: VideoCodec) {
     // If user selected menu item is available with new format, maintain format
     if forCodec.qualityTypes.contains(selectedQuality) {
       qualityDropdown.selectItem(withTitle: selectedQuality.dropdownTitle)
