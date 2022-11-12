@@ -14,30 +14,58 @@ extension ViewController {
   /// Updates PremiumView with updated options per output format (ie. update codec dropdown list with available codecs)
   func didSelectNewOutput(format: VideoFormat) {
     initCodecDropdownMenu(forFormat: format)
-    initQualityDropdownMenu(forCodec: format.defaultCodec)
+    initQualityDropdownMenu(forCodec: outputCodec)
   }
   func didSelectNewOutput(codec: VideoCodec) {
-    initQualityDropdownMenu(forCodec: codec)
     outputCodec = codec
+    initQualityDropdownMenu(forCodec: codec)
     Logger.info("User selected codec: \(codec.rawValue)")
-    Logger.debug("New default quality selected: \(outputQuality.rawValue)")
   }
   /// Initialize dropdown menu with titles (see `VideoCodec.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
+    let selectedCodecMenuItem = getUserSelectedCodec(fromTitle: codecDropdown.titleOfSelectedItem!)
+    
     let titles = getCodecDropdownTitles(forFormat: forFormat)
     codecDropdown.removeAllItems()
     codecDropdown.addItems(withTitles: titles)
-    // Set new default output codec based on format
+    
+    setOutputCodec(selectedCodec: selectedCodecMenuItem, forFormat: forFormat)
+  }
+  /// Sets new video codec menu items, but maintains the selection if compatible and appropriate (see ignoreDefaultCases).
+  func setOutputCodec(selectedCodec: VideoCodec, forFormat: VideoFormat) {
+    // TODO: if Remux has been detected { return }
+    
+    // If user selected menu item is available with new format, maintain format
+    if forFormat.compatibleCodecs.contains(selectedCodec) && ignoreDefaultCases(selectedCodec) {
+      codecDropdown.selectItem(withTitle: selectedCodec.dropdownTitle)
+      return
+    }
+    // Otherwise, set new default codec at selection index
     outputCodec = forFormat.defaultCodec
+    codecDropdown.selectItem(withTitle: outputCodec.dropdownTitle)
     Logger.debug("New default codec selected: \(outputCodec.rawValue)")
   }
+  /// Ignores specific edge cases for MPEG-4 and VP8 video codecs; ie.
+  /// Switching from MKV (H.264) to WebM (VP8) and back would otherwise result in MKV (VP8) due to compatibility.
+  func ignoreDefaultCases(_ selectedCodec: VideoCodec) -> Bool {
+    let selectedFormat = outputFormat
+    let mpeg4CompatibleFormats: [VideoFormat] = [.mp4, .mkv, .m4v, .mov]
+    if selectedCodec == .mpeg4 && mpeg4CompatibleFormats.contains(selectedFormat) {
+      return false
+    }
+    if selectedCodec == .vp8 && selectedFormat == .mkv {
+      return false
+    }
+    return true
+  }
+  
   /// Return VideoCodec title strings as an array for dropdown presentation
   func getCodecDropdownTitles(forFormat: VideoFormat) -> [String] {
-    codecTitles = []  // clear all codec types
+    var titles: [String] = []
     for codec in forFormat.compatibleCodecs {
-      codecTitles.append(codec.dropdownTitle)
+      titles.append(codec.dropdownTitle)
     }
-    return codecTitles
+    return titles
   }
   /// Return VideoCodec type from dropdown item selection
   func getUserSelectedCodec(fromTitle: String) -> VideoCodec {
@@ -62,14 +90,27 @@ extension ViewController {
   
   /// Initialize dropdown menu with titles (see `VideoQuality.dropdownTitle` for values)
   func initQualityDropdownMenu(forCodec: VideoCodec) {
+    let selectedQualityMenuItem = getUserSelectedQuality(fromTitle: qualityDropdown.titleOfSelectedItem!)
+    
     let titles = getQualityDropdownTitles(forCodec: forCodec)
     qualityDropdown.removeAllItems()
     qualityDropdown.addItems(withTitles: titles)
-    // Set default selected item
-    outputQuality = forCodec.defaultQuality
-    let selectedItem = forCodec.defaultQuality
-    qualityDropdown.selectItem(withTitle: selectedItem.dropdownTitle)
+    
+    setOutputQuality(selectedQuality: selectedQualityMenuItem, forCodec: forCodec)
   }
+  /// Sets new video quality menu items, but maintains the selection if compatible.
+  func setOutputQuality(selectedQuality: VideoQuality, forCodec: VideoCodec) {
+    // If user selected menu item is available with new format, maintain format
+    if forCodec.qualityTypes.contains(selectedQuality) {
+      qualityDropdown.selectItem(withTitle: selectedQuality.dropdownTitle)
+      return
+    }
+    // Otherwise, set new default codec at selection index
+    outputQuality = forCodec.defaultQuality
+    qualityDropdown.selectItem(withTitle: outputQuality.dropdownTitle)
+    Logger.debug("New default quality selected: \(outputQuality.rawValue)")
+  }
+  
   /// Return VideoQuality title strings as an array for dropdown presentation
   func getQualityDropdownTitles(forCodec: VideoCodec) -> [String] {
     var titles: [String] = []
@@ -93,7 +134,7 @@ extension ViewController {
     let title = sender.titleOfSelectedItem!
     let quality = getUserSelectedQuality(fromTitle: title)
     outputQuality = quality
-    Logger.info("User did select quality: \(quality.rawValue)")
+    Logger.info("User selected quality: \(quality.rawValue)")
   }
   
 }
