@@ -901,12 +901,13 @@
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tyy-Gc-LJo">
                                                             <rect key="frame" x="69" y="3" width="173" height="25"/>
-                                                            <popUpButtonCell key="cell" type="push" title="H.264" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Qwb-R8-J7F" id="DME-xo-5Cg">
+                                                            <popUpButtonCell key="cell" type="push" title="Auto" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Qwb-R8-J7F" id="DME-xo-5Cg">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="menu"/>
                                                                 <menu key="menu" id="1lP-XA-lKg">
                                                                     <items>
-                                                                        <menuItem title="H.264" state="on" id="Qwb-R8-J7F"/>
+                                                                        <menuItem title="Auto" state="on" id="Qwb-R8-J7F"/>
+                                                                        <menuItem title="H.264" id="PyE-Jw-35a"/>
                                                                         <menuItem title="H.265 (HEVC)" id="Ixr-2g-fzD"/>
                                                                         <menuItem title="MPEG-4" id="HEa-cm-phh"/>
                                                                     </items>
@@ -2033,8 +2034,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wed-Vm-xLL"/>
-        <segue reference="yPM-Jk-fVy"/>
+        <segue reference="EQ5-Om-Sgo"/>
+        <segue reference="AU9-B4-7B8"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AppIconLogo" width="60" height="60"/>

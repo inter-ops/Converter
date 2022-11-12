@@ -32,6 +32,7 @@ extension VideoCodec {
   
   var qualityTypes: [VideoQuality] {
     switch self {
+    case .auto: return [.betterQuality, .balanced, .smallerSize]
     case .h264: return [.betterQuality, .balanced, .smallerSize]
     case .hevc: return [.betterQuality, .balanced, .smallerSize]
     case .vp8: return [.betterQuality, .balanced, .smallerSize]
@@ -48,6 +49,7 @@ extension VideoCodec {
   
   var defaultQuality: VideoQuality {
     switch self {
+    case .auto: return .balanced
     case .h264: return .balanced
     case .hevc: return .balanced
     case .vp8: return .balanced
