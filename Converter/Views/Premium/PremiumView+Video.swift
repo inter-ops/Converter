@@ -32,9 +32,9 @@ extension ViewController {
     return codecTitles
   }
   /// Return VideoCodec type from dropdown item selection
-  func getUserSelectedCodec(_ item: String) -> VideoCodec {
+  func getUserSelectedCodec(fromTitle: String) -> VideoCodec {
     for codec in VideoCodec.allCases {
-      if item == codec.dropdownTitle {
+      if title == codec.dropdownTitle {
         return codec
       }
     }
@@ -43,8 +43,8 @@ extension ViewController {
   }
   /// Called when the user updates dropdown selection item
   @IBAction func selectCodec(_ sender: NSPopUpButton) {
-    userSelectedCodecTitle = sender.titleOfSelectedItem!
-    let codec = getUserSelectedCodec(userSelectedCodecTitle)
+    let title = sender.titleOfSelectedItem!
+    let codec = getUserSelectedCodec(fromTitle: title)
     outputCodec = codec
     Logger.info("User did select codec: \(codec.rawValue)")
   }
@@ -69,9 +69,9 @@ extension ViewController {
     return qualityTitles
   }
   /// Return VideoQuality type from dropdown item selection
-  func getUserSelectedQuality(_ item: String) -> VideoQuality {
+  func getUserSelectedQuality(fromTitle: String) -> VideoQuality {
     for quality in VideoQuality.allCases {
-      if item == quality.dropdownTitle {
+      if title == quality.dropdownTitle {
         return quality
       }
     }
@@ -80,8 +80,8 @@ extension ViewController {
   }
   /// Called when the user updates dropdown selection item
   @IBAction func selectQuality(_ sender: NSPopUpButton) {
-    userSelectedQualityTitle = sender.titleOfSelectedItem!
-    let quality = getUserSelectedQuality(userSelectedQualityTitle)
+    let title = sender.titleOfSelectedItem!
+    let quality = getUserSelectedQuality(fromTitle: title)
     outputQuality = quality
     // Handler function
     Logger.info("User did select quality: \(quality.rawValue)")

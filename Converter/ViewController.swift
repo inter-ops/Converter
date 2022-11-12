@@ -785,9 +785,9 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   
   /// Return VideoFormat type from dropdown item selection
-  func getFormat(_ item: String) -> VideoFormat {
+  func getFormat(fromTitle: String) -> VideoFormat {
     for format in VideoFormat.allCases {
-      if item == format.dropdownTitle {
+      if title == format.dropdownTitle {
         return format
       }
     }
@@ -797,19 +797,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Called when the user updates dropdown selection item
   @IBAction func selectFormat(_ sender: NSPopUpButton) {
-    userSelectedFormatTitle = sender.titleOfSelectedItem!
-    let format = getFormat(userSelectedFormatTitle)
+    let title = sender.titleOfSelectedItem!
+    let format = getFormat(fromTitle: title)
     outputFormat = format
     // Set default codec for new format type
     didSelectNewOutput(format: format)
     Logger.debug("User selected output format: \(format.rawValue)")
   }
-  // selectFormat(sender:)
-  var userSelectedFormatTitle = VideoFormat.mp4.dropdownTitle
-  // selectCodec(sender:)
-  var userSelectedCodecTitle = VideoCodec.h264.dropdownTitle
-  // selectQuality(sender:)
-  var userSelectedQualityTitle = VideoQuality.balanced.dropdownTitle
   
   @IBAction func clickActionButton(_ sender: Any) {
     // User did click button: "Convert" or "Stop"
