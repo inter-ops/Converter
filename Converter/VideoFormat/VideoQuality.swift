@@ -46,6 +46,19 @@ extension VideoCodec {
     }
   }
   
+  var defaultQuality: VideoQuality {
+    switch self {
+    case .h264: return .balanced
+    case .hevc: return .balanced
+    case .vp8: return .balanced
+    case .vp9: return .balanced
+    case .mpeg4: return .balanced
+    case .gif: return .balanced
+    case .prores: return .prAuto
+    // Will not appear in codec dropdown
+    case .mpeg1video: return .balanced
+    case .mpeg2video: return .balanced
+    case .unknown: return .balanced
     }
   }
   

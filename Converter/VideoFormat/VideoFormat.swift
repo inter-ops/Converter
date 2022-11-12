@@ -34,6 +34,10 @@ enum VideoFormat: String, CaseIterable {
     case .gif: return [.gif]
     }
   }
+  /// Returns the default `VideoCodec` for the given `VideoFormat`
+  var defaultCodec: VideoCodec {
+    return self.compatibleCodecs[0]
+  }
   
   static func isSupportedAsInput(_ input: String) -> Bool {
     let ext = input.lowercased().pathExtension
