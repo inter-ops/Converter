@@ -48,7 +48,14 @@ func getFileName(filePath: String) -> String {
 
 // TODO: Create a readme for this documentation after refactor is done on this file.
 
-func getOutputBitrateForH264(inputVideo: Video) -> String {
+func getOutputBitrateForHEVC(inputVideo: Video) -> Int {
+  let h264Bitrate = getOutputBitrateForH264(inputVideo: inputVideo)
+  
+  // Based on testing, quality for HEVC seems equal to H264 at 80% bitrate. So multiply H264 bitrate by 0.8
+  return Int(Double(h264Bitrate) * 0.8)
+}
+
+func getOutputBitrateForH264(inputVideo: Video) -> Int {
   let inputWidth = inputVideo.videoStreams[0].width
   let inputHeight = inputVideo.videoStreams[0].height
   
@@ -67,40 +74,39 @@ func getOutputBitrateForH264(inputVideo: Video) -> String {
   // - https://netflixtechblog.com/optimized-shot-based-encodes-for-4k-now-streaming-47b516b10bbb
   if inputWidth > maxWidth1080p {
     // 2016p
-    return "16M"
+    return 16000000 // 16M
   }
   else if inputWidth > maxWidth720p {
     // 1080p
-    return "8M"
+    return 8000000 // 8M
   }
   else if inputWidth > maxWidth480p {
     // 720p
-    return "4M"
+    return 4000000 // 4M
   }
   else if inputWidth > maxWidth360p {
     // 576p or 480p
     if inputHeight > 540 {
       // We assume this means 576p
-      return "3M"
+      return 3000000 // 3M
     }
     else {
       // 480p
-      return "2M"
+      return 2000000 // 2M
     }
   }
   else if inputWidth > maxWidth240p {
     // 360p
-    return "1M"
+    return 1000000 // 1M
   }
   else {
     // 240p
-    return "750k"
+    return 750000 // 750k
   }
 }
 
-func getOutputCrfForVp9(inputVideo: Video) -> String {
+func getOutputCrfForVp9(inputVideo: Video) -> Int {
   let inputWidth = inputVideo.videoStreams[0].width
-  let inputHeight = inputVideo.videoStreams[0].height
   
   // If the input height is slightly above a target we will round down, otherwise we always round up. The maximums below dictate the number at which we would round down for.
   
@@ -116,31 +122,31 @@ func getOutputCrfForVp9(inputVideo: Video) -> String {
   // https://trac.ffmpeg.org/wiki/Encode/VP9
   if inputWidth > maxWidth1440p {
     // 2016p
-    return "15"
+    return 15
   }
   if inputWidth > maxWidth1080p {
     // 1440p
-    return "24"
+    return 24
   }
   else if inputWidth > maxWidth720p {
     // 1080p
-    return "31"
+    return 31
   }
   else if inputWidth > maxWidth480p {
     // 720p
-    return "32"
+    return 32
   }
   else if inputWidth > maxWidth360p {
     // 480p
-    return "33"
+    return 33
   }
   else if inputWidth > maxWidth240p {
     // 360p
-    return "36"
+    return 36
   }
   else {
     // 240p
-    return "37"
+    return 37
   }
 }
 
@@ -160,7 +166,6 @@ func getVideoCommandForH264(inputVideo: Video) -> String {
   return "-c:v h264_videotoolbox -b:v \(outputBitrate) -pix_fmt yuv420p -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
 }
 
-// TODO: Finish this
 func getVideoCommandForHEVC(inputVideo: Video) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   if inputVideoCodec == .hevc {
@@ -168,16 +173,10 @@ func getVideoCommandForHEVC(inputVideo: Video) -> String {
     // M4V does not support HEVC so we must re-encode this case
     return "-c:v copy -tag:v hvc1"
   }
-  
-  // TODO: Test if pix_fmt value is problematic (are there cases where not doing so would result in unplayable videos).  https://trac.ffmpeg.org/ticket/9521
 
-  // TODO: Create bitrate latter for 265
-  // The general gist for equal quality comparison to H.264, you’re looking at an average of 52% to 78% of the H.264 bitrate – largest factors within that range were resolution and frame rate.
-  // This also includes here, where libx265 outshines any other encoder. I wasn’t able to replicate nearly as good a quality with VT_H265 at similar bitrates. I started to get comparable quality at I think +15-20% the bitrate you’d get with HEVC – and even then
-
-  
-  let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo)
-  return "-c:v hevc_videotoolbox -b:v \(outputBitrate) -tag:v hvc1 -pix_fmt yuv420p -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
+  let outputBitrate = getOutputBitrateForHEVC(inputVideo: inputVideo)
+  // 10 bit color is required, see https://trac.ffmpeg.org/ticket/9521
+  return "-c:v hevc_videotoolbox -b:v \(outputBitrate) -tag:v hvc1 -pix_fmt yuv420p10le -allow_sw 1  -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
 }
 
 /// VP8 and VP9
@@ -251,7 +250,6 @@ func getVideoConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec? 
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
-  let inputFileType = getFileExtension(filePath: inputVideo.filePath)
 
   if outputVideoCodec != nil {
     switch outputVideoCodec {
