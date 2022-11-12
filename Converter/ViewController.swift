@@ -782,7 +782,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Return VideoFormat type from dropdown item selection
   func getUserSelectedFormat(fromTitle: String) -> VideoFormat {
     for format in VideoFormat.allCases {
-      if title == format.dropdownTitle {
+      if fromTitle == format.dropdownTitle {
         return format
       }
     }

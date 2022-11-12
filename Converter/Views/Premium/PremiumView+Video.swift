@@ -34,7 +34,7 @@ extension ViewController {
   /// Return VideoCodec type from dropdown item selection
   func getUserSelectedCodec(fromTitle: String) -> VideoCodec {
     for codec in VideoCodec.allCases {
-      if title == codec.dropdownTitle {
+      if fromTitle == codec.dropdownTitle {
         return codec
       }
     }
@@ -71,7 +71,7 @@ extension ViewController {
   /// Return VideoQuality type from dropdown item selection
   func getUserSelectedQuality(fromTitle: String) -> VideoQuality {
     for quality in VideoQuality.allCases {
-      if title == quality.dropdownTitle {
+      if fromTitle == quality.dropdownTitle {
         return quality
       }
     }
