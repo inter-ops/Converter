@@ -55,11 +55,11 @@ extension ViewController {
   
   /// Return VideoCodec title strings as an array for dropdown presentation
   func getCodecDropdownTitles(forFormat: VideoFormat) -> [String] {
-    codecTitles = []  // clear all codec types
+    var titles: [String] = []
     for codec in forFormat.compatibleCodecs {
-      codecTitles.append(codec.dropdownTitle)
+      titles.append(codec.dropdownTitle)
     }
-    return codecTitles
+    return titles
   }
   /// Return VideoCodec type from dropdown item selection
   func getUserSelectedCodec(fromTitle: String) -> VideoCodec {

@@ -65,10 +65,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   @IBOutlet weak var expandCollapsePremiumButtonTrailingConstraint: NSLayoutConstraint!
   
-  // PremiumView variables
-  var codecTitles: [String] = []
-  var qualityTitles: [String] = []
-  
   /// Returns true if the `copyAllAudioCheckbox` has been selected; otherwise, returns false.
   var copyAllAudio: Bool {
     if copyAllAudioCheckbox.state == .on {
