@@ -65,10 +65,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   @IBOutlet weak var expandCollapsePremiumButtonTrailingConstraint: NSLayoutConstraint!
   
-  // PremiumView variables
-  var codecTitles: [String] = []
-  var qualityTitles: [String] = []
-  
   /// Returns true if the `copyAllAudioCheckbox` has been selected; otherwise, returns false.
   var copyAllAudio: Bool {
     if copyAllAudioCheckbox.state == .on {
@@ -782,7 +778,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Return VideoFormat type from dropdown item selection
   func getUserSelectedFormat(fromTitle: String) -> VideoFormat {
     for format in VideoFormat.allCases {
-      if title == format.dropdownTitle {
+      if fromTitle == format.dropdownTitle {
         return format
       }
     }
