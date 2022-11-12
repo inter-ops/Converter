@@ -284,6 +284,11 @@ func getVideoConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec? 
   switch outputFileType {
     
   case VideoFormat.webm.rawValue:
+    if inputVideoCodec == .vp9 {
+      // If input is already VP9, we call getVideoCommandForVp9, which will remux the input
+      return getVideoCommandForVp9(inputVideo: inputVideo)
+    }
+    // All other cases, we convert to VP8 (this also handles remuxing if input is already VP8)
     return getVideoCommandForVp8(inputVideo: inputVideo)
   
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
