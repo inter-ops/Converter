@@ -19,11 +19,8 @@ extension ViewController {
   func initCodecDropdownMenu(forFormat: VideoFormat) {
     codecDropdown.removeAllItems()
     codecDropdown.addItems(withTitles: getCodecDropdownTitles(forFormat: forFormat))
-    
     // Set new default output codec based on format
     outputCodec = forFormat.compatibleCodecs[0]
-    userSelectedCodecType = outputCodec
-    
     Logger.debug("New default codec selected: \(outputCodec.rawValue)")
   }
   /// Return VideoCodec title strings as an array for dropdown presentation
@@ -44,20 +41,12 @@ extension ViewController {
     Logger.error("Unable to read selected codec type\nReturning default type: VideoCodec.h264")
     return .h264
   }
-  /// Returns VideoCodec type upon user dropdown selection (ie. `.h264`)
-  func userDidSelectCodec(_ codec: VideoCodec) {
-    // Update outputFormat to selected item
-    outputCodec = codec
-    
-    Logger.info("User did select codec: \(codec.rawValue)")
-    
-  }
   /// Called when the user updates dropdown selection item
   @IBAction func selectCodec(_ sender: NSPopUpButton) {
-    userSelectedCodec = sender.titleOfSelectedItem!
-    userSelectedCodecType = getUserSelectedCodec(userSelectedCodec)
-    // Handler function
-    userDidSelectCodec(userSelectedCodecType)
+    userSelectedCodecTitle = sender.titleOfSelectedItem!
+    let codec = getUserSelectedCodec(userSelectedCodecTitle)
+    outputCodec = codec
+    Logger.info("User did select codec: \(codec.rawValue)")
   }
   
   
@@ -79,15 +68,6 @@ extension ViewController {
     }
     return qualityTitles
   }
-  
-  /// Returns VideoQuality type upon user dropdown selection (ie. `.balanced`)
-  func userDidSelectQuality(_ quality: VideoQuality) {
-    // Update outputQuality to selected item
-    outputQuality = quality
-    
-    Logger.info("User did select quality: \(quality.rawValue)")
-    
-  }
   /// Return VideoQuality type from dropdown item selection
   func getUserSelectedQuality(_ item: String) -> VideoQuality {
     for quality in VideoQuality.allCases {
@@ -100,10 +80,11 @@ extension ViewController {
   }
   /// Called when the user updates dropdown selection item
   @IBAction func selectQuality(_ sender: NSPopUpButton) {
-    userSelectedQuality = sender.titleOfSelectedItem!
-    userSelectedQualityType = getUserSelectedQuality(userSelectedQuality)
+    userSelectedQualityTitle = sender.titleOfSelectedItem!
+    let quality = getUserSelectedQuality(userSelectedQualityTitle)
+    outputQuality = quality
     // Handler function
-    userDidSelectQuality(userSelectedQualityType)
+    Logger.info("User did select quality: \(quality.rawValue)")
   }
   
 }

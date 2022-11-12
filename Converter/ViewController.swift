@@ -406,18 +406,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     updateDragDrop(subtitle: "Too many videos selected (maximum \(Constants.fileCountLimit))", withStyle: .warning)
   }
   
-  /// Returns VideoFormat type upon user dropdown selection (ie. `.mp4`)
-  func userDidSelectFormat(_ format: VideoFormat) {
-    // Update outputFormat to selected item
-    outputFormat = format
-    
-    Logger.debug("User selected output format: \(format.rawValue)")
-    
-    // Set default codec for new format type (if premium)
-    didSelectNewOutput(format: format)
-  }
-  
-  
   // TODO: These methods should be moved to a util
   func getEstimatedTotalConversionTime(statistics: Statistics, timeElapsed: Double) -> Double {
     let videoTime = Double(statistics.getTime())/1000
@@ -809,20 +797,19 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Called when the user updates dropdown selection item
   @IBAction func selectFormat(_ sender: NSPopUpButton) {
-    userSelectedFormat = sender.titleOfSelectedItem!
-    userSelectedFormatType = getFormat(userSelectedFormat)
-    // Handler function
-    userDidSelectFormat(userSelectedFormatType)
+    userSelectedFormatTitle = sender.titleOfSelectedItem!
+    let format = getFormat(userSelectedFormatTitle)
+    outputFormat = format
+    // Set default codec for new format type
+    didSelectNewOutput(format: format)
+    Logger.debug("User selected output format: \(format.rawValue)")
   }
   // selectFormat(sender:)
-  var userSelectedFormat = VideoFormat.mp4.dropdownTitle
-  var userSelectedFormatType: VideoFormat = .mp4
+  var userSelectedFormatTitle = VideoFormat.mp4.dropdownTitle
   // selectCodec(sender:)
-  var userSelectedCodec = VideoCodec.h264.dropdownTitle
-  var userSelectedCodecType: VideoCodec = .h264
+  var userSelectedCodecTitle = VideoCodec.h264.dropdownTitle
   // selectQuality(sender:)
-  var userSelectedQuality = VideoQuality.balanced.dropdownTitle
-  var userSelectedQualityType: VideoQuality = .balanced
+  var userSelectedQualityTitle = VideoQuality.balanced.dropdownTitle
   
   @IBAction func clickActionButton(_ sender: Any) {
     // User did click button: "Convert" or "Stop"
