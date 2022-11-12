@@ -92,7 +92,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
 
   // Video object variables
   var outputFormat: VideoFormat = .mp4  //  User select output format (mp4 default)
-  var outputCodec: VideoCodec = .h264   // User select output codec (h264 default)
+  var outputCodec: VideoCodec = .auto   // User select output codec (h264 default)
   var outputQuality: VideoQuality = .balanced // User select output quality (balanced default)
   
   var inputVideos: [Video] = []
