@@ -34,7 +34,7 @@ extension ViewController {
   
   func setOrMaintainMenuItem(selectedCodec: VideoCodec, forFormat: VideoFormat) {
     // If user selected menu item is available with new format, maintain format
-    if forFormat.compatibleCodecs.contains(selectedCodec) {
+    if forFormat.compatibleCodecs.contains(selectedCodec) && selectedCodec != .mpeg4 {
       codecDropdown.selectItem(withTitle: selectedCodec.dropdownTitle)
       return
     }
