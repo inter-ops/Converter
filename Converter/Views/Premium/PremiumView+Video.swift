@@ -14,7 +14,7 @@ extension ViewController {
   /// Updates PremiumView with updated options per output format (ie. update codec dropdown list with available codecs)
   func didSelectNewOutput(format: VideoFormat) {
     initCodecDropdownMenu(forFormat: format)
-    initQualityDropdownMenu(forCodec: format.defaultCodec)
+    initQualityDropdownMenu(forCodec: outputCodec)
   }
   func didSelectNewOutput(codec: VideoCodec) {
     initQualityDropdownMenu(forCodec: codec)
@@ -24,13 +24,27 @@ extension ViewController {
   }
   /// Initialize dropdown menu with titles (see `VideoCodec.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
+    let selectedCodecMenuItem = getUserSelectedCodec(fromTitle: codecDropdown.titleOfSelectedItem!)
+    
     let titles = getCodecDropdownTitles(forFormat: forFormat)
     codecDropdown.removeAllItems()
     codecDropdown.addItems(withTitles: titles)
-    // Set new default output codec based on format
+    
+    setOrMaintainMenuItem(selectedCodec: selectedCodecMenuItem, forFormat: forFormat)
+  }
+  
+  func setOrMaintainMenuItem(selectedCodec: VideoCodec, forFormat: VideoFormat) {
+    // If user selected menu item is available with new format, maintain format
+    if forFormat.compatibleCodecs.contains(selectedCodec) {
+      codecDropdown.selectItem(withTitle: selectedCodec.dropdownTitle)
+      return
+    }
+    // Otherwise, set new default codec at selection index
     outputCodec = forFormat.defaultCodec
+    codecDropdown.selectItem(withTitle: outputCodec.dropdownTitle)
     Logger.debug("New default codec selected: \(outputCodec.rawValue)")
   }
+  
   /// Return VideoCodec title strings as an array for dropdown presentation
   func getCodecDropdownTitles(forFormat: VideoFormat) -> [String] {
     codecTitles = []  // clear all codec types
@@ -62,14 +76,28 @@ extension ViewController {
   
   /// Initialize dropdown menu with titles (see `VideoQuality.dropdownTitle` for values)
   func initQualityDropdownMenu(forCodec: VideoCodec) {
+    let selectedQualityMenuItem = getUserSelectedQuality(fromTitle: qualityDropdown.titleOfSelectedItem!)
+    
     let titles = getQualityDropdownTitles(forCodec: forCodec)
     qualityDropdown.removeAllItems()
     qualityDropdown.addItems(withTitles: titles)
-    // Set default selected item
-    outputQuality = forCodec.defaultQuality
-    let selectedItem = forCodec.defaultQuality
-    qualityDropdown.selectItem(withTitle: selectedItem.dropdownTitle)
+    
+    setOrMaintainMenuItem(selectedQuality: selectedQualityMenuItem, forCodec: forCodec)
   }
+  
+  func setOrMaintainMenuItem(selectedQuality: VideoQuality, forCodec: VideoCodec) {
+    print("selectedQuality: \(selectedQuality), forCodec: \(forCodec)")
+    // If user selected menu item is available with new format, maintain format
+    if forCodec.qualityTypes.contains(selectedQuality) {
+      qualityDropdown.selectItem(withTitle: selectedQuality.dropdownTitle)
+      return
+    }
+    // Otherwise, set new default codec at selection index
+    outputQuality = forCodec.defaultQuality
+    qualityDropdown.selectItem(withTitle: outputQuality.dropdownTitle)
+    Logger.debug("New default quality selected: \(outputQuality.rawValue)")
+  }
+  
   /// Return VideoQuality title strings as an array for dropdown presentation
   func getQualityDropdownTitles(forCodec: VideoCodec) -> [String] {
     var titles: [String] = []
