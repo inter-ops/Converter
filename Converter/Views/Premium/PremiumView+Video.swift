@@ -83,7 +83,6 @@ extension ViewController {
     let title = sender.titleOfSelectedItem!
     let quality = getUserSelectedQuality(fromTitle: title)
     outputQuality = quality
-    // Handler function
     Logger.info("User did select quality: \(quality.rawValue)")
   }
   
