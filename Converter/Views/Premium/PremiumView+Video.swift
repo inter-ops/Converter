@@ -46,8 +46,12 @@ extension ViewController {
   /// Ignores specific edge cases for MPEG-4 and VP8 video codecs; ie.
   /// Switching from MKV (H.264) to WebM (VP8) and back would otherwise result in MKV (VP8) due to compatibility.
   func ignoreDefaultCases(_ selectedCodec: VideoCodec) -> Bool {
-    let ignoredCases: [VideoCodec] = [.mpeg4, .vp8]
-    if ignoredCases.contains(selectedCodec) {
+    let selectedFormat = outputFormat
+    let mpeg4CompatibleFormats: [VideoFormat] = [.mp4, .mkv, .m4v, .mov]
+    if selectedCodec == .mpeg4 && mpeg4CompatibleFormats.contains(selectedFormat) {
+      return false
+    }
+    if selectedCodec == .vp8 && selectedFormat == .mkv {
       return false
     }
     return true
