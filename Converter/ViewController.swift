@@ -780,7 +780,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   
   /// Return VideoFormat type from dropdown item selection
-  func getFormat(fromTitle: String) -> VideoFormat {
+  func getUserSelectedFormat(fromTitle: String) -> VideoFormat {
     for format in VideoFormat.allCases {
       if title == format.dropdownTitle {
         return format
@@ -793,7 +793,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Called when the user updates dropdown selection item
   @IBAction func selectFormat(_ sender: NSPopUpButton) {
     let title = sender.titleOfSelectedItem!
-    let format = getFormat(fromTitle: title)
+    let format = getUserSelectedFormat(fromTitle: title)
     outputFormat = format
     // Set default codec for new format type
     didSelectNewOutput(format: format)
