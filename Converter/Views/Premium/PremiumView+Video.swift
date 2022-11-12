@@ -17,10 +17,9 @@ extension ViewController {
     initQualityDropdownMenu(forCodec: outputCodec)
   }
   func didSelectNewOutput(codec: VideoCodec) {
-    initQualityDropdownMenu(forCodec: codec)
     outputCodec = codec
+    initQualityDropdownMenu(forCodec: codec)
     Logger.info("User selected codec: \(codec.rawValue)")
-    Logger.debug("New default quality selected: \(outputQuality.rawValue)")
   }
   /// Initialize dropdown menu with titles (see `VideoCodec.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
@@ -86,7 +85,6 @@ extension ViewController {
   }
   
   func setOrMaintainMenuItem(selectedQuality: VideoQuality, forCodec: VideoCodec) {
-    print("selectedQuality: \(selectedQuality), forCodec: \(forCodec)")
     // If user selected menu item is available with new format, maintain format
     if forCodec.qualityTypes.contains(selectedQuality) {
       qualityDropdown.selectItem(withTitle: selectedQuality.dropdownTitle)
@@ -121,7 +119,7 @@ extension ViewController {
     let title = sender.titleOfSelectedItem!
     let quality = getUserSelectedQuality(fromTitle: title)
     outputQuality = quality
-    Logger.info("User did select quality: \(quality.rawValue)")
+    Logger.info("User selected quality: \(quality.rawValue)")
   }
   
 }
