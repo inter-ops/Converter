@@ -13,7 +13,6 @@ extension ViewController {
     
     collapsePremiumView()
     didSelectNewOutput(format: outputFormat)  // Set default codec on launch based on default output format
-    initQualityDropdownMenu()
     
     if userDidPurchasePremium {
       enablePremiumView()
