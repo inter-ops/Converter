@@ -38,6 +38,10 @@ enum VideoFormat: String, CaseIterable {
   var defaultCodec: VideoCodec {
     return self.compatibleCodecs[0]
   }
+  /// The default output codec to fallback on (old behaviour of `defaultCodec`)
+  var fallbackCodec: VideoCodec {
+    return self.compatibleCodecs[1]
+  }
   
   static func isSupportedAsInput(_ input: String) -> Bool {
     let ext = input.lowercased().pathExtension
