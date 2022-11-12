@@ -22,17 +22,21 @@ enum VideoFormat: String, CaseIterable {
     }
   }
   
-  // Order listed here will determine dropdown order. Thus, keep default options at 0 index.
+  /// Returns a list of compatible `[VideoCodec]` based on the VideoFormat
   var compatibleCodecs: [VideoCodec] {
     switch self {
     case .mp4: return [.h264, .hevc, .mpeg4]
-    case .mkv: return [.h264, .hevc, .mpeg4, .vp8, .vp9]
+    case .mkv: return [.h264, .hevc, .mpeg4, .vp8, .vp9, .prores]
     case .m4v: return [.h264, .hevc, .mpeg4]
-    case .mov: return [.h264, .hevc, .mpeg4]
+    case .mov: return [.h264, .hevc, .mpeg4, .prores]
     case .webm: return [.vp8, .vp9]
     case .avi: return [.mpeg4]
     case .gif: return [.gif]
     }
+  }
+  /// Returns the default `VideoCodec` for the given `VideoFormat`
+  var defaultCodec: VideoCodec {
+    return self.compatibleCodecs[0]
   }
   
   static func isSupportedAsInput(_ input: String) -> Bool {
