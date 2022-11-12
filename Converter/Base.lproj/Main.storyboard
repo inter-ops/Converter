@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.AVKitIBPlugin" version="21225"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
+        <plugIn identifier="com.apple.AVKitIBPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -710,6 +710,31 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem title="ViewController" id="It0-jn-m7w">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" id="ixC-tW-3Ym">
+                                                <items>
+                                                    <menuItem title="Enable UI" id="fyo-lF-E8u">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="enableViewControllerUI:" target="Voe-Tx-rLC" id="4bA-ab-dYD"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Disable UI" id="LqZ-r3-Tyo">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="disableViewControllerUI:" target="Voe-Tx-rLC" id="n7y-cJ-tzq"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Disable UI with Animation" id="Hon-H1-Alb">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="disableViewControllerUIWithAnimation:" target="Voe-Tx-rLC" id="ou8-NY-AIM"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="K4S-oF-xT0"/>
                                         <menuItem title="Premium" id="wD5-Tv-FMN">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -868,14 +893,14 @@
                                     <box title="Video" translatesAutoresizingMaskIntoConstraints="NO" id="VQD-YI-J4X">
                                         <rect key="frame" x="22" y="99" width="266" height="108"/>
                                         <view key="contentView" id="Hvg-LQ-zGb">
-                                            <rect key="frame" x="3" y="3" width="260" height="90"/>
+                                            <rect key="frame" x="4" y="5" width="258" height="88"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="UhC-9T-gka">
-                                                    <rect key="frame" x="0.0" y="46" width="260" height="34"/>
+                                                    <rect key="frame" x="0.0" y="44" width="258" height="34"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tyy-Gc-LJo">
-                                                            <rect key="frame" x="69" y="3" width="175" height="25"/>
+                                                            <rect key="frame" x="69" y="3" width="173" height="25"/>
                                                             <popUpButtonCell key="cell" type="push" title="H.264" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Qwb-R8-J7F" id="DME-xo-5Cg">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="menu"/>
@@ -910,10 +935,10 @@
                                                     </constraints>
                                                 </customView>
                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="l26-vP-cZW">
-                                                    <rect key="frame" x="0.0" y="12" width="260" height="34"/>
+                                                    <rect key="frame" x="0.0" y="10" width="258" height="34"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wVb-4m-7Tg">
-                                                            <rect key="frame" x="70" y="3" width="174" height="25"/>
+                                                            <rect key="frame" x="70" y="3" width="172" height="25"/>
                                                             <popUpButtonCell key="cell" type="push" title="Balanced" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="z2G-GU-XsX" id="bKg-qY-PGM">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="menu"/>
@@ -965,11 +990,11 @@
                                     <box title="Audio" translatesAutoresizingMaskIntoConstraints="NO" id="X8R-r4-HQB">
                                         <rect key="frame" x="302" y="133" width="226" height="74"/>
                                         <view key="contentView" id="gEZ-8u-gq6">
-                                            <rect key="frame" x="3" y="3" width="220" height="56"/>
+                                            <rect key="frame" x="4" y="5" width="218" height="54"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="Xis-V9-NWS">
-                                                    <rect key="frame" x="0.0" y="12" width="220" height="34"/>
+                                                    <rect key="frame" x="0.0" y="10" width="218" height="34"/>
                                                     <subviews>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BLz-qY-TiN">
                                                             <rect key="frame" x="18" y="8" width="164" height="18"/>
@@ -1003,11 +1028,11 @@
                                     <box title="Subtitles" translatesAutoresizingMaskIntoConstraints="NO" id="QEJ-rq-dkH">
                                         <rect key="frame" x="302" y="21" width="226" height="108"/>
                                         <view key="contentView" id="NYd-sh-PD9">
-                                            <rect key="frame" x="3" y="3" width="220" height="90"/>
+                                            <rect key="frame" x="4" y="5" width="218" height="88"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="tue-Qs-3bV">
-                                                    <rect key="frame" x="0.0" y="46" width="220" height="34"/>
+                                                    <rect key="frame" x="0.0" y="44" width="218" height="34"/>
                                                     <subviews>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ahx-BL-VQd">
                                                             <rect key="frame" x="18" y="8" width="176" height="18"/>
@@ -1027,9 +1052,9 @@
                                                     </constraints>
                                                 </customView>
                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="dVG-tg-mMT">
-                                                    <rect key="frame" x="0.0" y="12" width="220" height="34"/>
+                                                    <rect key="frame" x="0.0" y="10" width="218" height="34"/>
                                                     <subviews>
-                                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5hq-7m-pOI">
+                                                        <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5hq-7m-pOI">
                                                             <rect key="frame" x="18" y="8" width="69" height="18"/>
                                                             <buttonCell key="cell" type="check" title="Burn in" bezelStyle="regularSquare" imagePosition="left" inset="2" id="bLt-3b-ka0">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1039,7 +1064,7 @@
                                                                 <action selector="selectBurnInSubtitlesCheckbox:" target="XfG-lQ-9wD" id="NSz-cL-vDw"/>
                                                             </connections>
                                                         </button>
-                                                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DtH-UZ-ofq">
+                                                        <popUpButton verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DtH-UZ-ofq">
                                                             <rect key="frame" x="92" y="3" width="112" height="25"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" priority="500" constant="105" id="7u3-Gk-yn0"/>
@@ -1194,6 +1219,9 @@
                                     <constraint firstAttribute="height" constant="6" id="rk5-6p-ceM"/>
                                 </constraints>
                             </customView>
+                            <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="D1h-3E-4Fq">
+                                <rect key="frame" x="-2" y="34" width="554" height="20"/>
+                            </progressIndicator>
                             <visualEffectView blendingMode="behindWindow" material="menu" state="active" translatesAutoresizingMaskIntoConstraints="NO" id="F5s-5R-gtP">
                                 <rect key="frame" x="0.0" y="0.0" width="550" height="40"/>
                                 <subviews>
@@ -1236,7 +1264,9 @@
                             <constraint firstItem="v9D-vH-xx2" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="Gdn-Bw-cZu"/>
                             <constraint firstItem="2rF-NO-8km" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="HgJ-gN-KLc"/>
                             <constraint firstItem="WOp-7k-7wN" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="I1B-2Y-bed"/>
+                            <constraint firstItem="D1h-3E-4Fq" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="-2" id="KOv-hn-hwY"/>
                             <constraint firstItem="JZg-d2-J84" firstAttribute="top" secondItem="kPm-gZ-vwn" secondAttribute="bottom" constant="16" id="Muk-Lo-DRK"/>
+                            <constraint firstAttribute="trailing" secondItem="D1h-3E-4Fq" secondAttribute="trailing" constant="-2" id="NSG-du-sPT"/>
                             <constraint firstAttribute="trailing" secondItem="JZg-d2-J84" secondAttribute="trailing" id="OGz-IW-mfq"/>
                             <constraint firstItem="Gfl-op-5Hr" firstAttribute="top" secondItem="rgh-KN-ah2" secondAttribute="bottom" id="P4y-Cy-T4a"/>
                             <constraint firstAttribute="trailing" secondItem="WOp-7k-7wN" secondAttribute="trailing" constant="25" id="R2C-Qs-qgK"/>
@@ -1257,6 +1287,7 @@
                             <constraint firstAttribute="trailing" secondItem="Gfl-op-5Hr" secondAttribute="trailing" id="sMq-Wn-OhA"/>
                             <constraint firstAttribute="trailing" secondItem="kPm-gZ-vwn" secondAttribute="trailing" id="tQS-j9-EzD"/>
                             <constraint firstItem="2rF-NO-8km" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="yjg-OF-Rcg"/>
+                            <constraint firstItem="F5s-5R-gtP" firstAttribute="top" secondItem="D1h-3E-4Fq" secondAttribute="bottom" constant="-5" id="ztE-Zp-SfB"/>
                         </constraints>
                     </view>
                     <connections>
@@ -1272,6 +1303,7 @@
                         <outlet property="dragDropBottomTitle" destination="t3K-S7-h56" id="PYQ-hS-1yp"/>
                         <outlet property="dragDropIconImageView" destination="PEi-Si-rDf" id="zmR-Pw-fpo"/>
                         <outlet property="dragDropTopTitle" destination="wI2-qE-TlK" id="loF-4s-gyn"/>
+                        <outlet property="dragDropView" destination="WOp-7k-7wN" id="qDi-vq-5IM"/>
                         <outlet property="estimatedTimeLabel" destination="xFx-Bv-g0e" id="9Fh-Hm-58c"/>
                         <outlet property="estimatedTimeText" destination="Co3-Zb-XoX" id="X9E-pS-Bnt"/>
                         <outlet property="expandCollapsePremiumButtonTrailingConstraint" destination="owb-la-udg" id="uXh-Jm-ub7"/>
@@ -1279,6 +1311,8 @@
                         <outlet property="expandablePremiumView" destination="Gfl-op-5Hr" id="VM5-Up-esk"/>
                         <outlet property="formatControlRowView" destination="rgh-KN-ah2" id="G7q-1W-MV2"/>
                         <outlet property="formatDropdown" destination="7wJ-0E-QQo" id="WVa-fz-ypj"/>
+                        <outlet property="helpInfoButton" destination="C1X-LD-ymz" id="GaW-2Z-nLT"/>
+                        <outlet property="indeterminateProgressBar" destination="D1h-3E-4Fq" id="fAZ-Qb-5uS"/>
                         <outlet property="mainView" destination="2rF-NO-8km" id="3Yl-eL-hNN"/>
                         <outlet property="mainViewHeightConstraint" destination="sNk-0M-lg5" id="hPp-c5-leF"/>
                         <outlet property="mainViewWidthConstraint" destination="F7m-Xg-Rau" id="lZQ-li-wVq"/>
@@ -1768,7 +1802,7 @@
         <scene sceneID="1cf-U6-hsg">
             <objects>
                 <viewController id="lLy-C5-2W2" customClass="PurchasePremiumViewController" customModule="Video_Converter" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" misplaced="YES" id="msr-Wu-JnD">
+                    <view key="view" id="msr-Wu-JnD">
                         <rect key="frame" x="0.0" y="0.0" width="350" height="550"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
@@ -1999,8 +2033,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="EQ5-Om-Sgo"/>
-        <segue reference="AU9-B4-7B8"/>
+        <segue reference="wed-Vm-xLL"/>
+        <segue reference="yPM-Jk-fVy"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AppIconLogo" width="60" height="60"/>

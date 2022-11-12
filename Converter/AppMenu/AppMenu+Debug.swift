@@ -33,4 +33,19 @@ extension AppDelegate {
     viewController?.collapsePremiumIfExpanded()
   }
   
+  @IBAction func enableViewControllerUI(_ sender: Any) {
+    let viewController = mainWindow.contentViewController as? ViewController
+    viewController?.enableUI()
+  }
+  
+  @IBAction func disableViewControllerUI(_ sender: Any) {
+    let viewController = mainWindow.contentViewController as? ViewController
+    viewController?.disableUI()
+  }
+  
+  @IBAction func disableViewControllerUIWithAnimation(_ sender: Any) {
+    let viewController = mainWindow.contentViewController as? ViewController
+    viewController?.disableUI(withLoaderAnimation: true)
+  }
+  
 }
