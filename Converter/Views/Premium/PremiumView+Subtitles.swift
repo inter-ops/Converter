@@ -11,20 +11,19 @@ extension ViewController {
   
   /// Called when the user toggles the state of the copy all subtitles checkmark
   @IBAction func toggleCopyAllSubtitlesCheckbox(_ sender: NSButton) {
-    copyAllSubtitlesState = sender.state
-    Logger.info("Copy all subtitle streams: \(copyAllSubtitlesState.toString)")
+    let checkboxState = sender.state
+    Logger.info("Copy all subtitle streams: \(checkboxState.toString)")
   }
   
   /// Called when the user toggles the state of the burn-in subtitles checkmark
   @IBAction func selectBurnInSubtitlesCheckbox(_ sender: NSButton) {
-    burnInSubtitleState = sender.state
-    
-    if burnInSubtitleState == .on {
+    let checkboxState = sender.state
+    if checkboxState == .on {
       burnInSubtitleDropdown.isEnabled = true
     } else {
       burnInSubtitleDropdown.isEnabled = false
     }
-    Logger.info("Burn in subtitles: \(burnInSubtitleState.toString)")
+    Logger.info("Burn in subtitles: \(checkboxState.toString)")
   }
   /// Populate the dropdown with subtitle tracks
   func updateBurnInSubtitles(subtitleList: [String]) {

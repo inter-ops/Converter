@@ -71,33 +71,28 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Returns true if the `copyAllAudioCheckbox` has been selected; otherwise, returns false.
   var copyAllAudio: Bool {
-    if copyAllAudioState == .on {
+    if copyAllAudioCheckbox.state == .on {
       return true
     }
     return false
   }
-  var copyAllAudioState: NSControl.StateValue = .off      // default unchecked
-  
   /// Returns true if the `copyAllSubtitlesCheckbox` has been selected; otherwise, returns false.
   var copyAllSubtitles: Bool {
-    if copyAllSubtitlesState == .on {
+    if copyAllSubtitlesCheckbox.state == .on {
       return true
     }
     return false
   }
-  var copyAllSubtitlesState: NSControl.StateValue = .off  // default unchecked
-  
   /// Returns true if the `burnInSubtitlesCheckbox` has been selected; otherwise, returns false.
   /// Also enables/disables `burnInSubtitleDropdown` based on `burnInSubtitlesCheckbox` current state.
   var burnInSubtitles: Bool {
-    if burnInSubtitleState == .on {
+    if burnInSubtitleCheckbox.state == .on {
       burnInSubtitleDropdown.isEnabled = true
       return true
     }
     burnInSubtitleDropdown.isEnabled = false
     return false
   }
-  var burnInSubtitleState: NSControl.StateValue = .off    // default unchecked
 
   // Video object variables
   var outputFormat: VideoFormat = .mp4  //  User select output format (mp4 default)
