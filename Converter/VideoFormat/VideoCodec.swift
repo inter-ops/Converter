@@ -19,7 +19,7 @@ enum VideoCodec: String, CaseIterable {
     // Will not appear in codec dropdown
     case .mpeg1video: return "MPEG-1"
     case .mpeg2video: return "MPEG-2"
-    case .prores: return "ProRes"
+    case .prores: return "Apple ProRes"
     case .unknown: return "Unknown"
     }
   }
