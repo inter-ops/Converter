@@ -27,7 +27,7 @@ enum VideoFormat: String, CaseIterable {
     switch self {
     case .mp4: return [.auto, .h264, .hevc, .mpeg4]
     case .mkv: return [.auto, .h264, .hevc, .mpeg4, .vp8, .vp9, .prores]
-    case .m4v: return [.auto, .h264, .mpeg4]
+    case .m4v: return [.auto, .h264, .hevc, .mpeg4]
     case .mov: return [.auto, .h264, .hevc, .mpeg4, .prores]
     case .webm: return [.auto, .vp8, .vp9]
     case .avi: return [.auto, .mpeg4]

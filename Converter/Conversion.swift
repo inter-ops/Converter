@@ -166,17 +166,29 @@ func getVideoCommandForH264(inputVideo: Video) -> String {
   return "-c:v h264_videotoolbox -b:v \(outputBitrate) -pix_fmt yuv420p -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
 }
 
+// TODO: Test
 func getVideoCommandForHEVC(inputVideo: Video) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
+  let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
+  
+  var command: String
   if inputVideoCodec == .hevc {
     // https://brandur.org/fragments/ffmpeg-h265
     // M4V does not support HEVC so we must re-encode this case
-    return "-c:v copy -tag:v hvc1"
+    command = "-c:v copy -tag:v hvc1"
+  }
+  else {
+    let outputBitrate = getOutputBitrateForHEVC(inputVideo: inputVideo)
+    // 10 bit color is required, see https://trac.ffmpeg.org/ticket/9521
+    command = "-c:v hevc_videotoolbox -b:v \(outputBitrate) -tag:v hvc1 -pix_fmt yuv420p10le -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
   }
 
-  let outputBitrate = getOutputBitrateForHEVC(inputVideo: inputVideo)
-  // 10 bit color is required, see https://trac.ffmpeg.org/ticket/9521
-  return "-c:v hevc_videotoolbox -b:v \(outputBitrate) -tag:v hvc1 -pix_fmt yuv420p10le -allow_sw 1  -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
+  // M4V needs this flag to be able to play HEVC, see https://trac.ffmpeg.org/ticket/7685
+  if outputFileType == VideoFormat.m4v.rawValue {
+    command += " -f mp4"
+  }
+  
+  return command
 }
 
 func getVideoCommandForProres(inputVideo: Video) -> String {
@@ -321,8 +333,8 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
     if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
       return getVideoCommandForH264(inputVideo: inputVideo)
     }
-    else if inputVideoCodec == VideoCodec.hevc && outputFileType != VideoFormat.m4v.rawValue {
-      // For input HEVC we can copy the codec (handled in getVideoCommandForHEVC) unless output is M4V, since it doesn't support HEVC.
+    else if inputVideoCodec == .hevc {
+      // For input HEVC we can copy the codec (handled in getVideoCommandForHEVC)
       return getVideoCommandForHEVC(inputVideo: inputVideo)
     }
     else if inputVideoCodec == .h264 || inputVideoCodec == .mpeg4 || inputVideoCodec == .mpeg1video || inputVideoCodec == .mpeg2video {
