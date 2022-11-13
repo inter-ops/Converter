@@ -179,6 +179,18 @@ func getVideoCommandForHEVC(inputVideo: Video) -> String {
   return "-c:v hevc_videotoolbox -b:v \(outputBitrate) -tag:v hvc1 -pix_fmt yuv420p10le -allow_sw 1  -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
 }
 
+func getVideoCommandForProres(inputVideo: Video) -> String {
+  // TODO: Finish setting this up. Resources:
+  // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
+  // - https://www.reddit.com/r/ffmpeg/comments/pn383s/command_line_for_transcoding_mp4_to_prores/
+  // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
+  // - https://video.stackexchange.com/questions/14712/how-to-encode-apple-prores-on-windows-or-linux
+  //
+  
+  // TODO: Set quality
+  return "-c:v prores_videotoolbox"
+}
+
 /// VP8 and VP9
 /// cpu-used 2 speeds up processing by about 2x, but does impact quality a bit. I haven't seen a noticeable difference, but if it becomes problematic, we should set it to 1.
 /// See here for more info:
@@ -212,6 +224,22 @@ func getVideoCommandForVp9(inputVideo: Video) -> String {
 
 func getVideoCommandForMpeg4(inputVideo: Video) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
+  let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
+  let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
+  
+  if outputFileType == VideoFormat.mov.rawValue {
+    // Quicktime cannot open MOV XVID files. If the input is MPEG4 but not XVID, we can remux.
+    if inputVideoCodec == .mpeg4 && inputVideoCodecTag != "xvid" {
+      return "-c:v copy"
+    }
+    
+    // TODO: We may be able to still copy here, but simply use a different vtag. Need to research if this is possible.
+    // Otherwise we need to re-encode the XVID streams using a different FourCC.
+    // We simply use the default FourCC: FMP4. See here for more details: https://trac.ffmpeg.org/wiki/Encode/MPEG-4
+    return "-c:v mpeg4 -qscale:v 5 -pix_fmt yuv420p"
+  }
+  
+  // For all other input MPEG4 files, we can remux
   if inputVideoCodec == .mpeg4 {
     return "-c:v copy"
   }
@@ -237,12 +265,12 @@ func getVideoCommandForGif(inputVideo: Video) -> String {
   return "-vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
 }
 
-// TODO: Pass outputVideoCodec from parent
+// TODO: Handle outputQuality
 
 /// Get the video portion of the ffmpeg command.
 /// For x264, we always use 8-bit colour (pixfmt yuv420p) to ensure maximum support. See "Encoding for dumb players" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
 /// We use a crf of 20. The default is 23, and 17-18 is considered visually lossless. See "Choose a CRF value" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
-func getVideoConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec? = nil) -> String {
+func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outputQuality: VideoQuality) -> String {
   if inputVideo.videoStreams.isEmpty {
     return ""
   }
@@ -251,10 +279,10 @@ func getVideoConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec? 
   let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
 
-  if outputVideoCodec != nil {
-    switch outputVideoCodec {
+  if outputCodec != .auto {
+    switch outputCodec {
     case .mpeg4:
-      // TODO: Ensure this works well for non-avi output formats
+      // TODO: Ensure this works well for non-avi output formats.
       return getVideoCommandForMpeg4(inputVideo: inputVideo)
     case .h264:
       return getVideoCommandForH264(inputVideo: inputVideo)
@@ -266,15 +294,11 @@ func getVideoConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec? 
       return getVideoCommandForVp9(inputVideo: inputVideo)
     case .gif:
       return getVideoCommandForGif(inputVideo: inputVideo)
-    // TODO: Add ProRes. Resources:
-    // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
-    // - https://www.reddit.com/r/ffmpeg/comments/pn383s/command_line_for_transcoding_mp4_to_prores/
-    // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
-    // - https://video.stackexchange.com/questions/14712/how-to-encode-apple-prores-on-windows-or-linux
-    //
+    case .prores:
+      return getVideoCommandForProres(inputVideo: inputVideo)
     default:
       // This should never happen
-      Logger.error("Unexpected output video codec selected by user \(outputVideoCodec!)")
+      Logger.error("Unexpected output video codec selected by user \(outputCodec)")
     }
   }
 
@@ -293,11 +317,11 @@ func getVideoConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec? 
   
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
     
-    // MOV does not support xvid, so we need to re-encode to H264
+    // MOV does not support xvid, so we re-encode to H264
     if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
       return getVideoCommandForH264(inputVideo: inputVideo)
     }
-    else if inputVideoCodec == VideoCodec.hevc && outputFileType != "m4v" {
+    else if inputVideoCodec == VideoCodec.hevc && outputFileType != VideoFormat.m4v.rawValue {
       // For input HEVC we can copy the codec (handled in getVideoCommandForHEVC) unless output is M4V, since it doesn't support HEVC.
       return getVideoCommandForHEVC(inputVideo: inputVideo)
     }
@@ -434,8 +458,8 @@ func getSubtitleConversionCommand(inputVideo: Video) -> String {
 }
 
 // TODO: FFMPEG command could be built using a builder class (eg withVideoCodec("x264").withCrf(20)), would cleanup the getVideoConversionCommand, getAudioConversionCommand and getSubtitleConversionCommand functions
-func getFfmpegCommand(inputVideo: Video) -> String {
-  let videoCommand = getVideoConversionCommand(inputVideo: inputVideo)
+func getFfmpegCommand(inputVideo: Video, outputVideoCodec: VideoCodec, outputVideoQuality: VideoQuality) -> String {
+  let videoCommand = getVideoConversionCommand(inputVideo: inputVideo, outputCodec: outputVideoCodec, outputQuality: outputVideoQuality)
   let audioCommand = getAudioConversionCommand(inputVideo: inputVideo)
   let subtitleCommand = getSubtitleConversionCommand(inputVideo: inputVideo)
   

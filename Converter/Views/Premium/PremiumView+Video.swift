@@ -19,44 +19,43 @@ extension ViewController {
   func didSelectNewOutput(codec: VideoCodec) {
     outputCodec = codec
     initQualityDropdownMenu(forCodec: codec)
-    Logger.info("User selected codec: \(codec.rawValue)")
+    Logger.debug("User selected codec: \(codec.rawValue)")
   }
   /// Initialize dropdown menu with titles (see `VideoCodec.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
-    let selectedCodecMenuItem = getUserSelectedCodec(fromTitle: codecDropdown.titleOfSelectedItem!)
+    let previouslySelectedCodec = getUserSelectedCodec(fromTitle: codecDropdown.titleOfSelectedItem!)
     
     let titles = getCodecDropdownTitles(forFormat: forFormat)
     codecDropdown.removeAllItems()
     codecDropdown.addItems(withTitles: titles)
     
-    setOutputCodec(selectedCodec: selectedCodecMenuItem, forFormat: forFormat)
+    setOutputCodec(forFormat: forFormat, previouslySelectedCodec: previouslySelectedCodec)
   }
   /// Sets new video codec menu items, but maintains the selection if compatible and appropriate (see ignoreDefaultCases).
-  func setOutputCodec(selectedCodec: VideoCodec, forFormat: VideoFormat) {
-    // TODO: if Remux has been detected { return }
-    
-    // If user selected menu item is available with new format, maintain format
-    if forFormat.compatibleCodecs.contains(selectedCodec) && ignoreDefaultCases(selectedCodec) {
-      codecDropdown.selectItem(withTitle: selectedCodec.dropdownTitle)
+  func setOutputCodec(forFormat: VideoFormat, previouslySelectedCodec: VideoCodec) {
+    // If the previously selected codec is also available for the new format, keep option selected.
+    if shouldUseSameCodec(forFormat, previouslySelectedCodec) {
+      codecDropdown.selectItem(withTitle: previouslySelectedCodec.dropdownTitle)
       return
     }
-    // Otherwise, set new default codec at selection index
-    outputCodec = forFormat.defaultCodec
+    // Otherwise, set codec to auto
+    outputCodec = .auto
     codecDropdown.selectItem(withTitle: outputCodec.dropdownTitle)
     Logger.debug("New default codec selected: \(outputCodec.rawValue)")
   }
-  /// Ignores specific edge cases for MPEG-4 and VP8 video codecs; ie.
-  /// Switching from MKV (H.264) to WebM (VP8) and back would otherwise result in MKV (VP8) due to compatibility.
-  func ignoreDefaultCases(_ selectedCodec: VideoCodec) -> Bool {
-    let selectedFormat = outputFormat
-    let mpeg4CompatibleFormats: [VideoFormat] = [.mp4, .mkv, .m4v, .mov]
-    if selectedCodec == .mpeg4 && mpeg4CompatibleFormats.contains(selectedFormat) {
+  
+  /// Determines whether we should keep the selected codec when switching to a new output format. For certain edge cases we never want to keep
+  /// the selected codec  (when the codec is supported but not ideal to use for the format, e.g. WEBM -> MKV), and otherwise check that the selected codec is supported in the new output format.
+  func shouldUseSameCodec(_ forFormat: VideoFormat, _ previouslySelectedCodec: VideoCodec) -> Bool {
+    // We only keep MPEG4 if the new format is AVI, otherwise we want to switch to auto
+    if previouslySelectedCodec == .mpeg4 && forFormat != .avi {
       return false
     }
-    if selectedCodec == .vp8 && selectedFormat == .mkv {
+    if previouslySelectedCodec == .vp8 && forFormat == .mkv {
       return false
     }
-    return true
+    
+    return forFormat.compatibleCodecs.contains(previouslySelectedCodec)
   }
   
   /// Return VideoCodec title strings as an array for dropdown presentation
@@ -74,8 +73,8 @@ extension ViewController {
         return codec
       }
     }
-    Logger.error("Unable to read selected codec type\nReturning default type: \(outputFormat.defaultCodec.rawValue)")
-    return outputFormat.defaultCodec
+    Logger.error("Unable to read selected codec type, returning .auto")
+    return .auto
   }
   /// Called when the user updates dropdown selection item
   @IBAction func selectCodec(_ sender: NSPopUpButton) {
