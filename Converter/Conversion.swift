@@ -213,13 +213,7 @@ func getVideoCommandForHEVC(inputVideo: Video) -> String {
   return command
 }
 
-// TODO: Test
 func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) -> String {
-  // TODO: Finish setting this up. Resources:
-  // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
-  // - https://www.reddit.com/r/ffmpeg/comments/pn383s/command_line_for_transcoding_mp4_to_prores/
-  // - https://video.stackexchange.com/questions/14712/how-to-encode-apple-prores-on-windows-or-linux
-  
   // See docs under Prores for pix_fmt details https://trac.ffmpeg.org/wiki/Encode/VFX
   let pixFmt = outputQuality == .pr4444 || outputQuality == .pr4444Xq ? "yuva444p10le" : "yuv422p10le"
   let profile = getProfileForProres(outputQuality: outputQuality)
@@ -263,8 +257,9 @@ func getVideoCommandForMpeg4(inputVideo: Video) -> String {
   let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
-  if outputFileType == VideoFormat.mov.rawValue {
-    // Quicktime cannot open MOV XVID files. If the input is MPEG4 but not XVID, we can remux.
+  // MP4, MOV and M4v do not support XVID, so we handle these separately
+  if outputFileType == VideoFormat.mov.rawValue || outputFileType == VideoFormat.mp4.rawValue || outputFileType == VideoFormat.m4v.rawValue {
+    // If the input is MPEG4 but not XVID, we can remux.
     if inputVideoCodec == .mpeg4 && inputVideoCodecTag != "xvid" {
       return "-c:v copy"
     }
@@ -318,7 +313,6 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
   if outputCodec != .auto {
     switch outputCodec {
     case .mpeg4:
-      // TODO: Ensure this works well for non-avi output formats.
       return getVideoCommandForMpeg4(inputVideo: inputVideo)
     case .h264:
       return getVideoCommandForH264(inputVideo: inputVideo)
