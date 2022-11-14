@@ -215,6 +215,7 @@ func getVideoCommandForHEVC(inputVideo: Video) -> String {
 
 func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) -> String {
   // See docs under Prores for pix_fmt details https://trac.ffmpeg.org/wiki/Encode/VFX
+  // TODO: Had error "Incompatible pixel format 'yuv422p10le' for codec 'prores_videotoolbox', auto-selecting format 'p210le'"
   let pixFmt = outputQuality == .pr4444 || outputQuality == .pr4444Xq ? "yuva444p10le" : "yuv422p10le"
   let profile = getProfileForProres(outputQuality: outputQuality)
   
@@ -382,85 +383,146 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
 
 /// This function checks the number of audio channels available in the input audio and determines how many output channels should be used to ensure a successful conversion and QuickTime support.
 /// Reference: https://trac.ffmpeg.org/wiki/AudioChannelManipulation, https://brandur.org/fragments/ffmpeg-h265
-func getAacConversionCommand(inputVideo: Video) -> String {
+func getAacConversionCommand(inputVideo: Video, shouldCopyAllStreams: Bool) -> String {
   let numberOfAudioChannels = inputVideo.audioStreams[0].channels
 
+  var command: String
   if numberOfAudioChannels >= 6 {
     // If we have 6 or more channels, we can force a 5.1 channel layout
-    return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+    command = "-filter_complex \"[0:a:0]channelmap=channel_layout=5.1[filtered]\" -map [filtered] -c:a:0 aac"
   }
   else {
     // For any other number of channels, FFMPEG can handle converting to stereo. If we have a mono audio input, FFMPEG will simply copy the mono audio to both channels.
-    return "-c:a aac -ac 2"
+    command = "-map 0:a:0 -c:a:0 aac -ac 2"
   }
+  
+  // TODO: Note that some videos will get warmings when opening due to this, since they have invalid audio streams.
+  if shouldCopyAllStreams {
+    command = "-c:a copy \(command) -map 0:a"
+  }
+  return command
+}
+
+// TODO: Ensure we dont need to use experimental flag
+
+func findIndexOfAudioCodec(inputVideo: Video, supportedCodecs: [AudioCodec]) -> Int? {
+  return inputVideo.audioStreams.firstIndex(where: { supportedCodecs.contains($0.codec) })
 }
 
 // References:
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
-func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec) -> String {
+
+func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec, shouldCopyAllStreams: Bool) -> String {
+  // TODO: All audio streams are still getting copied
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
   // If we don't have any audio streams, or we are converting to GIF, we don't need an audio conversion command
   if inputVideo.audioStreams.isEmpty || outputFileType == VideoFormat.gif.rawValue {
     return ""
   }
-  
-  let inputAudioCodec = inputVideo.audioStreams[0].codec
 
   switch outputFileType {
   case VideoFormat.m4v.rawValue:
     // Codecs supported by M4V and Quicktime. This should be identical to the logic for MP4 and MOV, with the exception of avoiding copying EAC3 codec.
     // Technically M4V should support EAC3, but FFMPEG throws an error when this is attempted.
     // See this ticket for more info https://trac.ffmpeg.org/ticket/4844
-    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.ac3 {
-      return "-c:a copy"
-    }
-    else {
-      // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return getAacConversionCommand(inputVideo: inputVideo)
-    }
-  case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue:
-    // Codecs supported by MP4 and Quicktime
-    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 {
-      return "-c:a copy"
-    }
-    // If input audio is not one of the generally supported codecs, we can check for some additional cases which ProRes supports
-    else if outputVideoCodec == .prores {
-      if inputAudioCodec == .pcm_s16le || inputAudioCodec == .pcm_s24le {
-        return "-c:a copy"
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: [.aac, .ac3])
+    if streamIndex != nil {
+      if shouldCopyAllStreams {
+        return "-map 0:a -c:a copy"
       }
       else {
-        // For ProRes outputs, pcm_s16le and pcm_s24le are most common.
-        return "-c:a pcm_s24le"
+        return "-map 0:a:\(streamIndex!) -c:a copy"
       }
     }
-    else {
-      // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return getAacConversionCommand(inputVideo: inputVideo)
+    
+    return getAacConversionCommand(inputVideo: inputVideo, shouldCopyAllStreams: shouldCopyAllStreams)
+    
+  case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue:
+    // Codecs supported by MP4 and Quicktime
+    var supportedCodecs: [AudioCodec] = [.aac, .eac3, .ac3]
+    if outputVideoCodec == .prores {
+      supportedCodecs += [.pcm_s16le, .pcm_s24le]
     }
+    
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: supportedCodecs)
+    if streamIndex != nil {
+      if shouldCopyAllStreams {
+        return "-map 0:a -c:a copy"
+      }
+      else {
+        return "-map 0:a:\(streamIndex!) -c:a copy"
+      }
+    }
+    else if outputVideoCodec == .prores {
+      // For ProRes outputs, pcm_s16le and pcm_s24le are most common.
+      var command = "-map 0:a:0 -c:a:0 pcm_s24le"
+      // TODO: This doesnt work for TrueHD, get the error "[mov @ 0x7fcfaf4075e0] truehd only supported in MP4."
+      if shouldCopyAllStreams {
+        command = "-c:a copy \(command) -map 0:a"
+      }
+      
+      return command
+    }
+    
+    return getAacConversionCommand(inputVideo: inputVideo, shouldCopyAllStreams: shouldCopyAllStreams)
+    
   case VideoFormat.mkv.rawValue:
-    if inputAudioCodec == AudioCodec.unknown {
-      return getAacConversionCommand(inputVideo: inputVideo)
+    // MKV supports all audio codecs we recognize. We remove .unknown from the options so that we copy all audio codecs other than one's we don't recognize.
+    var supportedCodecs = AudioCodec.allCases
+    supportedCodecs.removeAll(where: { $0 == .unknown })
+    
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: supportedCodecs)
+    if streamIndex != nil {
+      if shouldCopyAllStreams {
+        return "-map 0:a -c:a copy"
+      }
+      else {
+        return "-map 0:a:\(streamIndex!) -c:a copy"
+      }
     }
-    else {
-      // MKV supports all audio codecs we support
-      return "-c:a copy"
-    }
+  
+    return getAacConversionCommand(inputVideo: inputVideo, shouldCopyAllStreams: shouldCopyAllStreams)
+    
   case VideoFormat.avi.rawValue:
     // Codecs supported by AVI
     // TODO: We don't need to re-encode DTS, only DTS-HD. Should be able to determine this with all the metadata we are capturing.
-    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.mp3 || inputAudioCodec == AudioCodec.ac3 {
-      return "-c:a copy"
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: [.aac, .mp3, .ac3])
+    if streamIndex != nil {
+      if shouldCopyAllStreams {
+        return "-map 0:a -c:a copy"
+      }
+      else {
+        return "-map 0:a:\(streamIndex!) -c:a copy"
+      }
     }
-    else {
-      return getAacConversionCommand(inputVideo: inputVideo)
-    }
+    
+    return getAacConversionCommand(inputVideo: inputVideo, shouldCopyAllStreams: shouldCopyAllStreams)
   case VideoFormat.webm.rawValue:
-    return "-c:a libvorbis"
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: [.vorbis, .opus])
+    if streamIndex != nil {
+      if shouldCopyAllStreams {
+        return "-map 0:a -c:a copy"
+      }
+      else {
+        return "-map 0:a:\(streamIndex!) -c:a copy"
+      }
+    }
+    
+    var command = "-map 0:a:0 -c:a:0 libvorbis"
+    
+    // TODO: Doesnt seem like we can keep non-webm audio in a webm container. Will likely need to disable this option. See below
+    // https://superuser.com/questions/737638/ffmpeg-incorrect-codec-parameters-when-trying-to-merge-mp3-and-webm-files
+    // https://stackoverflow.com/questions/67034367/how-to-add-mp3-to-webm-file
+//    if shouldCopyAllStreams {
+//      command = "-c:a copy \(command) -map 0:a"
+//    }
+    return command
+    
   default:
     Logger.error("Unknown output file type when selecting audio codec")
-    return getAacConversionCommand(inputVideo: inputVideo)
+    return getAacConversionCommand(inputVideo: inputVideo, shouldCopyAllStreams: shouldCopyAllStreams)
   }
 }
 
@@ -498,14 +560,13 @@ func getSubtitleConversionCommand(inputVideo: Video) -> String {
 }
 
 // TODO: FFMPEG command could be built using a builder class (eg withVideoCodec("x264").withCrf(20)), would cleanup the getVideoConversionCommand, getAudioConversionCommand and getSubtitleConversionCommand functions
-func getFfmpegCommand(inputVideo: Video, outputVideoCodec: VideoCodec, outputVideoQuality: VideoQuality) -> String {
+func getFfmpegCommand(inputVideo: Video, outputVideoCodec: VideoCodec, outputVideoQuality: VideoQuality, shouldCopyAllAudioStreams: Bool) -> String {
   let videoCommand = getVideoConversionCommand(inputVideo: inputVideo, outputCodec: outputVideoCodec, outputQuality: outputVideoQuality)
-  let audioCommand = getAudioConversionCommand(inputVideo: inputVideo, outputVideoCodec: outputVideoCodec)
+  let audioCommand = getAudioConversionCommand(inputVideo: inputVideo, outputVideoCodec: outputVideoCodec, shouldCopyAllStreams: shouldCopyAllAudioStreams)
   let subtitleCommand = getSubtitleConversionCommand(inputVideo: inputVideo)
   
-  // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
-  // converting more than one audio and video stream, the mapping should be moved to getVideoConversionCommand and getAudioConversionCommand
-  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? -map 0:a? \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
+  // Mapping audio and subtitle streams are handled by the getAudioConversionCommand and getSubtitleConversionCommand functions
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -strict experimental -map 0:v? \(videoCommand) \(audioCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
   
   return command
 }

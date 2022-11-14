@@ -608,7 +608,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     var analyticsTimer = Timer()
     
     self.activeVideoIndex = activeVideoIndex
-    let ffmpegCommand = getFfmpegCommand(inputVideo: inputVideos[activeVideoIndex], outputVideoCodec: outputCodec, outputVideoQuality: outputQuality)
+    let ffmpegCommand = getFfmpegCommand(inputVideo: inputVideos[activeVideoIndex], outputVideoCodec: outputCodec, outputVideoQuality: outputQuality, shouldCopyAllAudioStreams: copyAllAudio)
     self.inputVideos[activeVideoIndex].startOfConversion = Date()
     self.inputVideos[activeVideoIndex].ffmpegCommand = ffmpegCommand
     
