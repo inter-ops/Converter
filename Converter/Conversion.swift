@@ -214,7 +214,6 @@ func getVideoCommandForHEVC(inputVideo: Video) -> String {
 }
 
 // TODO: Test
-// TODO: What audio & subtitle do we use for this?
 func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) -> String {
   // TODO: Finish setting this up. Resources:
   // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
@@ -247,7 +246,7 @@ func getVideoCommandForVp8(inputVideo: Video) -> String {
   return "-c:v libvpx -b:v \(outputBitrate) -crf 5 -deadline good -cpu-used 2 -pix_fmt yuv420p"
 }
 
-// TODO: Test
+// TODO: Test quality output
 func getVideoCommandForVp9(inputVideo: Video) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   if inputVideoCodec == .vp9 {
@@ -405,7 +404,7 @@ func getAacConversionCommand(inputVideo: Video) -> String {
 // References:
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
-func getAudioConversionCommand(inputVideo: Video) -> String {
+func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec) -> String {
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
   // If we don't have any audio streams, or we are converting to GIF, we don't need an audio conversion command
@@ -431,6 +430,16 @@ func getAudioConversionCommand(inputVideo: Video) -> String {
     // Codecs supported by MP4 and Quicktime
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 {
       return "-c:a copy"
+    }
+    // If input audio is not one of the generally supported codecs, we can check for some additional cases which ProRes supports
+    else if outputVideoCodec == .prores {
+      if inputAudioCodec == .pcm_s16le || inputAudioCodec == .pcm_s24le {
+        return "-c:a copy"
+      }
+      else {
+        // For ProRes outputs, pcm_s16le and pcm_s24le are most common.
+        return "-c:a pcm_s24le"
+      }
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
@@ -497,7 +506,7 @@ func getSubtitleConversionCommand(inputVideo: Video) -> String {
 // TODO: FFMPEG command could be built using a builder class (eg withVideoCodec("x264").withCrf(20)), would cleanup the getVideoConversionCommand, getAudioConversionCommand and getSubtitleConversionCommand functions
 func getFfmpegCommand(inputVideo: Video, outputVideoCodec: VideoCodec, outputVideoQuality: VideoQuality) -> String {
   let videoCommand = getVideoConversionCommand(inputVideo: inputVideo, outputCodec: outputVideoCodec, outputQuality: outputVideoQuality)
-  let audioCommand = getAudioConversionCommand(inputVideo: inputVideo)
+  let audioCommand = getAudioConversionCommand(inputVideo: inputVideo, outputVideoCodec: outputVideoCodec)
   let subtitleCommand = getSubtitleConversionCommand(inputVideo: inputVideo)
   
   // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
