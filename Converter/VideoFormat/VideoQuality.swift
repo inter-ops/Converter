@@ -39,7 +39,7 @@ extension VideoCodec {
     case .vp9: return [.betterQuality, .balanced, .smallerSize]
     case .mpeg4: return [.betterQuality, .balanced, .smallerSize]
     case .gif: return [.betterQuality, .balanced, .smallerSize]
-    case .prores: return [.prAuto, .prProxy, .prLt, .prStandard, .prHq, .pr4444, .prXq]
+    case .prores: return [.prAuto, .prProxy, .prLt, .prStandard, .prHq, .pr4444, .pr4444Xq]
     // Will not appear in codec dropdown
     case .mpeg1video: return [.betterQuality, .balanced, .smallerSize]
     case .mpeg2video: return [.betterQuality, .balanced, .smallerSize]
