@@ -440,7 +440,7 @@ func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec, 
     // Codecs supported by MP4 and Quicktime
     var supportedCodecs: [AudioCodec] = [.aac, .eac3, .ac3]
     if outputVideoCodec == .prores {
-      supportedCodecs += [.pcm_s16le, .pcm_s24le]
+      supportedCodecs += [.pcm_s16le, .pcm_s24le, .pcm_s32le, .pcm_f32le, .flac]
     }
     
     let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: supportedCodecs)
