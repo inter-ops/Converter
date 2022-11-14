@@ -412,7 +412,6 @@ func findIndexOfAudioCodec(inputVideo: Video, supportedCodecs: [AudioCodec]) -> 
 // - https://en.wikipedia.org/wiki/QuickTime
 
 func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec, shouldCopyAllStreams: Bool) -> String {
-  // TODO: All audio streams are still getting copied
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
   // If we don't have any audio streams, or we are converting to GIF, we don't need an audio conversion command
