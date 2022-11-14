@@ -8,7 +8,7 @@
 enum VideoQuality: String, CaseIterable {
   case betterQuality, balanced, smallerSize
   
-  case prAuto, prProxy, prLt, prStandard, prHq, pr4444, prXq
+  case prAuto, prProxy, prLt, prStandard, prHq, pr4444, pr4444Xq
   
   var dropdownTitle: String {
     switch self {
@@ -23,7 +23,7 @@ enum VideoQuality: String, CaseIterable {
     case .prStandard: return "ProRes 422"
     case .prHq: return "ProRes 422 HQ"
     case .pr4444: return "ProRes 4444"
-    case .prXq: return "ProRes 4444 XQ"
+    case .pr4444Xq: return "ProRes 4444 XQ"
     }
   }
 }

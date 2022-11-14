@@ -150,6 +150,28 @@ func getOutputCrfForVp9(inputVideo: Video) -> Int {
   }
 }
 
+func getProfileForProres(outputQuality: VideoQuality) -> String {
+  switch outputQuality {
+  case .prAuto:
+    return "auto"
+  case .prProxy:
+    return "proxy"
+  case .prLt:
+    return "lt"
+  case .prStandard:
+    return "standard"
+  case .prHq:
+    return "hq"
+  case .pr4444:
+    return "4444"
+  case .pr4444Xq:
+    return "xq"
+  default:
+    Logger.error("Unknown ProRes output quality provided: \(outputQuality)")
+    return "auto"
+  }
+}
+
 // TODO: For apple silicon users we can use constant quality mode, see here https://stackoverflow.com/a/69668183
 
 /// Video Toolbox
@@ -191,16 +213,19 @@ func getVideoCommandForHEVC(inputVideo: Video) -> String {
   return command
 }
 
-func getVideoCommandForProres(inputVideo: Video) -> String {
+// TODO: Test
+// TODO: What audio & subtitle do we use for this?
+func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) -> String {
   // TODO: Finish setting this up. Resources:
   // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
   // - https://www.reddit.com/r/ffmpeg/comments/pn383s/command_line_for_transcoding_mp4_to_prores/
-  // - https://ottverse.com/ffmpeg-convert-to-apple-prores-422-4444-hq/
   // - https://video.stackexchange.com/questions/14712/how-to-encode-apple-prores-on-windows-or-linux
-  //
   
-  // TODO: Set quality
-  return "-c:v prores_videotoolbox"
+  // See docs under Prores for pix_fmt details https://trac.ffmpeg.org/wiki/Encode/VFX
+  let pixFmt = outputQuality == .pr4444 || outputQuality == .pr4444Xq ? "yuva444p10le" : "yuv422p10le"
+  let profile = getProfileForProres(outputQuality: outputQuality)
+  
+  return "-c:v prores_videotoolbox -profile:v \(profile) -pix_fmt \(pixFmt) -allow_sw 1"
 }
 
 /// VP8 and VP9
@@ -307,7 +332,7 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
     case .gif:
       return getVideoCommandForGif(inputVideo: inputVideo)
     case .prores:
-      return getVideoCommandForProres(inputVideo: inputVideo)
+      return getVideoCommandForProres(inputVideo: inputVideo, outputQuality: outputQuality)
     default:
       // This should never happen
       Logger.error("Unexpected output video codec selected by user \(outputCodec)")
