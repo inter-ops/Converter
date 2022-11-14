@@ -403,8 +403,6 @@ func getAacConversionCommand(inputVideo: Video, shouldCopyAllStreams: Bool) -> S
   return command
 }
 
-// TODO: Ensure we dont need to use experimental flag
-
 func findIndexOfAudioCodec(inputVideo: Video, supportedCodecs: [AudioCodec]) -> Int? {
   return inputVideo.audioStreams.firstIndex(where: { supportedCodecs.contains($0.codec) })
 }
