@@ -150,28 +150,6 @@ func getOutputCrfForVp9(inputVideo: Video) -> Int {
   }
 }
 
-func getProfileForProres(outputQuality: VideoQuality) -> String {
-  switch outputQuality {
-  case .prAuto:
-    return "auto"
-  case .prProxy:
-    return "proxy"
-  case .prLt:
-    return "lt"
-  case .prStandard:
-    return "standard"
-  case .prHq:
-    return "hq"
-  case .pr4444:
-    return "4444"
-  case .pr4444Xq:
-    return "xq"
-  default:
-    Logger.error("Unknown ProRes output quality provided: \(outputQuality)")
-    return "auto"
-  }
-}
-
 // TODO: For apple silicon users we can use constant quality mode, see here https://stackoverflow.com/a/69668183
 
 /// Video Toolbox
@@ -215,10 +193,10 @@ func getVideoCommandForHEVC(inputVideo: Video) -> String {
 
 func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) -> String {
   // See docs under Prores for pix_fmt details https://trac.ffmpeg.org/wiki/Encode/VFX
+  // TODO: We currently get a warning that this pix fmt is unsupported, but ffmpeg choses a supported one automatically so it doesnt cause us any issues.
   let pixFmt = outputQuality == .pr4444 || outputQuality == .pr4444Xq ? "yuva444p10le" : "yuv422p10le"
-  let profile = getProfileForProres(outputQuality: outputQuality)
   
-  return "-c:v prores_videotoolbox -profile:v \(profile) -pix_fmt \(pixFmt) -allow_sw 1"
+  return "-c:v prores_videotoolbox -profile:v \(outputQuality.profile) -pix_fmt \(pixFmt) -allow_sw 1"
 }
 
 /// VP8 and VP9
@@ -427,7 +405,7 @@ func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec) 
     }
     // If input audio is not one of the generally supported codecs, we can check for some additional cases which ProRes supports
     else if outputVideoCodec == .prores {
-      if inputAudioCodec == .pcm_s16le || inputAudioCodec == .pcm_s24le {
+      if inputAudioCodec == .pcm_s16le || inputAudioCodec == .pcm_s24le || inputAudioCodec == .pcm_s32le || inputAudioCodec == .pcm_f32le || inputAudioCodec == .flac {
         return "-c:a copy"
       }
       else {

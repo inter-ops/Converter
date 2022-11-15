@@ -26,6 +26,25 @@ enum VideoQuality: String, CaseIterable {
     case .pr4444Xq: return "ProRes 4444 XQ"
     }
   }
+  
+  // Profile used in FFMPEG commands
+  var profile: String {
+    switch self {
+      // ProRes
+    case .prAuto: return "auto"
+    case .prProxy: return "proxy"
+    case .prLt: return "lt"
+    case .prStandard: return "standard"
+    case .prHq: return "hq"
+    case .pr4444: return "4444"
+    case .pr4444Xq: return "xq"
+      // Unused
+    case .betterQuality, .balanced, .smallerSize:
+      Logger.error("Profile fetched for invalid quality")
+      return "N/A"
+    }
+  }
+
 }
 
 extension VideoCodec {
