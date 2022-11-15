@@ -34,10 +34,6 @@ enum VideoFormat: String, CaseIterable {
     case .gif: return [.auto, .gif]
     }
   }
-  /// Returns the default `VideoCodec` for the given `VideoFormat`
-  var defaultCodec: VideoCodec {
-    return self.compatibleCodecs[0]
-  }
   /// The default output codec to fallback on (old behaviour of `defaultCodec`)
   var fallbackCodec: VideoCodec {
     return self.compatibleCodecs[1]

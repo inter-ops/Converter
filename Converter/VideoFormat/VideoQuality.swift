@@ -8,7 +8,7 @@
 enum VideoQuality: String, CaseIterable {
   case betterQuality, balanced, smallerSize
   
-  case prAuto, prProxy, prLt, prStandard, prHq, pr4444, prXq
+  case prAuto, prProxy, prLt, prStandard, prHq, pr4444, pr4444Xq
   
   var dropdownTitle: String {
     switch self {
@@ -23,9 +23,28 @@ enum VideoQuality: String, CaseIterable {
     case .prStandard: return "ProRes 422"
     case .prHq: return "ProRes 422 HQ"
     case .pr4444: return "ProRes 4444"
-    case .prXq: return "ProRes 4444 XQ"
+    case .pr4444Xq: return "ProRes 4444 XQ"
     }
   }
+  
+  // Profile used in FFMPEG commands
+  var profile: String {
+    switch self {
+      // ProRes
+    case .prAuto: return "auto"
+    case .prProxy: return "proxy"
+    case .prLt: return "lt"
+    case .prStandard: return "standard"
+    case .prHq: return "hq"
+    case .pr4444: return "4444"
+    case .pr4444Xq: return "xq"
+      // Unused
+    case .betterQuality, .balanced, .smallerSize:
+      Logger.error("Profile fetched for invalid quality")
+      return "N/A"
+    }
+  }
+
 }
 
 extension VideoCodec {
@@ -39,7 +58,7 @@ extension VideoCodec {
     case .vp9: return [.betterQuality, .balanced, .smallerSize]
     case .mpeg4: return [.betterQuality, .balanced, .smallerSize]
     case .gif: return [.betterQuality, .balanced, .smallerSize]
-    case .prores: return [.prAuto, .prProxy, .prLt, .prStandard, .prHq, .pr4444, .prXq]
+    case .prores: return [.prAuto, .prProxy, .prLt, .prStandard, .prHq, .pr4444, .pr4444Xq]
     // Will not appear in codec dropdown
     case .mpeg1video: return [.betterQuality, .balanced, .smallerSize]
     case .mpeg2video: return [.betterQuality, .balanced, .smallerSize]
