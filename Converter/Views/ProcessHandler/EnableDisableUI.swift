@@ -58,11 +58,6 @@ extension ViewController {
     let isPremiumEnabled = userDidPurchasePremium
     codecDropdown.isEnabled = isPremiumEnabled
     qualityDropdown.isEnabled = isPremiumEnabled
-    copyAllAudioCheckbox.isEnabled = isPremiumEnabled
-    copyAllSubtitlesCheckbox.isEnabled = isPremiumEnabled
-    burnInSubtitleCheckbox.isEnabled = isPremiumEnabled
-    // Only enable subtitle dropdown if burn-in is selected
-    _ = burnInSubtitles // var burnInSubtitles handles dropdown based on current state
   }
   /// Set the `isEnabled = false` state of all UI elements.
   func disableAllOnScreenElements() {
@@ -74,10 +69,6 @@ extension ViewController {
     // PremiumView elements
     codecDropdown.isEnabled = isEnabled
     qualityDropdown.isEnabled = isEnabled
-    copyAllAudioCheckbox.isEnabled = isEnabled
-    copyAllSubtitlesCheckbox.isEnabled = isEnabled
-    burnInSubtitleCheckbox.isEnabled = isEnabled
-    burnInSubtitleDropdown.isEnabled = isEnabled
   }
   
 }

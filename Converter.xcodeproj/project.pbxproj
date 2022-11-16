@@ -53,8 +53,6 @@
 		C274CDEB28E5E274005BCE22 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C274CDE928E5E274005BCE22 /* ContactViewController.swift */; };
 		C274CDEE28E609F5005BCE22 /* ReportErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C274CDED28E609F5005BCE22 /* ReportErrorViewController.swift */; };
 		C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */; };
-		C29D1A49290C800700711C14 /* PremiumView+Subtitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29D1A48290C800700711C14 /* PremiumView+Subtitles.swift */; };
-		C29D1A4B290C839500711C14 /* PremiumView+Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29D1A4A290C839500711C14 /* PremiumView+Audio.swift */; };
 		C29D1A4D290C83F300711C14 /* PremiumView+Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29D1A4C290C83F300711C14 /* PremiumView+Video.swift */; };
 		C2B26F5129142CC3001FBD6A /* PurchasePremiumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B26F5029142CC3001FBD6A /* PurchasePremiumViewController.swift */; };
 		C2BEEEFB2903141E00F9FFD8 /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */; };
@@ -133,8 +131,6 @@
 		C274CDE928E5E274005BCE22 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		C274CDED28E609F5005BCE22 /* ReportErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportErrorViewController.swift; sourceTree = "<group>"; };
 		C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionDidComplete.swift; sourceTree = "<group>"; };
-		C29D1A48290C800700711C14 /* PremiumView+Subtitles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PremiumView+Subtitles.swift"; sourceTree = "<group>"; };
-		C29D1A4A290C839500711C14 /* PremiumView+Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PremiumView+Audio.swift"; sourceTree = "<group>"; };
 		C29D1A4C290C83F300711C14 /* PremiumView+Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PremiumView+Video.swift"; sourceTree = "<group>"; };
 		C2B26F5029142CC3001FBD6A /* PurchasePremiumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasePremiumViewController.swift; sourceTree = "<group>"; };
 		C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
@@ -268,8 +264,6 @@
 				C2B26F4F29142C96001FBD6A /* PurchasePremium */,
 				C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */,
 				C29D1A4C290C83F300711C14 /* PremiumView+Video.swift */,
-				C29D1A4A290C839500711C14 /* PremiumView+Audio.swift */,
-				C29D1A48290C800700711C14 /* PremiumView+Subtitles.swift */,
 				C205DB1E290836AA00A1C6F8 /* ResizeViewHandler.swift */,
 			);
 			path = Premium;
@@ -462,7 +456,6 @@
 				C205DB1C2908358C00A1C6F8 /* WindowController.swift in Sources */,
 				C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */,
 				C274CDEB28E5E274005BCE22 /* ContactViewController.swift in Sources */,
-				C29D1A49290C800700711C14 /* PremiumView+Subtitles.swift in Sources */,
 				7948AA6228CF9916003DB5E2 /* Configuration.swift in Sources */,
 				C2E1F22128C29A17005A8B48 /* ErrorPrompt.swift in Sources */,
 				C21CC16C28EC920700176A98 /* MessageDidSend.swift in Sources */,
@@ -477,7 +470,6 @@
 				C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */,
 				79AF2A8228D60C26009CCB42 /* Video.swift in Sources */,
 				C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */,
-				C29D1A4B290C839500711C14 /* PremiumView+Audio.swift in Sources */,
 				7958C6BA291C319E00D4621A /* URL+Extensions.swift in Sources */,
 				C29D1A4D290C83F300711C14 /* PremiumView+Video.swift in Sources */,
 				794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */,
