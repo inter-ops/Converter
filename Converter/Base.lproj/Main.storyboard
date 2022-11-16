@@ -1003,9 +1003,6 @@
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
-                                                            <connections>
-                                                                <action selector="toggleCopyAllAudioCheckbox:" target="XfG-lQ-9wD" id="bCO-h9-ajz"/>
-                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <constraints>
@@ -1041,9 +1038,6 @@
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
-                                                            <connections>
-                                                                <action selector="toggleCopyAllSubtitlesCheckbox:" target="XfG-lQ-9wD" id="9eh-MD-BGp"/>
-                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <constraints>
@@ -1061,9 +1055,6 @@
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
-                                                            <connections>
-                                                                <action selector="selectBurnInSubtitlesCheckbox:" target="XfG-lQ-9wD" id="NSz-cL-vDw"/>
-                                                            </connections>
                                                         </button>
                                                         <popUpButton verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DtH-UZ-ofq">
                                                             <rect key="frame" x="92" y="3" width="112" height="25"/>
@@ -1294,12 +1285,9 @@
                     <connections>
                         <outlet property="actionButton" destination="Bdx-sF-qWs" id="TcE-73-pkG"/>
                         <outlet property="actionControlRowView" destination="kPm-gZ-vwn" id="yna-6t-Nfp"/>
-                        <outlet property="burnInSubtitleCheckbox" destination="5hq-7m-pOI" id="kZA-Fm-bpw"/>
-                        <outlet property="burnInSubtitleDropdown" destination="DtH-UZ-ofq" id="PV7-nV-bNO"/>
                         <outlet property="clearInputFileButton" destination="qVc-80-BUu" id="op8-FL-cCu"/>
                         <outlet property="codecDropdown" destination="Tyy-Gc-LJo" id="byV-gd-O22"/>
                         <outlet property="copyAllAudioCheckbox" destination="BLz-qY-TiN" id="wts-1M-Dt3"/>
-                        <outlet property="copyAllSubtitlesCheckbox" destination="ahx-BL-VQd" id="1wl-fC-Hqa"/>
                         <outlet property="dragDropBackgroundImageView" destination="v9D-vH-xx2" id="OQy-LN-aW5"/>
                         <outlet property="dragDropBottomTitle" destination="t3K-S7-h56" id="PYQ-hS-1yp"/>
                         <outlet property="dragDropIconImageView" destination="PEi-Si-rDf" id="zmR-Pw-fpo"/>
