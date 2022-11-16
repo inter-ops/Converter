@@ -1287,7 +1287,6 @@
                         <outlet property="actionControlRowView" destination="kPm-gZ-vwn" id="yna-6t-Nfp"/>
                         <outlet property="clearInputFileButton" destination="qVc-80-BUu" id="op8-FL-cCu"/>
                         <outlet property="codecDropdown" destination="Tyy-Gc-LJo" id="byV-gd-O22"/>
-                        <outlet property="copyAllAudioCheckbox" destination="BLz-qY-TiN" id="wts-1M-Dt3"/>
                         <outlet property="dragDropBackgroundImageView" destination="v9D-vH-xx2" id="OQy-LN-aW5"/>
                         <outlet property="dragDropBottomTitle" destination="t3K-S7-h56" id="PYQ-hS-1yp"/>
                         <outlet property="dragDropIconImageView" destination="PEi-Si-rDf" id="zmR-Pw-fpo"/>
