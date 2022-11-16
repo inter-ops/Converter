@@ -14,50 +14,73 @@ extension ViewController {
   /// Updates PremiumView with updated options per output format (ie. update codec dropdown list with available codecs)
   func didSelectNewOutput(format: VideoFormat) {
     initCodecDropdownMenu(forFormat: format)
+    initQualityDropdownMenu(forCodec: outputCodec)
+  }
+  func didSelectNewOutput(codec: VideoCodec) {
+    outputCodec = codec
+    initQualityDropdownMenu(forCodec: codec)
+    Logger.debug("User selected codec: \(codec.rawValue)")
   }
   /// Initialize dropdown menu with titles (see `VideoCodec.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {
+    let previouslySelectedCodec = getUserSelectedCodec(fromTitle: codecDropdown.titleOfSelectedItem!)
+    
+    let titles = getCodecDropdownTitles(forFormat: forFormat)
     codecDropdown.removeAllItems()
-    codecDropdown.addItems(withTitles: getCodecDropdownTitles(forFormat: forFormat))
+    codecDropdown.addItems(withTitles: titles)
     
-    // Set new default output codec based on format
-    outputCodec = forFormat.compatibleCodecs[0]
-    userSelectedCodecType = outputCodec
-    
-    Logger.info("New default codec selected: \(outputCodec.rawValue)")
+    setOutputCodec(forFormat: forFormat, previouslySelectedCodec: previouslySelectedCodec)
   }
+  /// Sets new video codec menu items, but maintains the selection if compatible and appropriate (see ignoreDefaultCases).
+  func setOutputCodec(forFormat: VideoFormat, previouslySelectedCodec: VideoCodec) {
+    // If the previously selected codec is also available for the new format, keep option selected.
+    if shouldUseSameCodec(forFormat, previouslySelectedCodec) {
+      codecDropdown.selectItem(withTitle: previouslySelectedCodec.dropdownTitle)
+      return
+    }
+    // Otherwise, set codec to auto
+    outputCodec = .auto
+    codecDropdown.selectItem(withTitle: outputCodec.dropdownTitle)
+    Logger.debug("New default codec selected: \(outputCodec.rawValue)")
+  }
+  
+  /// Determines whether we should keep the selected codec when switching to a new output format. For certain edge cases we never want to keep
+  /// the selected codec  (when the codec is supported but not ideal to use for the format, e.g. WEBM -> MKV), and otherwise check that the selected codec is supported in the new output format.
+  func shouldUseSameCodec(_ forFormat: VideoFormat, _ previouslySelectedCodec: VideoCodec) -> Bool {
+    // We only keep MPEG4 if the new format is AVI, otherwise we want to switch to auto
+    if previouslySelectedCodec == .mpeg4 && forFormat != .avi {
+      return false
+    }
+    if previouslySelectedCodec == .vp8 && forFormat == .mkv {
+      return false
+    }
+    
+    return forFormat.compatibleCodecs.contains(previouslySelectedCodec)
+  }
+  
   /// Return VideoCodec title strings as an array for dropdown presentation
   func getCodecDropdownTitles(forFormat: VideoFormat) -> [String] {
-    codecTitles = []  // clear all codec types
+    var titles: [String] = []
     for codec in forFormat.compatibleCodecs {
-      codecTitles.append(codec.dropdownTitle)
+      titles.append(codec.dropdownTitle)
     }
-    return codecTitles
+    return titles
   }
   /// Return VideoCodec type from dropdown item selection
-  func getUserSelectedCodec(_ item: String) -> VideoCodec {
+  func getUserSelectedCodec(fromTitle: String) -> VideoCodec {
     for codec in VideoCodec.allCases {
-      if item == codec.dropdownTitle {
+      if fromTitle == codec.dropdownTitle {
         return codec
       }
     }
-    Logger.error("Unable to read selected codec type\nReturning default type: VideoCodec.h264")
-    return .h264
-  }
-  /// Returns VideoCodec type upon user dropdown selection (ie. `.h264`)
-  func userDidSelectCodec(_ codec: VideoCodec) {
-    // Update outputFormat to selected item
-    outputCodec = codec
-    
-    Logger.info("User did select codec: \(codec.rawValue)")
-    
+    Logger.error("Unable to read selected codec type, returning .auto")
+    return .auto
   }
   /// Called when the user updates dropdown selection item
   @IBAction func selectCodec(_ sender: NSPopUpButton) {
-    userSelectedCodec = sender.titleOfSelectedItem!
-    userSelectedCodecType = getUserSelectedCodec(userSelectedCodec)
-    // Handler function
-    userDidSelectCodec(userSelectedCodecType)
+    let title = sender.titleOfSelectedItem!
+    let codec = getUserSelectedCodec(fromTitle: title)
+    didSelectNewOutput(codec: codec)
   }
   
   
@@ -65,45 +88,52 @@ extension ViewController {
   // MARK: - Video Quality
   
   /// Initialize dropdown menu with titles (see `VideoQuality.dropdownTitle` for values)
-  func initQualityDropdownMenu() {
+  func initQualityDropdownMenu(forCodec: VideoCodec) {
+    let selectedQualityMenuItem = getUserSelectedQuality(fromTitle: qualityDropdown.titleOfSelectedItem!)
+    
+    let titles = getQualityDropdownTitles(forCodec: forCodec)
     qualityDropdown.removeAllItems()
-    qualityDropdown.addItems(withTitles: getQualityDropdownTitles())
-    // Set middle item (balanced) as default selection
-    qualityDropdown.selectItem(withTitle: VideoQuality.balanced.dropdownTitle)
+    qualityDropdown.addItems(withTitles: titles)
+    
+    setOutputQuality(selectedQuality: selectedQualityMenuItem, forCodec: forCodec)
   }
-  /// Return VideoQuality title strings as an array for dropdown presentation
-  func getQualityDropdownTitles() -> [String] {
-    qualityTitles = []  // clear all quality types
-    for quality in VideoQuality.allCases {
-      qualityTitles.append(quality.dropdownTitle)
+  /// Sets new video quality menu items, but maintains the selection if compatible.
+  func setOutputQuality(selectedQuality: VideoQuality, forCodec: VideoCodec) {
+    // If user selected menu item is available with new format, maintain format
+    if forCodec.qualityTypes.contains(selectedQuality) {
+      qualityDropdown.selectItem(withTitle: selectedQuality.dropdownTitle)
+      return
     }
-    return qualityTitles
+    // Otherwise, set new default codec at selection index
+    outputQuality = forCodec.defaultQuality
+    qualityDropdown.selectItem(withTitle: outputQuality.dropdownTitle)
+    Logger.debug("New default quality selected: \(outputQuality.rawValue)")
   }
   
-  /// Returns VideoQuality type upon user dropdown selection (ie. `.balanced`)
-  func userDidSelectQuality(_ quality: VideoQuality) {
-    // Update outputQuality to selected item
-    outputQuality = quality
-    
-    Logger.info("User did select quality: \(quality.rawValue)")
-    
+  /// Return VideoQuality title strings as an array for dropdown presentation
+  func getQualityDropdownTitles(forCodec: VideoCodec) -> [String] {
+    var titles: [String] = []
+    for quality in forCodec.qualityTypes {
+      titles.append(quality.dropdownTitle)
+    }
+    return titles
   }
   /// Return VideoQuality type from dropdown item selection
-  func getUserSelectedQuality(_ item: String) -> VideoQuality {
+  func getUserSelectedQuality(fromTitle: String) -> VideoQuality {
     for quality in VideoQuality.allCases {
-      if item == quality.dropdownTitle {
+      if fromTitle == quality.dropdownTitle {
         return quality
       }
     }
-    Logger.error("Unable to read selected quality type\nReturning default type: VideoQuality.balanced")
-    return .balanced
+    Logger.error("Unable to read selected quality type\nReturning default type: \(outputCodec.defaultQuality.rawValue)")
+    return outputCodec.defaultQuality
   }
   /// Called when the user updates dropdown selection item
   @IBAction func selectQuality(_ sender: NSPopUpButton) {
-    userSelectedQuality = sender.titleOfSelectedItem!
-    userSelectedQualityType = getUserSelectedQuality(userSelectedQuality)
-    // Handler function
-    userDidSelectQuality(userSelectedQualityType)
+    let title = sender.titleOfSelectedItem!
+    let quality = getUserSelectedQuality(fromTitle: title)
+    outputQuality = quality
+    Logger.debug("User selected quality: \(quality.rawValue)")
   }
   
 }

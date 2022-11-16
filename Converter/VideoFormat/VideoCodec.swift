@@ -6,10 +6,11 @@
 //
 
 enum VideoCodec: String, CaseIterable {
-  case hevc, h264, vp8, vp9, mpeg1video, mpeg2video, mpeg4, prores, gif, unknown
+  case auto, hevc, h264, vp8, vp9, mpeg1video, mpeg2video, mpeg4, prores, gif, unknown
   
   var dropdownTitle: String {
     switch self {
+    case .auto: return "Auto"
     case .h264: return "H.264"
     case .hevc: return "H.265 (HEVC)"
     case .vp8: return "VP8"
@@ -19,7 +20,7 @@ enum VideoCodec: String, CaseIterable {
     // Will not appear in codec dropdown
     case .mpeg1video: return "MPEG-1"
     case .mpeg2video: return "MPEG-2"
-    case .prores: return "ProRes"
+    case .prores: return "Apple ProRes"
     case .unknown: return "Unknown"
     }
   }
@@ -36,15 +37,4 @@ func convertToVideoCodec(inputCodec: String) -> VideoCodec {
   return .unknown
 }
 
-enum VideoQuality: String, CaseIterable {
-  case betterQuality, balanced, smallerSize
-  
-  var dropdownTitle: String {
-    switch self {
-    case .betterQuality: return "Better Quality"
-    case .balanced: return "Balanced"
-    case .smallerSize: return "Smaller Size"
-    }
-  }
-  
-}
+
