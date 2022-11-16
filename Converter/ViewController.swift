@@ -591,6 +591,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Called when the user clicks "Stop" upon a conversion-in-progress
   func userDidClickStop() {
+    // TODO: For some reason, this takes a few seconds to register for VP9 conversions. We may want a better way to give users immediate feedback
     FFmpegKit.cancel()
   }
   
