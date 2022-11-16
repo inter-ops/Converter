@@ -24,7 +24,7 @@ struct Constants {
     static let mainViewWidth = CGFloat(350)
     static let mainViewHeight = CGFloat(370)
     static let expandedViewWidth = CGFloat(350) // 550
-    static let expandedViewHeight = CGFloat(580)
+    static let expandedViewHeight = CGFloat(473) // 580
   }
   
 }
