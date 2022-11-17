@@ -322,12 +322,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`). Show clearInputFileButton on `.warning`.
   func updateDragDropView(_ forType: DragDropBox.Style) {
     if forType == .warning { displayClearButton(.show) }
-    
-    if premiumViewIsExpanded {
-      dragDropBackgroundImageView.image = forType.backgroundImageWide
-    } else {
-      dragDropBackgroundImageView.image = forType.backgroundImage
-    }
+    dragDropBackgroundImageView.image = forType.backgroundImage
   }
   /// Sets the dragDropBox title text without affecting the box style (ie. `bottom: inputFileName`)
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {

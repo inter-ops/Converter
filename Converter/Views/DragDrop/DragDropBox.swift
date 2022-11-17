@@ -19,13 +19,6 @@ struct DragDropBox {
       }
     }
     
-    var backgroundImageWide: NSImage {
-      switch self {
-      case .regular: return NSImage(named: "dbox-default-wide")!
-      case .warning: return NSImage(named: "dbox-red-wide")!
-      }
-    }
-    
   }
   
   
