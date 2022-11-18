@@ -218,6 +218,7 @@ func getVideoCommandForVp8(inputVideo: Video, outputQuality: VideoQuality) -> St
   // https://trac.ffmpeg.org/wiki/Encode/VP8 Vartiable bitrate
   // VP8 output bitrates are very similar to h264, so we can use that value here
   let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo)
+  // TODO: Bitrate is a maximum if we provide CRF, may want to just make it a huge value.
   return "-c:v libvpx -b:v \(outputBitrate) -crf 5 -deadline good -cpu-used 2 -pix_fmt yuv420p"
 }
 
