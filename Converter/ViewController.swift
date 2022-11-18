@@ -46,15 +46,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   // PremiumView: Video
   @IBOutlet weak var expandablePremiumView: NSView!
   @IBOutlet weak var codecDropdown: NSPopUpButton!
-  //@IBOutlet weak var gpuCheckbox: NSButton!
-  //@IBOutlet weak var qualitySlider: NSSlider!
   @IBOutlet weak var qualityDropdown: NSPopUpButton!
-  // PremiumView: Audio
-  @IBOutlet weak var copyAllAudioCheckbox: NSButton!
-  // PremiumView: Subtitles
-  @IBOutlet weak var copyAllSubtitlesCheckbox: NSButton!
-  @IBOutlet weak var burnInSubtitleCheckbox: NSButton!
-  @IBOutlet weak var burnInSubtitleDropdown: NSPopUpButton!
   
   @IBOutlet weak var formatControlRowView: NSView!
   @IBOutlet weak var actionControlRowView: NSView!
@@ -62,33 +54,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   // MARK: ViewConstraints
   @IBOutlet weak var mainViewHeightConstraint: NSLayoutConstraint!
   @IBOutlet weak var mainViewWidthConstraint: NSLayoutConstraint!
-  
   @IBOutlet weak var expandCollapsePremiumButtonTrailingConstraint: NSLayoutConstraint!
-  
-  /// Returns true if the `copyAllAudioCheckbox` has been selected; otherwise, returns false.
-  var copyAllAudio: Bool {
-    if copyAllAudioCheckbox.state == .on {
-      return true
-    }
-    return false
-  }
-  /// Returns true if the `copyAllSubtitlesCheckbox` has been selected; otherwise, returns false.
-  var copyAllSubtitles: Bool {
-    if copyAllSubtitlesCheckbox.state == .on {
-      return true
-    }
-    return false
-  }
-  /// Returns true if the `burnInSubtitlesCheckbox` has been selected; otherwise, returns false.
-  /// Also enables/disables `burnInSubtitleDropdown` based on `burnInSubtitlesCheckbox` current state.
-  var burnInSubtitles: Bool {
-    if burnInSubtitleCheckbox.state == .on {
-      burnInSubtitleDropdown.isEnabled = true
-      return true
-    }
-    burnInSubtitleDropdown.isEnabled = false
-    return false
-  }
 
   // Video object variables
   var outputFormat: VideoFormat = .mp4  //  User select output format (mp4 default)
@@ -356,12 +322,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   /// Sets the dragDropBox image view (ie. Set red warning box with `.warning`). Show clearInputFileButton on `.warning`.
   func updateDragDropView(_ forType: DragDropBox.Style) {
     if forType == .warning { displayClearButton(.show) }
-    
-    if premiumViewIsExpanded {
-      dragDropBackgroundImageView.image = forType.backgroundImageWide
-    } else {
-      dragDropBackgroundImageView.image = forType.backgroundImage
-    }
+    dragDropBackgroundImageView.image = forType.backgroundImage
   }
   /// Sets the dragDropBox title text without affecting the box style (ie. `bottom: inputFileName`)
   func updateDragDropTitle(_ top: String = "", bottom: String = "") {
