@@ -121,18 +121,27 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     DispatchQueue.main.async {
       // If openAppWithFilesPaths is not empty
       if self.appDelegate.openAppWithFilePaths.count > 0 {
-        // Queue multiple video file paths for when viewDidAppear is called
-        self.dragDropViewDidReceive(filePaths: self.appDelegate.openAppWithFilePaths)
-        
-        // Might be clearing too early?
-        self.appDelegate.openAppWithFilePaths = []  // Empty openAppWithFilePaths
+        self.queueImportFilesFromFinder()
       }
       self.appDelegate.mainViewHasAppeared = true
     }
   }
   
   func queueImportFilesFromFinder() {
-    
+    if appDelegate.didDispatchFileQueue == false {
+      print("Dispatching...")
+      disableUI(withLoaderAnimation: true)
+      appDelegate.didDispatchFileQueue = true
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        if self.appDelegate.openAppWithFilePaths.count > 0 {
+          self.dragDropViewDidReceive(filePaths: self.appDelegate.openAppWithFilePaths)
+          self.appDelegate.openAppWithFilePaths = []  // Empty openAppWithFilePaths
+        }
+        self.appDelegate.didDispatchFileQueue = false
+        self.appDelegate.mainViewHasAppeared = true
+        self.enableUI()
+      }
+    }
   }
   
   

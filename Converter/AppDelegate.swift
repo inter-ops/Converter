@@ -39,31 +39,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   // open urls: https://developer.apple.com/documentation/appkit/nsapplicationdelegate/2887193-application
   /// Flag to determine if mainWindow ViewController has loaded to the point of accepting call requests
   var mainViewHasAppeared = false
+  /// Flag to determine if AppDelegate has already dispatched an input file queue to ViewController
+  var didDispatchFileQueue = false
   /// String path of the input file, requested to be open with mainWindow ViewController, if applicable
   var openAppWithFilePaths: [String] = []
-  /// Allows for macOS queue t append all input files
-  lazy var lastImportTime: Date = .init()
   /// Handles the opening of the app with multiple input files (see below).
   ///
   /// Called regardless of the application's current status (opened/closed) and includes, but is not limited to, such states:
   ///  * From Finder, right-click input file, `Open With... > [this application]`
   ///  * Dragging and dropping an input file onto the application icon in dock
   func application(_ application: NSApplication, open urls: [URL]) {
-    var inputFilePaths: [String] = []
     // Append each url to inputFilePaths as a String
     for url in urls {
-      inputFilePaths.append(url.path)
+      openAppWithFilePaths.append(url.path)
     }
-    
-    /// If the mainWindow ViewController has been loaded and is able to accept calls from AppDelegate
+    // If the app has already initialized and ViewController.didAppear, call the function directly
+    // Otherwise, let ViewController.didAppear handle it (cannot init before this method)
     if mainViewHasAppeared {
-      /// Load the input file request and bring the mainWindow to front
       let viewController = mainWindow.contentViewController as? ViewController
-      viewController?.dragDropViewDidReceive(filePaths: inputFilePaths)
+      viewController?.queueImportFilesFromFinder()
       mainWindow.makeKeyAndOrderFront(self)
-    } else {
-      /// Otherwise, set the String path of the input file for handling by the mainWindow ViewController once it is ready
-      openAppWithFilePaths = inputFilePaths
     }
   }
   
