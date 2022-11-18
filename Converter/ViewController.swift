@@ -190,7 +190,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       inputVideos = []
     }
     
-    var filteredPaths: [String] = []
+    var filteredPaths: Set<String> = []
     
     for filePath in filePaths {
       let inputFileUrl = filePath.fileURL.absoluteURL
@@ -204,22 +204,16 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         return
       case .directory:
         let directoryPaths = getVideoPathsInDirectory(baseUrl: inputFileUrl)
-        
-        if filteredPaths.count + directoryPaths.count > Constants.fileCountLimit {
-          showTooManyInputVideosBox()
-          return
-        }
-        
-        filteredPaths.append(contentsOf: directoryPaths)
+        filteredPaths.formUnion(directoryPaths)
         break
       case .valid:
-        if filteredPaths.count + 1 > Constants.fileCountLimit {
-          showTooManyInputVideosBox()
-          return
-        }
-        
-        filteredPaths.append(filePath)
+        filteredPaths.insert(filePath)
         break
+      }
+      
+      if filteredPaths.count > Constants.fileCountLimit {
+        showTooManyInputVideosBox()
+        return
       }
     }
     
@@ -238,7 +232,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
     else {
       // if free user, route first dragged file to singular dragDropDidReceive
-      addVideoToInputs(filePath: filteredPaths[0])
+      addVideoToInputs(filePath: filteredPaths.first!)
       // TODO: show notice: maximum one file input, upgrade for more
       //premiumNotice()
     }
@@ -347,7 +341,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func showNoSupportedFilesBox() {
     Logger.debug("Displaying no supported files error")
     clearInputVideos()
-    updateDragDrop(subtitle: "No supported files we're found", withStyle: .warning)
+    updateDragDrop(subtitle: "No supported files found", withStyle: .warning)
     showSupportedFormatsPopover()
   }
   
