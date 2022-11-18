@@ -35,8 +35,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     return true
   }
   
-  // openFiles: https://developer.apple.com/documentation/appkit/nsapplicationdelegate/1428742-application
-  // open urls: https://developer.apple.com/documentation/appkit/nsapplicationdelegate/2887193-application
   /// Flag to determine if mainWindow ViewController has loaded to the point of accepting call requests
   var mainViewHasAppeared = false
   /// Flag to determine if AppDelegate has already dispatched an input file queue to ViewController
@@ -49,12 +47,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   ///  * From Finder, right-click input file, `Open With... > [this application]`
   ///  * Dragging and dropping an input file onto the application icon in dock
   func application(_ application: NSApplication, open urls: [URL]) {
-    // Append each url to inputFilePaths as a String
+    // Append each url to openAppWithFilePaths as a String
     for url in urls {
       openAppWithFilePaths.append(url.path)
     }
-    // If the app has already initialized and ViewController.didAppear, call the function directly
-    // Otherwise, let ViewController.didAppear handle it (cannot init before this method)
+    /// If the application has already initialized, and ViewController.didAppear, call function directly.
+    /// Otherwise, let ViewController.didAppear handle function call (cannot init before this method; will crash).
     if mainViewHasAppeared {
       let viewController = mainWindow.contentViewController as? ViewController
       viewController?.queueImportFilesFromFinder()
