@@ -156,7 +156,8 @@ func getOutputCrfForVp9(inputVideo: Video) -> Int {
 /// "allow_sw 1" ensures that VT can be used on machines that don't support hardware encoding
 /// vf flag is to ensure the output width and height are divisible by 2, see https://stackoverflow.com/a/29582287/8292279
 
-func getVideoCommandForH264(inputVideo: Video) -> String {
+// TODO: Handle output quality
+func getVideoCommandForH264(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   if inputVideoCodec == .h264 {
     return "-c:v copy"
@@ -167,7 +168,8 @@ func getVideoCommandForH264(inputVideo: Video) -> String {
 }
 
 // TODO: Test
-func getVideoCommandForHEVC(inputVideo: Video) -> String {
+// TODO: Handle output quality
+func getVideoCommandForHEVC(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
@@ -206,7 +208,8 @@ func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) ->
 /// - https://superuser.com/questions/556463/converting-video-to-webm-with-ffmpeg-avconv
 /// - https://superuser.com/a/1280369
 
-func getVideoCommandForVp8(inputVideo: Video) -> String {
+// TODO: Handle output quality
+func getVideoCommandForVp8(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   if inputVideoCodec == .vp8 {
     return "-c:v copy"
@@ -219,7 +222,8 @@ func getVideoCommandForVp8(inputVideo: Video) -> String {
 }
 
 // TODO: Test quality output
-func getVideoCommandForVp9(inputVideo: Video) -> String {
+// TODO: Handle output quality
+func getVideoCommandForVp9(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   if inputVideoCodec == .vp9 {
     return "-c:v copy"
@@ -230,10 +234,21 @@ func getVideoCommandForVp9(inputVideo: Video) -> String {
   return "-c:v libvpx-vp9 -crf \(outputCrf) -b:v 0 -deadline good -cpu-used 2 -pix_fmt yuv420p"
 }
 
-func getVideoCommandForMpeg4(inputVideo: Video) -> String {
+func getVideoCommandForMpeg4(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
+  
+  var qscale: Int
+  if outputQuality == .betterQuality {
+    qscale = 2
+  }
+  else if outputQuality == .smallerSize {
+    qscale = 10
+  }
+  else {
+    qscale = 4
+  }
   
   // MP4, MOV and M4v do not support XVID, so we handle these separately
   if outputFileType == VideoFormat.mov.rawValue || outputFileType == VideoFormat.mp4.rawValue || outputFileType == VideoFormat.m4v.rawValue {
@@ -245,7 +260,7 @@ func getVideoCommandForMpeg4(inputVideo: Video) -> String {
     // TODO: We may be able to still copy here, but simply use a different vtag. Need to research if this is possible.
     // Otherwise we need to re-encode the XVID streams using a different FourCC.
     // We simply use the default FourCC: FMP4. See here for more details: https://trac.ffmpeg.org/wiki/Encode/MPEG-4
-    return "-c:v mpeg4 -qscale:v 5 -pix_fmt yuv420p"
+    return "-c:v mpeg4 -qscale:v \(qscale) -pix_fmt yuv420p"
   }
   
   // For all other input MPEG4 files, we can remux
@@ -259,7 +274,7 @@ func getVideoCommandForMpeg4(inputVideo: Video) -> String {
   return "-c:v mpeg4 -vtag xvid -qscale:v 5 -pix_fmt yuv420p"
 }
 
-func getVideoCommandForGif(inputVideo: Video) -> String {
+func getVideoCommandForGif(inputVideo: Video, outputQuality: VideoQuality) -> String {
   // We dont need to do any remuxing for input videos which already use gif codec since it can only be used with gif files. The only case where a user would convert from an input gif to an output gif is if there is an issue with their original file which may be resolved from re-encoding.
   
   // Gif conversion resources:
@@ -274,7 +289,7 @@ func getVideoCommandForGif(inputVideo: Video) -> String {
   return "-vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
 }
 
-// TODO: Handle outputQuality
+// TODO: How do we handle output quality if its a remux?
 
 /// Get the video portion of the ffmpeg command.
 /// For x264, we always use 8-bit colour (pixfmt yuv420p) to ensure maximum support. See "Encoding for dumb players" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
@@ -291,17 +306,17 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
   if outputCodec != .auto {
     switch outputCodec {
     case .mpeg4:
-      return getVideoCommandForMpeg4(inputVideo: inputVideo)
+      return getVideoCommandForMpeg4(inputVideo: inputVideo, outputQuality: outputQuality)
     case .h264:
-      return getVideoCommandForH264(inputVideo: inputVideo)
+      return getVideoCommandForH264(inputVideo: inputVideo, outputQuality: outputQuality)
     case .hevc:
-      return getVideoCommandForHEVC(inputVideo: inputVideo)
+      return getVideoCommandForHEVC(inputVideo: inputVideo, outputQuality: outputQuality)
     case .vp8:
-      return getVideoCommandForVp8(inputVideo: inputVideo)
+      return getVideoCommandForVp8(inputVideo: inputVideo, outputQuality: outputQuality)
     case .vp9:
-      return getVideoCommandForVp9(inputVideo: inputVideo)
+      return getVideoCommandForVp9(inputVideo: inputVideo, outputQuality: outputQuality)
     case .gif:
-      return getVideoCommandForGif(inputVideo: inputVideo)
+      return getVideoCommandForGif(inputVideo: inputVideo, outputQuality: outputQuality)
     case .prores:
       return getVideoCommandForProres(inputVideo: inputVideo, outputQuality: outputQuality)
     default:
@@ -318,20 +333,20 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
   case VideoFormat.webm.rawValue:
     if inputVideoCodec == .vp9 {
       // If input is already VP9, we call getVideoCommandForVp9, which will remux the input
-      return getVideoCommandForVp9(inputVideo: inputVideo)
+      return getVideoCommandForVp9(inputVideo: inputVideo, outputQuality: outputQuality)
     }
     // All other cases, we convert to VP8 (this also handles remuxing if input is already VP8)
-    return getVideoCommandForVp8(inputVideo: inputVideo)
+    return getVideoCommandForVp8(inputVideo: inputVideo, outputQuality: outputQuality)
   
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
     
     // MOV does not support xvid, so we re-encode to H264
     if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
-      return getVideoCommandForH264(inputVideo: inputVideo)
+      return getVideoCommandForH264(inputVideo: inputVideo, outputQuality: outputQuality)
     }
     else if inputVideoCodec == .hevc {
       // For input HEVC we can copy the codec (handled in getVideoCommandForHEVC)
-      return getVideoCommandForHEVC(inputVideo: inputVideo)
+      return getVideoCommandForHEVC(inputVideo: inputVideo, outputQuality: outputQuality)
     }
     else if inputVideoCodec == .h264 || inputVideoCodec == .mpeg4 || inputVideoCodec == .mpeg1video || inputVideoCodec == .mpeg2video {
       return "-c:v copy"
@@ -342,19 +357,19 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
     // GIF Resource: https://unix.stackexchange.com/a/294892
     
     // For everything else, re-encode to H264.
-    return getVideoCommandForH264(inputVideo: inputVideo)
+    return getVideoCommandForH264(inputVideo: inputVideo, outputQuality: outputQuality)
     
   case VideoFormat.avi.rawValue:
     // If this command ever causes problems for GIF inputs, try https://stackoverflow.com/questions/3212821/animated-gif-to-avi-on-linux https://www.linuxquestions.org/questions/linux-software-2/converting-animated-gif-to-avi-ffmpeg-549839/#edit2729743
-    return getVideoCommandForMpeg4(inputVideo: inputVideo)
+    return getVideoCommandForMpeg4(inputVideo: inputVideo, outputQuality: outputQuality)
     
   case VideoFormat.gif.rawValue:
-    return getVideoCommandForGif(inputVideo: inputVideo)
+    return getVideoCommandForGif(inputVideo: inputVideo, outputQuality: outputQuality)
     
   default:
     // For unknown cases, we re-encode to H264
     Logger.error("Unknown output file type when selecting video codec")
-    return getVideoCommandForH264(inputVideo: inputVideo)
+    return getVideoCommandForH264(inputVideo: inputVideo, outputQuality: outputQuality)
   }
 }
 
