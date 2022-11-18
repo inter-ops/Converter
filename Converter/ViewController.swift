@@ -659,6 +659,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       return
     }
     
+    if remainingInSeconds.isInfinite || remainingInSeconds.isNaN {
+      Logger.warning("Remaining time is invalid: \(remainingInSeconds)")
+    }
+    
     setEstimatedTimeLabel(Constants.estimatedTimeLabelText)
     
     let seconds = Int(remainingInSeconds)
