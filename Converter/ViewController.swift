@@ -881,6 +881,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func hideMultiFilesListPopover() {
     hidePopover(multiFilesListPopover)
   }
+  func hideAllUiPopovers() {
+    hideSupportedFormatsPopover()
+    hideHelpInfoPopover()
+    hideMultiFilesListPopover()
+  }
   
 }
 
