@@ -574,6 +574,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       
       DispatchQueue.main.async {
         // Reference: https://github.com/tanersener/ffmpeg-kit-test/blob/main/macos/test-app-cocoapods/FFmpegKitMACOS/CommandViewController.m
+        self.isTimeRemainingStable = false
         
         if returnCode!.isValueCancel() {
           self.updateProgressBar(value: 0)
@@ -584,7 +585,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         }
         
         self.updateProgressBar(value: 100)
-        self.isTimeRemainingStable = false
         // In case the conversion finished before the time remaining was estimated
         self.setEstimatedTimeLabel(Constants.estimatedTimeLabelText)
         
