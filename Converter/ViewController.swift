@@ -659,6 +659,10 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       return
     }
     
+    if remainingInSeconds.isInfinite || remainingInSeconds.isNaN {
+      return
+    }
+    
     setEstimatedTimeLabel(Constants.estimatedTimeLabelText)
     
     let seconds = Int(remainingInSeconds)
