@@ -117,13 +117,29 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   
   override func viewDidAppear() {
-    // Handles opening of file in application on launch after initial load
+    // Handles the opening of files on application launch after initial load (requires main thread)
     DispatchQueue.main.async {
-      if self.appDelegate.openAppWithFilePath != nil {
-        self.dragDropViewDidReceive(filePath: self.appDelegate.openAppWithFilePath!)
-        self.appDelegate.openAppWithFilePath = nil
+      // If openAppWithFilesPaths is not empty
+      if self.appDelegate.openAppWithFilePaths.count > 0 {
+        self.queueImportFilesFromFinder() // Call queueImportFiles
       }
+      // AppDelegate can now call queueImportFiles directly
       self.appDelegate.mainViewHasAppeared = true
+    }
+  }
+  /// Begin queue of files opened with macOS Finder handling.
+  func queueImportFilesFromFinder() {
+    // If AppDelegate has already initated queue session, ignore additional requests
+    if appDelegate.didDispatchFileQueue == false {
+      appDelegate.didDispatchFileQueue = true   // Is first session call, switch flag
+      disableUI(withLoaderAnimation: true)      // Disable UI with loader animation
+      // After 0.3s has elapsed, initate import of file queue
+      DispatchQueue.main.asyncAfter(deadline: .now() + Constants.inputFileFromSystemBufferDelay) {
+        self.dragDropViewDidReceive(filePaths: self.appDelegate.openAppWithFilePaths)
+        self.appDelegate.openAppWithFilePaths = []    // Empty openAppWithFilePaths
+        self.appDelegate.didDispatchFileQueue = false // Enable UI
+        self.enableUI()
+      }
     }
   }
   
@@ -864,6 +880,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   func hideMultiFilesListPopover() {
     hidePopover(multiFilesListPopover)
+  }
+  func hideAllUiPopovers() {
+    hideSupportedFormatsPopover()
+    hideHelpInfoPopover()
+    hideMultiFilesListPopover()
   }
   
 }

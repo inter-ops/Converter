@@ -69,6 +69,8 @@ extension ViewController {
     // PremiumView elements
     codecDropdown.isEnabled = isEnabled
     qualityDropdown.isEnabled = isEnabled
+    // Hide Popovers
+    hideAllUiPopovers()
   }
   
 }
