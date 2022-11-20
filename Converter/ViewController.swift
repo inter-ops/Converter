@@ -134,7 +134,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       appDelegate.didDispatchFileQueue = true   // Is first session call, switch flag
       disableUI(withLoaderAnimation: true)      // Disable UI with loader animation
       // After 0.3s has elapsed, initate import of file queue
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+      DispatchQueue.main.asyncAfter(deadline: .now() + Constants.inputFileFromSystemBufferDelay) {
         self.dragDropViewDidReceive(filePaths: self.appDelegate.openAppWithFilePaths)
         self.appDelegate.openAppWithFilePaths = []    // Empty openAppWithFilePaths
         self.appDelegate.didDispatchFileQueue = false // Enable UI

@@ -14,6 +14,8 @@ struct Constants {
   static let estimatingTimeLabelText = "Estimating time remaining..."
   
   static let fileCountLimit = 100
+  /// Input file buffer delay for NSApplication's `open urls` method (in seconds)
+  static let inputFileFromSystemBufferDelay = 0.4
   
   struct API {
     static let contactFormUrl = "https://contact-form-u7kjuwr4da-uc.a.run.app"
