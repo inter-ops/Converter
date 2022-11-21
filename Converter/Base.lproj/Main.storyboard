@@ -1663,46 +1663,14 @@
             <objects>
                 <viewController id="lLy-C5-2W2" customClass="PurchasePremiumViewController" customModule="Video_Converter" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="msr-Wu-JnD">
-                        <rect key="frame" x="0.0" y="0.0" width="350" height="550"/>
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="mGz-JP-Qbn">
-                                <rect key="frame" x="0.0" y="0.0" width="350" height="550"/>
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="500"/>
                                 <subviews>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Cep-uE-8yu">
-                                        <rect key="frame" x="90" y="480" width="171" height="60"/>
-                                        <subviews>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="isy-zh-t5R">
-                                                <rect key="frame" x="86" y="7" width="67" height="47"/>
-                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Pro" id="8Ks-5V-XuR">
-                                                    <font key="font" metaFont="systemBold" size="40"/>
-                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                </textFieldCell>
-                                            </textField>
-                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jgb-wv-4OX">
-                                                <rect key="frame" x="20" y="0.0" width="60" height="60"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="60" id="KUL-Nc-0tT"/>
-                                                    <constraint firstAttribute="height" constant="60" id="OwS-Zw-4p1"/>
-                                                </constraints>
-                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="AppIconLogo" id="ESQ-T6-8qr"/>
-                                            </imageView>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="isy-zh-t5R" firstAttribute="leading" secondItem="Jgb-wv-4OX" secondAttribute="trailing" constant="8" symbolic="YES" id="2aM-gm-5Oa"/>
-                                            <constraint firstAttribute="width" constant="171" id="4eo-EM-U2d"/>
-                                            <constraint firstItem="isy-zh-t5R" firstAttribute="centerY" secondItem="Cep-uE-8yu" secondAttribute="centerY" id="Tbx-9h-oy7"/>
-                                            <constraint firstItem="Jgb-wv-4OX" firstAttribute="centerY" secondItem="Cep-uE-8yu" secondAttribute="centerY" id="fYa-xa-foz"/>
-                                            <constraint firstAttribute="trailing" secondItem="isy-zh-t5R" secondAttribute="trailing" constant="20" symbolic="YES" id="h37-Q7-QJs"/>
-                                            <constraint firstItem="Jgb-wv-4OX" firstAttribute="leading" secondItem="Cep-uE-8yu" secondAttribute="leading" constant="20" symbolic="YES" id="jaV-RX-3TT"/>
-                                            <constraint firstAttribute="bottom" secondItem="Jgb-wv-4OX" secondAttribute="bottom" id="omm-MO-uBf"/>
-                                            <constraint firstAttribute="height" constant="60" id="uP7-tW-bcH"/>
-                                            <constraint firstItem="Jgb-wv-4OX" firstAttribute="top" secondItem="Cep-uE-8yu" secondAttribute="top" id="yHy-wc-Qcu"/>
-                                        </constraints>
-                                    </customView>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f1N-g9-5IS">
-                                        <rect key="frame" x="10" y="516" width="24" height="24"/>
+                                        <rect key="frame" x="10" y="466" width="24" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="24" id="Fb0-ff-ivA"/>
                                             <constraint firstAttribute="height" constant="24" id="gMj-AR-1Xe"/>
@@ -1716,11 +1684,11 @@
                                         </connections>
                                     </button>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="GcM-8O-QqD">
-                                        <rect key="frame" x="0.0" y="270" width="350" height="200"/>
+                                        <rect key="frame" x="0.0" y="245" width="300" height="175"/>
                                         <subviews>
                                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="E3c-0d-A3j">
-                                                <rect key="frame" x="0.0" y="0.0" width="350" height="200"/>
-                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="premium-card-top" id="FTW-O1-HwW"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="175"/>
+                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="premium-card-top-slim" id="FTW-O1-HwW"/>
                                             </imageView>
                                         </subviews>
                                         <constraints>
@@ -1728,21 +1696,21 @@
                                             <constraint firstItem="E3c-0d-A3j" firstAttribute="top" secondItem="GcM-8O-QqD" secondAttribute="top" id="nc7-4n-ZUT"/>
                                             <constraint firstAttribute="bottom" secondItem="E3c-0d-A3j" secondAttribute="bottom" id="qjU-rt-7MD"/>
                                             <constraint firstAttribute="trailing" secondItem="E3c-0d-A3j" secondAttribute="trailing" id="rs1-xG-wUA"/>
-                                            <constraint firstAttribute="height" constant="200" id="v5A-R5-Yn7"/>
+                                            <constraint firstAttribute="height" constant="175" id="v5A-R5-Yn7"/>
                                         </constraints>
                                     </customView>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="o84-8O-bt7">
-                                        <rect key="frame" x="0.0" y="80" width="350" height="190"/>
+                                        <rect key="frame" x="0.0" y="55" width="300" height="190"/>
                                         <subviews>
                                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tRW-iH-s92">
-                                                <rect key="frame" x="0.0" y="0.0" width="350" height="190"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="190"/>
                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="purple-bg" id="ehd-J2-B04"/>
                                             </imageView>
                                             <avPlayerView controlsStyle="none" videoGravity="resizeAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="vZp-k7-c6f">
-                                                <rect key="frame" x="0.0" y="0.0" width="350" height="190"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="190"/>
                                             </avPlayerView>
                                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r6o-9L-biS">
-                                                <rect key="frame" x="0.0" y="0.0" width="350" height="190"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="190"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="190" id="TAx-Pt-VhU"/>
                                                 </constraints>
@@ -1763,7 +1731,7 @@
                                                 </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U26-TB-jWb">
-                                                <rect key="frame" x="120" y="80" width="110" height="30"/>
+                                                <rect key="frame" x="95" y="80" width="110" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="YT1-Bs-IsQ"/>
                                                     <constraint firstAttribute="width" constant="110" id="xx2-tt-3fV"/>
@@ -1797,31 +1765,17 @@
                                         </constraints>
                                     </customView>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="hAV-uT-J1P">
-                                        <rect key="frame" x="0.0" y="0.0" width="350" height="80"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="55"/>
                                         <subviews>
                                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vsT-OO-9qi">
-                                                <rect key="frame" x="0.0" y="0.0" width="350" height="80"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="300" height="55"/>
                                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="purple-bg" id="Vbr-HJ-jC1"/>
                                             </imageView>
-                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T8t-6f-R3J">
-                                                <rect key="frame" x="230" y="25" width="100" height="30"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="H8J-Wy-bCq"/>
-                                                    <constraint firstAttribute="height" constant="30" id="bA9-dD-pfX"/>
-                                                </constraints>
-                                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="purchase-button" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="pN2-bG-BWN">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <action selector="purchaseButtonAction:" target="lLy-C5-2W2" id="dD4-jI-74n"/>
-                                                </connections>
-                                            </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MkJ-tb-gaF">
-                                                <rect key="frame" x="20" y="25" width="162" height="30"/>
+                                                <rect key="frame" x="20" y="15" width="140" height="26"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="162" id="0SG-zk-mrI"/>
-                                                    <constraint firstAttribute="height" constant="30" id="0rx-Bw-iff"/>
+                                                    <constraint firstAttribute="height" constant="26" id="0rx-Bw-iff"/>
+                                                    <constraint firstAttribute="width" secondItem="MkJ-tb-gaF" secondAttribute="height" multiplier="27:5" id="AMg-fB-9NJ"/>
                                                 </constraints>
                                                 <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="restore-button" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="zsJ-Xd-j8c">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1829,6 +1783,20 @@
                                                 </buttonCell>
                                                 <connections>
                                                     <action selector="restorePurchaseButtonAction:" target="lLy-C5-2W2" id="Ljc-f7-0Wp"/>
+                                                </connections>
+                                            </button>
+                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T8t-6f-R3J">
+                                                <rect key="frame" x="193" y="15" width="87" height="26"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="T8t-6f-R3J" secondAttribute="height" multiplier="10:3" id="Fre-lg-Maf"/>
+                                                    <constraint firstAttribute="height" constant="26" id="bA9-dD-pfX"/>
+                                                </constraints>
+                                                <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="purchase-button" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="pN2-bG-BWN">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="purchaseButtonAction:" target="lLy-C5-2W2" id="dD4-jI-74n"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -1839,9 +1807,41 @@
                                             <constraint firstAttribute="trailing" secondItem="T8t-6f-R3J" secondAttribute="trailing" constant="20" symbolic="YES" id="NM5-3g-W2j"/>
                                             <constraint firstAttribute="bottom" secondItem="vsT-OO-9qi" secondAttribute="bottom" id="NmL-kh-EnQ"/>
                                             <constraint firstItem="vsT-OO-9qi" firstAttribute="leading" secondItem="hAV-uT-J1P" secondAttribute="leading" id="aXf-xY-PyA"/>
-                                            <constraint firstAttribute="height" constant="80" id="qb9-0R-tgD"/>
+                                            <constraint firstAttribute="height" constant="55" id="qb9-0R-tgD"/>
                                             <constraint firstItem="T8t-6f-R3J" firstAttribute="centerY" secondItem="hAV-uT-J1P" secondAttribute="centerY" id="wnk-V2-j5C"/>
                                             <constraint firstItem="MkJ-tb-gaF" firstAttribute="leading" secondItem="hAV-uT-J1P" secondAttribute="leading" constant="20" symbolic="YES" id="xcd-AX-ejc"/>
+                                        </constraints>
+                                    </customView>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Cep-uE-8yu">
+                                        <rect key="frame" x="65" y="430" width="171" height="60"/>
+                                        <subviews>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="isy-zh-t5R">
+                                                <rect key="frame" x="86" y="7" width="67" height="47"/>
+                                                <textFieldCell key="cell" lineBreakMode="clipping" title="Pro" id="8Ks-5V-XuR">
+                                                    <font key="font" metaFont="systemBold" size="40"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jgb-wv-4OX">
+                                                <rect key="frame" x="20" y="0.0" width="60" height="60"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="60" id="KUL-Nc-0tT"/>
+                                                    <constraint firstAttribute="height" constant="60" id="OwS-Zw-4p1"/>
+                                                </constraints>
+                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="AppIconLogo" id="ESQ-T6-8qr"/>
+                                            </imageView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="isy-zh-t5R" firstAttribute="leading" secondItem="Jgb-wv-4OX" secondAttribute="trailing" constant="8" symbolic="YES" id="2aM-gm-5Oa"/>
+                                            <constraint firstAttribute="width" constant="171" id="4eo-EM-U2d"/>
+                                            <constraint firstItem="isy-zh-t5R" firstAttribute="centerY" secondItem="Cep-uE-8yu" secondAttribute="centerY" id="Tbx-9h-oy7"/>
+                                            <constraint firstItem="Jgb-wv-4OX" firstAttribute="centerY" secondItem="Cep-uE-8yu" secondAttribute="centerY" id="fYa-xa-foz"/>
+                                            <constraint firstAttribute="trailing" secondItem="isy-zh-t5R" secondAttribute="trailing" constant="20" symbolic="YES" id="h37-Q7-QJs"/>
+                                            <constraint firstItem="Jgb-wv-4OX" firstAttribute="leading" secondItem="Cep-uE-8yu" secondAttribute="leading" constant="20" symbolic="YES" id="jaV-RX-3TT"/>
+                                            <constraint firstAttribute="bottom" secondItem="Jgb-wv-4OX" secondAttribute="bottom" id="omm-MO-uBf"/>
+                                            <constraint firstAttribute="height" constant="60" id="uP7-tW-bcH"/>
+                                            <constraint firstItem="Jgb-wv-4OX" firstAttribute="top" secondItem="Cep-uE-8yu" secondAttribute="top" id="yHy-wc-Qcu"/>
                                         </constraints>
                                     </customView>
                                 </subviews>
@@ -1850,6 +1850,7 @@
                                     <constraint firstItem="hAV-uT-J1P" firstAttribute="leading" secondItem="mGz-JP-Qbn" secondAttribute="leading" id="3wQ-3G-z5r"/>
                                     <constraint firstAttribute="trailing" secondItem="o84-8O-bt7" secondAttribute="trailing" id="EVa-nj-eCG"/>
                                     <constraint firstItem="GcM-8O-QqD" firstAttribute="top" secondItem="Cep-uE-8yu" secondAttribute="bottom" constant="10" id="RTw-wi-l39"/>
+                                    <constraint firstAttribute="width" constant="300" id="Tet-bb-6sP"/>
                                     <constraint firstItem="f1N-g9-5IS" firstAttribute="leading" secondItem="mGz-JP-Qbn" secondAttribute="leading" constant="10" id="W0P-xE-WCt"/>
                                     <constraint firstAttribute="bottom" secondItem="hAV-uT-J1P" secondAttribute="bottom" id="ai6-Jm-qcj"/>
                                     <constraint firstItem="o84-8O-bt7" firstAttribute="leading" secondItem="mGz-JP-Qbn" secondAttribute="leading" id="bE4-bJ-5Uh"/>
@@ -1889,7 +1890,7 @@
                 </viewController>
                 <customObject id="ytj-Jv-tNa" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="732" y="895"/>
+            <point key="canvasLocation" x="732" y="894"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
@@ -1905,7 +1906,7 @@
         <image name="dbox-default" width="300" height="169"/>
         <image name="dbox-icon-empty" width="234" height="50"/>
         <image name="dismiss-large" width="24" height="24"/>
-        <image name="premium-card-top" width="350" height="200"/>
+        <image name="premium-card-top-slim" width="300" height="175"/>
         <image name="preview-video-button" width="110" height="30"/>
         <image name="purchase-button" width="100" height="30"/>
         <image name="purple-bg" width="350" height="350"/>
