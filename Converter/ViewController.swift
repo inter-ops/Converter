@@ -445,7 +445,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       if inputVideos.count > 1 {
         let userSelectedOutputDirectory = selectOutputDirectory()
         if userSelectedOutputDirectory == nil {
-          self.errorAlert(withMessage: "You must select an output folder.")
           return
         }
         
@@ -522,7 +521,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       else {
         let userSelectedOutputFileUrl = selectOutputFileUrl(format: outputFormat, inputFileUrl: inputVideos[0].fileUrl)
         if userSelectedOutputFileUrl == nil {
-          self.errorAlert(withMessage: "You must select an output folder.")
           return
         }
         inputVideos[0].outputFileUrl = userSelectedOutputFileUrl
@@ -575,6 +573,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       DispatchQueue.main.async {
         // Reference: https://github.com/tanersener/ffmpeg-kit-test/blob/main/macos/test-app-cocoapods/FFmpegKitMACOS/CommandViewController.m
         
+        // TODO: After a user cancels, we should be able to pick up the conversion from where it ended. Could do this pretty easily by leaving activeVideoIndex set if user cancels conversion.
         if returnCode!.isValueCancel() {
           self.updateProgressBar(value: 0)
           self.estimatedTimeText.stringValue = "Canceled ⚠️"
