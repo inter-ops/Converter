@@ -432,6 +432,7 @@ func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec) 
     return ""
   }
   
+  var command = "-map 0:a? "
   let inputAudioCodec = inputVideo.audioStreams[0].codec
 
   switch outputFileType {
@@ -440,54 +441,56 @@ func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec) 
     // Technically M4V should support EAC3, but FFMPEG throws an error when this is attempted.
     // See this ticket for more info https://trac.ffmpeg.org/ticket/4844
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.ac3 {
-      return "-c:a copy"
+      command += "-c:a copy"
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return getAacConversionCommand(inputVideo: inputVideo)
+      command += getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue:
     // Codecs supported by MP4 and Quicktime
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 {
-      return "-c:a copy"
+      command += "-c:a copy"
     }
     // If input audio is not one of the generally supported codecs, we can check for some additional cases which ProRes supports
     else if outputVideoCodec == .prores {
       if inputAudioCodec == .pcm_s16le || inputAudioCodec == .pcm_s24le || inputAudioCodec == .pcm_s32le || inputAudioCodec == .pcm_f32le || inputAudioCodec == .flac {
-        return "-c:a copy"
+        command += "-c:a copy"
       }
       else {
         // For ProRes outputs, pcm_s16le and pcm_s24le are most common.
-        return "-c:a pcm_s24le"
+        command += "-c:a pcm_s24le"
       }
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return getAacConversionCommand(inputVideo: inputVideo)
+      command += getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.mkv.rawValue:
     if inputAudioCodec == AudioCodec.unknown {
-      return getAacConversionCommand(inputVideo: inputVideo)
+      command += getAacConversionCommand(inputVideo: inputVideo)
     }
     else {
       // MKV supports all audio codecs we support
-      return "-c:a copy"
+      command += "-c:a copy"
     }
   case VideoFormat.avi.rawValue:
     // Codecs supported by AVI
     // TODO: We don't need to re-encode DTS, only DTS-HD. Should be able to determine this with all the metadata we are capturing.
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.mp3 || inputAudioCodec == AudioCodec.ac3 {
-      return "-c:a copy"
+      command += "-c:a copy"
     }
     else {
-      return getAacConversionCommand(inputVideo: inputVideo)
+      command += getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.webm.rawValue:
-    return "-c:a libvorbis"
+    command += "-c:a libvorbis"
   default:
     Logger.error("Unknown output file type when selecting audio codec")
-    return getAacConversionCommand(inputVideo: inputVideo)
+    command += getAacConversionCommand(inputVideo: inputVideo)
   }
+  
+  return command
 }
 
 /// Get the subtitle conversion portion of the FFMPEG command.
@@ -531,7 +534,7 @@ func getFfmpegCommand(inputVideo: Video, outputVideoCodec: VideoCodec, outputVid
   
   // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
   // converting more than one audio and video stream, the mapping should be moved to getVideoConversionCommand and getAudioConversionCommand
-  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? -map 0:a? \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
   
   return command
 }
