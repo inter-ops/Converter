@@ -48,14 +48,14 @@ func getFileName(filePath: String) -> String {
 
 // TODO: Create a readme for this documentation after refactor is done on this file.
 
-func getOutputBitrateForHEVC(inputVideo: Video) -> Int {
-  let h264Bitrate = getOutputBitrateForH264(inputVideo: inputVideo)
+func getOutputBitrateForHEVC(inputVideo: Video, outputQuality: VideoQuality) -> Int {
+  let h264Bitrate = getOutputBitrateForH264(inputVideo: inputVideo, outputQuality: outputQuality)
   
   // Based on testing, quality for HEVC seems equal to H264 at 80% bitrate. So multiply H264 bitrate by 0.8
   return Int(Double(h264Bitrate) * 0.8)
 }
 
-func getOutputBitrateForH264(inputVideo: Video) -> Int {
+func getOutputBitrateForH264(inputVideo: Video, outputQuality: VideoQuality) -> Int {
   let inputWidth = inputVideo.videoStreams[0].width
   let inputHeight = inputVideo.videoStreams[0].height
   
@@ -72,40 +72,51 @@ func getOutputBitrateForH264(inputVideo: Video) -> Int {
   // - https://slhck.info/video/2017/02/24/crf-guide.html (For CRF 20, which is what we used to use with libx264)
   // - https://netflixtechblog.com/per-title-encode-optimization-7e99442b62a2
   // - https://netflixtechblog.com/optimized-shot-based-encodes-for-4k-now-streaming-47b516b10bbb
+  var outputBitrate: Int
   if inputWidth > maxWidth1080p {
     // 2016p
-    return 16000000 // 16M
+    outputBitrate = 16000000 // 16M
   }
   else if inputWidth > maxWidth720p {
     // 1080p
-    return 8000000 // 8M
+    outputBitrate = 8000000 // 8M
   }
   else if inputWidth > maxWidth480p {
     // 720p
-    return 4000000 // 4M
+    outputBitrate = 4000000 // 4M
   }
   else if inputWidth > maxWidth360p {
     // 576p or 480p
     if inputHeight > 540 {
       // We assume this means 576p
-      return 3000000 // 3M
+      outputBitrate = 3000000 // 3M
     }
     else {
       // 480p
-      return 2000000 // 2M
+      outputBitrate = 2000000 // 2M
     }
   }
   else if inputWidth > maxWidth240p {
     // 360p
-    return 1000000 // 1M
+    outputBitrate = 1000000 // 1M
   }
   else {
     // 240p
-    return 750000 // 750k
+    outputBitrate = 750000 // 750k
   }
+
+  // TODO: Test these values
+  if outputQuality == .betterQuality {
+    outputBitrate *= 2
+  }
+  else if outputQuality == .smallerSize {
+    outputBitrate /= 2
+  }
+  
+  return outputBitrate
 }
 
-func getOutputCrfForVp9(inputVideo: Video) -> Int {
+func getOutputCrfForVp9(inputVideo: Video, outputQuality: VideoQuality) -> Int {
   let inputWidth = inputVideo.videoStreams[0].width
   
   // If the input height is slightly above a target we will round down, otherwise we always round up. The maximums below dictate the number at which we would round down for.
@@ -117,37 +128,48 @@ func getOutputCrfForVp9(inputVideo: Video) -> Int {
   let maxWidth360p = 500 // Regular width: 480
   let maxWidth240p = 380 // Regular width: 320
   
+  var crf: Int
   // Resource for values:
   // https://developers.google.com/media/vp9/settings/vod/#quality
   // https://trac.ffmpeg.org/wiki/Encode/VP9
   if inputWidth > maxWidth1440p {
     // 2016p
-    return 15
+    crf = 15
   }
   if inputWidth > maxWidth1080p {
     // 1440p
-    return 24
+    crf = 24
   }
   else if inputWidth > maxWidth720p {
     // 1080p
-    return 31
+    crf = 31
   }
   else if inputWidth > maxWidth480p {
     // 720p
-    return 32
+    crf = 32
   }
   else if inputWidth > maxWidth360p {
     // 480p
-    return 33
+    crf = 33
   }
   else if inputWidth > maxWidth240p {
     // 360p
-    return 36
+    crf = 36
   }
   else {
     // 240p
-    return 37
+    crf = 37
   }
+  
+  // Best numbers based on testing
+  if outputQuality == .betterQuality {
+    crf /= 2
+  }
+  else if outputQuality == .smallerSize {
+    crf += 5
+  }
+  
+  return crf
 }
 
 // TODO: For apple silicon users we can use constant quality mode, see here https://stackoverflow.com/a/69668183
@@ -163,7 +185,7 @@ func getVideoCommandForH264(inputVideo: Video, outputQuality: VideoQuality) -> S
     return "-c:v copy"
   }
   
-  let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo)
+  let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo, outputQuality: outputQuality)
   return "-c:v h264_videotoolbox -b:v \(outputBitrate) -pix_fmt yuv420p -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
 }
 
@@ -180,7 +202,7 @@ func getVideoCommandForHEVC(inputVideo: Video, outputQuality: VideoQuality) -> S
     command = "-c:v copy -tag:v hvc1"
   }
   else {
-    let outputBitrate = getOutputBitrateForHEVC(inputVideo: inputVideo)
+    let outputBitrate = getOutputBitrateForHEVC(inputVideo: inputVideo, outputQuality: outputQuality)
     // 10 bit color is required, see https://trac.ffmpeg.org/ticket/9521
     command = "-c:v hevc_videotoolbox -b:v \(outputBitrate) -tag:v hvc1 -pix_fmt yuv420p10le -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
   }
@@ -217,21 +239,19 @@ func getVideoCommandForVp8(inputVideo: Video, outputQuality: VideoQuality) -> St
   
   // https://trac.ffmpeg.org/wiki/Encode/VP8 Vartiable bitrate
   // VP8 output bitrates are very similar to h264, so we can use that value here
-  let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo)
+  let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo, outputQuality: outputQuality)
   // TODO: Bitrate is a maximum if we provide CRF, may want to just make it a huge value.
   return "-c:v libvpx -b:v \(outputBitrate) -crf 5 -deadline good -cpu-used 2 -pix_fmt yuv420p"
 }
 
-// TODO: Test quality output
-// TODO: Handle output quality
 func getVideoCommandForVp9(inputVideo: Video, outputQuality: VideoQuality) -> String {
-  let inputVideoCodec = inputVideo.videoStreams[0].codec
-  if inputVideoCodec == .vp9 {
-    return "-c:v copy"
-  }
+//  let inputVideoCodec = inputVideo.videoStreams[0].codec
+//  if inputVideoCodec == .vp9 {
+//    return "-c:v copy"
+//  }
   
   // https://trac.ffmpeg.org/wiki/Encode/VP9 Constant Quality mode
-  let outputCrf = getOutputCrfForVp9(inputVideo: inputVideo)
+  let outputCrf = getOutputCrfForVp9(inputVideo: inputVideo, outputQuality: outputQuality)
   return "-c:v libvpx-vp9 -crf \(outputCrf) -b:v 0 -deadline good -cpu-used 2 -pix_fmt yuv420p"
 }
 
