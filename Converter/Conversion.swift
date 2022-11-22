@@ -304,10 +304,22 @@ func getVideoCommandForGif(inputVideo: Video, outputQuality: VideoQuality) -> St
   // https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
   // Frame rate: https://trac.ffmpeg.org/wiki/ChangingFrameRate
   
+  // TODO: Test these values
+  let fps: Int
+  if outputQuality == .betterQuality {
+    fps = 30
+  }
+  else if outputQuality == .smallerSize {
+    fps = 10
+  }
+  else {
+    fps = 15
+  }
+  
   // TODO: There is still a slight stutter with certain output videos. This seems to improve with higher FPS but not resolve completely.
   // TODO: There is a slight delay with progress as the palette file needs to be created. Look into ways to estimate this, or may want to add an arbitrary delay based on file size or format. This delay is especially long for x265. Didnt find much online, so should ask stackoverflow. At the minimum, we should make it more clear that we are estimating conversion time during this period (since we show no progress bar).
   // NOTE: If color is an issue, use "palettegen=stats_mode=single" and "paletteuse=new=1"
-  return "-vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
+  return "-vf \"fps=\(fps),scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
 }
 
 // TODO: How do we handle output quality if its a remux?
