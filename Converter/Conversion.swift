@@ -118,13 +118,12 @@ func getOutputBitrateForH264(inputVideo: Video, outputQuality: VideoQuality) -> 
 }
 
 // TODO: We may want to adjust this for specific dimensions, but haven't found any suggestions online so holding off for now.
-// TODO: Test
 func getOutputCrfForVp8(inputVideo: Video, outputQuality: VideoQuality) -> Int {
   if outputQuality == .betterQuality {
-    return 5
+    return 6
   }
   else if outputQuality == .smallerSize {
-    return 30
+    return 25
   }
   
   return 10
@@ -143,38 +142,36 @@ func getOutputCrfForVp9(inputVideo: Video, outputQuality: VideoQuality) -> Int {
   let maxWidth240p = 380 // Regular width: 320
   
   var crf: Int
-  // TODO: Try knocking off a few CRF points from each of these for overall better quality, suggestions are for VOD.
-  
-  // Resource for values:
+  // See links below for CRF values. Took these and knocked off 5 from each, since these are supposed to be for VOD.
   // https://developers.google.com/media/vp9/settings/vod/#quality
   // https://trac.ffmpeg.org/wiki/Encode/VP9
   if inputWidth > maxWidth1440p {
     // 2016p
-    crf = 15
+    crf = 10
   }
   if inputWidth > maxWidth1080p {
     // 1440p
-    crf = 24
+    crf = 19
   }
   else if inputWidth > maxWidth720p {
     // 1080p
-    crf = 31
+    crf = 26
   }
   else if inputWidth > maxWidth480p {
     // 720p
-    crf = 32
+    crf = 27
   }
   else if inputWidth > maxWidth360p {
     // 480p
-    crf = 33
+    crf = 28
   }
   else if inputWidth > maxWidth240p {
     // 360p
-    crf = 36
+    crf = 31
   }
   else {
     // 240p
-    crf = 37
+    crf = 32
   }
   
   // Best numbers based on testing
@@ -182,7 +179,7 @@ func getOutputCrfForVp9(inputVideo: Video, outputQuality: VideoQuality) -> Int {
     crf /= 2
   }
   else if outputQuality == .smallerSize {
-    crf += 5
+    crf += 10
   }
   
   return crf
@@ -315,7 +312,6 @@ func getVideoCommandForGif(inputVideo: Video, outputQuality: VideoQuality) -> St
   // https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
   // Frame rate: https://trac.ffmpeg.org/wiki/ChangingFrameRate
   
-  // TODO: Test these values
   let fps: Int
   if outputQuality == .betterQuality {
     fps = 30
