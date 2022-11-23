@@ -193,7 +193,8 @@ func getOutputCrfForVp9(inputVideo: Video, outputQuality: VideoQuality) -> Int {
 
 func getVideoCommandForH264(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
-  if inputVideoCodec == .h264 {
+  // If the input codec is the same and the user didnt request a small size, remux
+  if inputVideoCodec == .h264 && outputQuality != .smallerSize {
     return "-c:v copy"
   }
   
@@ -206,7 +207,8 @@ func getVideoCommandForHEVC(inputVideo: Video, outputQuality: VideoQuality) -> S
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
   var command: String
-  if inputVideoCodec == .hevc {
+  // If the input codec is the same and the user didnt request a small size, remux
+  if inputVideoCodec == .hevc && outputQuality != .smallerSize {
     // https://brandur.org/fragments/ffmpeg-h265
     // M4V does not support HEVC so we must re-encode this case
     command = "-c:v copy -tag:v hvc1"
@@ -243,7 +245,8 @@ func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) ->
 // For testing, run once with current settings (balanced), then with VP9 bitrates & 100M and try each quality
 func getVideoCommandForVp8(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
-  if inputVideoCodec == .vp8 {
+  // If the input codec is the same and the user didnt request a small size, remux
+  if inputVideoCodec == .vp8 && outputQuality != .smallerSize {
     return "-c:v copy"
   }
   
@@ -254,7 +257,8 @@ func getVideoCommandForVp8(inputVideo: Video, outputQuality: VideoQuality) -> St
 
 func getVideoCommandForVp9(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
-  if inputVideoCodec == .vp9 {
+  // If the input codec is the same and the user didnt request a small size, remux
+  if inputVideoCodec == .vp9 && outputQuality != .smallerSize {
     return "-c:v copy"
   }
   
@@ -281,8 +285,8 @@ func getVideoCommandForMpeg4(inputVideo: Video, outputQuality: VideoQuality) -> 
   
   // MP4, MOV and M4v do not support XVID, so we handle these separately
   if outputFileType == VideoFormat.mov.rawValue || outputFileType == VideoFormat.mp4.rawValue || outputFileType == VideoFormat.m4v.rawValue {
-    // If the input is MPEG4 but not XVID, we can remux.
-    if inputVideoCodec == .mpeg4 && inputVideoCodecTag != "xvid" {
+    // If the input codec is the same, not XVID and the user didnt request a small size, remux
+    if inputVideoCodec == .mpeg4 && inputVideoCodecTag != "xvid" && outputQuality != .smallerSize {
       return "-c:v copy"
     }
     
@@ -292,8 +296,8 @@ func getVideoCommandForMpeg4(inputVideo: Video, outputQuality: VideoQuality) -> 
     return "-c:v mpeg4 -qscale:v \(qscale) -pix_fmt yuv420p"
   }
   
-  // For all other input MPEG4 files, we can remux
-  if inputVideoCodec == .mpeg4 {
+  // For all other input MPEG4 files, we can remux if the user didn't request a small size
+  if inputVideoCodec == .mpeg4 && outputQuality != .smallerSize {
     return "-c:v copy"
   }
   
@@ -328,8 +332,6 @@ func getVideoCommandForGif(inputVideo: Video, outputQuality: VideoQuality) -> St
   // NOTE: If color is an issue, use "palettegen=stats_mode=single" and "paletteuse=new=1"
   return "-vf \"fps=\(fps),scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
 }
-
-// TODO: How do we handle output quality if its a remux?
 
 /// Get the video portion of the ffmpeg command.
 /// For x264, we always use 8-bit colour (pixfmt yuv420p) to ensure maximum support. See "Encoding for dumb players" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
@@ -388,7 +390,7 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
       // For input HEVC we can copy the codec (handled in getVideoCommandForHEVC)
       return getVideoCommandForHEVC(inputVideo: inputVideo, outputQuality: outputQuality)
     }
-    else if inputVideoCodec == .h264 || inputVideoCodec == .mpeg4 || inputVideoCodec == .mpeg1video || inputVideoCodec == .mpeg2video {
+    else if (inputVideoCodec == .h264 || inputVideoCodec == .mpeg4 || inputVideoCodec == .mpeg1video || inputVideoCodec == .mpeg2video) && outputQuality != .smallerSize {
       return "-c:v copy"
     }
     
