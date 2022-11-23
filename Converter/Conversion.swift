@@ -45,6 +45,8 @@ func getFileName(filePath: String) -> String {
 // - https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
 // - https://netflixtechblog.com/vmaf-the-journey-continues-44b51ee9ed12
 
+// TODO: Some encoders support multi-threading. Look into if we can detect number of available cores and set multithreading parameters accordingly.
+
 
 // TODO: Create a readme for this documentation after refactor is done on this file.
 
@@ -105,7 +107,6 @@ func getOutputBitrateForH264(inputVideo: Video, outputQuality: VideoQuality) -> 
     outputBitrate = 750000 // 750k
   }
 
-  // TODO: Test these values
   if outputQuality == .betterQuality {
     outputBitrate *= 2
   }
@@ -114,6 +115,19 @@ func getOutputBitrateForH264(inputVideo: Video, outputQuality: VideoQuality) -> 
   }
   
   return outputBitrate
+}
+
+// TODO: We may want to adjust this for specific dimensions, but haven't found any suggestions online so holding off for now.
+// TODO: Test
+func getOutputCrfForVp8(inputVideo: Video, outputQuality: VideoQuality) -> Int {
+  if outputQuality == .betterQuality {
+    return 5
+  }
+  else if outputQuality == .smallerSize {
+    return 30
+  }
+  
+  return 10
 }
 
 func getOutputCrfForVp9(inputVideo: Video, outputQuality: VideoQuality) -> Int {
@@ -129,6 +143,8 @@ func getOutputCrfForVp9(inputVideo: Video, outputQuality: VideoQuality) -> Int {
   let maxWidth240p = 380 // Regular width: 320
   
   var crf: Int
+  // TODO: Try knocking off a few CRF points from each of these for overall better quality, suggestions are for VOD.
+  
   // Resource for values:
   // https://developers.google.com/media/vp9/settings/vod/#quality
   // https://trac.ffmpeg.org/wiki/Encode/VP9
@@ -178,7 +194,6 @@ func getOutputCrfForVp9(inputVideo: Video, outputQuality: VideoQuality) -> Int {
 /// "allow_sw 1" ensures that VT can be used on machines that don't support hardware encoding
 /// vf flag is to ensure the output width and height are divisible by 2, see https://stackoverflow.com/a/29582287/8292279
 
-// TODO: Handle output quality
 func getVideoCommandForH264(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   if inputVideoCodec == .h264 {
@@ -189,8 +204,6 @@ func getVideoCommandForH264(inputVideo: Video, outputQuality: VideoQuality) -> S
   return "-c:v h264_videotoolbox -b:v \(outputBitrate) -pix_fmt yuv420p -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
 }
 
-// TODO: Test
-// TODO: Handle output quality
 func getVideoCommandForHEVC(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
@@ -230,7 +243,7 @@ func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) ->
 /// - https://superuser.com/questions/556463/converting-video-to-webm-with-ffmpeg-avconv
 /// - https://superuser.com/a/1280369
 
-// TODO: Handle output quality
+// For testing, run once with current settings (balanced), then with VP9 bitrates & 100M and try each quality
 func getVideoCommandForVp8(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   if inputVideoCodec == .vp8 {
@@ -238,17 +251,15 @@ func getVideoCommandForVp8(inputVideo: Video, outputQuality: VideoQuality) -> St
   }
   
   // https://trac.ffmpeg.org/wiki/Encode/VP8 Vartiable bitrate
-  // VP8 output bitrates are very similar to h264, so we can use that value here
-  let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo, outputQuality: outputQuality)
-  // TODO: Bitrate is a maximum if we provide CRF, may want to just make it a huge value.
-  return "-c:v libvpx -b:v \(outputBitrate) -crf 5 -deadline good -cpu-used 2 -pix_fmt yuv420p"
+  let outputCrf = getOutputCrfForVp8(inputVideo: inputVideo, outputQuality: outputQuality)
+  return "-c:v libvpx -b:v 100M -crf \(outputCrf) -deadline good -cpu-used 2 -pix_fmt yuv420p"
 }
 
 func getVideoCommandForVp9(inputVideo: Video, outputQuality: VideoQuality) -> String {
-//  let inputVideoCodec = inputVideo.videoStreams[0].codec
-//  if inputVideoCodec == .vp9 {
-//    return "-c:v copy"
-//  }
+  let inputVideoCodec = inputVideo.videoStreams[0].codec
+  if inputVideoCodec == .vp9 {
+    return "-c:v copy"
+  }
   
   // https://trac.ffmpeg.org/wiki/Encode/VP9 Constant Quality mode
   let outputCrf = getOutputCrfForVp9(inputVideo: inputVideo, outputQuality: outputQuality)
