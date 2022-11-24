@@ -215,7 +215,6 @@ func getVideoCommandForHEVC(inputVideo: Video) -> String {
 
 func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) -> String {
   // See docs under Prores for pix_fmt details https://trac.ffmpeg.org/wiki/Encode/VFX
-  // TODO: Had error "Incompatible pixel format 'yuv422p10le' for codec 'prores_videotoolbox', auto-selecting format 'p210le'"
   let pixFmt = outputQuality == .pr4444 || outputQuality == .pr4444Xq ? "yuva444p10le" : "yuv422p10le"
   let profile = getProfileForProres(outputQuality: outputQuality)
   
@@ -517,7 +516,8 @@ func getFfmpegCommand(inputVideo: Video, outputVideoCodec: VideoCodec, outputVid
   let audioCommand = getAudioConversionCommand(inputVideo: inputVideo, outputVideoCodec: outputVideoCodec)
   let subtitleCommand = getSubtitleConversionCommand(inputVideo: inputVideo)
   
-  // Mapping audio and subtitle streams are handled by the getAudioConversionCommand and getSubtitleConversionCommand functions
+  // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
+  // converting more than one audio and video stream, the mapping should be moved to getVideoConversionCommand and getAudioConversionCommand
   let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -strict experimental -map 0:v? \(videoCommand) \(audioCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
   
   return command
