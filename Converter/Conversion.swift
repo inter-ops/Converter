@@ -548,7 +548,8 @@ func getFfprobeOutput(inputFilePath: String) -> String {
 }
 
 func isFileValid(inputFilePath: String) -> Bool {
-  let session = FFprobeKit.execute("-loglevel error \"\(inputFilePath)\"")
+  // TODO: This is a hacky fix, it ignores the problem. https://stackoverflow.com/questions/53260802/ffmpeg-referenced-qt-chapter-track-not-found
+  let session = FFprobeKit.execute("-ignore_chapters 1 -loglevel error \"\(inputFilePath)\"")
   let logs = session?.getAllLogsAsString()
   
   let error = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
