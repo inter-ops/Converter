@@ -552,6 +552,9 @@ func isFileValid(inputFilePath: String) -> Bool {
   let logs = session?.getAllLogsAsString()
   
   let error = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  if !error.isEmpty {
+    Logger.error("Error returned from ffprobe on isFileValid check: \(error)")
+  }
   
-  return error.count == 0
+  return error.isEmpty
 }
