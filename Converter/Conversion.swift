@@ -45,17 +45,19 @@ func getFileName(filePath: String) -> String {
 // - https://www.reddit.com/r/Twitch/comments/c8ec2h/guide_x264_encoding_is_still_the_best_slow_isnt/
 // - https://netflixtechblog.com/vmaf-the-journey-continues-44b51ee9ed12
 
+// TODO: Some encoders support multi-threading. Look into if we can detect number of available cores and set multithreading parameters accordingly.
+
 
 // TODO: Create a readme for this documentation after refactor is done on this file.
 
-func getOutputBitrateForHEVC(inputVideo: Video) -> Int {
-  let h264Bitrate = getOutputBitrateForH264(inputVideo: inputVideo)
+func getOutputBitrateForHEVC(inputVideo: Video, outputQuality: VideoQuality) -> Int {
+  let h264Bitrate = getOutputBitrateForH264(inputVideo: inputVideo, outputQuality: outputQuality)
   
   // Based on testing, quality for HEVC seems equal to H264 at 80% bitrate. So multiply H264 bitrate by 0.8
   return Int(Double(h264Bitrate) * 0.8)
 }
 
-func getOutputBitrateForH264(inputVideo: Video) -> Int {
+func getOutputBitrateForH264(inputVideo: Video, outputQuality: VideoQuality) -> Int {
   let inputWidth = inputVideo.videoStreams[0].width
   let inputHeight = inputVideo.videoStreams[0].height
   
@@ -72,40 +74,62 @@ func getOutputBitrateForH264(inputVideo: Video) -> Int {
   // - https://slhck.info/video/2017/02/24/crf-guide.html (For CRF 20, which is what we used to use with libx264)
   // - https://netflixtechblog.com/per-title-encode-optimization-7e99442b62a2
   // - https://netflixtechblog.com/optimized-shot-based-encodes-for-4k-now-streaming-47b516b10bbb
+  var outputBitrate: Int
   if inputWidth > maxWidth1080p {
     // 2016p
-    return 16000000 // 16M
+    outputBitrate = 16000000 // 16M
   }
   else if inputWidth > maxWidth720p {
     // 1080p
-    return 8000000 // 8M
+    outputBitrate = 8000000 // 8M
   }
   else if inputWidth > maxWidth480p {
     // 720p
-    return 4000000 // 4M
+    outputBitrate = 4000000 // 4M
   }
   else if inputWidth > maxWidth360p {
     // 576p or 480p
     if inputHeight > 540 {
       // We assume this means 576p
-      return 3000000 // 3M
+      outputBitrate = 3000000 // 3M
     }
     else {
       // 480p
-      return 2000000 // 2M
+      outputBitrate = 2000000 // 2M
     }
   }
   else if inputWidth > maxWidth240p {
     // 360p
-    return 1000000 // 1M
+    outputBitrate = 1000000 // 1M
   }
   else {
     // 240p
-    return 750000 // 750k
+    outputBitrate = 750000 // 750k
   }
+
+  if outputQuality == .betterQuality {
+    outputBitrate *= 2
+  }
+  else if outputQuality == .smallerSize {
+    outputBitrate /= 2
+  }
+  
+  return outputBitrate
 }
 
-func getOutputCrfForVp9(inputVideo: Video) -> Int {
+// TODO: We may want to adjust this for specific dimensions, but haven't found any suggestions online so holding off for now.
+func getOutputCrfForVp8(inputVideo: Video, outputQuality: VideoQuality) -> Int {
+  if outputQuality == .betterQuality {
+    return 6
+  }
+  else if outputQuality == .smallerSize {
+    return 25
+  }
+  
+  return 10
+}
+
+func getOutputCrfForVp9(inputVideo: Video, outputQuality: VideoQuality) -> Int {
   let inputWidth = inputVideo.videoStreams[0].width
   
   // If the input height is slightly above a target we will round down, otherwise we always round up. The maximums below dictate the number at which we would round down for.
@@ -117,37 +141,48 @@ func getOutputCrfForVp9(inputVideo: Video) -> Int {
   let maxWidth360p = 500 // Regular width: 480
   let maxWidth240p = 380 // Regular width: 320
   
-  // Resource for values:
+  var crf: Int
+  // See links below for CRF values. Took these and knocked off 5 from each, since these are supposed to be for VOD.
   // https://developers.google.com/media/vp9/settings/vod/#quality
   // https://trac.ffmpeg.org/wiki/Encode/VP9
   if inputWidth > maxWidth1440p {
     // 2016p
-    return 15
+    crf = 10
   }
   if inputWidth > maxWidth1080p {
     // 1440p
-    return 24
+    crf = 19
   }
   else if inputWidth > maxWidth720p {
     // 1080p
-    return 31
+    crf = 26
   }
   else if inputWidth > maxWidth480p {
     // 720p
-    return 32
+    crf = 27
   }
   else if inputWidth > maxWidth360p {
     // 480p
-    return 33
+    crf = 28
   }
   else if inputWidth > maxWidth240p {
     // 360p
-    return 36
+    crf = 31
   }
   else {
     // 240p
-    return 37
+    crf = 32
   }
+  
+  // Best numbers based on testing
+  if outputQuality == .betterQuality {
+    crf /= 2
+  }
+  else if outputQuality == .smallerSize {
+    crf += 10
+  }
+  
+  return crf
 }
 
 // TODO: For apple silicon users we can use constant quality mode, see here https://stackoverflow.com/a/69668183
@@ -156,29 +191,30 @@ func getOutputCrfForVp9(inputVideo: Video) -> Int {
 /// "allow_sw 1" ensures that VT can be used on machines that don't support hardware encoding
 /// vf flag is to ensure the output width and height are divisible by 2, see https://stackoverflow.com/a/29582287/8292279
 
-func getVideoCommandForH264(inputVideo: Video) -> String {
+func getVideoCommandForH264(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
-  if inputVideoCodec == .h264 {
+  // If the input codec is the same and the user didnt request a small size, remux
+  if inputVideoCodec == .h264 && outputQuality != .smallerSize {
     return "-c:v copy"
   }
   
-  let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo)
+  let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo, outputQuality: outputQuality)
   return "-c:v h264_videotoolbox -b:v \(outputBitrate) -pix_fmt yuv420p -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
 }
 
-// TODO: Test
-func getVideoCommandForHEVC(inputVideo: Video) -> String {
+func getVideoCommandForHEVC(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
   var command: String
-  if inputVideoCodec == .hevc {
+  // If the input codec is the same and the user didnt request a small size, remux
+  if inputVideoCodec == .hevc && outputQuality != .smallerSize {
     // https://brandur.org/fragments/ffmpeg-h265
     // M4V does not support HEVC so we must re-encode this case
     command = "-c:v copy -tag:v hvc1"
   }
   else {
-    let outputBitrate = getOutputBitrateForHEVC(inputVideo: inputVideo)
+    let outputBitrate = getOutputBitrateForHEVC(inputVideo: inputVideo, outputQuality: outputQuality)
     // 10 bit color is required, see https://trac.ffmpeg.org/ticket/9521
     command = "-c:v hevc_videotoolbox -b:v \(outputBitrate) -tag:v hvc1 -pix_fmt yuv420p10le -allow_sw 1 -vf \"scale=trunc(iw/2)*2:trunc(ih/2)*2\""
   }
@@ -206,50 +242,62 @@ func getVideoCommandForProres(inputVideo: Video, outputQuality: VideoQuality) ->
 /// - https://superuser.com/questions/556463/converting-video-to-webm-with-ffmpeg-avconv
 /// - https://superuser.com/a/1280369
 
-func getVideoCommandForVp8(inputVideo: Video) -> String {
+// For testing, run once with current settings (balanced), then with VP9 bitrates & 100M and try each quality
+func getVideoCommandForVp8(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
-  if inputVideoCodec == .vp8 {
+  // If the input codec is the same and the user didnt request a small size, remux
+  if inputVideoCodec == .vp8 && outputQuality != .smallerSize {
     return "-c:v copy"
   }
   
   // https://trac.ffmpeg.org/wiki/Encode/VP8 Vartiable bitrate
-  // VP8 output bitrates are very similar to h264, so we can use that value here
-  let outputBitrate = getOutputBitrateForH264(inputVideo: inputVideo)
-  return "-c:v libvpx -b:v \(outputBitrate) -crf 5 -deadline good -cpu-used 2 -pix_fmt yuv420p"
+  let outputCrf = getOutputCrfForVp8(inputVideo: inputVideo, outputQuality: outputQuality)
+  return "-c:v libvpx -b:v 100M -crf \(outputCrf) -deadline good -cpu-used 2 -pix_fmt yuv420p"
 }
 
-// TODO: Test quality output
-func getVideoCommandForVp9(inputVideo: Video) -> String {
+func getVideoCommandForVp9(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
-  if inputVideoCodec == .vp9 {
+  // If the input codec is the same and the user didnt request a small size, remux
+  if inputVideoCodec == .vp9 && outputQuality != .smallerSize {
     return "-c:v copy"
   }
   
   // https://trac.ffmpeg.org/wiki/Encode/VP9 Constant Quality mode
-  let outputCrf = getOutputCrfForVp9(inputVideo: inputVideo)
+  let outputCrf = getOutputCrfForVp9(inputVideo: inputVideo, outputQuality: outputQuality)
   return "-c:v libvpx-vp9 -crf \(outputCrf) -b:v 0 -deadline good -cpu-used 2 -pix_fmt yuv420p"
 }
 
-func getVideoCommandForMpeg4(inputVideo: Video) -> String {
+func getVideoCommandForMpeg4(inputVideo: Video, outputQuality: VideoQuality) -> String {
   let inputVideoCodec = inputVideo.videoStreams[0].codec
   let inputVideoCodecTag = inputVideo.videoStreams[0].codecTagString
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
+  var qscale: Int
+  if outputQuality == .betterQuality {
+    qscale = 2
+  }
+  else if outputQuality == .smallerSize {
+    qscale = 10
+  }
+  else {
+    qscale = 4
+  }
+  
   // MP4, MOV and M4v do not support XVID, so we handle these separately
   if outputFileType == VideoFormat.mov.rawValue || outputFileType == VideoFormat.mp4.rawValue || outputFileType == VideoFormat.m4v.rawValue {
-    // If the input is MPEG4 but not XVID, we can remux.
-    if inputVideoCodec == .mpeg4 && inputVideoCodecTag != "xvid" {
+    // If the input codec is the same, not XVID and the user didnt request a small size, remux
+    if inputVideoCodec == .mpeg4 && inputVideoCodecTag != "xvid" && outputQuality != .smallerSize {
       return "-c:v copy"
     }
     
     // TODO: We may be able to still copy here, but simply use a different vtag. Need to research if this is possible.
     // Otherwise we need to re-encode the XVID streams using a different FourCC.
     // We simply use the default FourCC: FMP4. See here for more details: https://trac.ffmpeg.org/wiki/Encode/MPEG-4
-    return "-c:v mpeg4 -qscale:v 5 -pix_fmt yuv420p"
+    return "-c:v mpeg4 -qscale:v \(qscale) -pix_fmt yuv420p"
   }
   
-  // For all other input MPEG4 files, we can remux
-  if inputVideoCodec == .mpeg4 {
+  // For all other input MPEG4 files, we can remux if the user didn't request a small size
+  if inputVideoCodec == .mpeg4 && outputQuality != .smallerSize {
     return "-c:v copy"
   }
   
@@ -259,7 +307,7 @@ func getVideoCommandForMpeg4(inputVideo: Video) -> String {
   return "-c:v mpeg4 -vtag xvid -qscale:v 5 -pix_fmt yuv420p"
 }
 
-func getVideoCommandForGif(inputVideo: Video) -> String {
+func getVideoCommandForGif(inputVideo: Video, outputQuality: VideoQuality) -> String {
   // We dont need to do any remuxing for input videos which already use gif codec since it can only be used with gif files. The only case where a user would convert from an input gif to an output gif is if there is an issue with their original file which may be resolved from re-encoding.
   
   // Gif conversion resources:
@@ -268,13 +316,22 @@ func getVideoCommandForGif(inputVideo: Video) -> String {
   // https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
   // Frame rate: https://trac.ffmpeg.org/wiki/ChangingFrameRate
   
+  let fps: Int
+  if outputQuality == .betterQuality {
+    fps = 30
+  }
+  else if outputQuality == .smallerSize {
+    fps = 10
+  }
+  else {
+    fps = 15
+  }
+  
   // TODO: There is still a slight stutter with certain output videos. This seems to improve with higher FPS but not resolve completely.
   // TODO: There is a slight delay with progress as the palette file needs to be created. Look into ways to estimate this, or may want to add an arbitrary delay based on file size or format. This delay is especially long for x265. Didnt find much online, so should ask stackoverflow. At the minimum, we should make it more clear that we are estimating conversion time during this period (since we show no progress bar).
   // NOTE: If color is an issue, use "palettegen=stats_mode=single" and "paletteuse=new=1"
-  return "-vf \"fps=15,scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
+  return "-vf \"fps=\(fps),scale=0:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\" -loop 0"
 }
-
-// TODO: Handle outputQuality
 
 /// Get the video portion of the ffmpeg command.
 /// For x264, we always use 8-bit colour (pixfmt yuv420p) to ensure maximum support. See "Encoding for dumb players" here for more info: https://trac.ffmpeg.org/wiki/Encode/H.264
@@ -291,17 +348,17 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
   if outputCodec != .auto {
     switch outputCodec {
     case .mpeg4:
-      return getVideoCommandForMpeg4(inputVideo: inputVideo)
+      return getVideoCommandForMpeg4(inputVideo: inputVideo, outputQuality: outputQuality)
     case .h264:
-      return getVideoCommandForH264(inputVideo: inputVideo)
+      return getVideoCommandForH264(inputVideo: inputVideo, outputQuality: outputQuality)
     case .hevc:
-      return getVideoCommandForHEVC(inputVideo: inputVideo)
+      return getVideoCommandForHEVC(inputVideo: inputVideo, outputQuality: outputQuality)
     case .vp8:
-      return getVideoCommandForVp8(inputVideo: inputVideo)
+      return getVideoCommandForVp8(inputVideo: inputVideo, outputQuality: outputQuality)
     case .vp9:
-      return getVideoCommandForVp9(inputVideo: inputVideo)
+      return getVideoCommandForVp9(inputVideo: inputVideo, outputQuality: outputQuality)
     case .gif:
-      return getVideoCommandForGif(inputVideo: inputVideo)
+      return getVideoCommandForGif(inputVideo: inputVideo, outputQuality: outputQuality)
     case .prores:
       return getVideoCommandForProres(inputVideo: inputVideo, outputQuality: outputQuality)
     default:
@@ -318,22 +375,22 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
   case VideoFormat.webm.rawValue:
     if inputVideoCodec == .vp9 {
       // If input is already VP9, we call getVideoCommandForVp9, which will remux the input
-      return getVideoCommandForVp9(inputVideo: inputVideo)
+      return getVideoCommandForVp9(inputVideo: inputVideo, outputQuality: outputQuality)
     }
     // All other cases, we convert to VP8 (this also handles remuxing if input is already VP8)
-    return getVideoCommandForVp8(inputVideo: inputVideo)
+    return getVideoCommandForVp8(inputVideo: inputVideo, outputQuality: outputQuality)
   
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mkv.rawValue:
     
     // MOV does not support xvid, so we re-encode to H264
     if inputVideoCodecTag == "xvid" && outputFileType == VideoFormat.mov.rawValue {
-      return getVideoCommandForH264(inputVideo: inputVideo)
+      return getVideoCommandForH264(inputVideo: inputVideo, outputQuality: outputQuality)
     }
     else if inputVideoCodec == .hevc {
       // For input HEVC we can copy the codec (handled in getVideoCommandForHEVC)
-      return getVideoCommandForHEVC(inputVideo: inputVideo)
+      return getVideoCommandForHEVC(inputVideo: inputVideo, outputQuality: outputQuality)
     }
-    else if inputVideoCodec == .h264 || inputVideoCodec == .mpeg4 || inputVideoCodec == .mpeg1video || inputVideoCodec == .mpeg2video {
+    else if (inputVideoCodec == .h264 || inputVideoCodec == .mpeg4 || inputVideoCodec == .mpeg1video || inputVideoCodec == .mpeg2video) && outputQuality != .smallerSize {
       return "-c:v copy"
     }
     
@@ -342,19 +399,19 @@ func getVideoConversionCommand(inputVideo: Video, outputCodec: VideoCodec, outpu
     // GIF Resource: https://unix.stackexchange.com/a/294892
     
     // For everything else, re-encode to H264.
-    return getVideoCommandForH264(inputVideo: inputVideo)
+    return getVideoCommandForH264(inputVideo: inputVideo, outputQuality: outputQuality)
     
   case VideoFormat.avi.rawValue:
     // If this command ever causes problems for GIF inputs, try https://stackoverflow.com/questions/3212821/animated-gif-to-avi-on-linux https://www.linuxquestions.org/questions/linux-software-2/converting-animated-gif-to-avi-ffmpeg-549839/#edit2729743
-    return getVideoCommandForMpeg4(inputVideo: inputVideo)
+    return getVideoCommandForMpeg4(inputVideo: inputVideo, outputQuality: outputQuality)
     
   case VideoFormat.gif.rawValue:
-    return getVideoCommandForGif(inputVideo: inputVideo)
+    return getVideoCommandForGif(inputVideo: inputVideo, outputQuality: outputQuality)
     
   default:
     // For unknown cases, we re-encode to H264
     Logger.error("Unknown output file type when selecting video codec")
-    return getVideoCommandForH264(inputVideo: inputVideo)
+    return getVideoCommandForH264(inputVideo: inputVideo, outputQuality: outputQuality)
   }
 }
 
@@ -384,6 +441,7 @@ func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec) 
     return ""
   }
   
+  var command = "-map 0:a? "
   let inputAudioCodec = inputVideo.audioStreams[0].codec
 
   switch outputFileType {
@@ -392,54 +450,56 @@ func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec) 
     // Technically M4V should support EAC3, but FFMPEG throws an error when this is attempted.
     // See this ticket for more info https://trac.ffmpeg.org/ticket/4844
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.ac3 {
-      return "-c:a copy"
+      command += "-c:a copy"
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return getAacConversionCommand(inputVideo: inputVideo)
+      command += getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue:
     // Codecs supported by MP4 and Quicktime
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 {
-      return "-c:a copy"
+      command += "-c:a copy"
     }
     // If input audio is not one of the generally supported codecs, we can check for some additional cases which ProRes supports
     else if outputVideoCodec == .prores {
       if inputAudioCodec == .pcm_s16le || inputAudioCodec == .pcm_s24le || inputAudioCodec == .pcm_s32le || inputAudioCodec == .pcm_f32le || inputAudioCodec == .flac {
-        return "-c:a copy"
+        command += "-c:a copy"
       }
       else {
         // For ProRes outputs, pcm_s16le and pcm_s24le are most common.
-        return "-c:a pcm_s24le"
+        command += "-c:a pcm_s24le"
       }
     }
     else {
       // See https://brandur.org/fragments/ffmpeg-h265 for details
-      return getAacConversionCommand(inputVideo: inputVideo)
+      command += getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.mkv.rawValue:
     if inputAudioCodec == AudioCodec.unknown {
-      return getAacConversionCommand(inputVideo: inputVideo)
+      command += getAacConversionCommand(inputVideo: inputVideo)
     }
     else {
       // MKV supports all audio codecs we support
-      return "-c:a copy"
+      command += "-c:a copy"
     }
   case VideoFormat.avi.rawValue:
     // Codecs supported by AVI
     // TODO: We don't need to re-encode DTS, only DTS-HD. Should be able to determine this with all the metadata we are capturing.
     if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.mp3 || inputAudioCodec == AudioCodec.ac3 {
-      return "-c:a copy"
+      command += "-c:a copy"
     }
     else {
-      return getAacConversionCommand(inputVideo: inputVideo)
+      command += getAacConversionCommand(inputVideo: inputVideo)
     }
   case VideoFormat.webm.rawValue:
-    return "-c:a libvorbis"
+    command += "-c:a libvorbis"
   default:
     Logger.error("Unknown output file type when selecting audio codec")
-    return getAacConversionCommand(inputVideo: inputVideo)
+    command += getAacConversionCommand(inputVideo: inputVideo)
   }
+  
+  return command
 }
 
 /// Get the subtitle conversion portion of the FFMPEG command.
@@ -483,7 +543,7 @@ func getFfmpegCommand(inputVideo: Video, outputVideoCodec: VideoCodec, outputVid
   
   // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
   // converting more than one audio and video stream, the mapping should be moved to getVideoConversionCommand and getAudioConversionCommand
-  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? -map 0:a? \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
   
   return command
 }
