@@ -493,10 +493,10 @@ func getSubtitleConversionCommand(inputVideo: Video) -> String {
 
   switch outputFileType {
   case VideoFormat.mp4.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mov.rawValue:
-    // NOTE: "-map_metadata:c" is to prevent creating a new subtitle stream with only chapters being shown, see below:
-    // https://www.reddit.com/r/ffmpeg/comments/jtzue6/comment/gc9wz0v/?utm_source=share&utm_medium=web2x&context=3
-    // https://trac.ffmpeg.org/ticket/9436
-    return "-map_metadata:c -1 -map 0:s:\(textBasedStreamIndex) -c:s:0 mov_text"
+    // NOTE: FFMPEG automatically creates a new subtitle stream with only chapters. If we want to avoid this, we need to do one of the following:
+    // - Ignore chapters all together (output file has no chapters): https://trac.ffmpeg.org/ticket/9436
+    // - Ignore chapter metadata (output file will have no chapter names): https://stackoverflow.com/questions/48930386/discard-data-stream-from-container-using-ffmpeg https://www.reddit.com/r/ffmpeg/comments/jtzue6/comment/gc9wz0v/?utm_source=share&utm_medium=web2x&context=3
+    return "-map 0:s:\(textBasedStreamIndex) -c:s:0 mov_text"
   case VideoFormat.mkv.rawValue:
     return "-map 0:s:\(textBasedStreamIndex) -c:s:0 ass" // We could also use srt, which is a less advanced format but may be better supported
   case VideoFormat.webm.rawValue:
