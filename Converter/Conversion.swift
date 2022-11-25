@@ -422,17 +422,22 @@ func getAacConversionCommand(inputVideo: Video) -> String {
 
   if numberOfAudioChannels >= 6 {
     // If we have 6 or more channels, we can force a 5.1 channel layout
-    return "-filter_complex \"channelmap=channel_layout=5.1\" -c:a aac"
+    return "-filter_complex \"[0:a:0]channelmap=channel_layout=5.1[filtered]\" -map [filtered] -c:a:0 aac"
   }
   else {
     // For any other number of channels, FFMPEG can handle converting to stereo. If we have a mono audio input, FFMPEG will simply copy the mono audio to both channels.
-    return "-c:a aac -ac 2"
+    return "-map 0:a:0 -c:a:0 aac -ac 2"
   }
+}
+
+func findIndexOfAudioCodec(inputVideo: Video, supportedCodecs: [AudioCodec]) -> Int? {
+  return inputVideo.audioStreams.firstIndex(where: { supportedCodecs.contains($0.codec) })
 }
 
 // References:
 // - https://en.wikipedia.org/wiki/Comparison_of_video_container_formats#Audio_coding_formats_support
 // - https://en.wikipedia.org/wiki/QuickTime
+
 func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec) -> String {
   let outputFileType = getFileExtension(filePath: inputVideo.outputFilePath!)
   
@@ -440,66 +445,71 @@ func getAudioConversionCommand(inputVideo: Video, outputVideoCodec: VideoCodec) 
   if inputVideo.audioStreams.isEmpty || outputFileType == VideoFormat.gif.rawValue {
     return ""
   }
-  
-  var command = "-map 0:a? "
-  let inputAudioCodec = inputVideo.audioStreams[0].codec
 
   switch outputFileType {
   case VideoFormat.m4v.rawValue:
     // Codecs supported by M4V and Quicktime. This should be identical to the logic for MP4 and MOV, with the exception of avoiding copying EAC3 codec.
     // Technically M4V should support EAC3, but FFMPEG throws an error when this is attempted.
     // See this ticket for more info https://trac.ffmpeg.org/ticket/4844
-    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.ac3 {
-      command += "-c:a copy"
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: [.aac, .ac3])
+    if streamIndex != nil {
+      return "-map 0:a:\(streamIndex!) -c:a copy"
     }
-    else {
-      // See https://brandur.org/fragments/ffmpeg-h265 for details
-      command += getAacConversionCommand(inputVideo: inputVideo)
-    }
+    
+    return getAacConversionCommand(inputVideo: inputVideo)
+    
   case VideoFormat.mp4.rawValue, VideoFormat.mov.rawValue:
     // Codecs supported by MP4 and Quicktime
-    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.eac3 || inputAudioCodec == AudioCodec.ac3 {
-      command += "-c:a copy"
+    var supportedCodecs: [AudioCodec] = [.aac, .eac3, .ac3]
+    if outputVideoCodec == .prores {
+      supportedCodecs += [.pcm_s16le, .pcm_s24le, .pcm_s32le, .pcm_f32le, .flac]
     }
-    // If input audio is not one of the generally supported codecs, we can check for some additional cases which ProRes supports
-    else if outputVideoCodec == .prores {
-      if inputAudioCodec == .pcm_s16le || inputAudioCodec == .pcm_s24le || inputAudioCodec == .pcm_s32le || inputAudioCodec == .pcm_f32le || inputAudioCodec == .flac {
-        command += "-c:a copy"
-      }
-      else {
-        // For ProRes outputs, pcm_s16le and pcm_s24le are most common.
-        command += "-c:a pcm_s24le"
-      }
+    
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: supportedCodecs)
+    if streamIndex != nil {
+      return "-map 0:a:\(streamIndex!) -c:a copy"
     }
-    else {
-      // See https://brandur.org/fragments/ffmpeg-h265 for details
-      command += getAacConversionCommand(inputVideo: inputVideo)
+    
+    if outputVideoCodec == .prores {
+      // For ProRes outputs, pcm_s16le and pcm_s24le are most common.
+      return "-map 0:a:0 -c:a:0 pcm_s24le"
     }
+    
+    return getAacConversionCommand(inputVideo: inputVideo)
+    
   case VideoFormat.mkv.rawValue:
-    if inputAudioCodec == AudioCodec.unknown {
-      command += getAacConversionCommand(inputVideo: inputVideo)
+    // MKV supports all audio codecs we recognize. We remove .unknown from the options so that we copy all audio codecs other than one's we don't recognize.
+    var supportedCodecs = AudioCodec.allCases
+    supportedCodecs.removeAll(where: { $0 == .unknown })
+    
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: supportedCodecs)
+    if streamIndex != nil {
+      return "-map 0:a:\(streamIndex!) -c:a copy"
     }
-    else {
-      // MKV supports all audio codecs we support
-      command += "-c:a copy"
-    }
+  
+    return getAacConversionCommand(inputVideo: inputVideo)
+    
   case VideoFormat.avi.rawValue:
     // Codecs supported by AVI
     // TODO: We don't need to re-encode DTS, only DTS-HD. Should be able to determine this with all the metadata we are capturing.
-    if inputAudioCodec == AudioCodec.aac || inputAudioCodec == AudioCodec.mp3 || inputAudioCodec == AudioCodec.ac3 {
-      command += "-c:a copy"
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: [.aac, .mp3, .ac3])
+    if streamIndex != nil {
+      return "-map 0:a:\(streamIndex!) -c:a copy"
     }
-    else {
-      command += getAacConversionCommand(inputVideo: inputVideo)
-    }
+    
+    return getAacConversionCommand(inputVideo: inputVideo)
   case VideoFormat.webm.rawValue:
-    command += "-c:a libvorbis"
+    let streamIndex = findIndexOfAudioCodec(inputVideo: inputVideo, supportedCodecs: [.vorbis, .opus])
+    if streamIndex != nil {
+      return "-map 0:a:\(streamIndex!) -c:a copy"
+    }
+    
+    return "-map 0:a:0 -c:a:0 libvorbis"
+
   default:
     Logger.error("Unknown output file type when selecting audio codec")
-    command += getAacConversionCommand(inputVideo: inputVideo)
+    return getAacConversionCommand(inputVideo: inputVideo)
   }
-  
-  return command
 }
 
 /// Get the subtitle conversion portion of the FFMPEG command.
@@ -518,10 +528,10 @@ func getSubtitleConversionCommand(inputVideo: Video) -> String {
 
   switch outputFileType {
   case VideoFormat.mp4.rawValue, VideoFormat.m4v.rawValue, VideoFormat.mov.rawValue:
-    // NOTE: "-map_metadata:c" is to prevent creating a new subtitle stream with only chapters being shown, see below:
-    // https://www.reddit.com/r/ffmpeg/comments/jtzue6/comment/gc9wz0v/?utm_source=share&utm_medium=web2x&context=3
-    // https://trac.ffmpeg.org/ticket/9436
-    return "-map_metadata:c -1 -map 0:s:\(textBasedStreamIndex) -c:s:0 mov_text"
+    // NOTE: FFMPEG automatically creates a new subtitle stream with only chapters. If we want to avoid this, we need to do one of the following:
+    // - Ignore chapters all together (output file has no chapters): https://trac.ffmpeg.org/ticket/9436
+    // - Ignore chapter metadata (output file will have no chapter names): https://stackoverflow.com/questions/48930386/discard-data-stream-from-container-using-ffmpeg https://www.reddit.com/r/ffmpeg/comments/jtzue6/comment/gc9wz0v/?utm_source=share&utm_medium=web2x&context=3
+    return "-map 0:s:\(textBasedStreamIndex) -c:s:0 mov_text"
   case VideoFormat.mkv.rawValue:
     return "-map 0:s:\(textBasedStreamIndex) -c:s:0 ass" // We could also use srt, which is a less advanced format but may be better supported
   case VideoFormat.webm.rawValue:
@@ -543,7 +553,7 @@ func getFfmpegCommand(inputVideo: Video, outputVideoCodec: VideoCodec, outputVid
   
   // We currently map all audio and video streams, but subtitle stream mapping is handled by getSubtitleConversionCommand. Once we support
   // converting more than one audio and video stream, the mapping should be moved to getVideoConversionCommand and getAudioConversionCommand
-  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? \(audioCommand) \(videoCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
+  let command = "-hide_banner -y -i \"\(inputVideo.filePath)\" -map 0:v? \(videoCommand) \(audioCommand) \(subtitleCommand) \"\(inputVideo.outputFilePath!)\""
   
   return command
 }
@@ -577,6 +587,9 @@ func isFileValid(inputFilePath: String) -> Bool {
   let logs = session?.getAllLogsAsString()
   
   let error = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
+  if !error.isEmpty {
+    Logger.error("Error returned from ffprobe on isFileValid check: \(error)")
+  }
   
-  return error.count == 0
+  return error.isEmpty
 }
