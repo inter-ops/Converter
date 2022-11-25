@@ -532,7 +532,7 @@ func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> 
 }
 
 func getAllVideoProperties(inputFileUrl: URL) -> Video {
-  let session = FFprobeKit.execute("-ignore_chapters 1 -loglevel error -show_entries stream:format \"\(inputFileUrl.path)\"")
+  let session = FFprobeKit.execute("-loglevel error -show_entries stream:format \"\(inputFileUrl.path)\"")
   let logs = session?.getAllLogsAsString()!.trimmingCharacters(in: .whitespacesAndNewlines)
 
   return buildVideo(withFfprobeOutput: logs!, inputFileUrl: inputFileUrl)
@@ -548,8 +548,7 @@ func getFfprobeOutput(inputFilePath: String) -> String {
 }
 
 func isFileValid(inputFilePath: String) -> Bool {
-  // TODO: This is a hacky fix, it ignores the problem. https://stackoverflow.com/questions/53260802/ffmpeg-referenced-qt-chapter-track-not-found
-  let session = FFprobeKit.execute("-ignore_chapters 1 -loglevel error \"\(inputFilePath)\"")
+  let session = FFprobeKit.execute("-loglevel error \"\(inputFilePath)\"")
   let logs = session?.getAllLogsAsString()
   
   let error = logs!.trimmingCharacters(in: .whitespacesAndNewlines)
