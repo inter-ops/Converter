@@ -532,7 +532,7 @@ func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> 
 }
 
 func getAllVideoProperties(inputFileUrl: URL) -> Video {
-  let session = FFprobeKit.execute("-loglevel error -show_entries stream:format \"\(inputFileUrl.path)\"")
+  let session = FFprobeKit.execute("-ignore_chapters 1 -loglevel error -show_entries stream:format \"\(inputFileUrl.path)\"")
   let logs = session?.getAllLogsAsString()!.trimmingCharacters(in: .whitespacesAndNewlines)
 
   return buildVideo(withFfprobeOutput: logs!, inputFileUrl: inputFileUrl)
