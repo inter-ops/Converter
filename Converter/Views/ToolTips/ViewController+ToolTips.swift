@@ -35,7 +35,7 @@ extension ViewController {
     
     static let formatDropdown =
       """
-      The intended output container format.
+      The output container format.
       
       Depending on your usage, MP4 is generally the most compatible format.
       """
