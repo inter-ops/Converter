@@ -9,41 +9,74 @@ import Cocoa
 
 extension ViewController {
   
-  enum ElementToolTips: String {
-    case formatDropdown
-    case codecDropdown
-    case qualityDropdown
-    
-    var stringValue: String {
-      switch self {
-      case .formatDropdown: return
-        """
-        The intended output container format. Depending on your usage, MP4 is generally the most compatible format.
-        """
-      case .codecDropdown: return
-        """
-        Determines the encoder used to convert your video file. Auto selected by default.
-        
-        • Auto (default): Allow our smart algorithms to automatically determine the most ideal codec for both quality and compatibility.
-        """
-      case .qualityDropdown: return
-        """
-        Determines the target output quality for your video file. Balanced selected by default.
-        
-        • Better Quality: Targets the highest possible quality, at the expense of a larger file size.
-        
-        • Balanced (default): Maintains an appropriate balance between both quality and file size. The most ideal option.
-        
-        • Smaller Size: Targets a smaller file size, at the expense of overall quality.
-        """
-      }
-    }
+  func initToolTips() {
+    formatDropdown.toolTip = formatDropdownToolTip
+    codecDropdown.toolTip = codecDropdownToolTip
+    qualityDropdown.toolTip = qualityDropdownToolTip
   }
   
-  func initToolTips() {
-    formatDropdown.toolTip = ElementToolTips.formatDropdown.stringValue
-    codecDropdown.toolTip = ElementToolTips.codecDropdown.stringValue
-    qualityDropdown.toolTip = ElementToolTips.qualityDropdown.stringValue
+  var formatDropdownToolTip: String {
+    return UiToolTips.formatDropdown
+  }
+  
+  var codecDropdownToolTip: String {
+    return UiToolTips.codecDropdown
+  }
+  
+  var qualityDropdownToolTip: String {
+    if outputCodec == .prores {
+      return UiToolTips.proResQualityDropdown
+    }
+    return UiToolTips.defaultQualityDropdown
+  }
+  
+  
+  struct UiToolTips {
+    
+    static let formatDropdown =
+      """
+      The intended output container format.
+      
+      Depending on your usage, MP4 is generally the most compatible format.
+      """
+    
+    static var codecDropdown =
+      """
+      Determines the encoder used to convert your video file. Auto selected by default.
+      
+      • Auto (default): Allow our smart algorithms to automatically determine the most ideal codec for both quality and compatibility.
+      """
+    
+    static var defaultQualityDropdown =
+      """
+      Determines the target output quality for your video file. Balanced selected by default.
+      
+      • Better Quality: Targets the highest possible quality, at the expense of a larger file size.
+      
+      • Balanced (default): Maintains an appropriate balance between both quality and file size. The most ideal option.
+      
+      • Smaller Size: Targets a smaller file size, at the expense of overall quality.
+      """
+    
+    static var proResQualityDropdown =
+      """
+      Apple ProRes codecs provide an unparalleled combination of multistream, real-time editing performance, impressive image quality, and reduced storage rates. Apple ProRes codecs take full advantage of multicore processing and feature fast, reduced-resolution decoding modes.
+      
+      • Auto (default): Selects the most optimal codec based on the input file.
+      
+      • 422 Proxy: The most highly compressed codec, intended for use in offline workflows that require low data rates but full-resolution video. The target data rate is approximately 45 Mbps at 1920x1080 and 29.97 fps.
+      
+      • 422 LT: A more highly compressed codec than Apple ProRes 422, with roughly 70 percent of the data rate and 30 percent smaller file sizes. This codec is perfect for environments where storage capacity and data rate are at a premium. The target data rate is approximately 102 Mbps at 1920x1080 and 29.97 fps.
+      
+      • 422: A high-quality compressed codec offering nearly all the benefits of Apple ProRes 422 HQ, but at 66 percent of the data rate for even better multistream, real-time editing performance. The target data rate is approximately 147 Mbps at 1920x1080 and 29.97 fps.
+      
+      • 422 HQ: A higher-data-rate version of Apple ProRes 422 that preserves visual quality at the same high level as Apple ProRes 4444 but for 4:2:2 image sources. This codec supports full-width, 4:2:2 video sources at 10-bit pixel depths, while remaining visually lossless through many generations of decoding and reencoding. The target data rate is approximately 220 Mbps at 1920x1080 and 29.97 fps.
+      
+      • 4444: An extremely high-quality version of Apple ProRes for 4:4:4:4 image sources (including alpha channels). This codec features full-resolution, mastering-quality 4:4:4:4 RGBA color, and visual fidelity that is perceptually indistinguishable from the original material. Apple ProRes 4444 is a high-quality solution for storing and exchanging motion graphics and composites, with excellent multigeneration performance and a mathematically lossless alpha channel of up to 16 bits. It has a target data rate of approximately 330 Mbps for 4:4:4 sources at 1920x1080 and 29.97 fps.
+      
+      • 4444 XQ: The highest-quality version of Apple ProRes for 4:4:4:4 image sources (including alpha channels). This format has a very high data rate to preserve the detail in high-dynamic-range imagery generated by today’s highest-quality digital image sensors. Like standard Apple ProRes 4444, this codec supports up to 12 bits per image channel and up to 16 bits for the alpha channel. Apple ProRes 4444 XQ features a target data rate of approximately 500 Mbps for 4:4:4 sources at 1920x1080 and 29.97 fps.
+      """
+      
   }
   
 }
