@@ -42,14 +42,20 @@ extension ViewController {
     
     static var codecDropdown =
       """
-      Determines the encoder used to convert your video file. Auto selected by default.
+      Determines the encoder used to convert your video file.
       
-      • Auto (default): Allow our smart algorithms to automatically determine the most ideal codec for both quality and compatibility.
+      • Auto (default): Our smart algorithms will automatically determine the most ideal codec for both quality and compatibility. Prioritizes transmuxing if available.
+      
+      • H.264: The most compatible codec available. Good quality with average file size. Recommended for 1080p content.
+      
+      • H.265 (HEVC): The most powerful codec available with built-in HDR and 10-bit color range. Compatible with the Apple TV 4K and later. Recommended for 4K content.
+      
+      Transmuxing is the process of swapping your video's container to a different format, without the need to encode the entire media file. This preserves both quality and file size, while bringing it to a more compatible medium.
       """
     
     static var defaultQualityDropdown =
       """
-      Determines the target output quality for your video file. Balanced selected by default.
+      Determines the target output quality for your video file.
       
       • Better Quality: Targets the highest possible quality, at the expense of a larger file size.
       
