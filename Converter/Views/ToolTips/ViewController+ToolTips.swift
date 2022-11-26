@@ -42,7 +42,7 @@ extension ViewController {
     
     static var codecDropdown =
       """
-      Determines the encoder used to convert your video file.
+      Determines the encoder used to convert your video.
       
       • Auto (default): Our smart algorithms will automatically determine the most ideal codec for both quality and compatibility. Prioritizes transmuxing if available.
       
@@ -55,7 +55,7 @@ extension ViewController {
     
     static var defaultQualityDropdown =
       """
-      Determines the target output quality for your video file.
+      Determines the target output quality for your video.
       
       • Better Quality: Targets the highest possible quality, at the expense of a larger file size.
       
