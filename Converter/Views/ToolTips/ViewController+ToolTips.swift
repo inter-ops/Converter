@@ -44,7 +44,7 @@ extension ViewController {
       """
       Determines the encoder used to convert your video.
       
-      • Auto (default): Our smart algorithms will automatically determine the most ideal codec for both quality and compatibility. Prioritizes transmuxing if available.
+      • Auto (default): Our smart algorithms will automatically determine the most ideal codec for both quality and compatibility. Prioritizes transmuxing when available.
       
       • H.264: The most compatible codec available. Good quality with average file size. Recommended for 1080p content.
       
