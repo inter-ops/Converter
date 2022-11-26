@@ -906,14 +906,15 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="194" id="xIQ-40-1ai"/>
                                                 </constraints>
-                                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="he9-SO-2IL" id="ohR-D7-DgU">
+                                                <popUpButtonCell key="cell" type="push" title="Auto" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="he9-SO-2IL" id="ohR-D7-DgU">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="menu"/>
                                                     <menu key="menu" id="AUe-Rn-K3z">
                                                         <items>
-                                                            <menuItem title="Item 1" state="on" id="he9-SO-2IL"/>
-                                                            <menuItem title="Item 2" id="ztj-ld-Xtk"/>
-                                                            <menuItem title="Item 3" id="2MT-7w-Vuq"/>
+                                                            <menuItem title="Auto" state="on" id="he9-SO-2IL"/>
+                                                            <menuItem title="H.264" id="ztj-ld-Xtk"/>
+                                                            <menuItem title="H.265 (HEVC)" id="2MT-7w-Vuq"/>
+                                                            <menuItem title="MPEG-4" id="QZb-Hn-M88"/>
                                                         </items>
                                                     </menu>
                                                 </popUpButtonCell>
@@ -946,14 +947,16 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="194" id="gdS-i0-vBq"/>
                                                 </constraints>
-                                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="TgE-7X-Tjo" id="J2f-3D-qqw">
+                                                <popUpButtonCell key="cell" type="push" title="Balanced" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="2WV-Iw-SFc" id="J2f-3D-qqw">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="menu"/>
                                                     <menu key="menu" id="QrC-tt-a4H">
                                                         <items>
-                                                            <menuItem title="Item 1" state="on" id="TgE-7X-Tjo"/>
-                                                            <menuItem title="Item 2" id="2WV-Iw-SFc"/>
-                                                            <menuItem title="Item 3" id="g8O-dO-uJ9"/>
+                                                            <menuItem title="Better Quality" id="TgE-7X-Tjo">
+                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                            </menuItem>
+                                                            <menuItem title="Balanced" state="on" id="2WV-Iw-SFc"/>
+                                                            <menuItem title="Smaller Size" id="g8O-dO-uJ9"/>
                                                         </items>
                                                     </menu>
                                                 </popUpButtonCell>
