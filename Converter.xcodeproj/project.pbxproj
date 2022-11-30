@@ -150,6 +150,7 @@
 		C2DC469F28AC1BB300EDD3EB /* DragDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropView.swift; sourceTree = "<group>"; };
 		C2DC46A128AD618500EDD3EB /* DragDropBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragDropBox.swift; sourceTree = "<group>"; };
 		C2E1F22028C29A17005A8B48 /* ErrorPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorPrompt.swift; sourceTree = "<group>"; };
+		C2F8D684293560470098DB21 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -298,6 +299,7 @@
 		C2D33F4528A950BA00BDCCD4 /* Converter */ = {
 			isa = PBXGroup;
 			children = (
+				C2F8D6832935601C0098DB21 /* StoreKit */,
 				79F0029A28EF46C700AD93BB /* Utilities */,
 				C2D94BCD28C11BCE001E14E9 /* Info.plist */,
 				C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */,
@@ -345,6 +347,14 @@
 				C205DB1D2908363D00A1C6F8 /* DragDrop */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		C2F8D6832935601C0098DB21 /* StoreKit */ = {
+			isa = PBXGroup;
+			children = (
+				C2F8D684293560470098DB21 /* Products.storekit */,
+			);
+			path = StoreKit;
 			sourceTree = "<group>";
 		};
 		D5F2785EA79D681D546BD992 /* Frameworks */ = {
