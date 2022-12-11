@@ -42,6 +42,13 @@
 		C22A4EF328F47AFD0050D739 /* AppMenu+Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */; };
 		C22A4EF528F47FB60050D739 /* AppMenu+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22A4EF428F47FB60050D739 /* AppMenu+Debug.swift */; };
 		C2404C872915903F00CD9430 /* ViewController+Purchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2404C862915903F00CD9430 /* ViewController+Purchase.swift */; };
+		C2438C37293FECF30038B640 /* AppDelegate+StoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C36293FECF30038B640 /* AppDelegate+StoreKit.swift */; };
+		C2438C70294507720038B640 /* AppProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C6F294507720038B640 /* AppProtocols.swift */; };
+		C2438C7429450A160038B640 /* StoreKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7329450A160038B640 /* StoreKitHelper.swift */; };
+		C2438C7629450AC30038B640 /* Products.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7529450AC30038B640 /* Products.swift */; };
+		C2438C7829450DD10038B640 /* ViewController+StoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7729450DD10038B640 /* ViewController+StoreKit.swift */; };
+		C2438C7A294518BB0038B640 /* StoreKitValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C79294518BB0038B640 /* StoreKitValidation.swift */; };
+		C2438C7C294669850038B640 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7B294669850038B640 /* Store.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
 		C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */; };
@@ -120,6 +127,13 @@
 		C22A4EF228F47AFD0050D739 /* AppMenu+Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppMenu+Global.swift"; sourceTree = "<group>"; };
 		C22A4EF428F47FB60050D739 /* AppMenu+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppMenu+Debug.swift"; sourceTree = "<group>"; };
 		C2404C862915903F00CD9430 /* ViewController+Purchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Purchase.swift"; sourceTree = "<group>"; };
+		C2438C36293FECF30038B640 /* AppDelegate+StoreKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+StoreKit.swift"; sourceTree = "<group>"; };
+		C2438C6F294507720038B640 /* AppProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppProtocols.swift; sourceTree = "<group>"; };
+		C2438C7329450A160038B640 /* StoreKitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitHelper.swift; sourceTree = "<group>"; };
+		C2438C7529450AC30038B640 /* Products.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Products.swift; sourceTree = "<group>"; };
+		C2438C7729450DD10038B640 /* ViewController+StoreKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+StoreKit.swift"; sourceTree = "<group>"; };
+		C2438C79294518BB0038B640 /* StoreKitValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitValidation.swift; sourceTree = "<group>"; };
+		C2438C7B294669850038B640 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
 		C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulProgressIndicator.swift; sourceTree = "<group>"; };
 		C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpInfoViewController.xib; sourceTree = "<group>"; };
@@ -206,6 +220,26 @@
 				C22A4EF428F47FB60050D739 /* AppMenu+Debug.swift */,
 			);
 			path = AppMenu;
+			sourceTree = "<group>";
+		};
+		C2438C6E294507470038B640 /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				C2438C6F294507720038B640 /* AppProtocols.swift */,
+				C2438C7329450A160038B640 /* StoreKitHelper.swift */,
+				C2438C7729450DD10038B640 /* ViewController+StoreKit.swift */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
+		C2438C7D29466A430038B640 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				C2F8D684293560470098DB21 /* Products.storekit */,
+				C2438C7529450AC30038B640 /* Products.swift */,
+				C2438C7B294669850038B640 /* Store.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		C24745C728BD8812007E128B /* Popover */ = {
@@ -352,7 +386,10 @@
 		C2F8D6832935601C0098DB21 /* StoreKit */ = {
 			isa = PBXGroup;
 			children = (
-				C2F8D684293560470098DB21 /* Products.storekit */,
+				C2438C36293FECF30038B640 /* AppDelegate+StoreKit.swift */,
+				C2438C7D29466A430038B640 /* Common */,
+				C2438C6E294507470038B640 /* Legacy */,
+				C2438C79294518BB0038B640 /* StoreKitValidation.swift */,
 			);
 			path = StoreKit;
 			sourceTree = "<group>";
@@ -449,9 +486,11 @@
 				C2638D5628EA211400841C47 /* ReportErrorWindowController.swift in Sources */,
 				79F0029C28EF46D400AD93BB /* Date.swift in Sources */,
 				C2DC46A028AC1BB300EDD3EB /* DragDropView.swift in Sources */,
+				C2438C7C294669850038B640 /* Store.swift in Sources */,
 				79CD2F2328ECBF2B005F34F0 /* Logger.swift in Sources */,
 				C2404C872915903F00CD9430 /* ViewController+Purchase.swift in Sources */,
 				C2BEEEFB2903141E00F9FFD8 /* PremiumView.swift in Sources */,
+				C2438C7429450A160038B640 /* StoreKitHelper.swift in Sources */,
 				79AF2A7E28D5FDF6009CCB42 /* SubtitleCodec.swift in Sources */,
 				C22A4EF328F47AFD0050D739 /* AppMenu+Global.swift in Sources */,
 				C22A4EF528F47FB60050D739 /* AppMenu+Debug.swift in Sources */,
@@ -461,7 +500,9 @@
 				C2B26F5129142CC3001FBD6A /* PurchasePremiumViewController.swift in Sources */,
 				799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */,
 				C2CAD9FF291ED5B8005F9733 /* ProcessLoader.swift in Sources */,
+				C2438C37293FECF30038B640 /* AppDelegate+StoreKit.swift in Sources */,
 				C22287A528F498F400137473 /* String+Extensions.swift in Sources */,
+				C2438C70294507720038B640 /* AppProtocols.swift in Sources */,
 				C2D33F5728A97E2000BDCCD4 /* VideoFormat.swift in Sources */,
 				C205DB1C2908358C00A1C6F8 /* WindowController.swift in Sources */,
 				C2DC46A228AD618500EDD3EB /* DragDropBox.swift in Sources */,
@@ -470,6 +511,8 @@
 				C2E1F22128C29A17005A8B48 /* ErrorPrompt.swift in Sources */,
 				C21CC16C28EC920700176A98 /* MessageDidSend.swift in Sources */,
 				7978DA6B28BAE30400BC254B /* Constants.swift in Sources */,
+				C2438C7829450DD10038B640 /* ViewController+StoreKit.swift in Sources */,
+				C2438C7629450AC30038B640 /* Products.swift in Sources */,
 				C2CAD9FD291EC410005F9733 /* EnableDisableUI.swift in Sources */,
 				794AA2CA28C2D61900AADF36 /* ChannelLayout.swift in Sources */,
 				C2638D5428EA20CA00841C47 /* ContactWindowController.swift in Sources */,
@@ -482,6 +525,7 @@
 				C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */,
 				7958C6BA291C319E00D4621A /* URL+Extensions.swift in Sources */,
 				C29D1A4D290C83F300711C14 /* PremiumView+Video.swift in Sources */,
+				C2438C7A294518BB0038B640 /* StoreKitValidation.swift in Sources */,
 				794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */,
 				C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */,
 				C2638D5C28EB446A00841C47 /* SegueData.swift in Sources */,

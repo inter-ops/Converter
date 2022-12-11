@@ -755,6 +755,29 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="zvb-J3-IVA"/>
+                                        <menuItem title="StoreKit" id="fAR-CT-Uwz">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" id="NXS-uX-H2q">
+                                                <items>
+                                                    <menuItem title="Purchase Premium" id="eqq-mw-wiq">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="debugPurchasePremiumTransaction:" target="Voe-Tx-rLC" id="c8x-hO-xGx"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Restore Premium" id="6Nf-UW-5Gv">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="debugRestorePurchaseSession:" target="Voe-Tx-rLC" id="60S-Vu-VQQ"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Check Status" id="SW3-NY-k1i">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -1897,8 +1920,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="EQ5-Om-Sgo"/>
-        <segue reference="AU9-B4-7B8"/>
+        <segue reference="wed-Vm-xLL"/>
+        <segue reference="yPM-Jk-fVy"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AppIconLogo" width="60" height="60"/>
