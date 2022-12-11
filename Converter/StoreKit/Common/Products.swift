@@ -8,7 +8,14 @@
 import Foundation
 
 enum Products: String {
+  
   case premium = "VC0089E74P"
+  
+}
+
+// MARK: Product Variables
+
+extension Products {
   
   var id: String {
     return self.rawValue
