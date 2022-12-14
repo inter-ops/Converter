@@ -78,7 +78,11 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     initPremiumView()
     updateDragDrop(withStyle: .regular)
     
+    // Potentially old
     initStoreKitHelper()
+    
+    // Receipt check
+    initReceiptCheck()
   }
   
   func initMainView() {

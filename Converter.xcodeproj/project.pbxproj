@@ -57,6 +57,9 @@
 		C2638D5428EA20CA00841C47 /* ContactWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2638D5328EA20CA00841C47 /* ContactWindowController.swift */; };
 		C2638D5628EA211400841C47 /* ReportErrorWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2638D5528EA211400841C47 /* ReportErrorWindowController.swift */; };
 		C2638D5C28EB446A00841C47 /* SegueData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2638D5B28EB446A00841C47 /* SegueData.swift */; };
+		C26C7526294A4FDF00EF8E1E /* TPInAppReceipt in Frameworks */ = {isa = PBXBuildFile; productRef = C26C7525294A4FDF00EF8E1E /* TPInAppReceipt */; };
+		C26C7529294A504200EF8E1E /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26C7528294A504200EF8E1E /* IAPHelper.swift */; };
+		C26C752B294A52B800EF8E1E /* ViewController+ReceiptCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26C752A294A52B800EF8E1E /* ViewController+ReceiptCheck.swift */; };
 		C274CDEB28E5E274005BCE22 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C274CDE928E5E274005BCE22 /* ContactViewController.swift */; };
 		C274CDEE28E609F5005BCE22 /* ReportErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C274CDED28E609F5005BCE22 /* ReportErrorViewController.swift */; };
 		C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */; };
@@ -142,6 +145,8 @@
 		C2638D5328EA20CA00841C47 /* ContactWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactWindowController.swift; sourceTree = "<group>"; };
 		C2638D5528EA211400841C47 /* ReportErrorWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportErrorWindowController.swift; sourceTree = "<group>"; };
 		C2638D5B28EB446A00841C47 /* SegueData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegueData.swift; sourceTree = "<group>"; };
+		C26C7528294A504200EF8E1E /* IAPHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
+		C26C752A294A52B800EF8E1E /* ViewController+ReceiptCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ReceiptCheck.swift"; sourceTree = "<group>"; };
 		C274CDE928E5E274005BCE22 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		C274CDED28E609F5005BCE22 /* ReportErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportErrorViewController.swift; sourceTree = "<group>"; };
 		C289E8AB28BA6DD10002CDA3 /* ConversionDidComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversionDidComplete.swift; sourceTree = "<group>"; };
@@ -180,6 +185,7 @@
 				79D352A528FDDDE300F8CD39 /* libavdevice.xcframework in Frameworks */,
 				79D352AF28FDDDE900F8CD39 /* libswscale.xcframework in Frameworks */,
 				79D352A928FDDDE500F8CD39 /* libavformat.xcframework in Frameworks */,
+				C26C7526294A4FDF00EF8E1E /* TPInAppReceipt in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +267,15 @@
 				C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */,
 			);
 			path = ProgressBar;
+			sourceTree = "<group>";
+		};
+		C26C7527294A502B00EF8E1E /* Receipt */ = {
+			isa = PBXGroup;
+			children = (
+				C26C7528294A504200EF8E1E /* IAPHelper.swift */,
+				C26C752A294A52B800EF8E1E /* ViewController+ReceiptCheck.swift */,
+			);
+			path = Receipt;
 			sourceTree = "<group>";
 		};
 		C274CDE828E5E243005BCE22 /* NativeContact */ = {
@@ -387,6 +402,7 @@
 			isa = PBXGroup;
 			children = (
 				C2438C36293FECF30038B640 /* AppDelegate+StoreKit.swift */,
+				C26C7527294A502B00EF8E1E /* Receipt */,
 				C2438C7D29466A430038B640 /* Common */,
 				C2438C6E294507470038B640 /* Legacy */,
 				C2438C79294518BB0038B640 /* StoreKitValidation.swift */,
@@ -426,6 +442,9 @@
 			dependencies = (
 			);
 			name = Converter;
+			packageProductDependencies = (
+				C26C7525294A4FDF00EF8E1E /* TPInAppReceipt */,
+			);
 			productName = Converter;
 			productReference = C2D33F4328A950BA00BDCCD4 /* Video Converter.app */;
 			productType = "com.apple.product-type.application";
@@ -454,6 +473,9 @@
 				Base,
 			);
 			mainGroup = C2D33F3A28A950BA00BDCCD4;
+			packageReferences = (
+				C26C7524294A4FDF00EF8E1E /* XCRemoteSwiftPackageReference "TPInAppReceipt" */,
+			);
 			productRefGroup = C2D33F4428A950BA00BDCCD4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -499,6 +521,7 @@
 				7908E48728AAAFB500B02512 /* Conversion.swift in Sources */,
 				C2B26F5129142CC3001FBD6A /* PurchasePremiumViewController.swift in Sources */,
 				799E3E5428C0479500234BDE /* AudioCodec.swift in Sources */,
+				C26C752B294A52B800EF8E1E /* ViewController+ReceiptCheck.swift in Sources */,
 				C2CAD9FF291ED5B8005F9733 /* ProcessLoader.swift in Sources */,
 				C2438C37293FECF30038B640 /* AppDelegate+StoreKit.swift in Sources */,
 				C22287A528F498F400137473 /* String+Extensions.swift in Sources */,
@@ -509,6 +532,7 @@
 				C274CDEB28E5E274005BCE22 /* ContactViewController.swift in Sources */,
 				7948AA6228CF9916003DB5E2 /* Configuration.swift in Sources */,
 				C2E1F22128C29A17005A8B48 /* ErrorPrompt.swift in Sources */,
+				C26C7529294A504200EF8E1E /* IAPHelper.swift in Sources */,
 				C21CC16C28EC920700176A98 /* MessageDidSend.swift in Sources */,
 				7978DA6B28BAE30400BC254B /* Constants.swift in Sources */,
 				C2438C7829450DD10038B640 /* ViewController+StoreKit.swift in Sources */,
@@ -938,6 +962,25 @@
 			defaultConfigurationName = "Production Release";
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C26C7524294A4FDF00EF8E1E /* XCRemoteSwiftPackageReference "TPInAppReceipt" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tikhop/TPInAppReceipt.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C26C7525294A4FDF00EF8E1E /* TPInAppReceipt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C26C7524294A4FDF00EF8E1E /* XCRemoteSwiftPackageReference "TPInAppReceipt" */;
+			productName = TPInAppReceipt;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C2D33F3B28A950BA00BDCCD4 /* Project object */;
 }

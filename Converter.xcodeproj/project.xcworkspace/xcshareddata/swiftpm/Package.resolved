@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "asn1swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tikhop/ASN1Swift",
+      "state" : {
+        "revision" : "b53bee03a942623db25afc5bfb80227b2cb3b425",
+        "version" : "1.2.4"
+      }
+    },
+    {
+      "identity" : "tpinappreceipt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tikhop/TPInAppReceipt.git",
+      "state" : {
+        "revision" : "5b830d6ce6c34bb4bb976917576ab560e7945037",
+        "version" : "3.3.4"
+      }
+    }
+  ],
+  "version" : 2
+}

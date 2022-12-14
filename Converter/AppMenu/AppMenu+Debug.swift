@@ -60,4 +60,10 @@ extension AppDelegate {
     viewController?.restorePremium()
   }
   
+  // MARK: - Receipt Validation
+  @IBAction func debugCheckPremiumPurchaseReceipt(_ sender: Any) {
+    let viewController = mainWindow.contentViewController as? ViewController
+    viewController?.hasPurchasedPremium()
+  }
+  
 }
