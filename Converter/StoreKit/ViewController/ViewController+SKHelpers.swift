@@ -12,7 +12,7 @@ extension ViewController {
   func initStoreKitHelper() {
     initSKObservers()
     initReceiptCheck()
-    StoreKitHelper.shared.getProducts(products: Products.premium())
+    StoreKitHelper.shared.getProducts(products: Store.Products.premium())
   }
   
 }
