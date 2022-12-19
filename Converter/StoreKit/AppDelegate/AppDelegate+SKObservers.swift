@@ -18,6 +18,7 @@ extension AppDelegate {
   
   @objc func purchaseNotification(notification: Notification) {
     Logger.debug("StoreKit: User successfully purchased Premium")
+    NotificationCenter.default.post(name: IAPStore.PremiumPurchaseStatusDidChangeNotification, object: nil)
   }
   
   @objc func purchaseFailedNotification(notification: Notification) {
@@ -27,7 +28,7 @@ extension AppDelegate {
   @objc func restoreNotification(notification: Notification) {
     Logger.debug("StoreKit: User successfully restored purchases")
     // Note: This will still call successfully if the user has refunded
-    //if Server.hasValidPurchase { [can enable premium now] }
+    NotificationCenter.default.post(name: IAPStore.RestorePurchaseNotification, object: nil)
   }
   
   @objc func emptyRestoreNotification(notification: Notification) {

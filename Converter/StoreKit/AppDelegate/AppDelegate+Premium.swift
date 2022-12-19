@@ -9,9 +9,15 @@ import Foundation
 
 extension AppDelegate {
   
+  func initPremium() {
+    // Status check
+  }
   
   func premiumPurchaseIsValid() -> Bool {
-    return true
+    if noRefundHistory() {
+      return true
+    }
+    return false
   }
   
 }

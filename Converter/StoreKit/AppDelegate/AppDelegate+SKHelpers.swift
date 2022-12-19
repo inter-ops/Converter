@@ -41,19 +41,16 @@ extension AppDelegate {
   }
   
   func checkReceiptForPremiumPurchaseHistory() {
-    let receiptHasPremiumPurchase = IAPStore.shared.isProductPurchased(Store.Products.premium.id)
-    if receiptHasPremiumPurchase {
+    if receiptHasPremiumPurchaseHistory() {
       Logger.debug("StoreKit: Receipt does contain purchase history for Video Converter Pro")
-      checkUserRefundStatus()
       return
     }
     Logger.debug("StoreKit: Receipt contains no purchase history")
   }
   
-  
-  
-  
-  
+  func receiptHasPremiumPurchaseHistory() -> Bool {
+    return IAPStore.shared.isProductPurchased(Store.Products.premium.id)
+  }
   
  
 }

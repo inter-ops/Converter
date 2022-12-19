@@ -11,7 +11,7 @@ extension AppDelegate {
   
   // TODO: Check if user has refunded the purchase via App Store Server Notifications
   func noRefundHistory() -> Bool {
-    // 
+    // if user has refunded product, return false; else...
     return true
   }
   
