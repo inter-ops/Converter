@@ -96,20 +96,4 @@ extension ViewController {
     }
   }
   
-//  func returnRequestReceiptRefresh() -> InAppReceipt? {
-//    print("[STORE] Requesting receipt refresh")
-//
-//    InAppReceipt.refresh { (error) in
-//      if let err = error {
-//        print("[ERROR] \(err)")
-//      } else {
-//        // do your stuff with the receipt data here
-//        if let receipt = try? InAppReceipt.localReceipt() {
-//          // Check if user has purchased premium
-//          self.getLocalReceipt()
-//        }
-//      }
-//    }
-//  }
-  
 }
