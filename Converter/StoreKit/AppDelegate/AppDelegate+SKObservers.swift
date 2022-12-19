@@ -18,7 +18,7 @@ extension AppDelegate {
   
   @objc func purchaseNotification(notification: Notification) {
     Logger.debug("StoreKit: User successfully purchased Premium")
-    NotificationCenter.default.post(name: IAPStore.PremiumPurchaseStatusDidChangeNotification, object: nil)
+    NotificationCenter.default.post(name: IAPStore.PremiumPurchaseNotification, object: nil)
   }
   
   @objc func purchaseFailedNotification(notification: Notification) {
