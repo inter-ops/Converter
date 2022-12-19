@@ -45,8 +45,6 @@
 		C2438C37293FECF30038B640 /* AppDelegate+SKHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C36293FECF30038B640 /* AppDelegate+SKHelpers.swift */; };
 		C2438C70294507720038B640 /* AppProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C6F294507720038B640 /* AppProtocols.swift */; };
 		C2438C7429450A160038B640 /* StoreKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7329450A160038B640 /* StoreKitHelper.swift */; };
-		C2438C7829450DD10038B640 /* ViewController+StoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7729450DD10038B640 /* ViewController+StoreKit.swift */; };
-		C2438C7A294518BB0038B640 /* StoreKitValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C79294518BB0038B640 /* StoreKitValidation.swift */; };
 		C2438C7C294669850038B640 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7B294669850038B640 /* Store.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
@@ -137,8 +135,6 @@
 		C2438C36293FECF30038B640 /* AppDelegate+SKHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+SKHelpers.swift"; sourceTree = "<group>"; };
 		C2438C6F294507720038B640 /* AppProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppProtocols.swift; sourceTree = "<group>"; };
 		C2438C7329450A160038B640 /* StoreKitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitHelper.swift; sourceTree = "<group>"; };
-		C2438C7729450DD10038B640 /* ViewController+StoreKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+StoreKit.swift"; sourceTree = "<group>"; };
-		C2438C79294518BB0038B640 /* StoreKitValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitValidation.swift; sourceTree = "<group>"; };
 		C2438C7B294669850038B640 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
 		C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulProgressIndicator.swift; sourceTree = "<group>"; };
@@ -241,7 +237,6 @@
 			children = (
 				C2438C6F294507720038B640 /* AppProtocols.swift */,
 				C2438C7329450A160038B640 /* StoreKitHelper.swift */,
-				C2438C7729450DD10038B640 /* ViewController+StoreKit.swift */,
 			);
 			path = Legacy;
 			sourceTree = "<group>";
@@ -433,7 +428,6 @@
 				C26C7527294A502B00EF8E1E /* Receipt */,
 				C2438C7D29466A430038B640 /* Common */,
 				C2438C6E294507470038B640 /* Legacy */,
-				C2438C79294518BB0038B640 /* StoreKitValidation.swift */,
 			);
 			path = StoreKit;
 			sourceTree = "<group>";
@@ -566,7 +560,6 @@
 				C26C7529294A504200EF8E1E /* IAPStore.swift in Sources */,
 				C21CC16C28EC920700176A98 /* MessageDidSend.swift in Sources */,
 				7978DA6B28BAE30400BC254B /* Constants.swift in Sources */,
-				C2438C7829450DD10038B640 /* ViewController+StoreKit.swift in Sources */,
 				C2CAD9FD291EC410005F9733 /* EnableDisableUI.swift in Sources */,
 				794AA2CA28C2D61900AADF36 /* ChannelLayout.swift in Sources */,
 				C2638D5428EA20CA00841C47 /* ContactWindowController.swift in Sources */,
@@ -580,7 +573,6 @@
 				C289E8AC28BA6DD10002CDA3 /* ConversionDidComplete.swift in Sources */,
 				7958C6BA291C319E00D4621A /* URL+Extensions.swift in Sources */,
 				C29D1A4D290C83F300711C14 /* PremiumView+Video.swift in Sources */,
-				C2438C7A294518BB0038B640 /* StoreKitValidation.swift in Sources */,
 				C2BF37A32950D44000E89A16 /* AppDelegate+SKObservers.swift in Sources */,
 				794BE83428B3D0030074E40C /* VideoCodec.swift in Sources */,
 				C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */,
