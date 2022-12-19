@@ -14,7 +14,7 @@ extension ViewController {
   
   func purchasePremium() {
     Logger.debug("StoreKit: User is requesting premium purchase transaction")
-    StoreKitHelper.shared.purchase(productIdentifier: Products.premium.id) { (transaction) in
+    StoreKitHelper.shared.purchase(productIdentifier: Store.Products.premium.id) { (transaction) in
       switch transaction.transactionState {
       case .purchased:
         // User did purchase premium
