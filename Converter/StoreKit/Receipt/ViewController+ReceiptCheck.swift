@@ -69,11 +69,12 @@ extension ViewController {
 //      return
 //    }
 //    hasPurchasedPremium(receipt: receipt)
+    
     requestReceiptRefresh()
   }
   
   func hasPurchasedPremium(receipt: InAppReceipt) {
-    if receipt.containsPurchase(ofProductIdentifier: Products.premium.id){
+    if receipt.containsPurchase(ofProductIdentifier: Store.Products.premium.id){
       print("[STORE] User has purchased Premium")
       return
     }

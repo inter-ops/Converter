@@ -1,5 +1,5 @@
 //
-//  IAPHelper.swift
+//  IAPStore.swift
 //  Converter
 //
 //  Created by Justin Bush on 12/12/22.
@@ -11,9 +11,9 @@ import StoreKit
 import TPInAppReceipt
 
 
-open class IAPStore : NSObject {
+open class IAPStore: NSObject {
   public struct Products {
-    public static let premium = "VC0089E74P"
+    public static let premium = Store.Products.premium.id
     
     fileprivate static let identifiers : Set<String> = [Products.premium]
   }
@@ -51,7 +51,7 @@ extension IAPStore {
   
   /// Request IAP products from App Store server
   /// - Parameter completionHandler: function that will be executed after retrieving the products
-  public func requestProducts(completionHandler: @escaping (_ success: Bool, _ products: [SKProduct]?) -> ()){
+  public func requestProducts(completionHandler: @escaping (_ success: Bool, _ products: [SKProduct]?) -> ()) {
     
     productsRequest?.cancel()
     productsRequestCompletionHandler = completionHandler
@@ -75,7 +75,7 @@ extension IAPStore {
   /// - Returns: boolean
   public func isProductPurchased(_ productIdentifier: String) -> Bool {
     if let receipt = try? InAppReceipt.localReceipt(){
-      if receipt.containsPurchase(ofProductIdentifier: productIdentifier){
+      if receipt.containsPurchase(ofProductIdentifier: productIdentifier) {
         return true
       }
     }

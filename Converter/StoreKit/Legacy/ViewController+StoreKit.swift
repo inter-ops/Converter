@@ -10,21 +10,10 @@ import StoreKit
 
 extension ViewController {
   
-  func initStoreKitHelper() {
-    StoreKitHelper.shared.getProducts(products: Products.premium())
-  }
+  
   
   func purchasePremium() {
     Logger.debug("StoreKit: User is requesting premium purchase transaction")
-    beginPurchasePremiumSession()
-  }
-  
-  func restorePremium() {
-    Logger.debug("StoreKit: User is attempting to restore their premium purchase")
-    beginPurchasePremiumSession()
-  }
-  
-  func beginPurchasePremiumSession() {
     StoreKitHelper.shared.purchase(productIdentifier: Products.premium.id) { (transaction) in
       switch transaction.transactionState {
       case .purchased:
@@ -44,22 +33,33 @@ extension ViewController {
     }
   }
   
+  func restorePremium() {
+    Logger.debug("StoreKit: User is attempting to restore their premium purchase")
+    beginRestorePurchaseSession()
+  }
+  
   func beginRestorePurchaseSession() {
     StoreKitHelper.shared.restorePurchases { (transaction) in
       switch transaction.transactionState {
       case .purchased:
         // Should never get be called
+        print("restore: purchased")
         break
       case .restored:
         // User did manage to restore successfully
+        print("restore: restored")
         break
       case .deferred:
         // User did defer restore transaction; session will end
+        print("restore: deferred")
         break
       case .failed:
         // User did fail to restore purchase; user does not own product (possible refund case)
+        print("restore: failed")
         break
-      default: break
+      default:
+        print("restore: default")
+        break
       }
     }
   }

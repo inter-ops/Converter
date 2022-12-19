@@ -24,6 +24,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     initDebugMenu()
     /// Initialize Logger
     Logger.initFfmpegLogs()
+    /// Initialize StoreKit observers
+    initSKObservers()
   }
   
   /// Called upon request to reactivate NSApp from an inactive state (ie. clicking the app from the dock)
