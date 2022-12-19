@@ -12,13 +12,6 @@ struct Store {
   enum Products: String {
     case premium = "VC0089E74P"
   }
-
-  static func isLegacy() -> Bool {
-    if #available(OSX 12, *) {
-      return false  // StoreKit 2
-    }
-    return true     // StoreKit Legacy
-  }
   
 }
 
@@ -37,6 +30,17 @@ extension Store.Products {
   
   func callAsFunction() -> Set<String> {
     return setId
+  }
+  
+}
+
+extension Store {
+  
+  static func isLegacy() -> Bool {
+    if #available(OSX 12, *) {
+      return false  // StoreKit 2
+    }
+    return true     // StoreKit Legacy
   }
   
 }

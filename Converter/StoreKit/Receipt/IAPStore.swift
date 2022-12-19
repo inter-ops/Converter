@@ -10,12 +10,11 @@ import Foundation
 import StoreKit
 import TPInAppReceipt
 
-
 open class IAPStore: NSObject {
   public struct Products {
     public static let premium = Store.Products.premium.id
     
-    fileprivate static let identifiers : Set<String> = [Products.premium]
+    fileprivate static let identifiers: Set<String> = [Products.premium]
   }
   
   fileprivate let productIdentifiers: Set<String>
@@ -64,7 +63,7 @@ extension IAPStore {
   /// Buy the specific IAP Product
   /// - Parameter product: the IAP Product to purchase
   public func purchaseProduct(_ product: SKProduct) {
-    print("Purchasing \(product.productIdentifier)...")
+    Logger.debug("[StoreKit] Purchasing \(product.productIdentifier)...")
     let payment = SKPayment(product: product)
     SKPaymentQueue.default().add(payment)
   }
@@ -74,7 +73,7 @@ extension IAPStore {
   /// - Parameter productIdentifier: the IAP Product Identifier
   /// - Returns: boolean
   public func isProductPurchased(_ productIdentifier: String) -> Bool {
-    if let receipt = try? InAppReceipt.localReceipt(){
+    if let receipt = try? InAppReceipt.localReceipt() {
       if receipt.containsPurchase(ofProductIdentifier: productIdentifier) {
         return true
       }
@@ -89,7 +88,7 @@ extension IAPStore {
   /// - Parameter productIdentifier: the product identifier of the subscription
   /// - Returns: boolean
   public func isSubscriptionActive(_ productIdentifier: String?) -> Bool {
-    if let receipt = try? InAppReceipt.localReceipt(){
+    if let receipt = try? InAppReceipt.localReceipt() {
       if let productIdentifier = productIdentifier {
         return receipt.hasActiveAutoRenewableSubscription(ofProductIdentifier: productIdentifier, forDate: Date())
       }
@@ -159,7 +158,7 @@ extension IAPStore: SKPaymentTransactionObserver {
   }
   
   public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-    if(queue.transactions.isEmpty){
+    if (queue.transactions.isEmpty) {
       // post notification that there is nothing to restore
       NotificationCenter.default.post(name: IAPStore.IAPStoreEmptyRestoreNotification, object: nil)
       

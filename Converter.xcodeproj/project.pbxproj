@@ -428,8 +428,8 @@
 		C2F8D6832935601C0098DB21 /* StoreKit */ = {
 			isa = PBXGroup;
 			children = (
-				C2BF37A82950E2DA00E89A16 /* ViewController */,
 				C2BF37A12950D42900E89A16 /* AppDelegate */,
+				C2BF37A82950E2DA00E89A16 /* ViewController */,
 				C26C7527294A502B00EF8E1E /* Receipt */,
 				C2438C7D29466A430038B640 /* Common */,
 				C2438C6E294507470038B640 /* Legacy */,
