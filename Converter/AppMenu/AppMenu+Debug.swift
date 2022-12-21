@@ -51,19 +51,17 @@ extension AppDelegate {
   // MARK: - StoreKit
   
   @IBAction func debugPurchasePremiumTransaction(_ sender: Any) {
-    let viewController = mainWindow.contentViewController as? ViewController
-    viewController?.purchasePremium()
+    purchasePremium()
   }
   
   @IBAction func debugRestorePurchaseSession(_ sender: Any) {
-    let viewController = mainWindow.contentViewController as? ViewController
-    viewController?.restorePremium()
+    restorePurchases()
   }
   
   // MARK: - Receipt Validation
+  
   @IBAction func debugCheckPremiumPurchaseReceipt(_ sender: Any) {
-    let viewController = mainWindow.contentViewController as? ViewController
-    viewController?.hasPurchasedPremium()
+    checkReceiptForPremiumPurchaseHistory()
   }
   
 }

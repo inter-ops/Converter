@@ -69,11 +69,12 @@ extension ViewController {
 //      return
 //    }
 //    hasPurchasedPremium(receipt: receipt)
+    
     requestReceiptRefresh()
   }
   
   func hasPurchasedPremium(receipt: InAppReceipt) {
-    if receipt.containsPurchase(ofProductIdentifier: Products.premium.id){
+    if receipt.containsPurchase(ofProductIdentifier: Store.Products.premium.id){
       print("[STORE] User has purchased Premium")
       return
     }
@@ -94,21 +95,5 @@ extension ViewController {
       }
     }
   }
-  
-//  func returnRequestReceiptRefresh() -> InAppReceipt? {
-//    print("[STORE] Requesting receipt refresh")
-//
-//    InAppReceipt.refresh { (error) in
-//      if let err = error {
-//        print("[ERROR] \(err)")
-//      } else {
-//        // do your stuff with the receipt data here
-//        if let receipt = try? InAppReceipt.localReceipt() {
-//          // Check if user has purchased premium
-//          self.getLocalReceipt()
-//        }
-//      }
-//    }
-//  }
   
 }
