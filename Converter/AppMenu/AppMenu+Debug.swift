@@ -48,4 +48,20 @@ extension AppDelegate {
     viewController?.disableUI(withLoaderAnimation: true)
   }
   
+  // MARK: - StoreKit
+  
+  @IBAction func debugPurchasePremiumTransaction(_ sender: Any) {
+    purchasePremium()
+  }
+  
+  @IBAction func debugRestorePurchaseSession(_ sender: Any) {
+    restorePurchases()
+  }
+  
+  // MARK: - Receipt Validation
+  
+  @IBAction func debugCheckPremiumPurchaseReceipt(_ sender: Any) {
+    checkReceiptForPremiumPurchaseHistory()
+  }
+  
 }
