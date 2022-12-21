@@ -772,8 +772,12 @@
                                                             <action selector="debugRestorePurchaseSession:" target="Voe-Tx-rLC" id="60S-Vu-VQQ"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Check Status" id="SW3-NY-k1i">
+                                                    <menuItem isSeparatorItem="YES" id="9gM-ab-P5L"/>
+                                                    <menuItem title="Premium Receipt Status" id="SW3-NY-k1i">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="debugCheckPremiumPurchaseReceipt:" target="Voe-Tx-rLC" id="6Y9-Iz-YIl"/>
+                                                        </connections>
                                                     </menuItem>
                                                 </items>
                                             </menu>
