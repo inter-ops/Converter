@@ -133,8 +133,12 @@ class PurchasePremiumViewController: NSViewController {
   
 }
 
+
+// MARK: StoreKit
+
 extension PurchasePremiumViewController {
   
+  /// Dismiss sheet presentation on main thread and enable Premium functionality
   func dismissOnMainThread() {
     DispatchQueue.main.async {
       self.videoPlayer.player?.pause()
