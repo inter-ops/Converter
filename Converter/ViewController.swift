@@ -16,10 +16,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     return appDelegate.userReceiptDoesContainPremium
   }
   
-  func enablePremium() {
-    enablePremiumView()
-  }
-  
   @IBOutlet weak var mainView: NSView!
   @IBOutlet weak var formatDropdown: NSPopUpButton!
   @IBOutlet weak var progressBar: ColorfulProgressIndicator!

@@ -105,7 +105,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   func enablePremiumInViewController() {
     let viewController = mainWindow.contentViewController as? ViewController
-    viewController?.enablePremium()
+    viewController?.enablePremiumView()
   }
   
   

@@ -10,11 +10,12 @@ import Foundation
 struct Store {
   
   enum Products: String {
-    // Video Convert Pro (Production)
+    // Video Convert Pro (MAS)
     case premium = "io.airtv.iap.VideoConverterPro"
     
     // Consumable Testing (Never Purchased)
     //case premium = "io.airtv.VideoConverterConsumableDebug"
+    
     // Non-Consumable Testing (Always Purchased)
     //case premium = "VC0089E74P"
     

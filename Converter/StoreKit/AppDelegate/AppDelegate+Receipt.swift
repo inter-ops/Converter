@@ -74,7 +74,7 @@ extension AppDelegate {
   
   func handleSandboxReceiptRequest() {
     if userReceiptDoesContainPremium {
-      Logger.debug("Receipt: Enabling Premium for Sandbox account")
+      Logger.debug("Receipt: Enabling Premium for Sandbox account. Please restart application.")
       enablePremiumInViewController()
     }
   }
