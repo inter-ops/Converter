@@ -779,6 +779,12 @@
                                                             <action selector="debugCheckPremiumPurchaseReceipt:" target="Voe-Tx-rLC" id="6Y9-Iz-YIl"/>
                                                         </connections>
                                                     </menuItem>
+                                                    <menuItem title="Request Receipt Refresh" id="C9c-pk-Lk0">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="debugRequestReceiptRefresh:" target="Voe-Tx-rLC" id="7Y5-cp-OQ0"/>
+                                                        </connections>
+                                                    </menuItem>
                                                 </items>
                                             </menu>
                                         </menuItem>

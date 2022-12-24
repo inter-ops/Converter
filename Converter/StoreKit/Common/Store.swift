@@ -10,7 +10,7 @@ import Foundation
 struct Store {
   
   enum Products: String {
-    case premium = "VC0089E74P"
+    case premium = "io.airtv.VideoConverterConsumableDebug" //"VC0089E74P"
   }
   
 }

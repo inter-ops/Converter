@@ -29,13 +29,13 @@ class PurchasePremiumViewController: NSViewController {
   @IBOutlet weak var purchasePremiumButton: NSButton!
   @IBOutlet weak var restorePurchaseButton: NSButton!
   
+  let appDelegate = NSApplication.shared.delegate as! AppDelegate
+  
   @IBAction func dismissSheetViewController(_ sender: NSButton) {
     videoPlayer.player?.pause() // Ensure player stop
     // Dismiss sheet view
     dismiss(self)
-    let appDelegate = NSApplication.shared.delegate as! AppDelegate
     appDelegate.collapsePremiumView(self)
-    
   }
   
   @IBAction func presentVideoPreviewButtonAction(_ sender: NSButton) {
@@ -46,14 +46,17 @@ class PurchasePremiumViewController: NSViewController {
     collapseAndStopVideo()
   }
   
+  
   @IBAction func purchaseButtonAction(_ sender: NSButton) {
     Logger.info("PurchasePremium: User did select purchase button")
     // Call In-App Purchase window
+    purchasePremium()
   }
   
   @IBAction func restorePurchaseButtonAction(_ sender: NSButton) {
     Logger.info("PurchasePremium: User did select restore purchase button")
     // Call Purchase Restore window
+    restorePurchases()
   }
   
   override func viewDidLoad() {
@@ -127,5 +130,50 @@ class PurchasePremiumViewController: NSViewController {
     }
   }
 
+  
+}
+
+extension PurchasePremiumViewController {
+  
+  func dismissOnMainThread() {
+    DispatchQueue.main.async {
+      self.videoPlayer.player?.pause()
+      self.dismiss(self)
+      self.appDelegate.enablePremiumInViewController()
+    }
+  }
+  
+  func purchasePremium() {
+    StoreKitHelper.shared.purchase(productIdentifier: Store.Products.premium.id) { (transaction) in
+      switch transaction.transactionState {
+      case .purchased:
+        // User did purchase premium
+        self.dismissOnMainThread()
+        break
+      case .restored:
+        // User did restore in purchase session
+        self.dismissOnMainThread()
+        break
+      case .deferred:
+        // User did defer transaction; session will end
+        break
+      case .failed:
+        // User did fail transaction; either cancelled or rejected
+        break
+      default: break
+      }
+    }
+  }
+  
+  func restorePurchases() {
+    // Obtain receipt data for purchase history if available
+    StoreKitHelper.shared.restorePurchases(completion: { (transaction) in
+      // If new receipt data contains Premium
+      if self.appDelegate.userReceiptDoesContainPremium {
+        self.dismissOnMainThread()
+      }
+    })
+  }
+  
   
 }

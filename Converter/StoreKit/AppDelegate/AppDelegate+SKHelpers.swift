@@ -29,31 +29,12 @@ extension AppDelegate {
       default: break
       }
     }
-    //    IAPStore.shared.requestProducts(completionHandler: { (_, products) in
-    //      if let premiumProduct = products?.first {
-    //        IAPStore.shared.purchaseProduct(premiumProduct)
-    //      }
-    //    })
   }
   
   func restorePurchases() {
     IAPStore.shared.restorePurchases()
   }
   
-  func checkReceiptForPremiumPurchaseHistory() {
-    if receiptHasPremiumPurchaseHistory() {
-      Logger.debug("StoreKit: Receipt does contain purchase history for Video Converter Pro")
-      return
-    }
-    Logger.debug("StoreKit: Receipt contains no purchase history")
-  }
-  
-  func receiptHasPremiumPurchaseHistory() -> Bool {
-    return IAPStore.shared.isProductPurchased(Store.Products.premium.id)
-  }
-  
  
 }
-
-
 
