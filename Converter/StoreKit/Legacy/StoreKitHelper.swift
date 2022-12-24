@@ -41,7 +41,7 @@ extension StoreKitHelper: SKProductsRequestDelegate {
   func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
     self.products = response.products
     for product in response.products {
-      Logger.info("StoreKit: Successfully loaded product(s) from App Store: \(product.localizedTitle)")
+      Logger.info("StoreKit: Successfully loaded product localization [\(product.localizedTitle)]")
     }
   }
 }
