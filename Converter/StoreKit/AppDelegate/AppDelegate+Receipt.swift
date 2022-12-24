@@ -17,8 +17,7 @@ extension AppDelegate {
   func userReceiptDoesContainPremiumPurchase() -> Bool {
     if let receipt = try? InAppReceipt.localReceipt() {
       if localReceiptIsValid(receipt: receipt) {
-        // All genuine users should reach this point
-        Logger.debug("Purchase Status: \(IAPStore.shared.isProductPurchased(Store.Products.premium.id))")
+        // All genuine MAS users should reach this point
         return IAPStore.shared.isProductPurchased(Store.Products.premium.id)
       }
       

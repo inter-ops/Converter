@@ -10,7 +10,16 @@ import Foundation
 struct Store {
   
   enum Products: String {
-    case premium = "io.airtv.VideoConverterConsumableDebug" //"VC0089E74P"
+    // Video Convert Pro (Production)
+    case premium = "io.airtv.iap.VideoConverterPro"
+    
+    // Consumable Testing (Never Purchased)
+    //case premium = "io.airtv.VideoConverterConsumableDebug"
+    // Non-Consumable Testing (Always Purchased)
+    //case premium = "VC0089E74P"
+    
+    // For more info on consumable and non-consumable testing, see:
+    // https://stackoverflow.com/questions/7747457/clearing-purchases-from-ios-in-app-purchase-sandbox-for-a-test-user
   }
   
 }
