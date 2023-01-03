@@ -12,13 +12,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// `true` if user has purchased premium or app is in debug environment
   var userDidPurchasePremium: Bool {
-    if Config.shared.debug { return true } // comment this line to preview app as free user
-    return false
-  }
-  /// `true` if premium features should be hidden from app. `false` if app is in debug environment
-  var isPremiumHiddenFromApp: Bool {
-    if Config.shared.debug { return false }
-    return true
+    //if Config.shared.debug { return true } // comment this line to preview app as free user
+    return appDelegate.userReceiptDoesContainPremium
   }
   
   @IBOutlet weak var mainView: NSView!
@@ -77,8 +72,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     displayClearButton(.hide)
     initPremiumView()
     updateDragDrop(withStyle: .regular)
-    // StoreKit & Receipts
-    initStoreKitHelper()
   }
   
   func initMainView() {
@@ -86,12 +79,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     mainViewHeightConstraint.constant = Constants.Frame.mainViewHeight
     
     expandablePremiumView.isHidden = true
-    
-    // TODO: Remove once premium is ready for prod
-    if isPremiumHiddenFromApp {
-      expandCollapsePremiumViewButton.isHidden = true
-      expandCollapsePremiumButtonTrailingConstraint.constant = -8
-    }
   }
   
   override func viewDidDisappear() {

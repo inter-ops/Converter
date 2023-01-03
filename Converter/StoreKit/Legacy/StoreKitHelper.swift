@@ -41,7 +41,7 @@ extension StoreKitHelper: SKProductsRequestDelegate {
   func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
     self.products = response.products
     for product in response.products {
-      Logger.debug("StoreKit: Successfully loaded product: \(product.localizedTitle)")
+      Logger.debug("StoreKit: Successfully loaded product localization [\(product.localizedTitle)]")
     }
   }
 }
@@ -71,7 +71,7 @@ extension SKPaymentTransactionState {
     case .failed: return "Transaction failed"
     case .purchased: return "Transaction successful"
     case .purchasing: return "Attempting transaction"
-    case .restored: return "Successfully restored purchase"
+    case .restored: return "Found restorable purchase"
     default: return "Unknown status"
     }
   }

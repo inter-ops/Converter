@@ -61,7 +61,11 @@ extension AppDelegate {
   // MARK: - Receipt Validation
   
   @IBAction func debugCheckPremiumPurchaseReceipt(_ sender: Any) {
-    checkReceiptForPremiumPurchaseHistory()
+    Logger.debug("Premium Purchase Status: \(userReceiptDoesContainPremium)")
+  }
+  
+  @IBAction func debugRequestReceiptRefresh(_ sender: Any) {
+    requestReceiptFromSandbox()
   }
   
 }

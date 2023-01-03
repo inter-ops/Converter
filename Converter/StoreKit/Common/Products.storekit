@@ -7,15 +7,35 @@
     {
       "displayPrice" : "4.99",
       "familyShareable" : false,
-      "internalID" : "6444778696",
+      "internalID" : "6445227080",
+      "localizations" : [
+        {
+          "description" : "Video Converter Pro (Debug) – Consumable",
+          "displayName" : "Video Converter Pro",
+          "locale" : "en_CA"
+        }
+      ],
+      "productID" : "io.airtv.VideoConverterConsumableDebug",
+      "referenceName" : "Video Converter Consumable (Debug)",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "6445227084",
       "localizations" : [
         {
           "description" : "Unlock all tools and advanced functionality.",
           "displayName" : "Video Converter Pro",
           "locale" : "en_CA"
+        },
+        {
+          "description" : "Unlock all tools and advanced functionality.",
+          "displayName" : "Video Converter Pro",
+          "locale" : "en_US"
         }
       ],
-      "productID" : "VC0089E74P",
+      "productID" : "io.airtv.iap.VideoConverterPro",
       "referenceName" : "Video Converter Pro",
       "type" : "NonConsumable"
     }
@@ -23,7 +43,7 @@
   "settings" : {
     "_applicationInternalID" : "1518836004",
     "_developerTeamID" : "85N3S3DG8M",
-    "_lastSynchronizedDate" : 692052125.23437405
+    "_lastSynchronizedDate" : 693607194.70825195
   },
   "subscriptionGroups" : [
 
