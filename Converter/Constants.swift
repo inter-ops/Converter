@@ -32,5 +32,9 @@ struct Constants {
     static let expandedViewHeight = CGFloat(438) // 580
   }
   
+  struct Keys {
+    static let appVersionIsLowerThanRequired = "AppVersionIsLowerThanRequiredKey"
+  }
+  
 }
 

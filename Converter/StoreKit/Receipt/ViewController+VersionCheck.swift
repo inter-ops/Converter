@@ -21,11 +21,28 @@ extension ViewController {
     return 1.0
   }
   
+  func checkInternetAndMinimumAppVersion() {
+    if Reachability.isConnectedToNetwork() {
+      checkMinimumAppVersion()
+      return
+    }
+    
+    let appVersionWasPreviouslyLowerThanRequired = UserDefaults.standard.bool(forKey: Constants.Keys.appVersionIsLowerThanRequired)
+    // If flag was previously triggered, require connection to the internet
+    if appVersionWasPreviouslyLowerThanRequired {
+      DispatchQueue.main.async {
+        self.disableUiAndShowConnectionRequiredAlert()
+      }
+    }
+    
+  }
+  
   func checkMinimumAppVersion() {
     API.getMinimumAppVersion { responseData, errorMessage in
       if let minimumAppVersion = responseData?["version"] as? Double {
         if self.appVersion < minimumAppVersion {
           Logger.debug("App version \(self.appVersion) is older than minimum version \(minimumAppVersion), disabling UI")
+          UserDefaults.standard.set(true, forKey: Constants.Keys.appVersionIsLowerThanRequired)
           
           DispatchQueue.main.async {
             self.disableUiAndShowLatestVersionAlert()
@@ -33,6 +50,7 @@ extension ViewController {
         }
         else {
           Logger.debug("App version \(self.appVersion) is valid for minimum version \(minimumAppVersion)")
+          UserDefaults.standard.set(false, forKey: Constants.Keys.appVersionIsLowerThanRequired)
         }
       }
       else {
@@ -45,6 +63,11 @@ extension ViewController {
   func disableUiAndShowLatestVersionAlert() {
     disableUI()
     showLatestVersionAlert()
+  }
+  
+  func disableUiAndShowConnectionRequiredAlert() {
+    disableUI()
+    showConnectionRequiredAlert()
   }
   
   func showLatestVersionAlert() {
@@ -69,6 +92,22 @@ extension ViewController {
       NSWorkspace.shared.open(url)
       NSApplication.shared.terminate(self)
     }
+  }
+  
+  func showConnectionRequiredAlert() {
+    let a = NSAlert()
+    a.messageText = "Internet Connection Required"
+    a.informativeText = "Please connect your device to the internet so that we can validate your copy of Video Converter.\n\nYou only need to do this once!"
+    a.addButton(withTitle: "OK")
+    a.alertStyle = NSAlert.Style.informational
+    
+    a.beginSheetModal(for: self.view.window!, completionHandler: { (modalResponse) -> Void in
+      
+      if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
+        NSApplication.shared.terminate(self)
+      }
+      
+    })
   }
   
 }
