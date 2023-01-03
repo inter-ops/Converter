@@ -23,11 +23,6 @@ extension ViewController {
   
   func checkMinimumAppVersion() {
     API.getMinimumAppVersion { responseData, errorMessage in
-      if errorMessage != nil {
-        // TODO: Handle error
-        return
-      }
-      
       if let minimumAppVersion = responseData?["version"] as? Double {
         if self.appVersion < minimumAppVersion {
           Logger.debug("App version \(self.appVersion) is older than minimum version \(minimumAppVersion), disabling UI")
