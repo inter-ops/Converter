@@ -27,9 +27,10 @@ extension ViewController {
       return
     }
     
-    let appVersionWasPreviouslyLowerThanRequired = UserDefaults.standard.bool(forKey: Constants.Keys.appVersionIsLowerThanRequired)
-    // If flag was previously triggered, require connection to the internet
-    if appVersionWasPreviouslyLowerThanRequired {
+    Logger.debug("Unable to connect to the internet for app version validation")
+    // If app version was flagged, require internet check to resolve
+    if UserDefaults.standard.appVersionHasBeenFlagged() {
+      Logger.debug("App version has been flagged")
       DispatchQueue.main.async {
         self.disableUiAndShowConnectionRequiredAlert()
       }
@@ -42,7 +43,7 @@ extension ViewController {
       if let minimumAppVersion = responseData?["version"] as? Double {
         if self.appVersion < minimumAppVersion {
           Logger.debug("App version \(self.appVersion) is older than minimum version \(minimumAppVersion), disabling UI")
-          UserDefaults.standard.set(true, forKey: Constants.Keys.appVersionIsLowerThanRequired)
+          UserDefaults.standard.flagAppVersionAsLowerThanRequired(true)
           
           DispatchQueue.main.async {
             self.disableUiAndShowLatestVersionAlert()
@@ -50,7 +51,7 @@ extension ViewController {
         }
         else {
           Logger.debug("App version \(self.appVersion) is valid for minimum version \(minimumAppVersion)")
-          UserDefaults.standard.set(false, forKey: Constants.Keys.appVersionIsLowerThanRequired)
+          UserDefaults.standard.flagAppVersionAsLowerThanRequired(false)
         }
       }
       else {
