@@ -9,21 +9,42 @@ import Cocoa
 
 extension ViewController {
   
-  var firebaseVersion: Double? {
-    // TODO: Return Firebase variable if available:
-    // if reachable { return Double value } else { return nil }
-    return nil
-  }
-  
-  func firebaseVersionCheck() {
-    if let latestRequiredVersion = firebaseVersion {
-      if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? Double {
-        Logger.debug("App Version: \(appVersion) vs. Latest Version: \(latestRequiredVersion)")
-        if appVersion < latestRequiredVersion {
-          disableUiAndShowLatestVersionAlert()
-        }
+  var appVersion: Double {
+    if let appVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+      if let appVersionDouble = Double(appVersionString) {
+        return appVersionDouble
       }
     }
+    
+    Logger.error("Error fetching app version, returning 1.0")
+    
+    return 1.0
+  }
+  
+  func checkMinimumAppVersion() {
+    API.getMinimumAppVersion { responseData, errorMessage in
+      if errorMessage != nil {
+        // TODO: Handle error
+        return
+      }
+      
+      if let minimumAppVersion = responseData?["version"] as? Double {
+        if self.appVersion < minimumAppVersion {
+          Logger.debug("App version \(self.appVersion) is older than minimum version \(minimumAppVersion), disabling UI")
+          
+          DispatchQueue.main.async {
+            self.disableUiAndShowLatestVersionAlert()
+          }
+        }
+        else {
+          Logger.debug("App version \(self.appVersion) is valid for minimum version \(minimumAppVersion)")
+        }
+      }
+      else {
+        Logger.error("Invalid data returned when fetching app version")
+      }
+    }
+        
   }
   
   func disableUiAndShowLatestVersionAlert() {
@@ -49,7 +70,7 @@ extension ViewController {
   }
   
   func openAppInMacAppStore() {
-    if let url = URL(string: "macappstore://apps.apple.com/us/app/video-converter/id1518836004") {
+    if let url = URL(string: Constants.appStoreUrl) {
       NSWorkspace.shared.open(url)
       NSApplication.shared.terminate(self)
     }

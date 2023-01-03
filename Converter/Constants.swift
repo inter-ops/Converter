@@ -17,9 +17,12 @@ struct Constants {
   /// Input file buffer delay for NSApplication's `open urls` method (in seconds)
   static let inputFileFromSystemBufferDelay = 0.4
   
+  static let appStoreUrl = "macappstore://apps.apple.com/us/app/video-converter/id1518836004"
+  
   struct API {
     static let contactFormUrl = "https://contact-form-u7kjuwr4da-uc.a.run.app"
     static let errorReportUrl = "https://error-report-u7kjuwr4da-uc.a.run.app"
+    static let minimimAppVersionUrl = "https://get-minimum-app-version-u7kjuwr4da-uc.a.run.app"
   }
   
   struct Frame {
