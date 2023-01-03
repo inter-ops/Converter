@@ -20,11 +20,15 @@ extension ViewController {
       if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? Double {
         Logger.debug("App Version: \(appVersion) vs. Latest Version: \(latestRequiredVersion)")
         if appVersion < latestRequiredVersion {
-          disableUI()
-          
+          disableUiAndShowLatestVersionAlert()
         }
       }
     }
+  }
+  
+  func disableUiAndShowLatestVersionAlert() {
+    disableUI()
+    showLatestVersionAlert()
   }
   
   func showLatestVersionAlert() {
@@ -45,8 +49,9 @@ extension ViewController {
   }
   
   func openAppInMacAppStore() {
-    if let url = URL(string: "https://apps.apple.com/us/app/video-converter/id1518836004") {
+    if let url = URL(string: "macappstore://apps.apple.com/us/app/video-converter/id1518836004") {
       NSWorkspace.shared.open(url)
+      NSApplication.shared.terminate(self)
     }
   }
   
