@@ -24,8 +24,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     initDebugMenu()
     /// Initialize Logger
     Logger.initFfmpegLogs()
-    /// Initialize StoreKit observers
-    //initSKObservers()
     /// Retrieve StoreKit products
     StoreKitHelper.shared.getProducts(products: Store.Products.premium())
   }
