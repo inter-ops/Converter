@@ -47,6 +47,7 @@
 		C2438C7429450A160038B640 /* StoreKitHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7329450A160038B640 /* StoreKitHelper.swift */; };
 		C2438C7C294669850038B640 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7B294669850038B640 /* Store.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
+		C24FE45529648B6900928BAD /* ViewController+VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE45429648B6900928BAD /* ViewController+VersionCheck.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
 		C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */; };
 		C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C257C19528BE70C800E2849D /* HelpInfoViewController.swift */; };
@@ -133,6 +134,7 @@
 		C2438C7329450A160038B640 /* StoreKitHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitHelper.swift; sourceTree = "<group>"; };
 		C2438C7B294669850038B640 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
+		C24FE45429648B6900928BAD /* ViewController+VersionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+VersionCheck.swift"; sourceTree = "<group>"; };
 		C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulProgressIndicator.swift; sourceTree = "<group>"; };
 		C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpInfoViewController.xib; sourceTree = "<group>"; };
 		C257C19528BE70C800E2849D /* HelpInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpInfoViewController.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				C26C7528294A504200EF8E1E /* IAPStore.swift */,
+				C24FE45429648B6900928BAD /* ViewController+VersionCheck.swift */,
 			);
 			path = Receipt;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				C2BF37A52950DFAA00E89A16 /* AppDelegate+SKRefund.swift in Sources */,
 				C2BEEEFB2903141E00F9FFD8 /* PremiumView.swift in Sources */,
 				C2438C7429450A160038B640 /* StoreKitHelper.swift in Sources */,
+				C24FE45529648B6900928BAD /* ViewController+VersionCheck.swift in Sources */,
 				79AF2A7E28D5FDF6009CCB42 /* SubtitleCodec.swift in Sources */,
 				C22A4EF328F47AFD0050D739 /* AppMenu+Global.swift in Sources */,
 				C22A4EF528F47FB60050D739 /* AppMenu+Debug.swift in Sources */,

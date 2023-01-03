@@ -114,6 +114,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       }
       // AppDelegate can now call queueImportFiles directly
       self.appDelegate.mainViewHasAppeared = true
+      // Run Firebase Version Check
+      self.firebaseVersionCheck()
     }
   }
   /// Begin queue of files opened with macOS Finder handling.
