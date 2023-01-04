@@ -21,6 +21,16 @@ extension ViewController {
     return 1.0
   }
   
+  func checkIfAppVersionHasBeenFlagged() {
+    // If app version was flagged, require internet check to resolve
+    if UserDefaults.standard.appVersionHasBeenFlagged() {
+      Logger.debug("App version has been flagged, prompting user for internet connection")
+      DispatchQueue.main.async {
+        self.disableUiAndShowConnectionRequiredAlert()
+      }
+    }
+  }
+  
   func checkInternetAndMinimumAppVersion() {
     if Reachability.isConnectedToNetwork() {
       checkMinimumAppVersion()
@@ -28,18 +38,17 @@ extension ViewController {
     }
     
     Logger.debug("Unable to connect to the internet for app version validation")
-    // If app version was flagged, require internet check to resolve
-    if UserDefaults.standard.appVersionHasBeenFlagged() {
-      Logger.debug("App version has been flagged")
-      DispatchQueue.main.async {
-        self.disableUiAndShowConnectionRequiredAlert()
-      }
-    }
-    
+    checkIfAppVersionHasBeenFlagged()
   }
   
   func checkMinimumAppVersion() {
     API.getMinimumAppVersion { responseData, errorMessage in
+      if errorMessage != nil && errorMessage!.contains("The request timed out") {
+        Logger.debug("Request to get minimum app version timed out")
+        self.checkIfAppVersionHasBeenFlagged()
+        return
+      }
+      
       if let minimumAppVersion = responseData?["version"] as? Double {
         if self.appVersion < minimumAppVersion {
           Logger.debug("App version \(self.appVersion) is older than minimum version \(minimumAppVersion), disabling UI")

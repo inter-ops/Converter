@@ -20,7 +20,7 @@ func sendPostRequest(url: String, data: Dictionary<String, AnyObject>, completio
     
     // This occurs if the dataTask fails to execute (eg network cuts out or is too slow).
     if error != nil {
-      Logger.error("Data task failed to execute")
+      Logger.error("Data task failed to execute: \(error!.localizedDescription)")
       return completion(nil, error!.localizedDescription)
     }
     
@@ -68,7 +68,7 @@ func sendGetRequest(url: String, completion: @escaping (_ responseData: Dictiona
     
     // This occurs if the dataTask fails to execute (eg network cuts out or is too slow).
     if error != nil {
-      Logger.error("Data task failed to execute")
+      Logger.error("Data task failed to execute: \(error!.localizedDescription)")
       return completion(nil, error!.localizedDescription)
     }
     
