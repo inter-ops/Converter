@@ -48,6 +48,8 @@
 		C2438C7C294669850038B640 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2438C7B294669850038B640 /* Store.swift */; };
 		C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */; };
 		C24FE45529648B6900928BAD /* ViewController+VersionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE45429648B6900928BAD /* ViewController+VersionCheck.swift */; };
+		C24FE4582964E21A00928BAD /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE4572964E21A00928BAD /* Reachability.swift */; };
+		C24FE45A2964E88000928BAD /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FE4592964E88000928BAD /* UserDefaults+Extensions.swift */; };
 		C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */; };
 		C257C19428BE6EF000E2849D /* HelpInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */; };
 		C257C19628BE70C800E2849D /* HelpInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C257C19528BE70C800E2849D /* HelpInfoViewController.swift */; };
@@ -135,6 +137,8 @@
 		C2438C7B294669850038B640 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		C24745C828BD883C007E128B /* SupportedFormatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedFormatsViewController.swift; sourceTree = "<group>"; };
 		C24FE45429648B6900928BAD /* ViewController+VersionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+VersionCheck.swift"; sourceTree = "<group>"; };
+		C24FE4572964E21A00928BAD /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		C24FE4592964E88000928BAD /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 		C256C46B28BA882100F4DE98 /* ColorfulProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulProgressIndicator.swift; sourceTree = "<group>"; };
 		C257C19328BE6EF000E2849D /* HelpInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpInfoViewController.xib; sourceTree = "<group>"; };
 		C257C19528BE70C800E2849D /* HelpInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpInfoViewController.swift; sourceTree = "<group>"; };
@@ -193,6 +197,7 @@
 		79F0029A28EF46C700AD93BB /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				C24FE4562964E20C00928BAD /* Reachability */,
 				C22287A328F4988900137473 /* Extensions */,
 				79F0029B28EF46D400AD93BB /* Date.swift */,
 			);
@@ -213,6 +218,7 @@
 			children = (
 				C22287A428F498F400137473 /* String+Extensions.swift */,
 				7958C6B9291C319E00D4621A /* URL+Extensions.swift */,
+				C24FE4592964E88000928BAD /* UserDefaults+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -255,6 +261,14 @@
 				C2C9C3D52912D87A00307251 /* MultiFilesListViewController.xib */,
 			);
 			path = Popover;
+			sourceTree = "<group>";
+		};
+		C24FE4562964E20C00928BAD /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				C24FE4572964E21A00928BAD /* Reachability.swift */,
+			);
+			path = Reachability;
 			sourceTree = "<group>";
 		};
 		C256C46A28BA878A00F4DE98 /* ProgressBar */ = {
@@ -511,6 +525,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2638D5628EA211400841C47 /* ReportErrorWindowController.swift in Sources */,
+				C24FE45A2964E88000928BAD /* UserDefaults+Extensions.swift in Sources */,
 				79F0029C28EF46D400AD93BB /* Date.swift in Sources */,
 				C2DC46A028AC1BB300EDD3EB /* DragDropView.swift in Sources */,
 				C2438C7C294669850038B640 /* Store.swift in Sources */,
@@ -558,6 +573,7 @@
 				C256C46C28BA882100F4DE98 /* ColorfulProgressIndicator.swift in Sources */,
 				C2638D5C28EB446A00841C47 /* SegueData.swift in Sources */,
 				C24745C928BD883C007E128B /* SupportedFormatsViewController.swift in Sources */,
+				C24FE4582964E21A00928BAD /* Reachability.swift in Sources */,
 				C274CDEE28E609F5005BCE22 /* ReportErrorViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -649,7 +665,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 10;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 85N3S3DG8M;
+				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Converter/Info.plist;
@@ -738,7 +754,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 10;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 85N3S3DG8M;
+				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Converter/Info.plist;
@@ -886,7 +902,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 10;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 85N3S3DG8M;
+				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Converter/Info.plist;
@@ -919,7 +935,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 10;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 85N3S3DG8M;
+				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Converter/Info.plist;
