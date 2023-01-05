@@ -32,5 +32,9 @@ struct Constants {
     static let expandedViewHeight = CGFloat(438) // 580
   }
   
+  enum UDKeys: String {
+    case appVersionWasFlaggedAsLowerThanRequired
+  }
+  
 }
 

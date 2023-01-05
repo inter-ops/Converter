@@ -107,7 +107,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   override func viewDidAppear() {
     // Run Firebase Version Check
-    checkMinimumAppVersion()
+    checkInternetAndMinimumAppVersion()
     
     // Handles the opening of files on application launch after initial load (requires main thread)
     DispatchQueue.main.async {
