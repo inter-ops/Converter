@@ -736,6 +736,20 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="K4S-oF-xT0"/>
+                                        <menuItem title="Firebase" id="0PA-XJ-cT0">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" id="ztK-xI-eXb">
+                                                <items>
+                                                    <menuItem title="Simulate Lower App Version" id="1Kr-GL-BAX">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="debugSimulateLowerRequiredVersion:" target="Voe-Tx-rLC" id="f3x-HA-6um"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="9mH-wZ-Yph"/>
                                         <menuItem title="Premium" id="wD5-Tv-FMN">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" id="TDx-RF-cpG">

@@ -68,4 +68,9 @@ extension AppDelegate {
     requestReceiptFromSandbox()
   }
   
+  @IBAction func debugSimulateLowerRequiredVersion(_ sender: Any) {
+    let viewController = mainWindow.contentViewController as? ViewController
+    viewController?.disableUiAndShowLatestVersionAlert()
+  }
+  
 }
