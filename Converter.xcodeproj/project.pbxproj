@@ -67,6 +67,8 @@
 		C2BEEEFB2903141E00F9FFD8 /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */; };
 		C2BF37A52950DFAA00E89A16 /* AppDelegate+SKRefund.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF37A42950DFAA00E89A16 /* AppDelegate+SKRefund.swift */; };
 		C2BF37A72950E0C000E89A16 /* AppDelegate+Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BF37A62950E0C000E89A16 /* AppDelegate+Receipt.swift */; };
+		C2C32146296CD5F900989D44 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2C32145296CD5F900989D44 /* AVKit.framework */; };
+		C2C32148296CD61800989D44 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2C32147296CD61800989D44 /* AVFoundation.framework */; };
 		C2C9C3D62912D87A00307251 /* MultiFilesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C9C3D42912D87A00307251 /* MultiFilesListViewController.swift */; };
 		C2C9C3D72912D87A00307251 /* MultiFilesListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2C9C3D52912D87A00307251 /* MultiFilesListViewController.xib */; };
 		C2CAD9FD291EC410005F9733 /* EnableDisableUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CAD9FC291EC410005F9733 /* EnableDisableUI.swift */; };
@@ -155,6 +157,8 @@
 		C2BEEEFA2903141E00F9FFD8 /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
 		C2BF37A42950DFAA00E89A16 /* AppDelegate+SKRefund.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+SKRefund.swift"; sourceTree = "<group>"; };
 		C2BF37A62950E0C000E89A16 /* AppDelegate+Receipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+Receipt.swift"; sourceTree = "<group>"; };
+		C2C32145296CD5F900989D44 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		C2C32147296CD61800989D44 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C2C9C3D42912D87A00307251 /* MultiFilesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiFilesListViewController.swift; sourceTree = "<group>"; };
 		C2C9C3D52912D87A00307251 /* MultiFilesListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MultiFilesListViewController.xib; sourceTree = "<group>"; };
 		C2CAD9FC291EC410005F9733 /* EnableDisableUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableDisableUI.swift; sourceTree = "<group>"; };
@@ -181,6 +185,8 @@
 			files = (
 				79D352AB28FDDDE600F8CD39 /* libavutil.xcframework in Frameworks */,
 				79D352A328FDDDE100F8CD39 /* libavcodec.xcframework in Frameworks */,
+				C2C32148296CD61800989D44 /* AVFoundation.framework in Frameworks */,
+				C2C32146296CD5F900989D44 /* AVKit.framework in Frameworks */,
 				79D352AD28FDDDE700F8CD39 /* libswresample.xcframework in Frameworks */,
 				79D352A128FDDDE000F8CD39 /* ffmpegkit.xcframework in Frameworks */,
 				79D352A728FDDDE400F8CD39 /* libavfilter.xcframework in Frameworks */,
@@ -432,6 +438,8 @@
 		D5F2785EA79D681D546BD992 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C2C32147296CD61800989D44 /* AVFoundation.framework */,
+				C2C32145296CD5F900989D44 /* AVKit.framework */,
 				79D3529828FDDD4600F8CD39 /* ffmpegkit.xcframework */,
 				79D3529728FDDD4600F8CD39 /* libavcodec.xcframework */,
 				79D3529528FDDD4500F8CD39 /* libavdevice.xcframework */,
