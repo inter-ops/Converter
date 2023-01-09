@@ -16,8 +16,4 @@ extension ViewController {
     }
   }
   
-  // TODO: Purchase Handler state changes in ViewController go here:
-  // 1. User did purchase premium, update UI elements to reflect
-  // 2. Disable PurchasePremium prompts
-  
 }

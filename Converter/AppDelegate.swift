@@ -24,7 +24,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     initDebugMenu()
     /// Initialize Logger
     Logger.initFfmpegLogs()
+    /// Retrieve StoreKit products
+    StoreKitHelper.shared.getProducts(products: Store.Products.premium())
   }
+  
+  
   
   /// Called upon request to reactivate NSApp from an inactive state (ie. clicking the app from the dock)
   func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -95,6 +99,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let sb = NSStoryboard(name: "Main", bundle: nil)
     let contactWindowController = sb.instantiateController(withIdentifier: "ContactWindowControllerID") as? NSWindowController
     contactWindowController?.showWindow(self)
+  }
+  
+  func enablePremiumInViewController() {
+    let viewController = mainWindow.contentViewController as? ViewController
+    viewController?.enablePremiumView()
   }
   
   
