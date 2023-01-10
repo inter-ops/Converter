@@ -44,7 +44,7 @@ extension ViewController {
       """
       Determines the encoder used to convert your video.
       
-      Auto (default): Our smart algorithms will automatically determine the most ideal codec for both quality and compatibility. Prioritizes transmuxing when available.
+      • Auto (default): Our smart algorithms will automatically determine the most ideal codec for both quality and compatibility. Prioritizes transmuxing when available.
       
       Transmuxing is the process of swapping your video's container to a different format, without the need to encode the entire media file. This preserves both quality and file size, while bringing it to a more compatible medium.
       """
@@ -64,7 +64,7 @@ extension ViewController {
       """
       Apple ProRes codecs provide an unparalleled combination of multistream, real-time editing performance, impressive image quality, and reduced storage rates. Apple ProRes codecs take full advantage of multicore processing and feature fast, reduced-resolution decoding modes.
       
-      Auto (default): Selects the most optimal codec based on the input file.
+      • Auto (default): Selects the most optimal codec based on the input file.
       
       See the Apple ProRes resource in the Help menu to learn more.
       """
