@@ -74,6 +74,7 @@
 		C2CAD9FD291EC410005F9733 /* EnableDisableUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CAD9FC291EC410005F9733 /* EnableDisableUI.swift */; };
 		C2CAD9FF291ED5B8005F9733 /* ProcessLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CAD9FE291ED5B8005F9733 /* ProcessLoader.swift */; };
 		C2CADA0129200A02005F9733 /* VideoQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CADA0029200A02005F9733 /* VideoQuality.swift */; };
+		C2CEA6E7293281B300BFC86F /* ViewController+ToolTips.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CEA6E6293281B300BFC86F /* ViewController+ToolTips.swift */; };
 		C2D33F4728A950BA00BDCCD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */; };
 		C2D33F4928A950BA00BDCCD4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D33F4828A950BA00BDCCD4 /* ViewController.swift */; };
 		C2D33F4B28A950BF00BDCCD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2D33F4A28A950BF00BDCCD4 /* Assets.xcassets */; };
@@ -164,6 +165,7 @@
 		C2CAD9FC291EC410005F9733 /* EnableDisableUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnableDisableUI.swift; sourceTree = "<group>"; };
 		C2CAD9FE291ED5B8005F9733 /* ProcessLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessLoader.swift; sourceTree = "<group>"; };
 		C2CADA0029200A02005F9733 /* VideoQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoQuality.swift; sourceTree = "<group>"; };
+		C2CEA6E6293281B300BFC86F /* ViewController+ToolTips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ToolTips.swift"; sourceTree = "<group>"; };
 		C2D33F4328A950BA00BDCCD4 /* Video Converter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Video Converter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D33F4628A950BA00BDCCD4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C2D33F4828A950BA00BDCCD4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -354,6 +356,14 @@
 			path = ProcessHandler;
 			sourceTree = "<group>";
 		};
+		C2CEA6E52932819300BFC86F /* ToolTips */ = {
+			isa = PBXGroup;
+			children = (
+				C2CEA6E6293281B300BFC86F /* ViewController+ToolTips.swift */,
+			);
+			path = ToolTips;
+			sourceTree = "<group>";
+		};
 		C2D33F3A28A950BA00BDCCD4 = {
 			isa = PBXGroup;
 			children = (
@@ -413,6 +423,7 @@
 		C2DC469E28AC1B9800EDD3EB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C2CEA6E52932819300BFC86F /* ToolTips */,
 				C2CAD9FB291EC390005F9733 /* ProcessHandler */,
 				C2BEEEF9290313C600F9FFD8 /* Premium */,
 				C274CDE828E5E243005BCE22 /* NativeContact */,
@@ -538,6 +549,7 @@
 				C2DC46A028AC1BB300EDD3EB /* DragDropView.swift in Sources */,
 				C2438C7C294669850038B640 /* Store.swift in Sources */,
 				79CD2F2328ECBF2B005F34F0 /* Logger.swift in Sources */,
+				C2CEA6E7293281B300BFC86F /* ViewController+ToolTips.swift in Sources */,
 				C2404C872915903F00CD9430 /* ViewController+Purchase.swift in Sources */,
 				C2BF37A72950E0C000E89A16 /* AppDelegate+Receipt.swift in Sources */,
 				C2BF37A52950DFAA00E89A16 /* AppDelegate+SKRefund.swift in Sources */,

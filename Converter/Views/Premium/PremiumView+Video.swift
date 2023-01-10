@@ -20,6 +20,8 @@ extension ViewController {
     outputCodec = codec
     initQualityDropdownMenu(forCodec: codec)
     Logger.debug("User selected codec: \(codec.rawValue)")
+    // Reinitialize ToolTips based on new codec selection
+    initToolTips()
   }
   /// Initialize dropdown menu with titles (see `VideoCodec.dropdownTitle` for values)
   func initCodecDropdownMenu(forFormat: VideoFormat) {

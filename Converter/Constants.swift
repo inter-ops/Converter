@@ -17,8 +17,6 @@ struct Constants {
   /// Input file buffer delay for NSApplication's `open urls` method (in seconds)
   static let inputFileFromSystemBufferDelay = 0.4
   
-  static let appStoreUrl = "macappstore://apps.apple.com/us/app/video-converter/id1518836004"
-  
   struct API {
     static let contactFormUrl = "https://contact-form-u7kjuwr4da-uc.a.run.app"
     static let errorReportUrl = "https://error-report-u7kjuwr4da-uc.a.run.app"
@@ -35,6 +33,12 @@ struct Constants {
   enum UDKeys: String {
     case appVersionWasFlaggedAsLowerThanRequired
   }
+  
+  // MARK: URLs
+  /// Deep link to open Video Converter on the Mac App Store
+  static let appStoreUrl = "macappstore://apps.apple.com/us/app/video-converter/id1518836004"
+  /// About Apple ProRes support page
+  static let appleProResSupportUrl = "https://support.apple.com/en-us/HT202410"
   
 }
 

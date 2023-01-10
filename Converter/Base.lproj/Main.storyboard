@@ -664,6 +664,20 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="1ar-2R-llq"/>
+                                        <menuItem title="Resources" id="38p-SO-iOY">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" id="6vL-bB-665">
+                                                <items>
+                                                    <menuItem title="Apple ProRes" id="CZI-X1-hqG">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="openAppleProResSupportPageInBrowser:" target="Voe-Tx-rLC" id="HDO-Ev-5Fe"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="GOu-uI-jFt"/>
                                         <menuItem title="Contact Us" id="d1o-Tg-Abg">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
