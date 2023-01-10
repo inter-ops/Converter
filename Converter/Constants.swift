@@ -20,6 +20,7 @@ struct Constants {
   struct API {
     static let contactFormUrl = "https://contact-form-u7kjuwr4da-uc.a.run.app"
     static let errorReportUrl = "https://error-report-u7kjuwr4da-uc.a.run.app"
+    static let minimimAppVersionUrl = "https://get-minimum-app-version-u7kjuwr4da-uc.a.run.app"
   }
   
   struct Frame {
@@ -29,6 +30,14 @@ struct Constants {
     static let expandedViewHeight = CGFloat(438) // 580
   }
   
+  enum UDKeys: String {
+    case appVersionWasFlaggedAsLowerThanRequired
+  }
+  
+  // MARK: URLs
+  /// Deep link to open Video Converter on the Mac App Store
+  static let appStoreUrl = "macappstore://apps.apple.com/us/app/video-converter/id1518836004"
+  /// About Apple ProRes support page
   static let appleProResSupportUrl = "https://support.apple.com/en-us/HT202410"
   
 }
