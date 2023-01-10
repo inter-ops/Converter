@@ -92,7 +92,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func openFileBrowser() {
     let openPanel = NSOpenPanel()
     
-    openPanel.allowsMultipleSelection = false
+    openPanel.allowsMultipleSelection = true
     openPanel.canChooseDirectories = true
     openPanel.canCreateDirectories = true
     openPanel.canChooseFiles = true
