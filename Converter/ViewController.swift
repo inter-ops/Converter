@@ -106,6 +106,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     }
   }
   
+  func openMultiFileBrowser() {
+    let openPanel = NSOpenPanel()
+    openPanel.allowsMultipleSelection = true
+    openPanel.canChooseDirectories = true
+    openPanel.canCreateDirectories = true
+    openPanel.canChooseFiles = true
+    openPanel.allowedFileTypes = supportedInputFormats
+    
+    let response = openPanel.runModal()
+    if response == .OK {
+      let urls = openPanel.urls
+      var paths: [String] = []
+      for url in urls {
+        paths.append(url.path)
+      }
+      Logger.info("paths: \(String(describing: paths))")
+      dragDropViewDidReceive(filePaths: paths)
+    }
+  }
+  
   override func viewDidAppear() {
     // Run Firebase Version Check
     checkInternetAndMinimumAppVersion()
