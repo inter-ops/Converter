@@ -90,10 +90,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   // TODO: This needs to be accessible even if a file is already selected, only in premium
   func openFileBrowser() {
-    let openPanel = NSOpenPanel()
+    if userDidPurchasePremium {
+      openMultiFileBrowser()
+      return
+    }
     
+    let openPanel = NSOpenPanel()
     openPanel.allowsMultipleSelection = false
-    openPanel.canChooseDirectories = true
+    openPanel.canChooseDirectories = false
     openPanel.canCreateDirectories = true
     openPanel.canChooseFiles = true
     openPanel.allowedFileTypes = supportedInputFormats
@@ -103,6 +107,26 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       let path = openPanel.url?.path
       Logger.info("path: \(String(describing: path))")
       dragDropViewDidReceive(filePath: path!)
+    }
+  }
+  
+  func openMultiFileBrowser() {
+    let openPanel = NSOpenPanel()
+    openPanel.allowsMultipleSelection = true
+    openPanel.canChooseDirectories = true
+    openPanel.canCreateDirectories = true
+    openPanel.canChooseFiles = true
+    openPanel.allowedFileTypes = supportedInputFormats
+    
+    let response = openPanel.runModal()
+    if response == .OK {
+      let urls = openPanel.urls
+      var paths: [String] = []
+      for url in urls {
+        paths.append(url.path)
+      }
+      Logger.info("paths: \(String(describing: paths))")
+      dragDropViewDidReceive(filePaths: paths)
     }
   }
   
