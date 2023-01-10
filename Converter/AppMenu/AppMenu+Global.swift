@@ -34,4 +34,15 @@ extension AppDelegate {
   }
   
   
+  
+  // MARK: - Help Menu
+  /// Opens Apple ProRes documentation in user's default browser
+  ///
+  /// **MainMenu:** `Help > Resources > Apple ProRes`
+  @IBAction func openAppleProResSupportPageInBrowser(_ sender: NSMenuItem) {
+    if let url = URL(string: Constants.appleProResSupportUrl) {
+      NSWorkspace.shared.open(url)
+    }
+  }
+  
 }
