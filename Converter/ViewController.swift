@@ -90,10 +90,14 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   // TODO: This needs to be accessible even if a file is already selected, only in premium
   func openFileBrowser() {
-    let openPanel = NSOpenPanel()
+    if userDidPurchasePremium {
+      openMultiFileBrowser()
+      return
+    }
     
-    openPanel.allowsMultipleSelection = true
-    openPanel.canChooseDirectories = true
+    let openPanel = NSOpenPanel()
+    openPanel.allowsMultipleSelection = false
+    openPanel.canChooseDirectories = false
     openPanel.canCreateDirectories = true
     openPanel.canChooseFiles = true
     openPanel.allowedFileTypes = supportedInputFormats
