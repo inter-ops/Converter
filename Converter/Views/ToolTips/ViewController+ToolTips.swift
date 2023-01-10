@@ -42,7 +42,7 @@ extension ViewController {
     
     static var codecDropdown =
       """
-      Determines the encoder used to convert your video.
+      Codecs are a type of video compression, with each offering different methods of efficiency (e.g. optimize for size over quality).
       
       • Auto (default): Our smart algorithms will automatically determine the most ideal codec for both quality and compatibility. Prioritizes transmuxing when available.
       
