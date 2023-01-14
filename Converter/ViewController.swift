@@ -211,7 +211,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     return filePaths
   }
   
-  // TODO: Disable UI(?) and loader animation for delay
+  // TODO: Disable UI(?) and loader animation for delay. Already tried this before but it doesn't work because were using the main thread for getVideoPathsInDirectory and addVideoToInputs. For addVideoToInputs, we can switch from using FFprobeKit.execute to FFprobeKit.executeAsync. Not sure for getVideoPathsInDirectory, maybe a dispatch?
   /// Handles multiple input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   func dragDropViewDidReceive(filePaths: [String]) {
     Logger.debug("Processing input paths: \(filePaths)")

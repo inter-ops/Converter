@@ -164,9 +164,9 @@ struct Video {
     self.filePath = fileUrl.path
     self.ffprobeOutput = ffprobeOutput
     
-    self.duration = Double(ffprobeDict["duration"] ?? "0")!
-    self.bitRate = Int(ffprobeDict["bit_rate"] ?? "0")!
-    self.size = Int(ffprobeDict["size"] ?? "0")!
+    self.duration = Double(ffprobeDict["duration"] ?? "0") ?? 0
+    self.bitRate = Int(ffprobeDict["bit_rate"] ?? "0") ?? 0
+    self.size = Int(ffprobeDict["size"] ?? "0") ?? 0
     self.formatName = ffprobeDict["format_name"] ?? ""
     self.formatLongName = ffprobeDict["format_long_name"] ?? ""
     self.videoStreams = videoStreams
