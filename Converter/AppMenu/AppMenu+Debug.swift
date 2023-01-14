@@ -35,17 +35,17 @@ extension AppDelegate {
   
   @IBAction func enableViewControllerUI(_ sender: Any) {
     let viewController = mainWindow.contentViewController as? ViewController
-    viewController?.enableUI()
+    viewController?.enableUi()
   }
   
   @IBAction func disableViewControllerUI(_ sender: Any) {
     let viewController = mainWindow.contentViewController as? ViewController
-    viewController?.disableUI()
+    viewController?.disableUi()
   }
   
   @IBAction func disableViewControllerUIWithAnimation(_ sender: Any) {
     let viewController = mainWindow.contentViewController as? ViewController
-    viewController?.disableUI(withLoaderAnimation: true)
+    viewController?.disableUi(withLoaderAnimation: true)
   }
   
   // MARK: - StoreKit
