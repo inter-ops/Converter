@@ -32,8 +32,7 @@ extension ViewController {
     dragDropBackgroundImageView.isEnabled = isEnabled
     dragDropTopTitle.textColor = .textColor
     dragDropBottomTitle.textColor = .textColor
-    
-    // TODO: Enable global input files
+    appDelegate.enableOpenFileMenuItem()  // Enable File > Open...
   }
   /// Disable associated `DragDropView` elements, with title textColors to match disabled state.
   func disableDragDropView() {
@@ -44,8 +43,7 @@ extension ViewController {
     dragDropBackgroundImageView.isEnabled = isEnabled
     dragDropTopTitle.textColor = .disabledControlTextColor
     dragDropBottomTitle.textColor = .disabledControlTextColor
-    
-    // TODO: Disable global input files
+    appDelegate.disableOpenFileMenuItem() // Disable File > Open...
   }
   /// Set the `isEnabled = true` state of all applicable UI elements.
   func enableAllOnScreenElements() {
@@ -76,14 +74,10 @@ extension ViewController {
   func disableUiForConversion() {
     let isEnabled = false
     // Disable DragDropView
-    clearInputFileButton.isEnabled = isEnabled
-    showInputFilesButton.isEnabled = isEnabled
-    dragDropIconImageView.isEnabled = isEnabled
-    dragDropBackgroundImageView.isEnabled = isEnabled
-    dragDropTopTitle.textColor = .disabledControlTextColor
-    dragDropBottomTitle.textColor = .disabledControlTextColor
-    // Disable main UI
+    disableDragDropView()
+    // Make sure action button (Stop) remains enabled
     actionButton.isEnabled = true
+    // Disable rest of main UI
     formatDropdown.isEnabled = isEnabled
     helpInfoButton.isEnabled = isEnabled
     expandCollapsePremiumViewButton.isEnabled = isEnabled
