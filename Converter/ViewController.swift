@@ -562,7 +562,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       startConversion(activeVideoIndex: 0)
       actionButton.title = "Stop"
       currentStatus = .converting
-      disableUiForConversion()
+      disableUi(forConversion: true)
       
     case .converting:
       userDidClickStop()

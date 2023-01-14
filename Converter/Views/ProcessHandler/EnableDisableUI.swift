@@ -16,12 +16,17 @@ extension ViewController {
     hideProcessLoaderAnimation()  // Hide processLoader and stop animation
   }
   /// Disable all UI elements. Show process loader with animation state.
-  /// Call `disableUI(withLoaderAnimation: true)` to also show the process loader animation.
+  /// Call `disableUi(withLoaderAnimation: true)` to also show the process loader animation.
   func disableUi(withLoaderAnimation: Bool = false) {
     disableAllOnScreenElements()  // Set isEnabled state of individual UI elements
     disableDragDropView()         // Custom DragDropView handling for disabled state
     // Show process loader by default, with option to disable without animation
     if withLoaderAnimation { showProcessLoaderAnimation() }
+  }
+  /// For while conversion is ongoing: Disable all on-screen elements except for the "Stop" action button (including import files via File -> Open in the menu bar)
+  func disableUi(forConversion: Bool) {
+    disableAllOnScreenElements(excludingActionButton: forConversion)
+    disableDragDropView()
   }
   /// Enable associated `DragDropView` elements, with title textColors to match enabled state.
   func enableDragDropView() {
@@ -58,10 +63,10 @@ extension ViewController {
     qualityDropdown.isEnabled = isPremiumEnabled
   }
   /// Set the `isEnabled = false` state of all UI elements.
-  func disableAllOnScreenElements() {
+  func disableAllOnScreenElements(excludingActionButton: Bool = false) {
     let isEnabled = false
     formatDropdown.isEnabled = isEnabled
-    actionButton.isEnabled = isEnabled
+    actionButton.isEnabled = excludingActionButton
     helpInfoButton.isEnabled = isEnabled
     expandCollapsePremiumViewButton.isEnabled = isEnabled
     // PremiumView elements
@@ -69,20 +74,6 @@ extension ViewController {
     qualityDropdown.isEnabled = isEnabled
     // Hide Popovers
     hideAllUiPopovers()
-  }
-  /// For while conversion is ongoing: Disable all on-screen elements except for the "Stop" button (including import files via File -> Open in the menu bar)
-  func disableUiForConversion() {
-    let isEnabled = false
-    // Disable DragDropView
-    disableDragDropView()
-    // Make sure action button (Stop) remains enabled
-    actionButton.isEnabled = true
-    // Disable rest of main UI
-    formatDropdown.isEnabled = isEnabled
-    helpInfoButton.isEnabled = isEnabled
-    expandCollapsePremiumViewButton.isEnabled = isEnabled
-    codecDropdown.isEnabled = isEnabled
-    qualityDropdown.isEnabled = isEnabled
   }
   
 }
