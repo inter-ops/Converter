@@ -562,10 +562,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       startConversion(activeVideoIndex: 0)
       actionButton.title = "Stop"
       currentStatus = .converting
+      disableUiForConversion()
+      
     case .converting:
       userDidClickStop()
       actionButton.title = "Convert"
       currentStatus = .ready
+      enableUI()
     }
   }
   
@@ -573,6 +576,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func resetActionButton() {
     actionButton.title = "Convert"
     currentStatus = .ready
+    enableUI()
   }
   
   /// Called when the user clicks "Stop" upon a conversion-in-progress
