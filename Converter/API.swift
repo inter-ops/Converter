@@ -123,21 +123,21 @@ struct API {
     
     var sanitizedApplicationLogs = applicationLogs
     
-    inputVideos.forEach { inputVideo in
+    inputVideos.enumerated().forEach { (i, inputVideo) in
       let inputFilePath = inputVideo.filePath
       let outputFilePath = inputVideo.outputFilePath
       
       // Remove current input and output file paths from application logs. This is done for all videos, whether errored or not.
-      sanitizedApplicationLogs = sanitizedApplicationLogs != nil ? sanitizeFilePaths(textToSanitize: sanitizedApplicationLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath!) : nil
+      sanitizedApplicationLogs = sanitizedApplicationLogs != nil ? sanitizeFilePaths(textToSanitize: sanitizedApplicationLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath!, videoIndex: i) : nil
       
       // Skip videos that did not have errors
       if !inputVideo.didError {
         return
       }
       
-      let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegCommand!, inputFilePath: inputFilePath, outputFilePath: outputFilePath!)
-      let sanitizedFfmpegSessionLogs = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegSessionLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath!)
-      let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: inputVideo.ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath!)
+      let sanitizedFfmpegCommand = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegCommand!, inputFilePath: inputFilePath, outputFilePath: outputFilePath!, videoIndex: i)
+      let sanitizedFfmpegSessionLogs = sanitizeFilePaths(textToSanitize: inputVideo.ffmpegSessionLogs!, inputFilePath: inputFilePath, outputFilePath: outputFilePath!, videoIndex: i)
+      let sanitizedFfprobeOutput = sanitizeFilePaths(textToSanitize: inputVideo.ffprobeOutput, inputFilePath: inputFilePath, outputFilePath: outputFilePath!, videoIndex: i)
 
       let inputFileExtension = URL(fileURLWithPath: inputFilePath).pathExtension
       let outputFileExtension = URL(fileURLWithPath: outputFilePath!).pathExtension
@@ -154,8 +154,8 @@ struct API {
 }
 
 // This should be moved to a util if it needs to be used elsewhere.
-func sanitizeFilePaths(textToSanitize: String, inputFilePath: String, outputFilePath: String) -> String {
-  return textToSanitize.replacingOccurrences(of: inputFilePath, with: "{{ input-path }}").replacingOccurrences(of: outputFilePath, with: "{{ output-path }}")
+func sanitizeFilePaths(textToSanitize: String, inputFilePath: String, outputFilePath: String, videoIndex: Int) -> String {
+  return textToSanitize.replacingOccurrences(of: inputFilePath, with: "{{ input-path-\(videoIndex) }}").replacingOccurrences(of: outputFilePath, with: "{{ output-path-\(videoIndex) }}")
 }
 
 
