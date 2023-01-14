@@ -22,6 +22,10 @@ extension AppDelegate {
     let viewController = mainWindow.contentViewController as? ViewController
     viewController?.openFileBrowser()
   }
+  /// Enable `File > Open...` menu item
+  func enableOpenFileMenuItem() { openFileMenuItem.isEnabled = true }
+  /// Disable `File > Open...` menu item
+  func disableOpenFileMenuItem() { openFileMenuItem.isEnabled = false }
   
   
   
