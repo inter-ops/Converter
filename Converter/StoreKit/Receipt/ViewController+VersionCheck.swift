@@ -71,12 +71,12 @@ extension ViewController {
   }
   
   func disableUiAndShowLatestVersionAlert() {
-    disableUI()
+    disableUi()
     showLatestVersionAlert()
   }
   
   func disableUiAndShowConnectionRequiredAlert() {
-    disableUI()
+    disableUi()
     showConnectionRequiredAlert()
   }
   

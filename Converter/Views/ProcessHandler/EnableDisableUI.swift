@@ -10,14 +10,14 @@ import Cocoa
 extension ViewController {
   /// Enable all free UI elements, with Premium elements dependent on `userDidPurchasePremium`.
   /// Additionally, hide any process loaders and stop ongoing animations.
-  func enableUI() {
+  func enableUi() {
     enableAllOnScreenElements()   // Set isEnabled state of individual UI elements
     enableDragDropView()          // Custom DragDropView handling for enabled state
     hideProcessLoaderAnimation()  // Hide processLoader and stop animation
   }
   /// Disable all UI elements. Show process loader with animation state.
   /// Call `disableUI(withLoaderAnimation: true)` to also show the process loader animation.
-  func disableUI(withLoaderAnimation: Bool = false) {
+  func disableUi(withLoaderAnimation: Bool = false) {
     disableAllOnScreenElements()  // Set isEnabled state of individual UI elements
     disableDragDropView()         // Custom DragDropView handling for disabled state
     // Show process loader by default, with option to disable without animation
