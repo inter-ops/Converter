@@ -72,5 +72,23 @@ extension ViewController {
     // Hide Popovers
     hideAllUiPopovers()
   }
+  /// For while conversion is ongoing: Disable all on-screen elements except for the "Stop" button (including import files via File -> Open in the menu bar)
+  func disableUiForConversion() {
+    let isEnabled = false
+    // Disable DragDropView
+    clearInputFileButton.isEnabled = isEnabled
+    showInputFilesButton.isEnabled = isEnabled
+    dragDropIconImageView.isEnabled = isEnabled
+    dragDropBackgroundImageView.isEnabled = isEnabled
+    dragDropTopTitle.textColor = .disabledControlTextColor
+    dragDropBottomTitle.textColor = .disabledControlTextColor
+    // Disable main UI
+    actionButton.isEnabled = true
+    formatDropdown.isEnabled = isEnabled
+    helpInfoButton.isEnabled = isEnabled
+    expandCollapsePremiumViewButton.isEnabled = isEnabled
+    codecDropdown.isEnabled = isEnabled
+    qualityDropdown.isEnabled = isEnabled
+  }
   
 }
