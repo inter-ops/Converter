@@ -80,6 +80,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   
   /// **MainMenu:** `Debug`
   @IBOutlet weak var debugMenu: NSMenuItem!
+  /// **MainMenu:** Open File Menu
+  @IBOutlet weak var openFileMenuItem: NSMenuItem!
   
   
   
