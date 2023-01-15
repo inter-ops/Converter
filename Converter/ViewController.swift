@@ -267,13 +267,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         }
         
         for filePath in filteredPaths {
-          let video = await addVideoToInputs(filePath: filePath, numberOfVideos: filteredPaths.count)
+          let video = await addVideoToInputs(filePath: filePath)
           inputVideos.append(video)
         }
       }
       else {
         // if free user, route first dragged file to singular dragDropDidReceive
-        let video = await addVideoToInputs(filePath: filteredPaths.first!, numberOfVideos: 1)
+        let video = await addVideoToInputs(filePath: filteredPaths.first!)
         inputVideos.append(video)
         // TODO: show notice: maximum one file input, upgrade for more
         //premiumNotice()
@@ -286,7 +286,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// Handles singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
   /// This function is async so that we run ffprobe commands on a background thread and can show the loading animation while they execute
-  func addVideoToInputs(filePath: String, numberOfVideos: Int) async -> Video {
+  func addVideoToInputs(filePath: String) async -> Video {
     let inputFileUrl = filePath.fileURL.absoluteURL
     return await withCheckedContinuation { continuation in
       getAllVideoProperties(inputFileUrl: inputFileUrl) { video in
