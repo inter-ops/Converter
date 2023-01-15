@@ -60,7 +60,7 @@
                             </menuItem>
                             <menuItem title="File" id="dMs-cI-mzQ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="File" id="bib-Uj-vzu">
+                                <menu key="submenu" title="File" autoenablesItems="NO" id="bib-Uj-vzu">
                                     <items>
                                         <menuItem title="New" hidden="YES" keyEquivalent="n" id="Was-JA-tGl">
                                             <connections>
@@ -828,6 +828,7 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Video_Converter" customModuleProvider="target">
                     <connections>
                         <outlet property="debugMenu" destination="dmb-yp-Nwr" id="kKD-LU-cdU"/>
+                        <outlet property="openFileMenuItem" destination="IAo-SY-fd9" id="tff-YW-mEm"/>
                     </connections>
                 </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>

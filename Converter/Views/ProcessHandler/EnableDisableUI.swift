@@ -10,18 +10,22 @@ import Cocoa
 extension ViewController {
   /// Enable all free UI elements, with Premium elements dependent on `userDidPurchasePremium`.
   /// Additionally, hide any process loaders and stop ongoing animations.
-  func enableUI() {
+  func enableUi() {
     enableAllOnScreenElements()   // Set isEnabled state of individual UI elements
     enableDragDropView()          // Custom DragDropView handling for enabled state
     hideProcessLoaderAnimation()  // Hide processLoader and stop animation
+    Logger.debug("UI enabled")
   }
   /// Disable all UI elements. Show process loader with animation state.
-  /// Call `disableUI(withLoaderAnimation: true)` to also show the process loader animation.
-  func disableUI(withLoaderAnimation: Bool = false) {
-    disableAllOnScreenElements()  // Set isEnabled state of individual UI elements
+  /// - parameters:
+  ///   - withActionButton: Set `false` to disable all UI elements except for the action button ("Stop" during conversion)
+  ///   - withLoaderAnimation: Set `true` to show the process loader animation
+  func disableUi(withActionButton: Bool = true, withLoaderAnimation: Bool = false) {
+    disableAllOnScreenElements(withActionButton: withActionButton)
     disableDragDropView()         // Custom DragDropView handling for disabled state
     // Show process loader by default, with option to disable without animation
     if withLoaderAnimation { showProcessLoaderAnimation() }
+    Logger.debug("UI disabled")
   }
   /// Enable associated `DragDropView` elements, with title textColors to match enabled state.
   func enableDragDropView() {
@@ -32,8 +36,7 @@ extension ViewController {
     dragDropBackgroundImageView.isEnabled = isEnabled
     dragDropTopTitle.textColor = .textColor
     dragDropBottomTitle.textColor = .textColor
-    
-    // TODO: Enable global input files
+    appDelegate.enableOpenFileMenuItem()  // Enable File > Open...
   }
   /// Disable associated `DragDropView` elements, with title textColors to match disabled state.
   func disableDragDropView() {
@@ -44,8 +47,7 @@ extension ViewController {
     dragDropBackgroundImageView.isEnabled = isEnabled
     dragDropTopTitle.textColor = .disabledControlTextColor
     dragDropBottomTitle.textColor = .disabledControlTextColor
-    
-    // TODO: Disable global input files
+    appDelegate.disableOpenFileMenuItem() // Disable File > Open...
   }
   /// Set the `isEnabled = true` state of all applicable UI elements.
   func enableAllOnScreenElements() {
@@ -60,10 +62,10 @@ extension ViewController {
     qualityDropdown.isEnabled = isPremiumEnabled
   }
   /// Set the `isEnabled = false` state of all UI elements.
-  func disableAllOnScreenElements() {
+  func disableAllOnScreenElements(withActionButton: Bool = true) {
     let isEnabled = false
     formatDropdown.isEnabled = isEnabled
-    actionButton.isEnabled = isEnabled
+    actionButton.isEnabled = !withActionButton
     helpInfoButton.isEnabled = isEnabled
     expandCollapsePremiumViewButton.isEnabled = isEnabled
     // PremiumView elements

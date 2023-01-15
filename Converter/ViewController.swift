@@ -149,13 +149,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // If AppDelegate has already initated queue session, ignore additional requests
     if appDelegate.didDispatchFileQueue == false {
       appDelegate.didDispatchFileQueue = true   // Is first session call, switch flag
-      disableUI(withLoaderAnimation: true)      // Disable UI with loader animation
+      disableUi(withLoaderAnimation: true)      // Disable UI with loader animation
       // After 0.3s has elapsed, initate import of file queue
       DispatchQueue.main.asyncAfter(deadline: .now() + Constants.inputFileFromSystemBufferDelay) {
         self.dragDropViewDidReceive(filePaths: self.appDelegate.openAppWithFilePaths)
         self.appDelegate.openAppWithFilePaths = []    // Empty openAppWithFilePaths
         self.appDelegate.didDispatchFileQueue = false // Enable UI
-        self.enableUI()
+        self.enableUi()
       }
     }
   }
@@ -560,10 +560,13 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       startConversion(activeVideoIndex: 0)
       actionButton.title = "Stop"
       currentStatus = .converting
+      disableUi(withActionButton: false)
+      
     case .converting:
       userDidClickStop()
       actionButton.title = "Convert"
       currentStatus = .ready
+      enableUi()
     }
   }
   
@@ -571,6 +574,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func resetActionButton() {
     actionButton.title = "Convert"
     currentStatus = .ready
+    enableUi()
   }
   
   /// Called when the user clicks "Stop" upon a conversion-in-progress
