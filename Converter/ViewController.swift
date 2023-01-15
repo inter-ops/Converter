@@ -215,6 +215,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func dragDropViewDidReceive(filePaths: [String]) {
     Logger.debug("Processing input paths: \(filePaths)")
     
+    disableUi(withActionButton: true, withLoaderAnimation: true)
     resetProgressBar()
     
     // Clear existing input videos
@@ -258,24 +259,34 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
     // if premium, handle multi-file
     if userDidPurchasePremium {
       for filePath in filteredPaths {
-        addVideoToInputs(filePath: filePath)
+        addVideoToInputs(filePath: filePath, numberOfVideos: filteredPaths.count)
       }
     }
     else {
       // if free user, route first dragged file to singular dragDropDidReceive
-      addVideoToInputs(filePath: filteredPaths.first!)
+      addVideoToInputs(filePath: filteredPaths.first!, numberOfVideos: 1)
       // TODO: show notice: maximum one file input, upgrade for more
       //premiumNotice()
     }
     
-    updateDragDrop(selectedVideos: inputVideos, icon: .videoFile, withStyle: .regular)
+//    updateDragDrop(selectedVideos: inputVideos, icon: .videoFile, withStyle: .regular)
   }
   
+  // TODO: Enabling UI should be handled by the parent func
   /// Handles singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
-  func addVideoToInputs(filePath: String) {
+  func addVideoToInputs(filePath: String, numberOfVideos: Int) {
     let inputFileUrl = filePath.fileURL.absoluteURL
-    let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl)
-    inputVideos.append(inputVideo)
+    getAllVideoProperties(inputFileUrl: inputFileUrl) { inputVideo in
+      DispatchQueue.main.async {
+        self.inputVideos.append(inputVideo)
+        
+        if self.inputVideos.count == numberOfVideos {
+            self.updateDragDrop(selectedVideos: self.inputVideos, icon: .videoFile, withStyle: .regular)
+            self.enableUi()
+        }
+      }
+      // TODO: need to enable UI once all of these are complete. Probs keep track of active sessions in an array and remove as they complete. Once array is empty, can enable UI.
+    }
   }
   
   /// Clears input videos
