@@ -36,7 +36,7 @@ extension ViewController {
     dragDropBackgroundImageView.isEnabled = isEnabled
     dragDropTopTitle.textColor = .textColor
     dragDropBottomTitle.textColor = .textColor
-    appDelegate.enableOpenFileMenuItem()  // Enable File > Open...
+    appDelegate.enableOpenFileMenuItemAndCoreServiceImport()  // Enable File > Open...
   }
   /// Disable associated `DragDropView` elements, with title textColors to match disabled state.
   func disableDragDropView() {
@@ -47,7 +47,7 @@ extension ViewController {
     dragDropBackgroundImageView.isEnabled = isEnabled
     dragDropTopTitle.textColor = .disabledControlTextColor
     dragDropBottomTitle.textColor = .disabledControlTextColor
-    appDelegate.disableOpenFileMenuItem() // Disable File > Open...
+    appDelegate.disableOpenFileMenuItemAndCoreServiceImport() // Disable File > Open...
   }
   /// Set the `isEnabled = true` state of all applicable UI elements.
   func enableAllOnScreenElements() {

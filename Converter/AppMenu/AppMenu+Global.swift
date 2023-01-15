@@ -23,12 +23,12 @@ extension AppDelegate {
     viewController?.openFileBrowser()
   }
   /// Enable `File > Open...` menu item
-  func enableOpenFileMenuItem() {
+  func enableOpenFileMenuItemAndCoreServiceImport() {
     mainViewIsDisabledFromImportingFiles = false
     openFileMenuItem.isEnabled = true
   }
   /// Disable `File > Open...` menu item
-  func disableOpenFileMenuItem() {
+  func disableOpenFileMenuItemAndCoreServiceImport() {
     mainViewIsDisabledFromImportingFiles = true
     openFileMenuItem.isEnabled = false
   }
