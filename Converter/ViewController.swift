@@ -215,7 +215,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   func dragDropViewDidReceive(filePaths: [String]) {
     Logger.debug("Processing input paths: \(filePaths)")
     
-    disableUi(withActionButton: true, withLoaderAnimation: true)
     resetProgressBar()
     
     // Clear existing input videos
@@ -256,36 +255,43 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       return
     }
     
-    // if premium, handle multi-file
-    if userDidPurchasePremium {
-      for filePath in filteredPaths {
-        addVideoToInputs(filePath: filePath, numberOfVideos: filteredPaths.count)
-      }
-    }
-    else {
-      // if free user, route first dragged file to singular dragDropDidReceive
-      addVideoToInputs(filePath: filteredPaths.first!, numberOfVideos: 1)
-      // TODO: show notice: maximum one file input, upgrade for more
-      //premiumNotice()
-    }
-    
-//    updateDragDrop(selectedVideos: inputVideos, icon: .videoFile, withStyle: .regular)
-  }
-  
-  // TODO: Enabling UI should be handled by the parent func
-  /// Handles singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
-  func addVideoToInputs(filePath: String, numberOfVideos: Int) {
-    let inputFileUrl = filePath.fileURL.absoluteURL
-    getAllVideoProperties(inputFileUrl: inputFileUrl) { inputVideo in
-      DispatchQueue.main.async {
-        self.inputVideos.append(inputVideo)
+    // We need to use a task here to ensure we only call addVideoToInputs one at a time. Otherwise, ffprobe commands run concurrently and
+    // result in null data.
+    Task {
+      // if premium, handle multi-file
+      if userDidPurchasePremium {
         
-        if self.inputVideos.count == numberOfVideos {
-            self.updateDragDrop(selectedVideos: self.inputVideos, icon: .videoFile, withStyle: .regular)
-            self.enableUi()
+        // Any less than 4 videos and the loading animation flashes too quick, resulting in a weird UX.
+        if filteredPaths.count > 4 {
+          disableUi(withActionButton: true, withLoaderAnimation: true)
+        }
+        
+        for filePath in filteredPaths {
+          let video = await addVideoToInputs(filePath: filePath, numberOfVideos: filteredPaths.count)
+          inputVideos.append(video)
         }
       }
-      // TODO: need to enable UI once all of these are complete. Probs keep track of active sessions in an array and remove as they complete. Once array is empty, can enable UI.
+      else {
+        // if free user, route first dragged file to singular dragDropDidReceive
+        let video = await addVideoToInputs(filePath: filteredPaths.first!, numberOfVideos: 1)
+        inputVideos.append(video)
+        // TODO: show notice: maximum one file input, upgrade for more
+        //premiumNotice()
+      }
+      
+      updateDragDrop(selectedVideos: inputVideos, icon: .videoFile, withStyle: .regular)
+      enableUi()
+    }
+  }
+  
+  /// Handles singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
+  /// This function is async so that we run ffprobe commands on a background thread and can show the loading animation while they execute
+  func addVideoToInputs(filePath: String, numberOfVideos: Int) async -> Video {
+    let inputFileUrl = filePath.fileURL.absoluteURL
+    return await withCheckedContinuation { continuation in
+      getAllVideoProperties(inputFileUrl: inputFileUrl) { video in
+        continuation.resume(returning: video)
+      }
     }
   }
   

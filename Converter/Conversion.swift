@@ -569,7 +569,6 @@ func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> 
 func getAllVideoProperties(inputFileUrl: URL, onDone: @escaping (_: Video) -> Void) -> Void {
   FFprobeKit.executeAsync("-loglevel error -show_entries stream:format \"\(inputFileUrl.path)\"") { session in
     let logs = session?.getAllLogsAsString()!.trimmingCharacters(in: .whitespacesAndNewlines)
-    
     let video = buildVideo(withFfprobeOutput: logs!, inputFileUrl: inputFileUrl)
     return onDone(video)
   }
