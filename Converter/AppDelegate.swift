@@ -12,6 +12,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
   /// WindowController.window used to handle and present ViewController
   var mainWindow: NSWindow!
+  /// A flag which returns `true` if the main view is disabled from accepting newly imported files
+  var mainViewIsDisabledFromImportingFiles = false
   
   // MARK: - AppDelegate Methods
   
@@ -51,6 +53,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   ///  * From Finder, right-click input file, `Open With... > [this application]`
   ///  * Dragging and dropping an input file onto the application icon in dock
   func application(_ application: NSApplication, open urls: [URL]) {
+    if mainViewIsDisabledFromImportingFiles {
+      Logger.debug("CoreServices: Ignoring newly imported files due to ongoing conversion")
+      return
+    }
+    
     // Append each url to openAppWithFilePaths as a String
     for url in urls {
       openAppWithFilePaths.append(url.path)
