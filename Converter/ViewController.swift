@@ -154,8 +154,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       DispatchQueue.main.asyncAfter(deadline: .now() + Constants.inputFileFromSystemBufferDelay) {
         self.dragDropViewDidReceive(filePaths: self.appDelegate.openAppWithFilePaths)
         self.appDelegate.openAppWithFilePaths = []    // Empty openAppWithFilePaths
-        self.appDelegate.didDispatchFileQueue = false // Enable UI
-        self.enableUi()
+        self.appDelegate.didDispatchFileQueue = false // Reset input file queue dispatch flag
       }
     }
   }
