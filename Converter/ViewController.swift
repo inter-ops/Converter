@@ -154,8 +154,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       DispatchQueue.main.asyncAfter(deadline: .now() + Constants.inputFileFromSystemBufferDelay) {
         self.dragDropViewDidReceive(filePaths: self.appDelegate.openAppWithFilePaths)
         self.appDelegate.openAppWithFilePaths = []    // Empty openAppWithFilePaths
-        self.appDelegate.didDispatchFileQueue = false // Enable UI
-        self.enableUi()
+        self.appDelegate.didDispatchFileQueue = false // Reset input file queue dispatch flag
       }
     }
   }
@@ -255,27 +254,44 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
       return
     }
     
-    // if premium, handle multi-file
-    if userDidPurchasePremium {
-      for filePath in filteredPaths {
-        addVideoToInputs(filePath: filePath)
+    // We need to use a task here to ensure we only call addVideoToInputs one at a time. Otherwise, ffprobe commands run concurrently and
+    // result in null data.
+    Task {
+      // if premium, handle multi-file
+      if userDidPurchasePremium {
+        
+        // Any less than 4 videos and the loading animation flashes too quick, resulting in a weird UX.
+        if filteredPaths.count > 4 {
+          disableUi(withLoaderAnimation: true)
+        }
+        
+        for filePath in filteredPaths {
+          let video = await addVideoToInputs(filePath: filePath)
+          inputVideos.append(video)
+        }
       }
+      else {
+        // if free user, route first dragged file to singular dragDropDidReceive
+        let video = await addVideoToInputs(filePath: filteredPaths.first!)
+        inputVideos.append(video)
+        // TODO: show notice: maximum one file input, upgrade for more
+        //premiumNotice()
+      }
+      
+      updateDragDrop(selectedVideos: inputVideos, icon: .videoFile, withStyle: .regular)
+      enableUi()
     }
-    else {
-      // if free user, route first dragged file to singular dragDropDidReceive
-      addVideoToInputs(filePath: filteredPaths.first!)
-      // TODO: show notice: maximum one file input, upgrade for more
-      //premiumNotice()
-    }
-    
-    updateDragDrop(selectedVideos: inputVideos, icon: .videoFile, withStyle: .regular)
   }
   
   /// Handles singular input file requests, checks for validity and adjust the dragDropBackgroundImageView box to reflect any errors
-  func addVideoToInputs(filePath: String) {
+  /// This function is async so that we run ffprobe commands on a background thread and can show the loading animation while they execute
+  func addVideoToInputs(filePath: String) async -> Video {
     let inputFileUrl = filePath.fileURL.absoluteURL
-    let inputVideo = getAllVideoProperties(inputFileUrl: inputFileUrl)
-    inputVideos.append(inputVideo)
+    return await withCheckedContinuation { continuation in
+      getAllVideoProperties(inputFileUrl: inputFileUrl) { video in
+        continuation.resume(returning: video)
+      }
+    }
   }
   
   /// Clears input videos

@@ -566,11 +566,12 @@ func runFfmpegCommand(command: String, onDone: @escaping (_: FFmpegSession?) -> 
   return session!
 }
 
-func getAllVideoProperties(inputFileUrl: URL) -> Video {
-  let session = FFprobeKit.execute("-loglevel error -show_entries stream:format \"\(inputFileUrl.path)\"")
-  let logs = session?.getAllLogsAsString()!.trimmingCharacters(in: .whitespacesAndNewlines)
-
-  return buildVideo(withFfprobeOutput: logs!, inputFileUrl: inputFileUrl)
+func getAllVideoProperties(inputFileUrl: URL, onDone: @escaping (_: Video) -> Void) -> Void {
+  FFprobeKit.executeAsync("-loglevel error -show_entries stream:format \"\(inputFileUrl.path)\"") { session in
+    let logs = session?.getAllLogsAsString()!.trimmingCharacters(in: .whitespacesAndNewlines)
+    let video = buildVideo(withFfprobeOutput: logs!, inputFileUrl: inputFileUrl)
+    return onDone(video)
+  }
 }
 
 // This uses the same command as getAllVideoProperties but we leave out the loglevel field to include additional metadata
