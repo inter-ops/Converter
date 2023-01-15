@@ -17,10 +17,10 @@ enum VideoCodec: String, CaseIterable {
     case .vp9: return "VP9"
     case .mpeg4: return "MPEG-4"
     case .gif: return "GIF"
+    case .prores: return "Apple ProRes"
     // Will not appear in codec dropdown
     case .mpeg1video: return "MPEG-1"
     case .mpeg2video: return "MPEG-2"
-    case .prores: return "Apple ProRes"
     case .unknown: return "Unknown"
     }
   }
