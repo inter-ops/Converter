@@ -263,7 +263,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
         
         // Any less than 4 videos and the loading animation flashes too quick, resulting in a weird UX.
         if filteredPaths.count > 4 {
-          disableUi(withActionButton: true, withLoaderAnimation: true)
+          disableUi(withLoaderAnimation: true)
         }
         
         for filePath in filteredPaths {
