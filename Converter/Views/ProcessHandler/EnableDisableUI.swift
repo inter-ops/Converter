@@ -17,18 +17,14 @@ extension ViewController {
     Logger.debug("UI enabled")
   }
   /// Disable all UI elements. Show process loader with animation state.
-  /// Call `disableUi(withLoaderAnimation: true)` to also show the process loader animation.
-  func disableUi(withLoaderAnimation: Bool = false) {
-    disableAllOnScreenElements()  // Set isEnabled state of individual UI elements
+  /// - parameters:
+  ///   - withActionButton: Set `false` to disable all UI elements except for the action button ("Stop" during conversion)
+  ///   - withLoaderAnimation: Set `true` to show the process loader animation
+  func disableUi(withActionButton: Bool = true, withLoaderAnimation: Bool = false) {
+    disableAllOnScreenElements(withActionButton: withActionButton)
     disableDragDropView()         // Custom DragDropView handling for disabled state
     // Show process loader by default, with option to disable without animation
     if withLoaderAnimation { showProcessLoaderAnimation() }
-    Logger.debug("UI disabled")
-  }
-  /// For while conversion is ongoing: Disable all on-screen elements except for the "Stop" action button (including import files via File -> Open in the menu bar)
-  func disableUi(withActionButton: Bool) {
-    disableAllOnScreenElements(withActionButton: withActionButton)
-    disableDragDropView()
     Logger.debug("UI disabled")
   }
   /// Enable associated `DragDropView` elements, with title textColors to match enabled state.
