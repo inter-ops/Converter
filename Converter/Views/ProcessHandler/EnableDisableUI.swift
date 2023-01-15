@@ -26,8 +26,8 @@ extension ViewController {
     Logger.debug("UI disabled")
   }
   /// For while conversion is ongoing: Disable all on-screen elements except for the "Stop" action button (including import files via File -> Open in the menu bar)
-  func disableUi(forConversion: Bool) {
-    disableAllOnScreenElements(excludingActionButton: forConversion)
+  func disableUi(withActionButton: Bool) {
+    disableAllOnScreenElements(withActionButton: withActionButton)
     disableDragDropView()
     Logger.debug("UI disabled")
   }
@@ -66,10 +66,10 @@ extension ViewController {
     qualityDropdown.isEnabled = isPremiumEnabled
   }
   /// Set the `isEnabled = false` state of all UI elements.
-  func disableAllOnScreenElements(excludingActionButton: Bool = false) {
+  func disableAllOnScreenElements(withActionButton: Bool = true) {
     let isEnabled = false
     formatDropdown.isEnabled = isEnabled
-    actionButton.isEnabled = excludingActionButton
+    actionButton.isEnabled = !withActionButton
     helpInfoButton.isEnabled = isEnabled
     expandCollapsePremiumViewButton.isEnabled = isEnabled
     // PremiumView elements
