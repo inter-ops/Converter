@@ -1387,7 +1387,7 @@
                                             <rect key="frame" x="1" y="1" width="398" height="195"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" selectionGranularity="word" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="8gq-WA-Ttm">
+                                                <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" selectionGranularity="word" continuousSpellChecking="YES" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="8gq-WA-Ttm">
                                                     <rect key="frame" x="0.0" y="0.0" width="398" height="195"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1621,7 +1621,7 @@
                                             <rect key="frame" x="1" y="1" width="238" height="119"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" selectionGranularity="word" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="CyQ-hI-elv">
+                                                <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" selectionGranularity="word" continuousSpellChecking="YES" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="CyQ-hI-elv">
                                                     <rect key="frame" x="0.0" y="0.0" width="238" height="119"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1959,7 +1959,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="EQ5-Om-Sgo"/>
+        <segue reference="wed-Vm-xLL"/>
         <segue reference="yPM-Jk-fVy"/>
     </inferredMetricsTieBreakers>
     <resources>
