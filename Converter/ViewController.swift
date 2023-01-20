@@ -669,7 +669,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
           
           if !self.inputVideos.allSatisfy({ $0.didError == false }) {
             self.estimatedTimeText.stringValue = "Error ⛔️"
-            self.unexpectedErrorAlert(inputVideos: self.inputVideos)
+            self.unexpectedErrorAlert(inputVideos: self.inputVideos, outputQuality: self.outputQuality, outputCodec: self.outputCodec)
           }
           else {
             self.alertConversionDidComplete(withOutputUrl: outputUrl)

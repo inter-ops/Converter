@@ -16,9 +16,9 @@ class ReportErrorWindowController: NSWindowController, NSWindowDelegate {
   }
   
 
-  func passErrorData(inputVideos: [Video]) {
+  func passErrorData(inputVideos: [Video], outputQuality: VideoQuality, outputCodec: VideoCodec) {
     let viewController = window?.contentViewController as? ReportErrorViewController
-    viewController?.setErrorData(inputVideos: inputVideos)
+    viewController?.setErrorData(inputVideos: inputVideos, outputQuality: outputQuality, outputCodec: outputCodec)
   }
   
 }
