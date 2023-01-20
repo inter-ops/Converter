@@ -10,7 +10,7 @@ import Cocoa
 extension ViewController {
   
   /// Alert user of an error that occured, with the option of forwarding to devs
-  func unexpectedErrorAlert(inputVideos: [Video]) {
+  func unexpectedErrorAlert(inputVideos: [Video], outputQuality: VideoQuality, outputCodec: VideoCodec) {
     let errorVideos = inputVideos.filter({ $0.didError == true })
     
     let a = NSAlert()
@@ -24,7 +24,7 @@ extension ViewController {
       
       if modalResponse == NSApplication.ModalResponse.alertFirstButtonReturn {
         Logger.debug("User did choose to send error message")
-        self.segueToErrorReport(inputVideos: inputVideos)
+        self.segueToErrorReport(inputVideos: inputVideos, outputQuality: outputQuality, outputCodec: outputCodec)
       }
       
       if modalResponse == NSApplication.ModalResponse.alertSecondButtonReturn {
@@ -93,13 +93,15 @@ extension ViewController {
     let a = AlertErrorTest.self
     a.inputVideo.outputFileUrl = a.outputFileUrl
     
-    unexpectedErrorAlert(inputVideos: [a.inputVideo])
+    unexpectedErrorAlert(inputVideos: [a.inputVideo], outputQuality: a.outputQuality, outputCodec: a.outputCodec)
   }
 }
 
 struct AlertErrorTest {
   static let inputFileUrl = URL(fileURLWithPath: "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm")
   static let outputFileUrl = URL(fileURLWithPath: "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4")
+  static let outputQuality = VideoQuality.betterQuality
+  static let outputCodec = VideoCodec.h264
   static let ffmpegCommand = """
   -hide_banner -loglevel error -y -i "/Users/justinbush/Desktop/AV Test Files/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).webm" -filter_complex "channelmap=channel_layout=5.1" -c:a aac -c:v libx264 -preset veryfast -crf 26 -c:s mov_text "/Users/justinbush/Downloads/YouTube 4K Trailer (2160p_25fps_VP9 LQ-160kbit_Opus).mp4"
   """

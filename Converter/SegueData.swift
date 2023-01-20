@@ -15,8 +15,10 @@ enum WindowSegues: String, CaseIterable {
 
 extension ViewController {
   
-  func segueToErrorReport(inputVideos: [Video]) {
+  func segueToErrorReport(inputVideos: [Video], outputQuality: VideoQuality, outputCodec: VideoCodec) {
     DraftError.inputVideos = inputVideos
+    DraftError.outputQuality = outputQuality
+    DraftError.outputCodec = outputCodec
     segue(.showReportError)
   }
   
@@ -30,7 +32,7 @@ extension ViewController {
     // Called upon window segue showReportError
     if (segue.identifier == WindowSegues.showReportError.rawValue) {
       if let reportErrorWC = segue.destinationController as? ReportErrorWindowController {
-        reportErrorWC.passErrorData(inputVideos: DraftError.inputVideos)
+        reportErrorWC.passErrorData(inputVideos: DraftError.inputVideos, outputQuality: DraftError.outputQuality, outputCodec: DraftError.outputCodec)
       }
     }
     
@@ -38,6 +40,8 @@ extension ViewController {
   
   struct DraftError {
     static var inputVideos: [Video] = []
+    static var outputQuality: VideoQuality = .balanced
+    static var outputCodec: VideoCodec = .auto
   }
   
 }

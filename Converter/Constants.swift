@@ -18,9 +18,9 @@ struct Constants {
   static let inputFileFromSystemBufferDelay = 0.4
   
   struct API {
-    static let contactFormUrl = "https://contact-form-u7kjuwr4da-uc.a.run.app"
-    static let errorReportUrl = "https://error-report-u7kjuwr4da-uc.a.run.app"
-    static let minimimAppVersionUrl = "https://get-minimum-app-version-string-u7kjuwr4da-uc.a.run.app"
+    static let contactFormUrl = "https://contact-form.api.airtv.io"
+    static let errorReportUrl = "https://error-report.api.airtv.io"
+    static let minimimAppVersionUrl = "https://minimum-app-version.api.airtv.io"
   }
   
   struct Frame {

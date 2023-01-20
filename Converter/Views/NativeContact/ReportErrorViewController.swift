@@ -18,6 +18,9 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
   @IBOutlet weak var indeterminateProgressBar: NSProgressIndicator!
   
   var inputVideos: [Video] = []
+  var outputQuality: VideoQuality = .balanced
+  var outputCodec: VideoCodec = .auto
+  
   let appDelegate = NSApplication.shared.delegate as! AppDelegate
   
   override func viewDidLoad() {
@@ -31,8 +34,10 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
     messageField.delegate = self
   }
   
-  func setErrorData(inputVideos: [Video]) {
+  func setErrorData(inputVideos: [Video], outputQuality: VideoQuality, outputCodec: VideoCodec) {
     self.inputVideos = inputVideos
+    self.outputQuality = outputQuality
+    self.outputCodec = outputCodec
   }
   
   @IBAction func sendButtonAction(_ sender: NSButton) {
@@ -59,7 +64,7 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
     
     let applicationLogs = shouldSendAppLogs ? Logger.getLogsAsString() : nil
     
-    API.errorReport(name: name, email: email, additionalDetails: additionalDetails, inputVideos: inputVideos, applicationLogs: applicationLogs) { responseData, errorMessage in
+    API.errorReport(name: name, email: email, additionalDetails: additionalDetails, outputQuality: outputQuality, outputCodec: outputCodec, inputVideos: inputVideos, applicationLogs: applicationLogs) { responseData, errorMessage in
       
       if errorMessage != nil {
         self.updateNotice(withMessage: errorMessage!)

@@ -117,7 +117,7 @@ struct API {
     sendPostRequest(url: Constants.API.contactFormUrl, data: params, completion: completion)
   }
   
-  static func errorReport(name: String, email: String, additionalDetails: String, inputVideos: [Video], applicationLogs: String?, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
+  static func errorReport(name: String, email: String, additionalDetails: String, outputQuality: VideoQuality, outputCodec: VideoCodec, inputVideos: [Video], applicationLogs: String?, completion: @escaping (_ responseData: Dictionary<String, AnyObject>?, _ errorMessage: String?) -> Void) {
     
     var videosData = [] as [Dictionary<String, AnyObject>]
     
@@ -142,12 +142,10 @@ struct API {
       let inputFileExtension = URL(fileURLWithPath: inputFilePath).pathExtension
       let outputFileExtension = URL(fileURLWithPath: outputFilePath!).pathExtension
       
-      let videoData = ["ffmpegCommand": sanitizedFfmpegCommand, "ffmpegSessionLogs": sanitizedFfmpegSessionLogs, "ffprobeOutput": sanitizedFfprobeOutput, "inputFileExtension": inputFileExtension, "outputFileExtension": outputFileExtension] as Dictionary<String, AnyObject>
+      let videoData = ["ffmpegCommand": sanitizedFfmpegCommand, "ffmpegSessionLogs": sanitizedFfmpegSessionLogs, "ffprobeOutput": sanitizedFfprobeOutput, "inputFileExtension": inputFileExtension, "outputFileExtension": outputFileExtension, "outputQuality": outputQuality.dropdownTitle, "outputCodec": outputCodec.dropdownTitle] as Dictionary<String, AnyObject>
       
       videosData.append(videoData)
     }
-    
-    // TODO: Add output codec & quality selection
     
     let params = ["name":name, "email":email, "additionalDetails": additionalDetails, "videos": videosData, "applicationLogs": sanitizedApplicationLogs ?? ""] as Dictionary<String, AnyObject>
     
