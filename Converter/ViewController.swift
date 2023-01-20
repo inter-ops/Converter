@@ -66,6 +66,7 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    logCurrentAppVersion()
     // Init view
     initMainView()
     initDropdownMenu()

@@ -31,4 +31,12 @@ extension String {
     return fileURL.lastPathComponent
   }
   
+  func toInt() -> Int? {
+    return NumberFormatter().number(from: self)?.intValue
+  }
+  
+  func toDouble() -> Double? {
+    return NumberFormatter().number(from: self)?.doubleValue
+  }
+  
 }

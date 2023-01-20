@@ -20,7 +20,7 @@ struct Constants {
   struct API {
     static let contactFormUrl = "https://contact-form-u7kjuwr4da-uc.a.run.app"
     static let errorReportUrl = "https://error-report-u7kjuwr4da-uc.a.run.app"
-    static let minimimAppVersionUrl = "https://get-minimum-app-version-u7kjuwr4da-uc.a.run.app"
+    static let minimimAppVersionUrl = "https://get-minimum-app-version-string-u7kjuwr4da-uc.a.run.app"
   }
   
   struct Frame {
@@ -33,6 +33,10 @@ struct Constants {
   enum UDKeys: String {
     case appVersionWasFlaggedAsLowerThanRequired
   }
+  
+  // MARK: App Data
+  static let appVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"]
+  static let buildNumberString = Bundle.main.infoDictionary?["CFBundleVersion"]
   
   // MARK: URLs
   /// Deep link to open Video Converter on the Mac App Store
