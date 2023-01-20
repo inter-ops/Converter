@@ -34,6 +34,10 @@ struct Constants {
     case appVersionWasFlaggedAsLowerThanRequired
   }
   
+  // MARK: App Data
+  static let appVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"]
+  static let buildNumberString = Bundle.main.infoDictionary?["CFBundleVersion"]
+  
   // MARK: URLs
   /// Deep link to open Video Converter on the Mac App Store
   static let appStoreUrl = "macappstore://apps.apple.com/us/app/video-converter/id1518836004"
