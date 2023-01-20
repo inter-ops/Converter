@@ -36,6 +36,8 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
   
   func setErrorData(inputVideos: [Video], outputQuality: VideoQuality, outputCodec: VideoCodec) {
     self.inputVideos = inputVideos
+    self.outputQuality = outputQuality
+    self.outputCodec = outputCodec
   }
   
   @IBAction func sendButtonAction(_ sender: NSButton) {
