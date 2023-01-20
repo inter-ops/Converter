@@ -9,16 +9,29 @@ import Cocoa
 
 extension ViewController {
   
-  var appVersion: Double {
-    if let appVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-      if let appVersionDouble = Double(appVersionString) {
-        return appVersionDouble
+  var appBuildNumber: Int {
+    if let buildNumberString = Constants.buildNumberString as? String {
+      if let buildNumberInt = buildNumberString.toInt() {
+        return buildNumberInt
       }
     }
     
-    Logger.error("Error fetching app version, returning 1.0")
+    Logger.error("Error fetching local build number, returning 1")
+    return 1
+  }
+  
+  var appVersionString: String {
+    if let appVersionString = Constants.appVersionString as? String {
+      return appVersionString
+    }
     
-    return 1.0
+    Logger.error("Error fetching app version, returning 1.0")
+    return "1.0"
+  }
+  
+  
+  func consoleLogCurrentAppVersion() {
+    let logMessage = "App Version: \(appVersionString) (\(appBuildNumber))"
   }
   
   func checkIfAppVersionHasBeenFlagged() {
