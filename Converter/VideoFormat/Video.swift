@@ -119,7 +119,7 @@ struct SubtitleStream {
     self.codecType = CodecType(rawValue: ffprobeDict["codec_type"]!)!
     self.codecTagString = ffprobeDict["codec_tag_string"] ?? ""
     self.codecTag = ffprobeDict["codec_tag"] ?? ""
-    self.isTextBased = ffprobeDict["width"] == "N/A"
+    self.isTextBased = ffprobeDict["width"] == "N/A" && ffprobeDict["codec_name"] != "hdmv_pgs_subtitle" // We've seen some hdmv_pgs_subtitle subtitles not have a width associated with them
     self.language = ffprobeDict["TAG:language"]
   }
 }
