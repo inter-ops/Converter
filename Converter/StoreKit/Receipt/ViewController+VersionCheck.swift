@@ -16,8 +16,9 @@ extension ViewController {
       }
     }
     
-    Logger.error("Error fetching local build number, returning 1")
-    return 1
+    let defaultBuildNumber = 1
+    Logger.error("Error fetching local build number, returning \(defaultBuildNumber)")
+    return defaultBuildNumber
   }
   
   var appVersionString: String {
@@ -25,14 +26,14 @@ extension ViewController {
       return appVersionString
     }
     
-    Logger.error("Error fetching app version, returning 1.0")
-    return "1.0"
+    let defaultVersionNumber = "1.0.0"
+    Logger.error("Error fetching app version, returning \(defaultVersionNumber)")
+    return defaultVersionNumber
   }
   
   
-  func consoleLogCurrentAppVersion() {
-    let logMessage = "App Version: \(appVersionString) (\(appBuildNumber))"
-    Logger.debug(logMessage)
+  func logCurrentAppVersion() {
+    Logger.debug("App Version: \(appVersionString) (\(appBuildNumber))")
   }
   
   func checkIfAppVersionHasBeenFlagged() {
@@ -63,9 +64,9 @@ extension ViewController {
         return
       }
       
-      if let minimumAppVersion = responseData?["version"] as? Double {
-        if self.appVersion < minimumAppVersion {
-          Logger.debug("App version \(self.appVersion) is older than minimum version \(minimumAppVersion), disabling UI")
+      if let minimumAppVersion = responseData?["version"] as? String {
+        if minimumAppVersion.compare(self.appVersionString, options: .numeric) == .orderedDescending {
+          Logger.debug("App version \(self.appVersionString) is older than minimum version \(minimumAppVersion), disabling UI")
           UserDefaults.standard.flagAppVersionAsLowerThanRequired(true)
           
           DispatchQueue.main.async {
@@ -73,7 +74,7 @@ extension ViewController {
           }
         }
         else {
-          Logger.debug("App version \(self.appVersion) is valid for minimum version \(minimumAppVersion)")
+          Logger.debug("App version \(self.appVersionString) is valid for minimum version \(minimumAppVersion)")
           UserDefaults.standard.flagAppVersionAsLowerThanRequired(false)
         }
       }

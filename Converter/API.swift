@@ -147,6 +147,8 @@ struct API {
       videosData.append(videoData)
     }
     
+    // TODO: Add output codec & quality selection
+    
     let params = ["name":name, "email":email, "additionalDetails": additionalDetails, "videos": videosData, "applicationLogs": sanitizedApplicationLogs ?? ""] as Dictionary<String, AnyObject>
     
     sendPostRequest(url: Constants.API.errorReportUrl, data: params, completion: completion)
