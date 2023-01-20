@@ -32,6 +32,7 @@ extension ViewController {
   
   func consoleLogCurrentAppVersion() {
     let logMessage = "App Version: \(appVersionString) (\(appBuildNumber))"
+    Logger.debug(logMessage)
   }
   
   func checkIfAppVersionHasBeenFlagged() {
