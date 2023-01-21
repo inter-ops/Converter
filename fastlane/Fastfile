@@ -1,0 +1,86 @@
+# TODOS REMAINING FOR SETUP
+# - Download screenshots from App store (need to wait till app is not in a pending state):  fastlane deliver download_screenshots
+# - Finish setting up auth by creating app_store_connect_api_key.json: https://docs.fastlane.tools/app-store-connect-api/
+# - Download any other metadata we want to track in git
+# - Setup match for code signing https://docs.fastlane.tools/codesigning/getting-started/
+
+
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+# uncomment for a specific xcode version
+# xcode_select "/Applications/Xcode_13.2.1.app"
+
+platform :ios do
+
+  desc "Push a new release build to the App Store"
+  lane :release do
+    match(type: "appstore", readonly: true)
+    # https://docs.fastlane.tools/actions/build_app/#parameters
+    build_app(
+      project: "Converter.xcodeproj", 
+      scheme: "Converter (Production)", 
+      # silent: true,
+      # suppress_xcode_output: true,
+    )
+    
+    upload_to_app_store(
+        skip_metadata: false,
+        skip_screenshots: true, # Can change this if we want to change screenshots locally, or capture with fastlane
+        force: true, # Skip HTML report verification
+        automatic_release: false,
+        submit_for_review: false,
+        submission_information: {
+          add_id_info_uses_idfa: false
+        },
+        precheck_include_in_app_purchases: false,
+        api_key_path: "app_store_connect_api_key.json"
+    )
+  end
+
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    match(type: "appstore", readonly: true)
+    
+    # https://docs.fastlane.tools/actions/build_app/#parameters
+    build_app(
+      project: "Converter.xcodeproj", 
+      scheme: "Converter (Development)",
+      # silent: true,
+      # suppress_xcode_output: true,
+    )
+
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      api_key_path: "app_store_connect_api_key.json"
+    )
+  end
+
+  # TODO: These should get auto executed as part of beta and release lanes
+  desc "Bump build number"
+  lane :bump_build do
+      # TODO: Double check this is working right
+      increment_version_number(xcodeproj: "Bounce.xcodeproj")
+      increment_build_number(xcodeproj: "Bounce.xcodeproj")
+  end
+  
+  desc "Commit version bump to repo"
+  lane :commit_bump do
+    commit_version_bump(xcodeproj: "Bounce.xcodeproj", force: true, message: "build: version bump")
+  end
+
+end
