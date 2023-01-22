@@ -1,9 +1,7 @@
 # TODOS REMAINING FOR SETUP
 # - Download screenshots from App store (need to wait till app is not in a pending state):  fastlane deliver download_screenshots
-# - Finish setting up auth by creating app_store_connect_api_key.json: https://docs.fastlane.tools/app-store-connect-api/
 # - Download any other metadata we want to track in git
-# - Setup match for code signing https://docs.fastlane.tools/codesigning/getting-started/
-
+# - Setup match for code signing https://codesigning.guide/ https://docs.fastlane.tools/actions/match/
 
 # This file contains the fastlane.tools configuration
 # You can find the documentation at https://docs.fastlane.tools
