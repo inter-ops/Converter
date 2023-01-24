@@ -64,16 +64,17 @@ class ContactViewController: NSViewController, NSTextViewDelegate, NSTextFieldDe
     updateProgressBar(.show)
     
     API.contactForm(name: name, email: email, topic: topic, message: message) { responseData, errorMessage in
-      
-      if errorMessage != nil {
-        self.updateNotice(withMessage: errorMessage!)
-        self.updateProgressBar(.hide)   // Stop progressBar animation and enable all fields
-        return
+      DispatchQueue.main.async {
+        if errorMessage != nil {
+          self.updateNotice(withMessage: errorMessage!)
+          self.updateProgressBar(.hide)   // Stop progressBar animation and enable all fields
+          return
+        }
+        
+        self.updateProgressBar(.hide) // Hide progressBar
+        self.updateNotice(.sent)      // Update noticeText
+        self.closeWindowWithSuccess() // Close window with success alert
       }
-      
-      self.updateProgressBar(.hide) // Hide progressBar
-      self.updateNotice(.sent)      // Update noticeText
-      self.closeWindowWithSuccess() // Close window with success alert
     }
   }
   
@@ -116,10 +117,8 @@ class ContactViewController: NSViewController, NSTextViewDelegate, NSTextFieldDe
   func closeWindowWithSuccess() {
     if !closeWindowWasCalled {
       closeWindowWasCalled = true
-      DispatchQueue.main.async {
-        self.view.window?.windowController?.close()
-        self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
-      }
+      self.view.window?.close()
+      self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
     }
   }
   
