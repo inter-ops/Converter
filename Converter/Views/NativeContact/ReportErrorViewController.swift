@@ -66,15 +66,17 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
     
     API.errorReport(name: name, email: email, additionalDetails: additionalDetails, outputQuality: outputQuality, outputCodec: outputCodec, inputVideos: inputVideos, applicationLogs: applicationLogs) { responseData, errorMessage in
       
-      if errorMessage != nil {
-        self.updateNotice(withMessage: errorMessage!)
-        self.updateProgressBar(.hide)   // Stop progressBar animation and enable all fields
-        return
+      DispatchQueue.main.async {
+        if errorMessage != nil {
+          self.updateNotice(withMessage: errorMessage!)
+          self.updateProgressBar(.hide)   // Stop progressBar animation and enable all fields
+          return
+        }
+        
+        self.updateProgressBar(.hide) // Hide progressBar
+        self.updateNotice(.sent)      // Update noticeText
+        self.closeWindowWithSuccess() // Close window with success alert
       }
-      
-      self.updateProgressBar(.hide) // Hide progressBar
-      self.updateNotice(.sent)      // Update noticeText
-      self.closeWindowWithSuccess() // Close window with success alert
     }
   }
   
@@ -118,10 +120,8 @@ class ReportErrorViewController: NSViewController, NSTextViewDelegate, NSTextFie
   func closeWindowWithSuccess() {
     if !closeWindowWasCalled {
       closeWindowWasCalled = true
-      DispatchQueue.main.async {
-        self.view.window?.windowController?.close()
-        self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
-      }
+      self.view.window?.windowController?.close()
+      self.appDelegate.bringMainWindowToFrontWithMessageDidSendAlert()
     }
   }
   
