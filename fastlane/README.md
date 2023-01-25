@@ -31,22 +31,6 @@ Push a new release build to the App Store
 
 Push a new beta build to TestFlight
 
-### ios bump_build
-
-```sh
-[bundle exec] fastlane ios bump_build
-```
-
-Bump build number
-
-### ios commit_bump
-
-```sh
-[bundle exec] fastlane ios commit_bump
-```
-
-Commit version bump to repo
-
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
