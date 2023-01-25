@@ -72,13 +72,13 @@ platform :ios do
   desc "Bump build number"
   lane :bump_build do
       # TODO: Double check this is working right
-      increment_version_number(xcodeproj: "Bounce.xcodeproj")
-      increment_build_number(xcodeproj: "Bounce.xcodeproj")
+      increment_version_number(project: "Converter.xcodeproj")
+      increment_build_number(project: "Converter.xcodeproj")
   end
   
   desc "Commit version bump to repo"
   lane :commit_bump do
-    commit_version_bump(xcodeproj: "Bounce.xcodeproj", force: true, message: "build: version bump")
+    commit_version_bump(project: "Converter.xcodeproj", force: true, message: "build: version bump")
   end
 
 end
