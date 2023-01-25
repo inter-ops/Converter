@@ -703,6 +703,7 @@
 				PRODUCT_NAME = "Video Converter";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = "Development Debug";
 		};
@@ -792,6 +793,7 @@
 				PRODUCT_NAME = "Video Converter";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = "Development Release";
 		};
@@ -940,6 +942,7 @@
 				PRODUCT_NAME = "Video Converter";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = "Production Debug";
 		};
@@ -973,6 +976,7 @@
 				PRODUCT_NAME = "Video Converter";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = "Production Release";
 		};
