@@ -29,7 +29,7 @@ platform :ios do
   lane :release do
     match(type: "appstore", readonly: true)
 
-    increment_build_number(project: "Converter.xcodeproj")
+    increment_build_number(xcodeproj: "Converter.xcodeproj")
 
     # https://docs.fastlane.tools/actions/build_app/#parameters
     build_app(
@@ -52,16 +52,18 @@ platform :ios do
         api_key_path: "app_store_connect_api_key.json"
     )
 
-    increment_version_number(project: "Converter.xcodeproj")
+    increment_version_number(xcodeproj: "Converter.xcodeproj")
 
-    # TODO: Commit & push version bump
+    # commit_version_bump(xcodeproj: "Converter.xcodeproj", force: true, message: "build: version bump")
+    
+    # TODO: Push
   end
 
   desc "Push a new beta build to TestFlight"
   lane :beta do
     match(type: "appstore", readonly: true)
 
-    increment_build_number(project: "Converter.xcodeproj")
+    increment_build_number(xcodeproj: "Converter.xcodeproj")
     
     # https://docs.fastlane.tools/actions/build_app/#parameters
     build_app(
@@ -76,19 +78,9 @@ platform :ios do
       api_key_path: "app_store_connect_api_key.json"
     )
 
-    # TODO: Commit & push version bump
-  end
-
-  # TODO: These should get auto executed as part of beta and release lanes
-  desc "Bump build number"
-  lane :bump_build do
-      # TODO: Double check this is working right
-      increment_version_number(project: "Converter.xcodeproj")
-  end
-  
-  desc "Commit version bump to repo"
-  lane :commit_bump do
-    commit_version_bump(project: "Converter.xcodeproj", force: true, message: "build: version bump")
+    # commit_version_bump(xcodeproj: "Converter.xcodeproj", force: true, message: "build: version bump")
+    
+    # TODO: Push
   end
 
 end
