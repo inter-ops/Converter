@@ -1,5 +1,5 @@
 app_identifier("io.airtv.Converter") # The bundle identifier of your app
-apple_id("francescod.virga@gmail.com") # Your Apple email address
+apple_id("justin@devsec.ca") # Your Apple email address
 
 itc_team_id("872163") # App Store Connect Team ID TODO verify this
 team_id("85N3S3DG8M") # Developer Portal Team ID
