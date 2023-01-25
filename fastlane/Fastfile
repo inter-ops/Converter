@@ -54,6 +54,8 @@ platform :ios do
 
     increment_version_number(xcodeproj: "Converter.xcodeproj")
 
+    # TODO: rm -rf video covnerter app bundle
+
     # commit_version_bump(xcodeproj: "Converter.xcodeproj", force: true, message: "build: version bump")
     
     # TODO: Push
@@ -78,6 +80,8 @@ platform :ios do
       api_key_path: "app_store_connect_api_key.json"
     )
 
+    # TODO: rm -rf video covnerter app bundle
+    
     # commit_version_bump(xcodeproj: "Converter.xcodeproj", force: true, message: "build: version bump")
     
     # TODO: Push
