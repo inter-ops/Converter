@@ -683,7 +683,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -698,7 +698,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.airtv.Converter;
 				PRODUCT_NAME = "Video Converter";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -773,7 +773,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -788,7 +788,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.airtv.Converter;
 				PRODUCT_NAME = "Video Converter";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -922,7 +922,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -937,7 +937,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.airtv.Converter;
 				PRODUCT_NAME = "Video Converter";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -956,7 +956,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 0;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = N23ZS9W2Y5;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -971,7 +971,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.airtv.Converter;
 				PRODUCT_NAME = "Video Converter";
 				SWIFT_EMIT_LOC_STRINGS = YES;
