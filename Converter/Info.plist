@@ -2,8 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Configuration</key>
-	<string>$(CONFIGURATION)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.1.4</string>
+	<key>CFBundleVersion</key>
+	<string>10</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -27,6 +29,8 @@
 			</array>
 		</dict>
 	</array>
+	<key>Configuration</key>
+	<string>$(CONFIGURATION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>

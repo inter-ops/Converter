@@ -1,0 +1,90 @@
+# TODOS REMAINING FOR SETUP
+# - Download screenshots from App store (need to wait till app is not in a pending state):  fastlane deliver download_screenshots
+# - Download any other metadata we want to track in git
+# - Setup match for code signing https://codesigning.guide/ https://docs.fastlane.tools/actions/match/
+
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+# uncomment for a specific xcode version
+# xcode_select "/Applications/Xcode_13.2.1.app"
+
+platform :ios do
+
+  desc "Push a new release build to the App Store"
+  lane :release do
+    match(type: "appstore", readonly: true)
+
+    increment_build_number(xcodeproj: "Converter.xcodeproj")
+
+    # https://docs.fastlane.tools/actions/build_app/#parameters
+    build_app(
+      project: "Converter.xcodeproj", 
+      scheme: "Converter (Production)", 
+      # silent: true,
+      # suppress_xcode_output: true,
+    )
+    
+    upload_to_app_store(
+        skip_metadata: false,
+        skip_screenshots: true, # Can change this if we want to change screenshots locally, or capture with fastlane
+        force: true, # Skip HTML report verification
+        automatic_release: false,
+        submit_for_review: false,
+        submission_information: {
+          add_id_info_uses_idfa: false
+        },
+        precheck_include_in_app_purchases: false,
+        api_key_path: "app_store_connect_api_key.json"
+    )
+
+    increment_version_number(xcodeproj: "Converter.xcodeproj")
+
+    # TODO: rm -rf video covnerter app bundle
+
+    # commit_version_bump(xcodeproj: "Converter.xcodeproj", force: true, message: "build: version bump")
+    
+    # TODO: Push
+  end
+
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    match(type: "appstore", readonly: true)
+
+    increment_build_number(xcodeproj: "Converter.xcodeproj")
+    
+    # https://docs.fastlane.tools/actions/build_app/#parameters
+    build_app(
+      project: "Converter.xcodeproj", 
+      scheme: "Converter (Development)",
+      # silent: true,
+      # suppress_xcode_output: true,
+    )
+
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      api_key_path: "app_store_connect_api_key.json"
+    )
+
+    # TODO: rm -rf video covnerter app bundle
+    
+    # commit_version_bump(xcodeproj: "Converter.xcodeproj", force: true, message: "build: version bump")
+    
+    # TODO: Push
+  end
+
+end
