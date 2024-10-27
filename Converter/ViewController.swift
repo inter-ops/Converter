@@ -12,8 +12,8 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// `true` if user has purchased premium or app is in debug environment
   var userDidPurchasePremium: Bool {
-    //if Config.shared.debug { return true } // comment this line to preview app as free user
-    return appDelegate.userReceiptDoesContainPremium
+    // TODO: We need to clean up all the premium logic (since everything is free now). For now we can just pretend the user purchased premium.
+    return true
   }
   
   @IBOutlet weak var mainView: NSView!
