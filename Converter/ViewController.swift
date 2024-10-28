@@ -66,7 +66,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    logCurrentAppVersion()
     // Init view
     initMainView()
     initDropdownMenu()
@@ -132,8 +131,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   }
   
   override func viewDidAppear() {
-    // Run Firebase Version Check
-    checkInternetAndMinimumAppVersion()
     
     // Handles the opening of files on application launch after initial load (requires main thread)
     DispatchQueue.main.async {
