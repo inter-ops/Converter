@@ -48,29 +48,4 @@ extension AppDelegate {
     viewController?.disableUi(withLoaderAnimation: true)
   }
   
-  // MARK: - StoreKit
-  
-  @IBAction func debugPurchasePremiumTransaction(_ sender: Any) {
-    purchasePremium()
-  }
-  
-  @IBAction func debugRestorePurchaseSession(_ sender: Any) {
-    restorePurchases()
-  }
-  
-  // MARK: - Receipt Validation
-  
-  @IBAction func debugCheckPremiumPurchaseReceipt(_ sender: Any) {
-    Logger.debug("Premium Purchase Status: \(userReceiptDoesContainPremium)")
-  }
-  
-  @IBAction func debugRequestReceiptRefresh(_ sender: Any) {
-    requestReceiptFromSandbox()
-  }
-  
-  @IBAction func debugSimulateLowerRequiredVersion(_ sender: Any) {
-    let viewController = mainWindow.contentViewController as? ViewController
-    viewController?.disableUiAndShowLatestVersionAlert()
-  }
-  
 }
