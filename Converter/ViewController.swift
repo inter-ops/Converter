@@ -12,7 +12,6 @@ class ViewController: NSViewController, NSPopoverDelegate, DragDropViewDelegate 
   
   /// `true` if user has purchased premium or app is in debug environment
   var userDidPurchasePremium: Bool {
-    // TODO: We need to clean up all the premium logic (since everything is free now). For now we can just pretend the user purchased premium.
     return true
   }
   
